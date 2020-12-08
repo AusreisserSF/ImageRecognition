@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.ftcappcommon;
+package org.firstinspires.ftc.ftcdevcommon;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -6,7 +6,6 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -199,8 +198,7 @@ public class XPathAccess {
 	public String getElementText(String pPath) throws XPathExpressionException {
         XPathExpression expr = xpath.compile(pPath + "/text()");
         // Trim needed because only validating parsers will strip white space.
-        String text = ((String) expr.evaluate(xmlElement, XPathConstants.STRING)).trim();
-		return text;
+		return ((String) expr.evaluate(xmlElement, XPathConstants.STRING)).trim();
 	}
 	
 	public int getIntFromText(String pIntText, String pNodeName) {
@@ -209,7 +207,7 @@ public class XPathAccess {
 
 		int itemInt;
 		try {
-			itemInt = Integer.valueOf(pIntText);
+			itemInt = Integer.parseInt(pIntText);
 		} catch (NumberFormatException ex) {
 			throw new AutonomousRobotException(TAG, "Value in " + pNodeName + ": " + pIntText + " is not an int");
 		}
@@ -223,7 +221,7 @@ public class XPathAccess {
 
 		double itemDouble;
 		try {
-			itemDouble = Double.valueOf(pDoubleText);
+			itemDouble = Double.parseDouble(pDoubleText);
 		} catch (NumberFormatException ex) {
 			throw new AutonomousRobotException(TAG, "Value in " + pNodeName + ": " + pDoubleText + " is not a double");
 		}
@@ -235,11 +233,10 @@ public class XPathAccess {
 		if (pBooltext.isEmpty())
 			throw new AutonomousRobotException(TAG, "Requested item " + pNodeName + " does not exist in " + processingContext);
 
-		String boolVal = pBooltext;
-		if (boolVal.equals("true"))
+		if (pBooltext.equals("true"))
 			return true;
-		if (boolVal.equals("false"))
+		if (pBooltext.equals("false"))
 			return false;
-		throw new AutonomousRobotException(TAG, "Value in " + pNodeName + ": " + boolVal + " is not a boolean");
+		throw new AutonomousRobotException(TAG, "Value in " + pNodeName + ": " + pBooltext + " is not a boolean");
 	}
 }

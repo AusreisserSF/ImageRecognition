@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.ftcappcommon;
+package org.firstinspires.ftc.ftcdevcommon.intellij;
 
-import org.firstinspires.ftc.ftcappcommon.AutonomousRobotException;
+import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 
 import java.io.File;
 import java.nio.file.Files;

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.ftcappcommon;
+package org.firstinspires.ftc.ftcdevcommon;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -10,8 +10,6 @@ import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutionException;
 
 public class CommonUtils {
-
-    private static final String TAG = "CommonUtils";
 
     //**TODO Requires minSdkVersion 26
     //public static String getLocalDateTimeStamp(LocalDateTime pLocalDateTime) {

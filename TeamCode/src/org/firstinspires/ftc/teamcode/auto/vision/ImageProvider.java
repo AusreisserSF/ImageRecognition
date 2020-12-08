@@ -5,10 +5,9 @@ package org.firstinspires.ftc.teamcode.auto.vision;
 import android.util.Pair;
 */
 
-import org.firstinspires.ftc.ftcappcommon.Pair;
+import org.firstinspires.ftc.ftcdevcommon.Pair;
 import org.opencv.core.Mat;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 public interface ImageProvider {

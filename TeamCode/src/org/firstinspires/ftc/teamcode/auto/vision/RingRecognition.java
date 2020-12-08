@@ -6,10 +6,10 @@ import org.opencv.android.OpenCVLoader;
 import android.util.Pair;
 */
 
-import org.firstinspires.ftc.ftcappcommon.CommonUtils;
-import org.firstinspires.ftc.ftcappcommon.Pair;
-import org.firstinspires.ftc.ftcappcommon.RobotLogCommon;
-import org.firstinspires.ftc.ftcappcommon.WorkingDirectory;
+import org.firstinspires.ftc.ftcdevcommon.CommonUtils;
+import org.firstinspires.ftc.ftcdevcommon.Pair;
+import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
+import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.auto.RobotConstants;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;

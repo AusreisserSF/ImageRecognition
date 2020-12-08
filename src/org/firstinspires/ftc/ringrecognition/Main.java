@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.robotsimulator;
+package org.firstinspires.ftc.ringrecognition;
 
 import javafx.application.Application;
 import org.firstinspires.ftc.teamcode.auto.RecognitionDispatcher;

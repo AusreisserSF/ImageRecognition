@@ -9,23 +9,16 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.firstinspires.ftc.ftcappcommon.AutonomousRobotException;
-import org.firstinspires.ftc.ftcappcommon.CommonUtils;
-import org.firstinspires.ftc.ftcappcommon.RobotLogCommon;
-import org.firstinspires.ftc.ftcappcommon.WorkingDirectory;
+import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
+import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
+import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.auto.vision.CommonParameters;
 import org.firstinspires.ftc.teamcode.auto.vision.RingParameters;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 // Class whose job it is to read an XML file that contains all of the information
 // needed for our OpenCV methods to recognize 0, 1, or 4 gold rings in autonomous.

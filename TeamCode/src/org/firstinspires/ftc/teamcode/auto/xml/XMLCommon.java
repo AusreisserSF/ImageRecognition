@@ -5,8 +5,8 @@ import org.w3c.dom.Node;
 import org.opencv.core.Rect;
 
 import org.firstinspires.ftc.teamcode.auto.vision.CommonParameters;
-import org.firstinspires.ftc.ftcappcommon.AutonomousRobotException;
-import org.firstinspires.ftc.ftcappcommon.RobotLogCommon;
+import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
+import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
 
 public class XMLCommon {
 

@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.ftcappcommon;
+package org.firstinspires.ftc.ftcdevcommon;
+
+import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -27,12 +29,12 @@ public class RobotLogCommon {
     public static final String logDir = "/logs/";
 
     private static final Level DEFAULT_LEVEL = Level.FINE;
-    private static Logger logger;
-    private static FileHandler fileHandler;
+    private static final Logger logger;
+    private static final FileHandler fileHandler;
 
-    private static LogWriter logWriter;
-    private static CompletableFuture<Void> logWriterFuture;
-    private static Lock logQueueLock = new ReentrantLock();
+    private static final LogWriter logWriter;
+    private static final CompletableFuture<Void> logWriterFuture;
+    private static final Lock logQueueLock = new ReentrantLock();
 
     private static final LinkedBlockingQueue<Pair<Level, String>> logEntryQueue = new LinkedBlockingQueue<>();
     private static boolean closeLogWriter = false;
@@ -81,9 +83,7 @@ public class RobotLogCommon {
 
             // Start a CompletableFuture for writing out the log.
             logWriter = new LogWriter();
-            logWriterFuture = CompletableFuture.supplyAsync(() -> {
-                return logWriter.call();
-            });
+            logWriterFuture = CompletableFuture.supplyAsync(() -> logWriter.call());
 
         } catch (Exception exception) {
             throw new AutonomousRobotException(TAG, "Error in initialization of logging: " + exception.getMessage());

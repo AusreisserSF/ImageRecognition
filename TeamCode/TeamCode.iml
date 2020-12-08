@@ -7,7 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="ftcappcommon" />
+    <orderEntry type="module" module-name="ftcdevcommon" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
