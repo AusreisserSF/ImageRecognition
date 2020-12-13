@@ -2,7 +2,7 @@
 package org.firstinspires.ftc.teamcode.auto.vision;
 
 import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
-import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
+import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
 import org.opencv.core.Mat;
 import org.opencv.core.Core;
 import org.opencv.imgcodecs.Imgcodecs;

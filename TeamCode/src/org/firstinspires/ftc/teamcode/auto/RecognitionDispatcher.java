@@ -11,7 +11,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
-import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
+import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
 import org.firstinspires.ftc.teamcode.auto.vision.FileImage;
 import org.firstinspires.ftc.teamcode.auto.vision.RingParameters;
 import org.firstinspires.ftc.teamcode.auto.vision.RingRecognition;

@@ -49,3 +49,20 @@
 [2020-12-12 20:13:32.733] [FINE   ] RingRecognition Number of white pixels 4604 
 [2020-12-12 20:13:32.733] [FINE   ] RingRecognition Found four rings: set Target Zone Goal C 
 [2020-12-12 20:13:32.733] [FINE   ] RingRecognition Found Target Zone TARGET_ZONE_C 
+[2020-12-13 10:05:03.134] [INFO   ] RingRecognition Starting ring recognition 
+[2020-12-13 10:05:03.203] [FINE   ] RingParametersXML Parsing XML ring_parameters 
+[2020-12-13 10:05:03.211] [FINE   ] CommonParametersXML Parsing XML image_parameters 
+[2020-12-13 10:05:03.215] [FINE   ] CommonParametersXML Parsing XML hsv_parameters 
+[2020-12-13 10:05:03.604] [FINE   ] RingRecognition In RingRecognition.findGoldRings 
+[2020-12-13 10:05:03.605] [FINE   ] ImageUtils File name Files/images/2020-12-11_16-04-33.jpg 
+[2020-12-13 10:05:03.615] [FINE   ] ImageUtils Image width 640, height 360 
+[2020-12-13 10:05:03.623] [FINE   ] RingRecognition Writing original image Files/images/Image_12131005_03615_IMG.png 
+[2020-12-13 10:05:03.636] [FINE   ] ImageUtils Image ROI x 230, y 150, width 200, height 100 
+[2020-12-13 10:05:03.637] [FINE   ] RingRecognition Writing image ROI Files/images/Image_12131005_03615_ROI.png 
+[2020-12-13 10:05:03.651] [FINE   ] RingRecognition Target hue levels: low 5, high 30 
+[2020-12-13 10:05:03.651] [FINE   ] RingRecognition Actual inRange HSV levels: hue low 5, hue high 30 
+[2020-12-13 10:05:03.652] [FINE   ] RingRecognition Actual inRange HSV levels: saturation low 100, value low 100 
+[2020-12-13 10:05:03.659] [FINE   ] RingRecognition Writing Files/images/Image_12131005_03615_HSV_THR.png 
+[2020-12-13 10:05:03.661] [FINE   ] RingRecognition Number of white pixels 4604 
+[2020-12-13 10:05:03.662] [FINE   ] RingRecognition Found four rings: set Target Zone Goal C 
+[2020-12-13 10:05:03.662] [FINE   ] RingRecognition Found Target Zone TARGET_ZONE_C 
