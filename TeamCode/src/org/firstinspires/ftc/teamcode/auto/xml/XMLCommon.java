@@ -6,7 +6,7 @@ import org.opencv.core.Rect;
 
 import org.firstinspires.ftc.teamcode.auto.vision.CommonParameters;
 import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
-import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
+import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
 
 public class XMLCommon {
 

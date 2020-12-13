@@ -8,7 +8,7 @@ import android.util.Pair;
 
 import org.firstinspires.ftc.ftcdevcommon.CommonUtils;
 import org.firstinspires.ftc.ftcdevcommon.Pair;
-import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
+import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.auto.RobotConstants;
 import org.opencv.core.Core;

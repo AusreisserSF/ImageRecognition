@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RingRecognition.iml" filepath="$PROJECT_DIR$/RingRecognition.iml" />
       <module fileurl="file://$PROJECT_DIR$/TeamCode/TeamCode.iml" filepath="$PROJECT_DIR$/TeamCode/TeamCode.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ftcdevcommon/ftcdevcommon.iml" filepath="$PROJECT_DIR$/ftcdevcommon/ftcdevcommon.iml" />
     </modules>
   </component>
 </project>

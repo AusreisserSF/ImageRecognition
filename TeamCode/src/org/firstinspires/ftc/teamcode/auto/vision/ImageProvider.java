@@ -12,10 +12,10 @@ import java.util.Date;
 
 public interface ImageProvider {
 
-    public enum ImageFormat {RGB, BGR}
+    enum ImageFormat {RGB, BGR}
 
     //**TODO requires minSdkVersion 26  public Pair<Mat, LocalDateTime> getImage() throws InterruptedException;
-    public Pair<Mat, Date> getImage() throws InterruptedException;
+    Pair<Mat, Date> getImage() throws InterruptedException;
 
-    public ImageFormat getImageFormat();
+    ImageFormat getImageFormat();
 }

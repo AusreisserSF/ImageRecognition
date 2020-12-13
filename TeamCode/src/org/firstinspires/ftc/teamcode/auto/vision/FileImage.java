@@ -13,9 +13,8 @@ import java.util.Date;
 
 public class FileImage implements ImageProvider {
 
-    private static final String TAG = "FileImage";
     private final String pathToImageFile;
-    private ImageUtils imageUtils = new ImageUtils();
+    private final ImageUtils imageUtils = new ImageUtils();
 
     public FileImage(String pPathToImageFile) {
         pathToImageFile = pPathToImageFile;
@@ -23,7 +22,7 @@ public class FileImage implements ImageProvider {
 
     @Override
     //**TODO requires minSdkVersion 26 public Pair<Mat, LocalDateTime> getImage() throws InterruptedException {
-    public Pair<Mat, Date> getImage() throws InterruptedException {
+    public Pair<Mat, Date> getImage() {
         Mat bgrMat = imageUtils.loadImage(pathToImageFile);
         return Pair.create(bgrMat, new Date());
     }

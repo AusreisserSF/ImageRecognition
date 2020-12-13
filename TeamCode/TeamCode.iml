@@ -7,7 +7,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="ftcdevcommon" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -20,6 +19,15 @@
         <SOURCES>
           <root url="jar://C:/opencv-4.4.0/build/java/opencv-440.jar!/" />
         </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://C:/FTCDevCommonIntelliJ_jar/ftcdevcommon.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
       </library>
     </orderEntry>
   </component>
