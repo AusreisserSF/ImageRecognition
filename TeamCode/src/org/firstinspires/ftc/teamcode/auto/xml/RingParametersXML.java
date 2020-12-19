@@ -1,24 +1,19 @@
 package org.firstinspires.ftc.teamcode.auto.xml;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-
 import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
-import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.auto.vision.CommonParameters;
 import org.firstinspires.ftc.teamcode.auto.vision.RingParameters;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-import java.io.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.*;
+import java.io.File;
+import java.io.IOException;
 
 // Class whose job it is to read an XML file that contains all of the information
 // needed for our OpenCV methods to recognize 0, 1, or 4 gold rings in autonomous.
@@ -26,25 +21,20 @@ public class RingParametersXML {
     public static final String TAG = "RingParametersXML";
     private static final String FILE_NAME = "RingParameters.xml";
 
-    private final DocumentBuilderFactory dbFactory;
     private final Document document;
-    private final DocumentBuilder dBuilder;
-
-    private final XPathFactory xpathFactory;
     private final XPath xpath;
 
-    public RingParametersXML() throws ParserConfigurationException, SAXException, IOException {
-
+    public RingParametersXML(String pXMLDir) {
         try {
-            dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             dbFactory.setIgnoringComments(true);
             // ONLY works with a validating parser (DTD or schema)
             // dbFactory.setIgnoringElementContentWhitespace(true);
             // Not supported in Android Studio dbFactory.setXIncludeAware(true);
-            dBuilder = dbFactory.newDocumentBuilder();
-            String configFilename = WorkingDirectory.getWorkingDirectory() + File.separator + FILE_NAME;
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            String configFilename = pXMLDir + FILE_NAME;
             document = dBuilder.parse(new File(configFilename));
-            xpathFactory = XPathFactory.newInstance();
+            XPathFactory xpathFactory = XPathFactory.newInstance();
             xpath = xpathFactory.newXPath();
 
         } catch (ParserConfigurationException pex) {

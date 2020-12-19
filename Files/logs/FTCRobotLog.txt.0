@@ -1,68 +1,19 @@
-[2020-12-07 17:41:16.292] [INFO   ] RingRecognition Starting ring recognition 
-[2020-12-07 17:41:16.365] [FINE   ] RingParametersXML Parsing XML ring_parameters 
-[2020-12-07 17:41:16.380] [FINE   ] CommonParametersXML Parsing XML image_parameters 
-[2020-12-07 17:41:16.384] [FINE   ] CommonParametersXML Parsing XML hsv_parameters 
-[2020-12-07 17:41:16.426] [FINE   ] RingRecognition In RingRecognition.findGoldRings 
-[2020-12-07 17:41:16.430] [FINE   ] ImageUtils File name Files/images/PXL_20201124_230436445_4_rings.png 
-[2020-12-07 17:41:16.441] [FINE   ] ImageUtils Image width 640, height 360 
-[2020-12-07 17:41:16.450] [FINE   ] RingRecognition Writing original image Files/images/Image_12071741_16440_IMG.png 
-[2020-12-07 17:41:16.462] [FINE   ] ImageUtils Image ROI x 230, y 150, width 200, height 100 
-[2020-12-07 17:41:16.462] [FINE   ] RingRecognition Writing image ROI Files/images/Image_12071741_16440_ROI.png 
-[2020-12-07 17:41:16.472] [FINE   ] RingRecognition Target hue levels: low 5, high 30 
-[2020-12-07 17:41:16.473] [FINE   ] RingRecognition Actual inRange HSV levels: hue low 5, hue high 30 
-[2020-12-07 17:41:16.473] [FINE   ] RingRecognition Actual inRange HSV levels: saturation low 100, value low 100 
-[2020-12-07 17:41:16.475] [FINE   ] RingRecognition Writing Files/images/Image_12071741_16440_HSV_THR.png 
-[2020-12-07 17:41:16.476] [FINE   ] RingRecognition Number of white pixels 2107 
-[2020-12-07 17:41:16.477] [FINE   ] RingRecognition Found four rings: set Target Zone Goal C 
-[2020-12-07 17:41:16.477] [FINE   ] RingRecognition Found Target Zone TARGET_ZONE_C 
-[2020-12-12 20:07:01.403] [INFO   ] RingRecognition Starting ring recognition 
-[2020-12-12 20:07:01.493] [FINE   ] RingParametersXML Parsing XML ring_parameters 
-[2020-12-12 20:07:01.525] [FINE   ] CommonParametersXML Parsing XML image_parameters 
-[2020-12-12 20:07:01.531] [FINE   ] CommonParametersXML Parsing XML hsv_parameters 
-[2020-12-12 20:07:01.574] [FINE   ] RingRecognition In RingRecognition.findGoldRings 
-[2020-12-12 20:07:01.578] [FINE   ] ImageUtils File name Files/images/PXL_20201124_230436445_4_rings.png 
-[2020-12-12 20:07:01.594] [FINE   ] ImageUtils Image width 640, height 360 
-[2020-12-12 20:07:01.604] [FINE   ] RingRecognition Writing original image Files/images/Image_12122007_01594_IMG.png 
-[2020-12-12 20:07:01.617] [FINE   ] ImageUtils Image ROI x 230, y 150, width 200, height 100 
-[2020-12-12 20:07:01.618] [FINE   ] RingRecognition Writing image ROI Files/images/Image_12122007_01594_ROI.png 
-[2020-12-12 20:07:01.629] [FINE   ] RingRecognition Target hue levels: low 5, high 30 
-[2020-12-12 20:07:01.629] [FINE   ] RingRecognition Actual inRange HSV levels: hue low 5, hue high 30 
-[2020-12-12 20:07:01.629] [FINE   ] RingRecognition Actual inRange HSV levels: saturation low 100, value low 100 
-[2020-12-12 20:07:01.632] [FINE   ] RingRecognition Writing Files/images/Image_12122007_01594_HSV_THR.png 
-[2020-12-12 20:07:01.634] [FINE   ] RingRecognition Number of white pixels 2107 
-[2020-12-12 20:07:01.634] [FINE   ] RingRecognition Found four rings: set Target Zone Goal C 
-[2020-12-12 20:07:01.635] [FINE   ] RingRecognition Found Target Zone TARGET_ZONE_C 
-[2020-12-12 20:13:32.589] [INFO   ] RingRecognition Starting ring recognition 
-[2020-12-12 20:13:32.665] [FINE   ] RingParametersXML Parsing XML ring_parameters 
-[2020-12-12 20:13:32.677] [FINE   ] CommonParametersXML Parsing XML image_parameters 
-[2020-12-12 20:13:32.680] [FINE   ] CommonParametersXML Parsing XML hsv_parameters 
-[2020-12-12 20:13:32.691] [FINE   ] RingRecognition In RingRecognition.findGoldRings 
-[2020-12-12 20:13:32.695] [FINE   ] ImageUtils File name Files/images/2020-12-11_16-04-33.jpg 
-[2020-12-12 20:13:32.709] [FINE   ] ImageUtils Image width 640, height 360 
-[2020-12-12 20:13:32.717] [FINE   ] RingRecognition Writing original image Files/images/Image_12122013_32709_IMG.png 
-[2020-12-12 20:13:32.724] [FINE   ] ImageUtils Image ROI x 230, y 150, width 200, height 100 
-[2020-12-12 20:13:32.724] [FINE   ] RingRecognition Writing image ROI Files/images/Image_12122013_32709_ROI.png 
-[2020-12-12 20:13:32.731] [FINE   ] RingRecognition Target hue levels: low 5, high 30 
-[2020-12-12 20:13:32.731] [FINE   ] RingRecognition Actual inRange HSV levels: hue low 5, hue high 30 
-[2020-12-12 20:13:32.731] [FINE   ] RingRecognition Actual inRange HSV levels: saturation low 100, value low 100 
-[2020-12-12 20:13:32.732] [FINE   ] RingRecognition Writing Files/images/Image_12122013_32709_HSV_THR.png 
-[2020-12-12 20:13:32.733] [FINE   ] RingRecognition Number of white pixels 4604 
-[2020-12-12 20:13:32.733] [FINE   ] RingRecognition Found four rings: set Target Zone Goal C 
-[2020-12-12 20:13:32.733] [FINE   ] RingRecognition Found Target Zone TARGET_ZONE_C 
-[2020-12-13 10:05:03.134] [INFO   ] RingRecognition Starting ring recognition 
-[2020-12-13 10:05:03.203] [FINE   ] RingParametersXML Parsing XML ring_parameters 
-[2020-12-13 10:05:03.211] [FINE   ] CommonParametersXML Parsing XML image_parameters 
-[2020-12-13 10:05:03.215] [FINE   ] CommonParametersXML Parsing XML hsv_parameters 
-[2020-12-13 10:05:03.604] [FINE   ] RingRecognition In RingRecognition.findGoldRings 
-[2020-12-13 10:05:03.605] [FINE   ] ImageUtils File name Files/images/2020-12-11_16-04-33.jpg 
-[2020-12-13 10:05:03.615] [FINE   ] ImageUtils Image width 640, height 360 
-[2020-12-13 10:05:03.623] [FINE   ] RingRecognition Writing original image Files/images/Image_12131005_03615_IMG.png 
-[2020-12-13 10:05:03.636] [FINE   ] ImageUtils Image ROI x 230, y 150, width 200, height 100 
-[2020-12-13 10:05:03.637] [FINE   ] RingRecognition Writing image ROI Files/images/Image_12131005_03615_ROI.png 
-[2020-12-13 10:05:03.651] [FINE   ] RingRecognition Target hue levels: low 5, high 30 
-[2020-12-13 10:05:03.651] [FINE   ] RingRecognition Actual inRange HSV levels: hue low 5, hue high 30 
-[2020-12-13 10:05:03.652] [FINE   ] RingRecognition Actual inRange HSV levels: saturation low 100, value low 100 
-[2020-12-13 10:05:03.659] [FINE   ] RingRecognition Writing Files/images/Image_12131005_03615_HSV_THR.png 
-[2020-12-13 10:05:03.661] [FINE   ] RingRecognition Number of white pixels 4604 
-[2020-12-13 10:05:03.662] [FINE   ] RingRecognition Found four rings: set Target Zone Goal C 
-[2020-12-13 10:05:03.662] [FINE   ] RingRecognition Found Target Zone TARGET_ZONE_C 
+[2020-12-19 14:12:59.576] [INFO   ] RingRecognition Starting ring recognition 
+[2020-12-19 14:12:59.688] [FINE   ] RingParametersXML Parsing XML ring_parameters 
+[2020-12-19 14:12:59.702] [FINE   ] CommonParametersXML Parsing XML image_parameters 
+[2020-12-19 14:12:59.708] [FINE   ] CommonParametersXML Parsing XML hsv_parameters 
+[2020-12-19 14:12:59.725] [FINE   ] RingRecognition In RingRecognition.findGoldRings 
+[2020-12-19 14:12:59.725] [FINE   ] ImageUtils File name Files/images/BRIO_2020-12-11_16-04-33_4_rings.jpg 
+[2020-12-19 14:12:59.734] [FINE   ] ImageUtils Image width 640, height 360 
+[2020-12-19 14:12:59.753] [FINE   ] RingRecognition Writing original image Files/images/Image_12191412_59734_IMG.png 
+[2020-12-19 14:12:59.770] [FINE   ] ImageUtils Image ROI x 230, y 150, width 200, height 100 
+[2020-12-19 14:12:59.771] [FINE   ] RingRecognition Writing image ROI Files/images/Image_12191412_59734_ROI.png 
+[2020-12-19 14:12:59.783] [FINE   ] RingRecognition Target hue levels: low 5, high 30 
+[2020-12-19 14:12:59.784] [FINE   ] RingRecognition Actual inRange HSV levels: hue low 5, hue high 30 
+[2020-12-19 14:12:59.784] [FINE   ] RingRecognition Actual inRange HSV levels: saturation low 100, value low 100 
+[2020-12-19 14:12:59.786] [FINE   ] RingRecognition Writing Files/images/Image_12191412_59734_HSV_THR.png 
+[2020-12-19 14:12:59.786] [FINE   ] RingRecognition Number of white pixels 4604 
+[2020-12-19 14:12:59.787] [FINE   ] RingRecognition Found four rings: set Target Zone Goal C 
+[2020-12-19 14:12:59.788] [FINE   ] RingRecognition Found Target Zone TARGET_ZONE_C 
+[2020-12-19 14:13:00.035] [INFO   ] Closing log and writing out the last 1 entries on the queue 
+[2020-12-19 14:13:00.035] [INFO   ] Shutting down log 

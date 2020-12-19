@@ -10,7 +10,7 @@ import org.firstinspires.ftc.ftcdevcommon.CommonUtils;
 import org.firstinspires.ftc.ftcdevcommon.Pair;
 import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
-import org.firstinspires.ftc.teamcode.auto.RobotConstants;
+import org.firstinspires.ftc.teamcode.auto.RingRecognitionConstants;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
@@ -41,11 +41,11 @@ public class RingRecognition {
 
     public RingRecognition() {
         // A failure in OpenCV initialization will prevent us from recognizing
-        // the gold mineral sample, but do not treat this as fatal.
+        // the ring stack, but do not treat this as fatal.
         if (!openCVInitialized)
             RobotLogCommon.d(TAG, "Failure in OpenCV initialization");
 
-        workingDirectory = WorkingDirectory.getWorkingDirectory() + RobotConstants.ringImageDir;
+        workingDirectory = WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.imageDir;
         imageUtils = new ImageUtils();
     }
 
@@ -56,9 +56,9 @@ public class RingRecognition {
 
         Pair<Mat, Date> ringImage = pImageProvider.getImage();
         if (ringImage.first == null)
-            return new RingReturn(true, RobotConstants.TargetZone.TARGET_ZONE_NPOS); // don't crash
+            return new RingReturn(true, RingRecognitionConstants.TargetZone.TARGET_ZONE_NPOS); // don't crash
 
-        //**TODO requires minSdkVersion 26 String fileDate = CommonUtils.getLocalDateTimeStamp(skystoneImage.second);
+        //TODO //** requires Android minSdkVersion 26 String fileDate = CommonUtils.getLocalDateTimeStamp(ringImage.second);
         String fileDate = CommonUtils.getDateTimeStamp(ringImage.second);
         String outputFilenamePreamble = workingDirectory + imageFilePrefix + fileDate;
 
@@ -112,19 +112,19 @@ public class RingRecognition {
 
         // If the number of white pixels is less than the minimum for a single
         // ring then assume there are no rings on the field.
-        RobotConstants.TargetZone targetZone = RobotConstants.TargetZone.TARGET_ZONE_NPOS;
+        RingRecognitionConstants.TargetZone targetZone = RingRecognitionConstants.TargetZone.TARGET_ZONE_NPOS;
         if (white_pixels < pRingParameters.minimum_pixel_count_1_ring) {
-            targetZone = RobotConstants.TargetZone.TARGET_ZONE_A;
+            targetZone = RingRecognitionConstants.TargetZone.TARGET_ZONE_A;
             RobotLogCommon.d(TAG, "No rings detected: set Target Zone Goal A");
         } else
 
         // If the number of white pixels is greater than the minimum for a stack
         // of  4 rings then the target is Goal C.
         if (white_pixels > pRingParameters.minimum_pixel_count_4_rings) {
-            targetZone = RobotConstants.TargetZone.TARGET_ZONE_C;
+            targetZone = RingRecognitionConstants.TargetZone.TARGET_ZONE_C;
             RobotLogCommon.d(TAG, "Found four rings: set Target Zone Goal C");
         } else { // Must be 1 ring.
-            targetZone = RobotConstants.TargetZone.TARGET_ZONE_B;
+            targetZone = RingRecognitionConstants.TargetZone.TARGET_ZONE_B;
             RobotLogCommon.d(TAG, "Found one ring: set Target Zone Goal B");
         }
 

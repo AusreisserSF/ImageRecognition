@@ -12,6 +12,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
+import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.auto.vision.FileImage;
 import org.firstinspires.ftc.teamcode.auto.vision.RingParameters;
 import org.firstinspires.ftc.teamcode.auto.vision.RingRecognition;
@@ -33,8 +34,9 @@ public class RecognitionDispatcher extends Application {
     public static final Font NOTIFICATION_TEXT_FONT = Font.font("Comic Sans MS", FontWeight.BOLD, 24);
 
     // See https://stackoverflow.com/questions/21729362/trying-to-call-a-javafx-application-from-java-nosuchmethodexception
-    //!! Default constructor is required. This is the one that launches calls.
+    //!! Default constructor is required.
     public RecognitionDispatcher() {
+        RobotLogCommon.initialize(WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.logDir);
         RobotLogCommon.i(TAG, "Starting ring recognition");
     }
 
@@ -44,12 +46,13 @@ public class RecognitionDispatcher extends Application {
         Pane field = new Pane();
 
         // Read the parameters for ring recognition from the xml file.
-        RingParametersXML ringParametersXML = new RingParametersXML();
+        RingParametersXML ringParametersXML = new RingParametersXML(WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.xmlDir);
         RingParameters ringParameters = ringParametersXML.getRingParameters();
         RingRecognition ringRecognition = new RingRecognition();
 
         // Call the OpenCV subsystem.
-        FileImage fileImage = new FileImage(ringParameters.imageParameters.file_name);
+        String imagePath = WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.imageDir;
+        FileImage fileImage = new FileImage(imagePath + ringParameters.imageParameters.file_name);
         RingReturn ringReturn = ringRecognition.findGoldRings(fileImage, ringParameters);
         if (ringReturn.fatalComputerVisionError)
             throw new AutonomousRobotException(TAG, "Error in computer vision subsystem");
@@ -57,10 +60,7 @@ public class RecognitionDispatcher extends Application {
         RobotLogCommon.d(TAG, "Found Target Zone " + ringReturn.targetZone);
 
         // Display the image in the Pane.
-
-        //String imageFilename = "\"" + ringParameters.imageParameters.file_name + "\"";
-        //Image image = new Image(imageFilename);
-        InputStream stream = new FileInputStream(ringParameters.imageParameters.file_name);
+        InputStream stream = new FileInputStream(imagePath + ringParameters.imageParameters.file_name);
         Image image = new Image(stream);
         ImageView imageView = new ImageView();
         imageView.setImage(image);
@@ -83,6 +83,8 @@ public class RecognitionDispatcher extends Application {
         pStage.setTitle("FTC 2020 - 2021 Ultimate Goal");
         pStage.setScene(scene);
         pStage.show();
+
+        RobotLogCommon.closeLog();
     }
 
 }

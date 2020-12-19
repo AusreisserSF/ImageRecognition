@@ -21,15 +21,7 @@
         </SOURCES>
       </library>
     </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://C:/FTCDevCommonIntelliJ_jar/ftcdevcommon.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" exported="" name="lib" level="project" />
+    <orderEntry type="library" exported="" name="ftcdevcommon_1_2" level="project" />
   </component>
 </module>

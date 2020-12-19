@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.auto.vision;
 
-import org.opencv.core.Rect;
-
 // Parameters extracted from RingParameters.xml.
 public class RingParameters {
 

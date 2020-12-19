@@ -1,10 +1,5 @@
 package org.firstinspires.ftc.teamcode.auto.vision;
 
-//!! Android only
-/*
-import android.util.Pair;
-*/
-
 import org.firstinspires.ftc.ftcdevcommon.Pair;
 import org.opencv.core.Mat;
 
