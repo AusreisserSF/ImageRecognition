@@ -1,38 +1,19 @@
-[2020-12-19 14:12:59.576] [INFO   ] RingRecognition Starting ring recognition 
-[2020-12-19 14:12:59.688] [FINE   ] RingParametersXML Parsing XML ring_parameters 
-[2020-12-19 14:12:59.702] [FINE   ] CommonParametersXML Parsing XML image_parameters 
-[2020-12-19 14:12:59.708] [FINE   ] CommonParametersXML Parsing XML hsv_parameters 
-[2020-12-19 14:12:59.725] [FINE   ] RingRecognition In RingRecognition.findGoldRings 
-[2020-12-19 14:12:59.725] [FINE   ] ImageUtils File name Files/images/BRIO_2020-12-11_16-04-33_4_rings.jpg 
-[2020-12-19 14:12:59.734] [FINE   ] ImageUtils Image width 640, height 360 
-[2020-12-19 14:12:59.753] [FINE   ] RingRecognition Writing original image Files/images/Image_12191412_59734_IMG.png 
-[2020-12-19 14:12:59.770] [FINE   ] ImageUtils Image ROI x 230, y 150, width 200, height 100 
-[2020-12-19 14:12:59.771] [FINE   ] RingRecognition Writing image ROI Files/images/Image_12191412_59734_ROI.png 
-[2020-12-19 14:12:59.783] [FINE   ] RingRecognition Target hue levels: low 5, high 30 
-[2020-12-19 14:12:59.784] [FINE   ] RingRecognition Actual inRange HSV levels: hue low 5, hue high 30 
-[2020-12-19 14:12:59.784] [FINE   ] RingRecognition Actual inRange HSV levels: saturation low 100, value low 100 
-[2020-12-19 14:12:59.786] [FINE   ] RingRecognition Writing Files/images/Image_12191412_59734_HSV_THR.png 
-[2020-12-19 14:12:59.786] [FINE   ] RingRecognition Number of white pixels 4604 
-[2020-12-19 14:12:59.787] [FINE   ] RingRecognition Found four rings: set Target Zone Goal C 
-[2020-12-19 14:12:59.788] [FINE   ] RingRecognition Found Target Zone TARGET_ZONE_C 
-[2020-12-19 14:13:00.035] [INFO   ] Closing log and writing out the last 1 entries on the queue 
-[2020-12-19 14:13:00.035] [INFO   ] Shutting down log 
-[2021-01-06 17:36:35.842] [INFO   ] RingRecognition Starting ring recognition 
-[2021-01-06 17:36:35.978] [FINE   ] RingParametersXML Parsing XML ring_parameters 
-[2021-01-06 17:36:36.014] [FINE   ] CommonParametersXML Parsing XML image_parameters 
-[2021-01-06 17:36:36.023] [FINE   ] CommonParametersXML Parsing XML hsv_parameters 
-[2021-01-06 17:36:39.244] [FINE   ] RingRecognition In RingRecognition.findGoldRings 
-[2021-01-06 17:36:39.245] [FINE   ] ImageUtils File name Files/images/BRIO_2020-12-11_16-04-33_4_rings.jpg 
-[2021-01-06 17:36:39.251] [FINE   ] ImageUtils Image width 640, height 360 
-[2021-01-06 17:36:39.263] [FINE   ] RingRecognition Writing original image Files/images/Image_01061736_39251_IMG.png 
-[2021-01-06 17:36:39.273] [FINE   ] ImageUtils Image ROI x 230, y 150, width 200, height 100 
-[2021-01-06 17:36:39.273] [FINE   ] RingRecognition Writing image ROI Files/images/Image_01061736_39251_ROI.png 
-[2021-01-06 17:36:39.281] [FINE   ] RingRecognition Target hue levels: low 5, high 30 
-[2021-01-06 17:36:39.281] [FINE   ] RingRecognition Actual inRange HSV levels: hue low 5, hue high 30 
-[2021-01-06 17:36:39.281] [FINE   ] RingRecognition Actual inRange HSV levels: saturation low 100, value low 100 
-[2021-01-06 17:36:39.282] [FINE   ] RingRecognition Writing Files/images/Image_01061736_39251_HSV_THR.png 
-[2021-01-06 17:36:39.282] [FINE   ] RingRecognition Number of white pixels 4604 
-[2021-01-06 17:36:39.283] [FINE   ] RingRecognition Found four rings: set Target Zone Goal C 
-[2021-01-06 17:36:39.283] [FINE   ] RingRecognition Found Target Zone TARGET_ZONE_C 
-[2021-01-06 17:36:39.472] [INFO   ] Closing log and writing out the last 1 entries on the queue 
-[2021-01-06 17:36:39.472] [INFO   ] Shutting down log 
+[2021-02-03 08:52:12.366] [INFO   ] RingRecognition Starting ring recognition
+[2021-02-03 08:52:12.502] [FINE   ] RingParametersXML Parsing XML ring_parameters 
+[2021-02-03 08:52:12.531] [FINE   ] CommonParametersXML Parsing XML image_parameters 
+[2021-02-03 08:52:12.537] [FINE   ] CommonParametersXML Parsing XML hsv_parameters 
+[2021-02-03 08:52:15.310] [FINE   ] RingRecognition In RingRecognition.findGoldRings 
+[2021-02-03 08:52:15.311] [FINE   ] ImageUtils File name Files/images/BRIO_2020-12-11_16-04-33_4_rings.jpg 
+[2021-02-03 08:52:15.321] [FINE   ] ImageUtils Image width 640, height 360 
+[2021-02-03 08:52:15.330] [FINE   ] RingRecognition Writing original image Files/images/Image_02030852_15321_IMG.png 
+[2021-02-03 08:52:15.342] [FINE   ] ImageUtils Image ROI x 230, y 150, width 200, height 100 
+[2021-02-03 08:52:15.342] [FINE   ] RingRecognition Writing image ROI Files/images/Image_02030852_15321_ROI.png 
+[2021-02-03 08:52:15.353] [FINE   ] RingRecognition Target hue levels: low 5, high 30 
+[2021-02-03 08:52:15.353] [FINE   ] RingRecognition Actual inRange HSV levels: hue low 5, hue high 30 
+[2021-02-03 08:52:15.354] [FINE   ] RingRecognition Actual inRange HSV levels: saturation low 100, value low 100 
+[2021-02-03 08:52:15.356] [FINE   ] RingRecognition Writing Files/images/Image_02030852_15321_HSV_THR.png 
+[2021-02-03 08:52:15.357] [FINE   ] RingRecognition Number of white pixels 4604 
+[2021-02-03 08:52:15.358] [FINE   ] RingRecognition Found four rings: set Target Zone Goal C 
+[2021-02-03 08:52:15.359] [FINE   ] RingRecognition Found Target Zone TARGET_ZONE_C 
+[2021-02-03 08:52:15.563] [INFO   ] Closing log and writing out the last 1 entries on the queue 
+[2021-02-03 08:52:15.564] [INFO   ] Shutting down log 

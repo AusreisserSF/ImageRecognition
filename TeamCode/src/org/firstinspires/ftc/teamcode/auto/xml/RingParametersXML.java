@@ -47,7 +47,7 @@ public class RingParametersXML {
     }
 
     public RingParameters getRingParameters() throws XPathExpressionException {
-        XMLCommon xmlCommon = new XMLCommon();
+        ImageXMLCommon imageXmlCommon = new ImageXMLCommon();
         XPathExpression expr;
         CommonParameters.ImageParameters imageParameters;
         CommonParameters.HSVParameters hsvParameters;
@@ -68,7 +68,7 @@ public class RingParametersXML {
         if ((image_parameters_node == null) || !image_parameters_node.getNodeName().equals("image_parameters"))
             throw new AutonomousRobotException(TAG, "Element 'image_parameters' not found");
 
-        imageParameters = xmlCommon.parseImageParameters(image_parameters_node);
+        imageParameters = imageXmlCommon.parseImageParameters(image_parameters_node);
 
         // Point to <hsv_parameters>
         expr = xpath.compile("//ring_parameters/hsv_parameters");
@@ -76,7 +76,7 @@ public class RingParametersXML {
         if (hsv_parameters_node == null)
             throw new AutonomousRobotException(TAG, "Element '//ring_parameters/hsv_parameters' not found");
 
-        hsvParameters = xmlCommon.parseHSVParameters(hsv_parameters_node);
+        hsvParameters = imageXmlCommon.parseHSVParameters(hsv_parameters_node);
 
         // Point to <size_parameters>
         expr = xpath.compile("//ring_parameters/size_parameters");

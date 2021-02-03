@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.auto.vision.CommonParameters;
 import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
 
-public class XMLCommon {
+public class ImageXMLCommon {
 
     public static final String TAG = "CommonParametersXML";
 
