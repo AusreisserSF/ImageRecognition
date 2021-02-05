@@ -9,7 +9,8 @@ public interface ImageProvider {
 
     enum ImageFormat {RGB, BGR}
 
-    //**TODO requires minSdkVersion 26  public Pair<Mat, LocalDateTime> getImage() throws InterruptedException;
+    // For LocalDateTime Android requires minSdkVersion 26
+    // public Pair<Mat, LocalDateTime> getImage() throws InterruptedException {
     Pair<Mat, Date> getImage() throws InterruptedException;
 
     ImageFormat getImageFormat();

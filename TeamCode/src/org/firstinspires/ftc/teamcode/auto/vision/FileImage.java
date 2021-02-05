@@ -21,7 +21,8 @@ public class FileImage implements ImageProvider {
     }
 
     @Override
-    //**TODO requires minSdkVersion 26 public Pair<Mat, LocalDateTime> getImage() throws InterruptedException {
+    // For LocalDateTime Android requires minSdkVersion 26
+    // public Pair<Mat, LocalDateTime> getImage() throws InterruptedException {
     public Pair<Mat, Date> getImage() {
         Mat bgrMat = imageUtils.loadImage(pathToImageFile);
         return Pair.create(bgrMat, new Date());

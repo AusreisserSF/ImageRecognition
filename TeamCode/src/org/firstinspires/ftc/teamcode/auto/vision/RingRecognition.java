@@ -58,7 +58,8 @@ public class RingRecognition {
         if (ringImage.first == null)
             return new RingReturn(true, RingRecognitionConstants.TargetZone.TARGET_ZONE_NPOS); // don't crash
 
-        //TODO //** requires Android minSdkVersion 26 String fileDate = CommonUtils.getLocalDateTimeStamp(ringImage.second);
+        // For LocalDateTime Android requires minSdkVersion 26
+        // public Pair<Mat, LocalDateTime> getImage() throws InterruptedException {
         String fileDate = CommonUtils.getDateTimeStamp(ringImage.second);
         String outputFilenamePreamble = workingDirectory + imageFilePrefix + fileDate;
 
