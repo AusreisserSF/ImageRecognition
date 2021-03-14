@@ -17,3 +17,85 @@
 [2021-02-05 08:54:16.541] [FINE   ] RingRecognition Found Target Zone TARGET_ZONE_C 
 [2021-02-05 08:54:16.800] [INFO   ] Closing log and writing out the last 1 entries on the queue 
 [2021-02-05 08:54:16.801] [INFO   ] Shutting down log 
+[2021-03-13 07:30:53.718] [INFO   ] RingRecognition Starting ring recognition 
+[2021-03-13 07:30:53.906] [FINE   ] RingParametersXML Parsing XML ring_parameters 
+[2021-03-13 07:30:53.949] [FINE   ] CommonParametersXML Parsing XML image_parameters 
+[2021-03-13 07:30:53.958] [FINE   ] CommonParametersXML Parsing XML hsv_parameters 
+[2021-03-13 07:30:58.177] [FINE   ] RingRecognition In RingRecognition.findGoldRings 
+[2021-03-13 07:30:58.177] [FINE   ] ImageUtils File name Files/images/Image_03111514_4_rings_IMG.png 
+[2021-03-13 07:30:58.187] [FINE   ] ImageUtils Image width 800, height 448 
+[2021-03-13 07:30:58.195] [FINE   ] RingRecognition Writing original image Files/images/Image_03130730_58187_IMG.png 
+[2021-03-13 07:30:58.211] [FINE   ] ImageUtils Image ROI x 600, y 300, width 180, height 110 
+[2021-03-13 07:30:58.212] [FINE   ] RingRecognition Writing image ROI Files/images/Image_03130730_58187_ROI.png 
+[2021-03-13 07:30:58.223] [FINE   ] RingRecognition Target hue levels: low 5, high 30 
+[2021-03-13 07:30:58.224] [FINE   ] RingRecognition Actual inRange HSV levels: hue low 5, hue high 30 
+[2021-03-13 07:30:58.224] [FINE   ] RingRecognition Actual inRange HSV levels: saturation low 100, value low 100 
+[2021-03-13 07:30:58.225] [FINE   ] RingRecognition Writing Files/images/Image_03130730_58187_HSV_THR.png 
+[2021-03-13 07:30:58.225] [FINE   ] RingRecognition Number of white pixels 278 
+[2021-03-13 07:30:58.226] [FINE   ] RingRecognition No rings detected: set Target Zone Goal A 
+[2021-03-13 07:30:58.227] [FINE   ] RingRecognition Found Target Zone TARGET_ZONE_A 
+[2021-03-13 07:30:58.482] [INFO   ] Closing log and writing out the last 1 entries on the queue 
+[2021-03-13 07:30:58.482] [INFO   ] Shutting down log 
+[2021-03-13 07:33:01.420] [INFO   ] RingRecognition Starting ring recognition 
+[2021-03-13 07:33:01.536] [FINE   ] RingParametersXML Parsing XML ring_parameters 
+[2021-03-13 07:33:01.552] [FINE   ] CommonParametersXML Parsing XML image_parameters 
+[2021-03-13 07:33:01.558] [FINE   ] CommonParametersXML Parsing XML hsv_parameters 
+[2021-03-13 07:33:01.578] [FINE   ] RingRecognition In RingRecognition.findGoldRings 
+[2021-03-13 07:33:01.578] [FINE   ] ImageUtils File name Files/images/Image_03111514_4_rings_IMG.png 
+[2021-03-13 07:33:01.593] [FINE   ] ImageUtils Image width 800, height 448 
+[2021-03-13 07:33:01.610] [FINE   ] RingRecognition Writing original image Files/images/Image_03130733_01593_IMG.png 
+[2021-03-13 07:33:01.640] [FINE   ] ImageUtils Image ROI x 610, y 300, width 180, height 120 
+[2021-03-13 07:33:01.641] [FINE   ] RingRecognition Writing image ROI Files/images/Image_03130733_01593_ROI.png 
+[2021-03-13 07:33:01.650] [FINE   ] RingRecognition Target hue levels: low 5, high 30 
+[2021-03-13 07:33:01.650] [FINE   ] RingRecognition Actual inRange HSV levels: hue low 5, hue high 30 
+[2021-03-13 07:33:01.651] [FINE   ] RingRecognition Actual inRange HSV levels: saturation low 100, value low 100 
+[2021-03-13 07:33:01.652] [FINE   ] RingRecognition Writing Files/images/Image_03130733_01593_HSV_THR.png 
+[2021-03-13 07:33:01.653] [FINE   ] RingRecognition Number of white pixels 278 
+[2021-03-13 07:33:01.653] [FINE   ] RingRecognition No rings detected: set Target Zone Goal A 
+[2021-03-13 07:33:01.654] [FINE   ] RingRecognition Found Target Zone TARGET_ZONE_A 
+[2021-03-13 07:33:01.944] [INFO   ] Closing log and writing out the last 1 entries on the queue 
+[2021-03-13 07:33:01.945] [INFO   ] Shutting down log 
+[2021-03-13 20:22:35.275] [INFO   ] RingRecognition Starting ring recognition 
+[2021-03-13 20:22:50.477] [FINE   ] RingParametersXML Parsing XML ring_parameters 
+[2021-03-13 20:22:50.502] [FINE   ] CommonParametersXML Parsing XML image_parameters 
+[2021-03-13 20:22:50.506] [FINE   ] CommonParametersXML Parsing XML hsv_parameters 
+[2021-03-13 20:22:50.512] [FINE   ] TowerParametersXML Parsing XML tower_parameters 
+[2021-03-13 20:22:50.512] [FINE   ] CommonParametersXML Parsing XML image_parameters 
+[2021-03-13 20:22:50.513] [FINE   ] CommonParametersXML Parsing XML gray_parameters 
+[2021-03-13 20:23:07.352] [FINE   ] TowerGoalLocation In TowerGoalLocation.getAngleToTowerGoal 
+[2021-03-13 20:23:08.957] [FINE   ] ImageUtils File name Files/images/Image_03111514_4_rings_IMG.png 
+[2021-03-13 20:23:08.992] [FINE   ] ImageUtils Image width 800, height 448 
+[2021-03-13 20:23:29.919] [FINE   ] TowerGoalLocation Writing original image Files/images/Image_03132023_08992_IMG.png 
+[2021-03-13 20:23:34.092] [FINE   ] ImageUtils Image ROI x 180, y 125, width 180, height 100 
+[2021-03-13 20:23:35.591] [FINE   ] TowerGoalLocation Writing image ROI Files/images/Image_03132023_08992_ROI.png 
+[2021-03-13 20:23:40.664] [FINE   ] TowerGoalLocation Writing Files/images/Image_03132023_08992_GRAY.png 
+[2021-03-13 20:23:42.391] [FINE   ] ImageUtils Original image: grayscale median 62 
+[2021-03-13 20:23:42.391] [FINE   ] ImageUtils Grayscale median target 165 
+[2021-03-13 20:23:42.393] [FINE   ] ImageUtils Grayscale adjustment 103 
+[2021-03-13 20:23:44.074] [FINE   ] TowerGoalLocation Writing adjusted grayscale image Files/images/Image_03132023_08992_ADJ.png 
+[2021-03-13 20:23:47.713] [FINE   ] TowerGoalLocation Threshold values: low 180, high 255 
+[2021-03-13 20:23:52.654] [FINE   ] TowerGoalLocation Writing Files/images/Image_03132023_08992_ADJ_THR.png 
+[2021-03-13 20:23:58.631] [FINE   ] TowerGoalLocation Number of contours 4 
+[2021-03-13 20:24:24.614] [FINE   ] TowerGoalLocation Writing Files/images/Image_03132023_08992_CON.png 
+[2021-03-13 20:28:14.483] [INFO   ] RingRecognition Starting ring recognition 
+[2021-03-13 20:28:14.600] [FINE   ] RingParametersXML Parsing XML ring_parameters 
+[2021-03-13 20:28:14.615] [FINE   ] CommonParametersXML Parsing XML image_parameters 
+[2021-03-13 20:28:14.621] [FINE   ] CommonParametersXML Parsing XML hsv_parameters 
+[2021-03-13 20:28:14.632] [FINE   ] TowerParametersXML Parsing XML tower_parameters 
+[2021-03-13 20:28:14.632] [FINE   ] CommonParametersXML Parsing XML image_parameters 
+[2021-03-13 20:28:14.634] [FINE   ] CommonParametersXML Parsing XML gray_parameters 
+[2021-03-13 20:28:14.639] [FINE   ] TowerGoalLocation In TowerGoalLocation.getAngleToTowerGoal 
+[2021-03-13 20:28:14.639] [FINE   ] ImageUtils File name Files/images/Vuforia_Webcam_1_Frame-0.png 
+[2021-03-13 20:28:14.652] [FINE   ] ImageUtils Image width 640, height 360 
+[2021-03-13 20:28:14.665] [FINE   ] TowerGoalLocation Writing original image Files/images/Image_03132028_14652_IMG.png 
+[2021-03-13 20:28:14.681] [FINE   ] ImageUtils Image ROI x 180, y 125, width 180, height 100 
+[2021-03-13 20:28:14.681] [FINE   ] TowerGoalLocation Writing image ROI Files/images/Image_03132028_14652_ROI.png 
+[2021-03-13 20:28:14.693] [FINE   ] TowerGoalLocation Writing Files/images/Image_03132028_14652_GRAY.png 
+[2021-03-13 20:28:14.702] [FINE   ] ImageUtils Original image: grayscale median 120 
+[2021-03-13 20:28:14.703] [FINE   ] ImageUtils Grayscale median target 165 
+[2021-03-13 20:28:14.703] [FINE   ] ImageUtils Grayscale adjustment 45 
+[2021-03-13 20:28:14.704] [FINE   ] TowerGoalLocation Writing adjusted grayscale image Files/images/Image_03132028_14652_ADJ.png 
+[2021-03-13 20:28:14.704] [FINE   ] TowerGoalLocation Threshold values: low 180, high 255 
+[2021-03-13 20:28:14.706] [FINE   ] TowerGoalLocation Writing Files/images/Image_03132028_14652_ADJ_THR.png 
+[2021-03-13 20:28:14.711] [FINE   ] TowerGoalLocation Number of contours 2 
+[2021-03-13 20:28:14.717] [FINE   ] TowerGoalLocation Writing Files/images/Image_03132028_14652_CON.png 

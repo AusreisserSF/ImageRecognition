@@ -24,27 +24,10 @@ public class RingRecognition {
     private static final String TAG = "RingRecognition";
     private static final String imageFilePrefix = "Image_";
 
-    private static final boolean openCVInitialized;
     private final String workingDirectory;
     private final ImageUtils imageUtils;
 
-    // Load OpenCV 4.4.0.
-    static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        openCVInitialized = true; // IntelliJ only
-
-        /* Android only
-        if (OpenCVLoader.initDebug())
-            openCVInitialized = true;
-        */
-    }
-
-    public RingRecognition() {
-        // A failure in OpenCV initialization will prevent us from recognizing
-        // the ring stack, but do not treat this as fatal.
-        if (!openCVInitialized)
-            RobotLogCommon.d(TAG, "Failure in OpenCV initialization");
-
+     public RingRecognition() {
         workingDirectory = WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.imageDir;
         imageUtils = new ImageUtils();
     }

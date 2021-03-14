@@ -1,0 +1,19 @@
+<tower_parameters>
+    <image_parameters>
+        <file>Vuforia_Webcam_1_Frame-0.png</file>
+        <resolution>
+            <width>640</width>
+            <height>360</height>
+        </resolution>
+        <image_roi>
+            <x>180</x>
+            <y>125</y>
+            <width>180</width>
+            <height>100</height>
+        </image_roi>
+    </image_parameters>
+    <gray_parameters>
+   <target>165</target>
+    <low_threshold>180</low_threshold>
+</gray_parameters>
+</tower_parameters>

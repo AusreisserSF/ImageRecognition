@@ -13,11 +13,10 @@ import javafx.stage.Stage;
 import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
-import org.firstinspires.ftc.teamcode.auto.vision.FileImage;
-import org.firstinspires.ftc.teamcode.auto.vision.RingParameters;
-import org.firstinspires.ftc.teamcode.auto.vision.RingRecognition;
-import org.firstinspires.ftc.teamcode.auto.vision.RingReturn;
+import org.firstinspires.ftc.teamcode.auto.vision.*;
 import org.firstinspires.ftc.teamcode.auto.xml.RingParametersXML;
+import org.firstinspires.ftc.teamcode.auto.xml.TowerParametersXML;
+import org.opencv.core.Core;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -33,11 +32,21 @@ public class RecognitionDispatcher extends Application {
     public static final double NOTIFICATION_TEXT_POSITION_X = 10;
     public static final Font NOTIFICATION_TEXT_FONT = Font.font("Comic Sans MS", FontWeight.BOLD, 24);
 
+    // Load OpenCV.
+    private static final boolean openCVInitialized;
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME); // IntelliJ only
+        openCVInitialized = true; // IntelliJ only
+    }
+
     // See https://stackoverflow.com/questions/21729362/trying-to-call-a-javafx-application-from-java-nosuchmethodexception
     //!! Default constructor is required.
     public RecognitionDispatcher() {
         RobotLogCommon.initialize(WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.logDir);
         RobotLogCommon.i(TAG, "Starting ring recognition");
+
+        if (!openCVInitialized)
+            new AutonomousRobotException(TAG, "Failure in OpenCV initialization");
     }
 
     @Override
@@ -50,8 +59,22 @@ public class RecognitionDispatcher extends Application {
         RingParameters ringParameters = ringParametersXML.getRingParameters();
         RingRecognition ringRecognition = new RingRecognition();
 
-        // Call the OpenCV subsystem.
+        // Read the parameters for the alignment of the robot with the tower goal
+        // from the xml file.
+        TowerParametersXML towerParametersXML = new TowerParametersXML(WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.xmlDir);
+        TowerParameters towerParameters = towerParametersXML.getTowerParameters();
+        TowerGoalAlignment towerGoalAlignment = new TowerGoalAlignment();
+
         String imagePath = WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.imageDir;
+
+        // Align the robot with the tower goal.
+        FileImage towerGoalFileImage = new FileImage(imagePath + towerParameters.imageParameters.file_name);
+        double alignmentAngle = towerGoalAlignment.getAngleToTowerGoal(towerGoalFileImage, towerParameters);
+        System.out.println("Tower goal alignment angle " + alignmentAngle);
+        System.exit(0);
+
+
+        // Call the OpenCV subsystem.
         FileImage fileImage = new FileImage(imagePath + ringParameters.imageParameters.file_name);
         RingReturn ringReturn = ringRecognition.findGoldRings(fileImage, ringParameters);
         if (ringReturn.fatalComputerVisionError)
