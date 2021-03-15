@@ -53,6 +53,9 @@ public class TowerParametersXML {
         XPathExpression expr;
         CommonParameters.ImageParameters imageParameters;
         CommonParameters.GrayParameters grayParameters;
+        double minArea;
+        double maxArea;
+        double angleOffset;
      
         // Point to the first node.
         RobotLogCommon.d(TAG, "Parsing XML tower_parameters");
@@ -78,7 +81,47 @@ public class TowerParametersXML {
 
         grayParameters = imageXmlCommon.parseGrayParameters(gray_parameters_node);
 
-        return new TowerParameters(imageParameters, grayParameters);
+        // Point to <validation_and_adjustment>
+        expr = xpath.compile("//tower_parameters/validation_and_adjustment");
+        Node val_adj_node = (Node) expr.evaluate(document, XPathConstants.NODE);
+        if (val_adj_node == null)
+            throw new AutonomousRobotException(TAG, "Element '//tower_parameters/validation_and_adjustment' not found");
+
+        // Process the three children of the <validation_and_adjustment> element
+        Node min_area_node = val_adj_node.getFirstChild();
+        min_area_node = getNextElement(min_area_node);
+        if ((min_area_node == null) || !min_area_node.getNodeName().equals("minimum_area") || min_area_node.getTextContent().isEmpty())
+            throw new AutonomousRobotException(TAG, "Element 'minimum_area' missing or empty");
+
+        try {
+            minArea = Double.parseDouble(min_area_node.getTextContent());
+        } catch (NumberFormatException nex) {
+            throw new AutonomousRobotException(TAG, "Invalid number format in element 'minimum_area'");
+        }
+
+        Node max_area_node = min_area_node.getNextSibling();
+        max_area_node = getNextElement(max_area_node);
+        if ((max_area_node == null) || !max_area_node.getNodeName().equals("maximum_area") || max_area_node.getTextContent().isEmpty())
+            throw new AutonomousRobotException(TAG, "Element 'maximum_area' missing or empty");
+
+        try {
+            maxArea = Double.parseDouble(max_area_node.getTextContent());
+        } catch (NumberFormatException nex) {
+            throw new AutonomousRobotException(TAG, "Invalid number format in element 'maximum_area'");
+        }
+
+        Node angle_offset_node = max_area_node.getNextSibling();
+        angle_offset_node = getNextElement(angle_offset_node);
+        if ((angle_offset_node == null) || !angle_offset_node.getNodeName().equals("vumark_center_to_frame_center_angle") || angle_offset_node.getTextContent().isEmpty())
+            throw new AutonomousRobotException(TAG, "Element 'vumark_center_to_frame_center_angle' missing or empty");
+
+        try {
+            angleOffset = Double.parseDouble(angle_offset_node.getTextContent());
+        } catch (NumberFormatException nex) {
+            throw new AutonomousRobotException(TAG, "Invalid number format in element 'vumark_center_to_frame_center_angle'");
+        }
+
+        return new TowerParameters(imageParameters, grayParameters, minArea, maxArea, angleOffset);
     }
 
     private Node getNextElement(Node pNode) {

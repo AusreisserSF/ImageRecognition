@@ -13,7 +13,12 @@
         </image_roi>
     </image_parameters>
     <gray_parameters>
-   <target>165</target>
-    <low_threshold>180</low_threshold>
-</gray_parameters>
+        <target>165</target>
+        <low_threshold>180</low_threshold>
+    </gray_parameters>
+    <validation_and_adjustment>
+        <minimum_area>10000.0</minimum_area>
+        <maximum_area>15000.0</maximum_area>
+        <vumark_center_to_frame_center_angle>0.0</vumark_center_to_frame_center_angle>
+    </validation_and_adjustment>
 </tower_parameters>
