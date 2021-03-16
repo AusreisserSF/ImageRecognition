@@ -13,7 +13,7 @@
         </image_roi>
     </image_parameters>
     <gray_parameters>
-        <target>165</target>
+        <target>125</target>
         <low_threshold>180</low_threshold>
     </gray_parameters>
     <validation_and_adjustment>

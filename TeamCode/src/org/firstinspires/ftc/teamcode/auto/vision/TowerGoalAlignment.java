@@ -1,23 +1,18 @@
 package org.firstinspires.ftc.teamcode.auto.vision;
 
-//!! Android only
-//** Do this in FTCAuto import org.opencv.android.OpenCVLoader;
-
 import org.firstinspires.ftc.ftcdevcommon.CommonUtils;
 import org.firstinspires.ftc.ftcdevcommon.Pair;
 import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
-
-//** Android import org.firstinspires.ftc.ftcdevcommon.android.WorkingDirectory;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
-
 import org.firstinspires.ftc.teamcode.auto.RobotConstants;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 
-import java.time.LocalDateTime;
 import java.util.*;
+
+//** Android import org.firstinspires.ftc.ftcdevcommon.android.WorkingDirectory;
 
 // Copied on 3/12/2021 from FtcUltimateGoal on Github.
 public class TowerGoalAlignment {
@@ -25,11 +20,11 @@ public class TowerGoalAlignment {
     private static final String TAG = "TowerGoalLocation";
     private static final String imageFilePrefix = "Image_";
 
-    public static final double TOWER_ANGLE_NPOS = -361.0; //** ->? RobotConstantsUltimateGoal; */
+    public static final double TOWER_ANGLE_NPOS = -361.0; //** RobotConstantsUltimateGoal
 
     private final String workingDirectory;
     private final ImageUtils imageUtils;
-    private Random rng = new Random(12345);
+    private final Random rng = new Random(12345);
 
     public TowerGoalAlignment() {
         workingDirectory = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
@@ -78,8 +73,7 @@ public class TowerGoalAlignment {
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_GRAY.png");
 
         // Adjust the brightness.
-        Mat adjustedGray = new Mat();
-        adjustedGray = imageUtils.adjustGrayscaleBrightness(grayROI, pTowerParameters.grayParameters.target);
+        Mat adjustedGray = imageUtils.adjustGrayscaleBrightness(grayROI, pTowerParameters.grayParameters.target);
         Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ.png", adjustedGray);
         RobotLogCommon.d(TAG, "Writing adjusted grayscale image " + outputFilenamePreamble + "_ADJ.png");
 
@@ -127,7 +121,7 @@ public class TowerGoalAlignment {
 
         double maxContourArea = 0;
         int maxValIdx = 0;
-        double contourArea = 0;
+        double contourArea;
         for (int contourIdx = 0; contourIdx < contours.size(); contourIdx++) {
             contourArea = Imgproc.contourArea(contours.get(contourIdx));
             if (maxContourArea < contourArea) {
@@ -155,7 +149,7 @@ public class TowerGoalAlignment {
         Point[] vertices = new Point[4];
         rotatedRect.points(vertices);
         MatOfPoint points = new MatOfPoint(vertices);
-        Imgproc.drawContours(vumark, Arrays.asList(points), -1, new Scalar(255, 0, 0), 4);
+        Imgproc.drawContours(vumark, Collections.singletonList(points), -1, new Scalar(255, 0, 0), 4);
 
         // Get the centroid of the Vumark.
         Moments vuMarkMoments = Imgproc.moments(contours.get(maxValIdx));
@@ -167,8 +161,6 @@ public class TowerGoalAlignment {
         Imgcodecs.imwrite(outputFilenamePreamble + "_RR.png", vumark);
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_RR.png");
 
-        //**TODO stopped here
-        //** Now compute the angle to the tower
         return computeAngle(pTowerParameters.imageParameters.image_roi.width, vumarkCentroid.x, pTowerParameters.vumark_center_to_frame_center_angle);
     }
 
@@ -223,6 +215,10 @@ public class TowerGoalAlignment {
         // Vumark center to the left of ROI center --
         // offset -5; angle 10 * directionToVumarkCenter(-1) * -1 -> -5 - 10;  -> -15
         double finalAngleAdjustment = pAngleOffset - (thetaDegrees * directionToVumarkCenter * -1);
+        RobotLogCommon.d(TAG, "Expected angle offset " + pAngleOffset);
+        RobotLogCommon.d(TAG, "Raw angle to Vumark " + thetaDegrees);
+        RobotLogCommon.d(TAG, "Final angle adjustment " + finalAngleAdjustment);
+
         return finalAngleAdjustment;
     }
 
