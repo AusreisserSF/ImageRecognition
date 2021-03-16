@@ -169,8 +169,61 @@ public class TowerGoalAlignment {
 
         //**TODO stopped here
         //** Now compute the angle to the tower
-        // pTowerParameters.vumark_center_to_frame_center_angle;
-        return TOWER_ANGLE_NPOS; //*** TEMP
+        return computeAngle(pTowerParameters.imageParameters.image_roi.width, vumarkCentroid.x, pTowerParameters.vumark_center_to_frame_center_angle);
+    }
+
+    // At the robot's ideal position for shooting, the Vumark may not be in
+    // the center of the region of interest (ROI) defined in the xml file.
+    // The xml file supports an element vumark_center_to_frame_center_angle.
+    // Account for that offset here when computing the number of degrees
+    // that the robot needs to turn to be in its ideal shooting position.
+    private double computeAngle(double pROIWidth, double pVumarkCentroidX, double pAngleOffset) {
+
+        //**TODO replace these constants with a computation based on the
+        // similar triangles method.
+        // For distance use height instead of width.
+
+        //** width of object as a function of skew
+        // see https://medium.com/analytics-vidhya/how-to-track-distance-and-angle-of-an-object-using-opencv-1f1966d418b4
+
+        final double INCHES_TO_TOWER = 60.0; // from the launch line
+        final double VUMARK_WIDTH_INCHES = 11.0;
+        final double VUMARK_HEIGHT_INCHES = 8.5;
+        final double VUMARK_PIXEL_WIDTH_FROM_LAUNCH_LINE = 110; //** guess: 11.0" = 110px @60"
+        final double PIXELS_PER_INCH_AT_LAUNCH_LINE = VUMARK_PIXEL_WIDTH_FROM_LAUNCH_LINE / VUMARK_WIDTH_INCHES;
+
+        // Get the angle from the robot to the center of the Vumark.
+        // Get the distance from the center of the Vumark to the center
+        // of the ROI.
+        double vumarkCenterOffset = pVumarkCentroidX - (pROIWidth / 2);
+
+        // Get the direction of the center of the Vumark from the center
+        // of the ROI. If the Vumark is to the right of the center of the
+        // ROI then the direction will be positive; otherwise negative.
+        double thetaDegrees = 0;
+        double directionToVumarkCenter = Math.signum(vumarkCenterOffset);
+        if (directionToVumarkCenter != 0) {
+            // Get the number of degrees from the center of the ROI to the
+            // center of the Vumark.
+            double oppositePixels = Math.abs(vumarkCenterOffset);
+            double adjacentPixels = INCHES_TO_TOWER * PIXELS_PER_INCH_AT_LAUNCH_LINE;
+            double tanTheta = oppositePixels / adjacentPixels;
+            double thetaAngleRadians = Math.atan(tanTheta);
+            thetaDegrees = Math.toDegrees(thetaAngleRadians);
+        }
+
+        // Get the number of degrees to turn. A positive value indicates a
+        // counter-clockwise turn, a negative value indicates a clockwise
+        // turn.
+        // If the center of the Vumark is to the right of the center of the ROI,
+        // the distance is positive but the angle, which is counter-clockwise,
+        // must be negative. So we have to invert the angle value.
+        // Vumark center to the right of ROI center --
+        // offset -5; angle 10 * directionToVumarkCenter(1) * -1 -> -5 - -10; -> +5
+        // Vumark center to the left of ROI center --
+        // offset -5; angle 10 * directionToVumarkCenter(-1) * -1 -> -5 - 10;  -> -15
+        double finalAngleAdjustment = pAngleOffset - (thetaDegrees * directionToVumarkCenter * -1);
+        return finalAngleAdjustment;
     }
 
 }
