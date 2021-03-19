@@ -12,9 +12,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
+import org.firstinspires.ftc.ftcdevcommon.XPathAccess;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.auto.vision.*;
 import org.firstinspires.ftc.teamcode.auto.xml.RingParametersXML;
+import org.firstinspires.ftc.teamcode.auto.xml.RobotConfigXML;
 import org.firstinspires.ftc.teamcode.auto.xml.TowerParametersXML;
 import org.opencv.core.Core;
 
@@ -34,6 +36,7 @@ public class RecognitionDispatcher extends Application {
 
     // Load OpenCV.
     private static final boolean openCVInitialized;
+
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME); // IntelliJ only
         openCVInitialized = true; // IntelliJ only
@@ -53,6 +56,17 @@ public class RecognitionDispatcher extends Application {
     public void start(Stage pStage) throws Exception {
         // Parent root = FXMLLoader.load(getClass().getResource("simulator.fxml"));
         Pane field = new Pane();
+
+        RobotConfigXML robotConfigXML = new RobotConfigXML(WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.xmlDir);
+
+        // local variable in FTCAuto.doCommand
+        XPathAccess configXPath;
+
+        configXPath = robotConfigXML.getPath("INIT_VUFORIA");
+        String vuforiaInitValue = configXPath.getString("init_value");
+
+        configXPath = robotConfigXML.getPath("WOBBLE_SERVO");
+        String upDown = configXPath.getString("position");
 
         // Read the parameters for ring recognition from the xml file.
         RingParametersXML ringParametersXML = new RingParametersXML(WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.xmlDir);
