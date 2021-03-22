@@ -68,6 +68,8 @@ public class RecognitionDispatcher extends Application {
         configXPath = robotConfigXML.getPath("WOBBLE_SERVO");
         String upDown = configXPath.getString("position");
 
+        String imagePath = WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.imageDir;
+
         // Read the parameters for ring recognition from the xml file.
         RingParametersXML ringParametersXML = new RingParametersXML(WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.xmlDir);
         RingParameters ringParameters = ringParametersXML.getRingParameters();
@@ -75,18 +77,17 @@ public class RecognitionDispatcher extends Application {
 
         // Read the parameters for the alignment of the robot with the tower goal
         // from the xml file.
+        /*
         TowerParametersXML towerParametersXML = new TowerParametersXML(WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.xmlDir);
         TowerParameters towerParameters = towerParametersXML.getTowerParameters();
         TowerGoalAlignment towerGoalAlignment = new TowerGoalAlignment();
-
-        String imagePath = WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.imageDir;
 
         // Align the robot with the tower goal.
         FileImage towerGoalFileImage = new FileImage(imagePath + towerParameters.imageParameters.file_name);
         double alignmentAngle = towerGoalAlignment.getAngleToTowerGoal(towerGoalFileImage, towerParameters);
         System.out.println("Tower goal alignment angle " + alignmentAngle);
         System.exit(0);
-
+         */
 
         // Call the OpenCV subsystem.
         FileImage fileImage = new FileImage(imagePath + ringParameters.imageParameters.file_name);
