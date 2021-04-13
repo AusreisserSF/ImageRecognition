@@ -16,6 +16,7 @@ import org.firstinspires.ftc.ftcdevcommon.XPathAccess;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.auto.vision.*;
 import org.firstinspires.ftc.teamcode.auto.xml.RingParametersXML;
+import org.firstinspires.ftc.teamcode.auto.xml.RobotActionXML;
 import org.firstinspires.ftc.teamcode.auto.xml.RobotConfigXML;
 import org.firstinspires.ftc.teamcode.auto.xml.TowerParametersXML;
 import org.opencv.core.Core;
@@ -56,6 +57,10 @@ public class RecognitionDispatcher extends Application {
     public void start(Stage pStage) throws Exception {
         // Parent root = FXMLLoader.load(getClass().getResource("simulator.fxml"));
         Pane field = new Pane();
+
+        //!! Test new layout of RobotAction.xml
+        RobotActionXML robotActionXML = new RobotActionXML(WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.xmlDir);
+        RobotActionXML.RobotActionData rad = robotActionXML.getOpModeData("TEST");
 
         RobotConfigXML robotConfigXML = new RobotConfigXML(WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.xmlDir);
 

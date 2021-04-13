@@ -23,3 +23,12 @@
 [2021-03-22 06:00:13.453] [FINE   ] RingRecognition Found Target Zone TARGET_ZONE_C 
 [2021-03-22 06:00:13.708] [INFO   ] Closing log and writing out the last 1 entries on the queue 
 [2021-03-22 06:00:13.708] [INFO   ] Shutting down log 
+[2021-04-12 16:28:22.464] [INFO   ] RingRecognition Starting ring recognition 
+[2021-04-12 16:30:41.302] [INFO   ] RingRecognition Starting ring recognition 
+[2021-04-12 16:31:07.108] [FINE   ] RobotActionXML Extracting data from RobotAction.xml for OpMode TEST 
+[2021-04-12 16:44:06.717] [INFO   ] RingRecognition Starting ring recognition 
+[2021-04-12 16:44:35.517] [FINE   ] RobotActionXML Extracting data from RobotAction.xml for OpMode TEST 
+[2021-04-12 16:58:16.847] [INFO   ] RingRecognition Starting ring recognition 
+[2021-04-12 16:58:44.734] [FINE   ] RobotActionXML Extracting data from RobotAction.xml for OpMode TEST 
+[2021-04-12 17:00:40.641] [INFO   ] RingRecognition Starting ring recognition 
+[2021-04-12 17:00:52.407] [FINE   ] RobotActionXML Extracting data from RobotAction.xml for OpMode TEST 

@@ -1,0 +1,24 @@
+<RobotAction>
+    <OpMode id="TEST">
+        <parameters>
+            <lowest_logging_level>v</lowest_logging_level>
+            <image_roi>
+                <x>585</x>
+                <y>260</y>
+                <width>200</width>
+                <height>130</height>
+            </image_roi>
+            <vumarks>
+                <RED_TOWER_GOAL/>
+                <RED_ALLIANCE/>
+            </vumarks>
+        </parameters>
+        <actions>
+            <RECOGNIZE_RINGS>
+                <ocv_image_provider>vuforia</ocv_image_provider>
+            </RECOGNIZE_RINGS>
+            <CLOSE_WEBCAM/>
+            <EXECUTE_TARGET_ZONE_STEPS/>
+        </actions>
+    </OpMode>
+</RobotAction>
