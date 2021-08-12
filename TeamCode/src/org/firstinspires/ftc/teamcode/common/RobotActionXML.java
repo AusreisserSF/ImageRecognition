@@ -34,7 +34,7 @@ public class RobotActionXML {
     private final Document document;
     private final XPath xpath;
 
-    //**TODO In IntelliJ can I use the Android path for a non-validating parser.
+    // In IntelliJ we can use a non-validating parser as we do in Android.
     /*
     // IntelliJ only
     private static final String JAXP_SCHEMA_LANGUAGE =
