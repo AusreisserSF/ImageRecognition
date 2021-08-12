@@ -1,15 +1,15 @@
 <ring_parameters>
     <image_parameters>
-        <file>Image_03191450_34606_IMG.png</file>
+        <file>Image_03151414_23257_IMG.png</file>
         <resolution>
             <width>800</width>
             <height>448</height>
         </resolution>
         <image_roi>
-            <x>585</x>
-            <y>260</y>
-            <width>200</width>
-            <height>130</height>
+            <x>545</x>
+            <y>295</y>
+            <width>190</width>
+            <height>120</height>
         </image_roi>
     </image_parameters>
     <hsv_parameters>

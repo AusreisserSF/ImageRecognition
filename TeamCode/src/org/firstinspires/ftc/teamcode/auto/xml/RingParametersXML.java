@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.auto.xml;
 
 import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
-import org.firstinspires.ftc.teamcode.auto.vision.CommonParameters;
+import org.firstinspires.ftc.teamcode.auto.vision.VisionParameters;
 import org.firstinspires.ftc.teamcode.auto.vision.RingParameters;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -19,7 +19,7 @@ import java.io.IOException;
 // needed for our OpenCV methods to recognize 0, 1, or 4 gold rings in autonomous.
 public class RingParametersXML {
     public static final String TAG = "RingParametersXML";
-    private static final String FILE_NAME = "RingParameters.xml";
+    private static final String RP_FILE_NAME = "RingParameters.xml";
 
     private final Document document;
     private final XPath xpath;
@@ -28,12 +28,13 @@ public class RingParametersXML {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             dbFactory.setIgnoringComments(true);
+
             // ONLY works with a validating parser (DTD or schema)
             // dbFactory.setIgnoringElementContentWhitespace(true);
             // Not supported in Android Studio dbFactory.setXIncludeAware(true);
+
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            String configFilename = pXMLDir + FILE_NAME;
-            document = dBuilder.parse(new File(configFilename));
+            document = dBuilder.parse(new File(pXMLDir + RP_FILE_NAME));
             XPathFactory xpathFactory = XPathFactory.newInstance();
             xpath = xpathFactory.newXPath();
 
@@ -47,10 +48,10 @@ public class RingParametersXML {
     }
 
     public RingParameters getRingParameters() throws XPathExpressionException {
-        ImageXMLCommon imageXmlCommon = new ImageXMLCommon();
+        ImageXML imageXml = new ImageXML();
         XPathExpression expr;
-        CommonParameters.ImageParameters imageParameters;
-        CommonParameters.HSVParameters hsvParameters;
+        VisionParameters.ImageParameters imageParameters;
+        VisionParameters.HSVParameters hsvParameters;
         double minimum_pixel_count_1_ring;
         double minimum_pixel_count_4_rings;
 
@@ -68,7 +69,7 @@ public class RingParametersXML {
         if ((image_parameters_node == null) || !image_parameters_node.getNodeName().equals("image_parameters"))
             throw new AutonomousRobotException(TAG, "Element 'image_parameters' not found");
 
-        imageParameters = imageXmlCommon.parseImageParameters(image_parameters_node);
+        imageParameters = imageXml.parseImageParameters(image_parameters_node);
 
         // Point to <hsv_parameters>
         expr = xpath.compile("//ring_parameters/hsv_parameters");
@@ -76,7 +77,7 @@ public class RingParametersXML {
         if (hsv_parameters_node == null)
             throw new AutonomousRobotException(TAG, "Element '//ring_parameters/hsv_parameters' not found");
 
-        hsvParameters = imageXmlCommon.parseHSVParameters(hsv_parameters_node);
+        hsvParameters = imageXml.parseHSVParameters(hsv_parameters_node);
 
         // Point to <size_parameters>
         expr = xpath.compile("//ring_parameters/size_parameters");

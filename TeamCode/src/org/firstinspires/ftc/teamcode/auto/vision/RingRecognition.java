@@ -1,23 +1,23 @@
 package org.firstinspires.ftc.teamcode.auto.vision;
 
 //!! Android only
-/*
-import org.opencv.android.OpenCVLoader;
-import android.util.Pair;
-*/
 
 import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
-import org.firstinspires.ftc.ftcdevcommon.CommonUtils;
+
+import org.firstinspires.ftc.ftcdevcommon.intellij.TimeStamp;
 import org.firstinspires.ftc.ftcdevcommon.Pair;
 import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
-import org.firstinspires.ftc.teamcode.auto.RingRecognitionConstants;
+import org.firstinspires.ftc.teamcode.common.RobotConstants;
+import org.firstinspires.ftc.teamcode.common.RobotConstantsUltimateGoal;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class RingRecognition {
@@ -28,8 +28,8 @@ public class RingRecognition {
     private final String workingDirectory;
     private final ImageUtils imageUtils;
 
-     public RingRecognition() {
-        workingDirectory = WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.imageDir;
+    public RingRecognition() {
+        workingDirectory = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
         imageUtils = new ImageUtils();
     }
 
@@ -38,13 +38,12 @@ public class RingRecognition {
 
         RobotLogCommon.d(TAG, "In RingRecognition.findGoldRings");
 
-        Pair<Mat, Date> ringImage = pImageProvider.getImage();
+        // LocalDateTime requires minSdkVersion 26  public Pair<Mat, LocalDateTime> getImage() throws InterruptedException;
+        Pair<Mat, LocalDateTime> ringImage = pImageProvider.getImage();
         if (ringImage.first == null)
-            return new RingReturn(true, RingRecognitionConstants.TargetZone.TARGET_ZONE_NPOS); // don't crash
+            return new RingReturn(true, RobotConstantsUltimateGoal.TargetZone.TARGET_ZONE_NPOS); // don't crash
 
-        // For LocalDateTime Android requires minSdkVersion 26
-        // public Pair<Mat, LocalDateTime> getImage() throws InterruptedException {
-        String fileDate = CommonUtils.getDateTimeStamp(ringImage.second);
+        String fileDate = TimeStamp.getLocalDateTimeStamp(ringImage.second);
         String outputFilenamePreamble = workingDirectory + imageFilePrefix + fileDate;
 
         // The image may be RGB (from a camera) or BGR ( OpenCV imread from a file).
@@ -59,6 +58,7 @@ public class RingRecognition {
         RobotLogCommon.d(TAG, "Writing original image " + imageFilename);
         Imgcodecs.imwrite(imageFilename, imgOriginal);
 
+        RobotLogCommon.d(TAG, "Image width " + imgOriginal.cols() + ", height " + imgOriginal.rows());
         if ((imgOriginal.cols() != pRingParameters.imageParameters.resolution_width) ||
                 (imgOriginal.rows() != pRingParameters.imageParameters.resolution_height))
             throw new AutonomousRobotException(TAG,
@@ -66,7 +66,11 @@ public class RingRecognition {
                             ", height " + pRingParameters.imageParameters.resolution_height);
 
         // Crop the image to reduce distractions.
-        Mat imageROI = imageUtils.getImageROI(imgOriginal, pRingParameters.imageParameters.image_roi);
+        Mat imageROI = imageUtils.getImageROI(imgOriginal,
+                new Rect(pRingParameters.imageParameters.image_roi.x,
+                        pRingParameters.imageParameters.image_roi.y,
+                        pRingParameters.imageParameters.image_roi.width,
+                        pRingParameters.imageParameters.image_roi.height));
         imageFilename = outputFilenamePreamble + "_ROI.png";
         RobotLogCommon.d(TAG, "Writing image ROI " + imageFilename);
         Imgcodecs.imwrite(imageFilename, imageROI);
@@ -114,21 +118,21 @@ public class RingRecognition {
 
         // If the number of white pixels is less than the minimum for a single
         // ring then assume there are no rings on the field.
-        RingRecognitionConstants.TargetZone targetZone = RingRecognitionConstants.TargetZone.TARGET_ZONE_NPOS;
+        RobotConstantsUltimateGoal.TargetZone targetZone;
         if (white_pixels < pRingParameters.minimum_pixel_count_1_ring) {
-            targetZone = RingRecognitionConstants.TargetZone.TARGET_ZONE_A;
+            targetZone = RobotConstantsUltimateGoal.TargetZone.TARGET_ZONE_A;
             RobotLogCommon.d(TAG, "No rings detected: set Target Zone Goal A");
         } else
 
-        // If the number of white pixels is greater than the minimum for a stack
-        // of  4 rings then the target is Goal C.
-        if (white_pixels > pRingParameters.minimum_pixel_count_4_rings) {
-            targetZone = RingRecognitionConstants.TargetZone.TARGET_ZONE_C;
-            RobotLogCommon.d(TAG, "Found four rings: set Target Zone Goal C");
-        } else { // Must be 1 ring.
-            targetZone = RingRecognitionConstants.TargetZone.TARGET_ZONE_B;
-            RobotLogCommon.d(TAG, "Found one ring: set Target Zone Goal B");
-        }
+            // If the number of white pixels is greater than the minimum for a stack
+            // of  4 rings then the target is Goal C.
+            if (white_pixels > pRingParameters.minimum_pixel_count_4_rings) {
+                targetZone = RobotConstantsUltimateGoal.TargetZone.TARGET_ZONE_C;
+                RobotLogCommon.d(TAG, "Found four rings: set Target Zone Goal C");
+            } else { // Must be 1 ring.
+                targetZone = RobotConstantsUltimateGoal.TargetZone.TARGET_ZONE_B;
+                RobotLogCommon.d(TAG, "Found one ring: set Target Zone Goal B");
+            }
 
         return new RingReturn(false, targetZone);
     }

@@ -1,16 +1,14 @@
 // Port of XMLCommon.cpp
 package org.firstinspires.ftc.teamcode.auto.xml;
 
-import org.w3c.dom.Node;
-import org.opencv.core.Rect;
-
-import org.firstinspires.ftc.teamcode.auto.vision.CommonParameters;
 import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
+import org.firstinspires.ftc.teamcode.auto.vision.VisionParameters;
+import org.w3c.dom.Node;
 
-public class ImageXMLCommon {
+public class ImageXML {
 
-    public static final String TAG = "CommonParametersXML";
+    public static final String TAG = "ImageXML";
 
     // Parse the XML elements that describe the image to be analyzed.
 /*
@@ -29,11 +27,11 @@ public class ImageXMLCommon {
 </image_parameters>
 */
 // Parse the children of the <image_parameters> element in the XML file.
-    public CommonParameters.ImageParameters parseImageParameters(Node pImageParametersNode) {
+    public VisionParameters.ImageParameters parseImageParameters(Node pImageParametersNode) {
         String file_name;
         int resolution_width;
         int resolution_height;
-        Rect image_roi;
+        VisionParameters.FTCRect image_roi;
 
         RobotLogCommon.d(TAG, "Parsing XML image_parameters");
 
@@ -87,7 +85,7 @@ public class ImageXMLCommon {
 
         image_roi = parseROI(image_roi_node);
 
-        return new CommonParameters.ImageParameters(file_name, resolution_width, resolution_height, image_roi);
+        return new VisionParameters.ImageParameters(file_name, resolution_width, resolution_height, image_roi);
     }
 
     // Parse any element that contains the 4 ROI children.
@@ -98,8 +96,8 @@ public class ImageXMLCommon {
 	<width></width>
 	<height></height>
 */
-    public static Rect parseROI(Node pROINode) {
-        Rect roiElement = new Rect();
+    public static VisionParameters.FTCRect parseROI(Node pROINode) {
+        int roiX, roiY, roiWidth, roiHeight;
 
         Node roi_x_node = pROINode.getFirstChild();
         roi_x_node = getNextElement(roi_x_node);
@@ -107,7 +105,7 @@ public class ImageXMLCommon {
             throw new AutonomousRobotException(TAG, "Element 'x' missing or empty");
 
         try {
-            roiElement.x = Integer.parseInt(roi_x_node.getTextContent());
+            roiX = Integer.parseInt(roi_x_node.getTextContent());
         } catch (NumberFormatException nex) {
             throw new AutonomousRobotException(TAG, "Invalid number format in element 'x'");
         }
@@ -118,7 +116,7 @@ public class ImageXMLCommon {
             throw new AutonomousRobotException(TAG, "Element 'y' missing or empty");
 
         try {
-            roiElement.y = Integer.parseInt(roi_y_node.getTextContent());
+            roiY = Integer.parseInt(roi_y_node.getTextContent());
         } catch (NumberFormatException nex) {
             throw new AutonomousRobotException(TAG, "Invalid number format in element 'y'");
         }
@@ -130,7 +128,7 @@ public class ImageXMLCommon {
             throw new AutonomousRobotException(TAG, "Element 'width' missing or empty");
 
         try {
-            roiElement.width = Integer.parseInt(roi_width_node.getTextContent());
+            roiWidth = Integer.parseInt(roi_width_node.getTextContent());
         } catch (NumberFormatException nex) {
             throw new AutonomousRobotException(TAG, "Invalid number format in element 'width'");
         }
@@ -141,16 +139,16 @@ public class ImageXMLCommon {
             throw new AutonomousRobotException(TAG, "Element 'height' missing or empty");
 
         try {
-            roiElement.height = Integer.parseInt(roi_height_node.getTextContent());
+            roiHeight = Integer.parseInt(roi_height_node.getTextContent());
         } catch (NumberFormatException nex) {
             throw new AutonomousRobotException(TAG, "Invalid number format in element 'height'");
         }
 
-        return roiElement;
+        return new VisionParameters.FTCRect( roiX, roiY, roiWidth, roiHeight);
     }
 
     // Parse the children of the <gray_parameters> element in the XML file.
-    public CommonParameters.GrayParameters parseGrayParameters(Node pGrayNode) {
+    public VisionParameters.GrayParameters parseGrayParameters(Node pGrayNode) {
         int target;
         int low_threshold;
 
@@ -177,7 +175,7 @@ public class ImageXMLCommon {
             throw new AutonomousRobotException(TAG, "Invalid number format in element 'low_threshold'");
         }
 
-        return new CommonParameters.GrayParameters(target, low_threshold);
+        return new VisionParameters.GrayParameters(target, low_threshold);
     }
 
 
@@ -194,7 +192,7 @@ public class ImageXMLCommon {
 </hsv_parameters>
 */
     // At this point pHSVNode points to the <hsv_parameters> element.
-    public CommonParameters.HSVParameters parseHSVParameters(Node pHSVNode) {
+    public VisionParameters.HSVParameters parseHSVParameters(Node pHSVNode) {
         String hue_name;
         int hue_low;
         int hue_high;
@@ -278,7 +276,7 @@ public class ImageXMLCommon {
             throw new AutonomousRobotException(TAG, "Invalid number format in element 'value_low_threshold'");
         }
 
-        return new CommonParameters.HSVParameters(hue_name, hue_low, hue_high,
+        return new VisionParameters.HSVParameters(hue_name, hue_low, hue_high,
                 saturation_target, saturation_low_threshold,
                 value_target, value_low_threshold);
     }

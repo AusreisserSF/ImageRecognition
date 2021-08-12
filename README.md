@@ -6,4 +6,12 @@ Includes a port to Java of the C++ ring
 recognition prototype in the project
 OpenCVTestbed2.
 
-Ready for porting into Android Studio.
+Uses Android XML parsing (non-schema) but
+IntelliJ Java 14 LocalDateTime.
+
+The project is actually mis-named: it can
+be used to test any XML processing in
+IntelliJ before it is ported to Android
+Studio (debugging is easier) and also the
+Java implementation of any image recognition
+(for the same reason).

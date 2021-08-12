@@ -12,17 +12,18 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
+import org.firstinspires.ftc.ftcdevcommon.RobotXMLElement;
 import org.firstinspires.ftc.ftcdevcommon.XPathAccess;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.auto.vision.*;
 import org.firstinspires.ftc.teamcode.auto.xml.RingParametersXML;
-import org.firstinspires.ftc.teamcode.auto.xml.RobotActionXML;
-import org.firstinspires.ftc.teamcode.auto.xml.RobotConfigXML;
-import org.firstinspires.ftc.teamcode.auto.xml.TowerParametersXML;
+import org.firstinspires.ftc.teamcode.common.RobotActionXML;
+import org.firstinspires.ftc.teamcode.common.RobotConstants;
 import org.opencv.core.Core;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.List;
 
 public class RecognitionDispatcher extends Application {
 
@@ -46,11 +47,11 @@ public class RecognitionDispatcher extends Application {
     // See https://stackoverflow.com/questions/21729362/trying-to-call-a-javafx-application-from-java-nosuchmethodexception
     //!! Default constructor is required.
     public RecognitionDispatcher() {
-        RobotLogCommon.initialize(WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.logDir);
+        RobotLogCommon.initialize(WorkingDirectory.getWorkingDirectory() + RobotConstants.logDir);
         RobotLogCommon.i(TAG, "Starting ring recognition");
 
         if (!openCVInitialized)
-            new AutonomousRobotException(TAG, "Failure in OpenCV initialization");
+            throw new AutonomousRobotException(TAG, "Failure in OpenCV initialization");
     }
 
     @Override
@@ -58,44 +59,32 @@ public class RecognitionDispatcher extends Application {
         // Parent root = FXMLLoader.load(getClass().getResource("simulator.fxml"));
         Pane field = new Pane();
 
-        //!! Test new layout of RobotAction.xml
-        RobotActionXML robotActionXML = new RobotActionXML(WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.xmlDir);
-        RobotActionXML.RobotActionData rad = robotActionXML.getOpModeData("TEST");
+        // Use RobotAction.xml but for a single action only.
+        RobotActionXML robotActionXML = new RobotActionXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
+        RobotActionXML.RobotActionData actionData = robotActionXML.getOpModeData("TEST");
+        List<RobotXMLElement> actions = actionData.actions;
+        if (actions.size() != 1 || !actions.get(0).getRobotXMLElementName().equals("RECOGNIZE_RINGS"))
+            throw new AutonomousRobotException(TAG, "TEST OpMode must contain a single action: RECOGNIZE_RINGS");
 
-        RobotConfigXML robotConfigXML = new RobotConfigXML(WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.xmlDir);
+        // Set up XPath access to the current action command.
+        RobotXMLElement ringRecognitionAction = actions.get(0);
+        XPathAccess commandXPath = new XPathAccess(ringRecognitionAction);
+        String commandName = ringRecognitionAction.getRobotXMLElementName().toUpperCase();
+        RobotLogCommon.d(TAG, "Executing FTCAuto command " + commandName);
 
-        // local variable in FTCAuto.doCommand
-        XPathAccess configXPath;
-
-        configXPath = robotConfigXML.getPath("INIT_VUFORIA");
-        String vuforiaInitValue = configXPath.getString("init_value");
-
-        configXPath = robotConfigXML.getPath("WOBBLE_SERVO");
-        String upDown = configXPath.getString("position");
-
-        String imagePath = WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.imageDir;
+        // The only allowed image_provider is "file".
+        String imageProviderId = commandXPath.getStringInRange("ocv_image_provider", commandXPath.validRange("vuforia", "file"));
+        if (!imageProviderId.equals("file"))
+            throw new AutonomousRobotException(TAG, "RECOGNIZE_RINGS: image_provider must be 'file'");
 
         // Read the parameters for ring recognition from the xml file.
-        RingParametersXML ringParametersXML = new RingParametersXML(WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.xmlDir);
+        RingParametersXML ringParametersXML = new RingParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
         RingParameters ringParameters = ringParametersXML.getRingParameters();
         RingRecognition ringRecognition = new RingRecognition();
 
-        // Read the parameters for the alignment of the robot with the tower goal
-        // from the xml file.
-        /*
-        TowerParametersXML towerParametersXML = new TowerParametersXML(WorkingDirectory.getWorkingDirectory() + RingRecognitionConstants.xmlDir);
-        TowerParameters towerParameters = towerParametersXML.getTowerParameters();
-        TowerGoalAlignment towerGoalAlignment = new TowerGoalAlignment();
-
-        // Align the robot with the tower goal.
-        FileImage towerGoalFileImage = new FileImage(imagePath + towerParameters.imageParameters.file_name);
-        double alignmentAngle = towerGoalAlignment.getAngleToTowerGoal(towerGoalFileImage, towerParameters);
-        System.out.println("Tower goal alignment angle " + alignmentAngle);
-        System.exit(0);
-         */
-
         // Call the OpenCV subsystem.
-        FileImage fileImage = new FileImage(imagePath + ringParameters.imageParameters.file_name);
+        String imagePath = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
+        ImageProvider fileImage = new FileImage(imagePath + ringParameters.imageParameters.file_name);
         RingReturn ringReturn = ringRecognition.findGoldRings(fileImage, ringParameters);
         if (ringReturn.fatalComputerVisionError)
             throw new AutonomousRobotException(TAG, "Error in computer vision subsystem");

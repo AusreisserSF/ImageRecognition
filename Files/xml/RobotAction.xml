@@ -8,17 +8,11 @@
                 <width>200</width>
                 <height>130</height>
             </image_roi>
-            <vumarks>
-                <RED_TOWER_GOAL/>
-                <RED_ALLIANCE/>
-            </vumarks>
-        </parameters>
+         </parameters>
         <actions>
             <RECOGNIZE_RINGS>
-                <ocv_image_provider>vuforia</ocv_image_provider>
+                <ocv_image_provider>file</ocv_image_provider>
             </RECOGNIZE_RINGS>
-            <CLOSE_WEBCAM/>
-            <EXECUTE_TARGET_ZONE_STEPS/>
         </actions>
     </OpMode>
 </RobotAction>
