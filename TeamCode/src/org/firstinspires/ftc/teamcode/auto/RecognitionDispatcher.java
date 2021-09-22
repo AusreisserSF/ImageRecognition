@@ -16,6 +16,7 @@ import org.firstinspires.ftc.ftcdevcommon.RobotXMLElement;
 import org.firstinspires.ftc.ftcdevcommon.XPathAccess;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.auto.vision.*;
+import org.firstinspires.ftc.teamcode.auto.xml.BarcodeParametersXML;
 import org.firstinspires.ftc.teamcode.auto.xml.RingParametersXML;
 import org.firstinspires.ftc.teamcode.common.RobotActionXML;
 import org.firstinspires.ftc.teamcode.common.RobotConstants;

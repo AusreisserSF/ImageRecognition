@@ -7,10 +7,9 @@ public class RobotConstantsFreightFrenzy {
         TELEOP_AUTO_DRIVE // for use in TeleOp only - does not appear on the driver station
     }
 
-    //**TODO These may be relative to the ROI, i.e. LEFT may actually be the center
-    // barcode - rename to avoid confusion? BARCODE_0_IN_ROI ...
-    public enum BarcodePosition {
-        LEFT, CENTER, RIGHT, BARCODE_NPOS
+    // Relative position of a barcode element within the ROI.
+    public enum BarcodeElementPosition {
+        BARCODE_ELEMENT_LEFT_WITHIN_ROI, BARCODE_ELEMENT_RIGHT_WITHIN_ROI, BARCODE_ELEMENT_NPOS
     }
 
     // Vumark identifiers
