@@ -52,7 +52,7 @@ public class BarcodeRecognition {
         // LocalDateTime requires Android minSdkVersion 26  public Pair<Mat, LocalDateTime> getImage() throws InterruptedException;
         Pair<Mat, LocalDateTime> barcodeImage = pImageProvider.getImage();
         if (barcodeImage.first == null)
-            return new BarcodeReturn(true, RobotConstantsFreightFrenzy.BarcodeElementPosition.BARCODE_ELEMENT_NPOS); // don't crash
+            return new BarcodeReturn(true, RobotConstantsFreightFrenzy.BarcodeElementWithinROI.BARCODE_ELEMENT_NPOS); // don't crash
 
         String fileDate = TimeStamp.getLocalDateTimeStamp(barcodeImage.second);
         String outputFilenamePreamble = workingDirectory + imageFilePrefix + fileDate;
@@ -146,7 +146,7 @@ public class BarcodeRecognition {
 	    RobotLogCommon.d(TAG, "Number of white pixels " + nzLocations.size().width);
 	    if (nzLocations.size().width < 3) {
 		    RobotLogCommon.d(TAG, "The stripe contains < 3 white pixels.");
-		    return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementPosition.BARCODE_ELEMENT_NPOS);
+		    return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWithinROI.BARCODE_ELEMENT_NPOS);
 	    }
 
 	    // MatOfPoint.get returns double[] where [0] = x, [1] = y
@@ -168,7 +168,7 @@ public class BarcodeRecognition {
 	    //RobotLogCommon.d(TAG, "Writing " + pOutputFilenamePreamble + "_CIR.png");
 
 	    // Calculate the barcode position.
-        RobotConstantsFreightFrenzy.BarcodeElementPosition positionFound = RobotConstantsFreightFrenzy.BarcodeElementPosition.BARCODE_ELEMENT_NPOS;
+        RobotConstantsFreightFrenzy.BarcodeElementWithinROI positionFound = RobotConstantsFreightFrenzy.BarcodeElementWithinROI.BARCODE_ELEMENT_NPOS;
 
         //**TODO iterate through or stream pBarcodeParameters.barcodeElements. Is firstWhitePixel >= array element lower
         // limit (x) && <= current element + width. 

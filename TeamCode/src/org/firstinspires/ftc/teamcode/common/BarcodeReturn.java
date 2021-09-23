@@ -4,9 +4,9 @@ package org.firstinspires.ftc.teamcode.common;
 public class BarcodeReturn {
 
     public final boolean fatalComputerVisionError;
-    public final RobotConstantsFreightFrenzy.BarcodeElementPosition barcodePosition;
+    public final RobotConstantsFreightFrenzy.BarcodeElementWithinROI barcodePosition;
 
-    public BarcodeReturn(boolean pFatalComputerVisionError, RobotConstantsFreightFrenzy.BarcodeElementPosition pBarcodePosition) {
+    public BarcodeReturn(boolean pFatalComputerVisionError, RobotConstantsFreightFrenzy.BarcodeElementWithinROI pBarcodePosition) {
         fatalComputerVisionError = pFatalComputerVisionError;
         barcodePosition = pBarcodePosition;
     }

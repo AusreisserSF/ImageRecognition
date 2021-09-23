@@ -20,12 +20,15 @@ import org.firstinspires.ftc.teamcode.auto.xml.BarcodeParametersXML;
 import org.firstinspires.ftc.teamcode.auto.xml.RingParametersXML;
 import org.firstinspires.ftc.teamcode.common.RobotActionXML;
 import org.firstinspires.ftc.teamcode.common.RobotConstants;
+import org.firstinspires.ftc.teamcode.common.RobotConstantsFreightFrenzy;
 import org.opencv.core.Core;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RecognitionDispatcher extends Application {
 
@@ -103,7 +106,7 @@ public class RecognitionDispatcher extends Application {
 
             break;
             }
-            case "FIND_TEAM_SCORING_ELEMENT": {
+            case "ANALYZE_BARCODE": {
 
                 // Read the parameters for barcode recognition from the xml file.
                 BarcodeParametersXML barcodeParametersXML = new BarcodeParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
@@ -113,9 +116,24 @@ public class RecognitionDispatcher extends Application {
                 // Call the OpenCV subsystem.
                 String imagePath = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
                 ImageProvider fileImage = new FileImage(imagePath + barcodeParameters.imageParameters.file_name);
+
+                //**TODO Get the barcode recognition parameters for the current OpMode.
+                Map<RobotConstantsFreightFrenzy.BarcodeElementWithinROI, BarcodeParameters.BarcodeElement> barcodeElements =
+                        new HashMap<>();
+                int left_x = commandXPath.getInt("left_within_roi/x");
+                int left_width = commandXPath.getInt("left_within_roi/width");
+                int left_shipping_hub_level = commandXPath.getInt("left_within_roi/shipping_hub_level");
+                barcodeElements.put(RobotConstantsFreightFrenzy.BarcodeElementWithinROI.LEFT_WITHIN_ROI, new BarcodeParameters.BarcodeElement(left_x, left_width));
+
+                //**TODO right_within_roi
+
+                barcodeParameters.setBarcodeElements(barcodeElements);
                 BarcodeReturn barcodeReturn = barcodeRecognition.findTeamScoringElement(fileImage, barcodeParameters);
                 if (barcodeReturn.fatalComputerVisionError)
                     throw new AutonomousRobotException(TAG, "Error in computer vision subsystem");
+
+                //**TODO set the shipping hub level based on the return
+                int final_shipping_heb_level = 0; //** class variable?
 
                 RobotLogCommon.d(TAG, "Found Team Scoring Element " + barcodeReturn.barcodePosition);
                 displayResults(imagePath + barcodeParameters.imageParameters.file_name,

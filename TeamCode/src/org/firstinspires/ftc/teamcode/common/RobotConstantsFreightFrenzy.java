@@ -8,8 +8,8 @@ public class RobotConstantsFreightFrenzy {
     }
 
     // Relative position of a barcode element within the ROI.
-    public enum BarcodeElementPosition {
-        BARCODE_ELEMENT_LEFT_WITHIN_ROI, BARCODE_ELEMENT_RIGHT_WITHIN_ROI, BARCODE_ELEMENT_NPOS
+    public enum BarcodeElementWithinROI {
+        LEFT_WITHIN_ROI, RIGHT_WITHIN_ROI, BARCODE_ELEMENT_NPOS
     }
 
     // Vumark identifiers
