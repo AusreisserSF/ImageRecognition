@@ -12,6 +12,11 @@ public class RobotConstantsFreightFrenzy {
         LEFT_WITHIN_ROI, RIGHT_WITHIN_ROI, BARCODE_ELEMENT_NPOS
     }
 
+    public enum ShippingHubLevels {
+        SHIPPING_HUB_LEVEL_1, SHIPPING_HUB_LEVEL_2, SHIPPING_HUB_LEVEL_3,
+        SHIPPING_HUB_LEVEL_NPOS
+    }
+
     // Vumark identifiers
     //public enum SupportedVumark {BLUE_TOWER_GOAL, RED_TOWER_GOAL, RED_ALLIANCE, BLUE_ALLIANCE, FRONT_WALL}
 

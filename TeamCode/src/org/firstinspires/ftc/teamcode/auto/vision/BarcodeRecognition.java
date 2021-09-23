@@ -15,6 +15,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 public class BarcodeRecognition {
 
@@ -170,8 +171,16 @@ public class BarcodeRecognition {
 	    // Calculate the barcode position.
         RobotConstantsFreightFrenzy.BarcodeElementWithinROI positionFound = RobotConstantsFreightFrenzy.BarcodeElementWithinROI.BARCODE_ELEMENT_NPOS;
 
-        //**TODO iterate through or stream pBarcodeParameters.barcodeElements. Is firstWhitePixel >= array element lower
-        // limit (x) && <= current element + width. 
+        //**TODO Is firstWhitePixel >= array element lower
+        // limit (x) && <= current element + width.
+        // Get the left window within the ROI from the barcode parameters.
+        Map<RobotConstantsFreightFrenzy.BarcodeElementWithinROI, BarcodeParameters.BarcodeElement> barcodeElements =
+         pBarcodeParameters.getBarcodeElements();
+        BarcodeParameters.BarcodeElement leftBarcodeElement = barcodeElements.get(RobotConstantsFreightFrenzy.BarcodeElementWithinROI.LEFT_WITHIN_ROI);
+
+        //**TODO STOPPED HERE 9/23/21
+        BarcodeParameters.BarcodeElement rightBarcodeElement = barcodeElements.get(RobotConstantsFreightFrenzy.BarcodeElementWithinROI.RIGHT_WITHIN_ROI);
+
         return new BarcodeReturn(false, positionFound);
     }
 
