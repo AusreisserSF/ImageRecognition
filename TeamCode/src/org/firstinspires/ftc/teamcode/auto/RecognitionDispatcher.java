@@ -127,19 +127,19 @@ public class RecognitionDispatcher extends Application {
                 // ROI.
                 int left_x = commandXPath.getInt("barcode_recognition/left_within_roi/x");
                 int left_width = commandXPath.getInt("barcode_recognition/left_within_roi/width");
-                RobotConstantsFreightFrenzy.ShippingHubLevels left_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/left_within_roi/shipping_hub_level"));
+                RobotConstantsFreightFrenzy.ShippingHubLevels left_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/left_within_roi/shipping_hub_level", true));
                 barcodeElements.put(RobotConstantsFreightFrenzy.BarcodeElementWithinROI.LEFT_WITHIN_ROI, new BarcodeParameters.BarcodeElement(left_x, left_width));
 
                 // Get the boundaries for the barcode element on the right side of the
                 // ROI.
                 int right_x = commandXPath.getInt("barcode_recognition/right_within_roi/x");
                 int right_width = commandXPath.getInt("barcode_recognition/right_within_roi/width");
-                RobotConstantsFreightFrenzy.ShippingHubLevels right_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/right_within_roi/shipping_hub_level"));
+                RobotConstantsFreightFrenzy.ShippingHubLevels right_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/right_within_roi/shipping_hub_level", true));
                 barcodeElements.put(RobotConstantsFreightFrenzy.BarcodeElementWithinROI.RIGHT_WITHIN_ROI, new BarcodeParameters.BarcodeElement(right_x, right_width));
                 barcodeParameters.setBarcodeElements(barcodeElements);
 
                 // Set the shipping hub level to infer if the Shipping Hub Element is not on the left or right.
-                RobotConstantsFreightFrenzy.ShippingHubLevels npos_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/barcode_element_npos/shipping_hub_level"));
+                RobotConstantsFreightFrenzy.ShippingHubLevels npos_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/barcode_element_npos/shipping_hub_level", true));
 
                 // At last perform the image recognition.
                 BarcodeReturn barcodeReturn = barcodeRecognition.findTeamScoringElement(fileImage, barcodeParameters);
@@ -167,9 +167,8 @@ public class RecognitionDispatcher extends Application {
                 RobotLogCommon.d(TAG, "Found Team Scoring Element at position " + barcodeReturn.barcodeElementWithinROI);
                 RobotLogCommon.d(TAG, "Shipping Hub Level " + shippingHubLevel);
                 displayResults(imagePath + barcodeParameters.imageParameters.file_name,
-                        "Shipping Hub Level based on barcode " + shippingHubLevel,
+                        shippingHubLevel.toString(),
                         "FTC 2021 - 2022 Freight Frenzy");
-
                 break;
             }
             default:

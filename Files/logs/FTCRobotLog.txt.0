@@ -1,54 +1,26 @@
-[2021-08-12 12:52:30.760] [INFO   ] RingRecognition Starting ring recognition 
-[2021-08-12 12:52:30.871] [CONFIG ] RobotActionXML Extracting data from RobotAction.xml for OpMode TEST 
-[2021-08-12 12:52:30.874] [FINE   ] RingRecognition Executing FTCAuto command RECOGNIZE_RINGS 
-[2021-08-12 12:52:30.880] [FINE   ] RingParametersXML Parsing XML ring_parameters 
-[2021-08-12 12:52:30.881] [FINE   ] ImageXML Parsing XML image_parameters 
-[2021-08-12 12:52:30.882] [FINE   ] ImageXML Parsing XML hsv_parameters 
-[2021-08-12 12:52:30.886] [FINE   ] RingRecognition In RingRecognition.findGoldRings 
-[2021-08-12 12:52:30.887] [FINE   ] ImageUtils File name Files/images/Image_03151414_23257_IMG.png 
-[2021-08-12 12:52:30.895] [FINE   ] ImageUtils Image width 800, height 448 
-[2021-08-12 12:52:30.911] [FINE   ] RingRecognition Writing original image Files/images/Image_08121252_30904_IMG.png 
-[2021-08-12 12:52:30.923] [FINE   ] RingRecognition Image width 800, height 448 
-[2021-08-12 12:52:30.928] [FINE   ] ImageUtils Image ROI x 545, y 295, width 190, height 120 
-[2021-08-12 12:52:30.928] [FINE   ] RingRecognition Writing image ROI Files/images/Image_08121252_30904_ROI.png 
-[2021-08-12 12:52:30.937] [FINE   ] RingRecognition Target hue levels: low 5, high 30 
-[2021-08-12 12:52:30.945] [FINE   ] ImageUtils HSV saturation channel median 12 
-[2021-08-12 12:52:30.945] [FINE   ] ImageUtils HSV value channel median 184 
-[2021-08-12 12:52:30.946] [FINE   ] ImageUtils Adjust HSV saturation by 0 
-[2021-08-12 12:52:30.946] [FINE   ] ImageUtils Adjust HSV value by -24 
-[2021-08-12 12:52:30.946] [FINE   ] RingRecognition Adjusted image levels: saturation low 12, value low 160 
-[2021-08-12 12:52:30.946] [FINE   ] RingRecognition Actual inRange HSV levels: hue low 5, hue high 30 
-[2021-08-12 12:52:30.946] [FINE   ] RingRecognition Actual inRange HSV levels: saturation low 10, value low 120 
-[2021-08-12 12:52:30.948] [FINE   ] RingRecognition Writing Files/images/Image_08121252_30904_ADJ_THR.png 
-[2021-08-12 12:52:30.948] [FINE   ] RingRecognition Number of white pixels 3627 
-[2021-08-12 12:52:30.948] [FINE   ] RingRecognition Found four rings: set Target Zone Goal C 
-[2021-08-12 12:52:30.949] [FINE   ] RingRecognition Found Target Zone TARGET_ZONE_C 
-[2021-08-12 12:52:31.128] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
-[2021-08-12 12:52:31.129] [INFO   ] RobotCommonLog Shutting down log 
-[2021-09-21 04:47:27.889] [INFO   ] RingRecognition Starting ring recognition 
-[2021-09-21 04:47:28.059] [CONFIG ] RobotActionXML Extracting data from RobotAction.xml for OpMode TEST 
-[2021-09-21 04:47:28.064] [FINE   ] RingRecognition Executing FTCAuto command RECOGNIZE_RINGS 
-[2021-09-21 04:47:28.072] [FINE   ] RingParametersXML Parsing XML ring_parameters 
-[2021-09-21 04:47:28.072] [FINE   ] ImageXML Parsing XML image_parameters 
-[2021-09-21 04:47:28.075] [FINE   ] ImageXML Parsing XML hsv_parameters 
-[2021-09-21 04:47:28.084] [FINE   ] RingRecognition In RingRecognition.findGoldRings 
-[2021-09-21 04:47:28.084] [FINE   ] ImageUtils File name Files/images/Image_03151414_23257_IMG.png 
-[2021-09-21 04:47:28.095] [FINE   ] ImageUtils Image width 800, height 448 
-[2021-09-21 04:47:28.112] [FINE   ] RingRecognition Writing original image Files/images/Image_09210447_28104_IMG.png 
-[2021-09-21 04:47:28.124] [FINE   ] RingRecognition Image width 800, height 448 
-[2021-09-21 04:47:28.128] [FINE   ] ImageUtils Image ROI x 545, y 295, width 190, height 120 
-[2021-09-21 04:47:28.129] [FINE   ] RingRecognition Writing image ROI Files/images/Image_09210447_28104_ROI.png 
-[2021-09-21 04:47:28.137] [FINE   ] RingRecognition Target hue levels: low 5, high 30 
-[2021-09-21 04:47:28.145] [FINE   ] ImageUtils HSV saturation channel median 12 
-[2021-09-21 04:47:28.146] [FINE   ] ImageUtils HSV value channel median 184 
-[2021-09-21 04:47:28.146] [FINE   ] ImageUtils Adjust HSV saturation by 0 
-[2021-09-21 04:47:28.146] [FINE   ] ImageUtils Adjust HSV value by -24 
-[2021-09-21 04:47:28.147] [FINE   ] RingRecognition Adjusted image levels: saturation low 12, value low 160 
-[2021-09-21 04:47:28.147] [FINE   ] RingRecognition Actual inRange HSV levels: hue low 5, hue high 30 
-[2021-09-21 04:47:28.148] [FINE   ] RingRecognition Actual inRange HSV levels: saturation low 10, value low 120 
-[2021-09-21 04:47:28.148] [FINE   ] RingRecognition Writing Files/images/Image_09210447_28104_ADJ_THR.png 
-[2021-09-21 04:47:28.149] [FINE   ] RingRecognition Number of white pixels 3627 
-[2021-09-21 04:47:28.150] [FINE   ] RingRecognition Found four rings: set Target Zone Goal C 
-[2021-09-21 04:47:28.151] [FINE   ] RingRecognition Found Target Zone TARGET_ZONE_C 
-[2021-09-21 04:47:28.333] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
-[2021-09-21 04:47:28.333] [INFO   ] RobotCommonLog Shutting down log 
+[2021-09-24 05:20:39.183] [INFO   ] RingRecognition Starting barcode recognition 
+[2021-09-24 05:20:39.327] [CONFIG ] RobotActionXML Extracting data from RobotAction.xml for OpMode TEST 
+[2021-09-24 05:20:39.342] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2021-09-24 05:20:39.343] [FINE   ] ImageXML Parsing XML image_parameters 
+[2021-09-24 05:20:39.344] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2021-09-24 05:20:39.359] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2021-09-24 05:20:39.360] [FINE   ] ImageUtils File name Files/images/Image_02230735_02246_IMG.png 
+[2021-09-24 05:20:39.370] [FINE   ] ImageUtils Image width 640, height 360 
+[2021-09-24 05:20:39.387] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_09240520_39379_IMG.png 
+[2021-09-24 05:20:39.399] [FINE   ] BarcodeRecognition Image width 640, height 360 
+[2021-09-24 05:20:39.405] [FINE   ] ImageUtils Image ROI x 125, y 240, width 310, height 30 
+[2021-09-24 05:20:39.406] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_09240520_39379_ROI.png 
+[2021-09-24 05:20:39.419] [FINE   ] BarcodeRecognition Writing Files/images/Image_09240520_39379_GRAY.png 
+[2021-09-24 05:20:39.426] [FINE   ] ImageUtils Original image: grayscale median 135 
+[2021-09-24 05:20:39.427] [FINE   ] ImageUtils Grayscale median target 150 
+[2021-09-24 05:20:39.427] [FINE   ] ImageUtils Grayscale adjustment 15 
+[2021-09-24 05:20:39.429] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_09240520_39379_ADJ.png 
+[2021-09-24 05:20:39.429] [FINE   ] BarcodeRecognition Inverse threshold values: low 75, max 255 (white) 
+[2021-09-24 05:20:39.431] [FINE   ] BarcodeRecognition Writing Files/images/Image_09240520_39379_ADJ_THR.png 
+[2021-09-24 05:20:39.433] [FINE   ] BarcodeRecognition Writing Files/images/Image_09240520_39379_STRIPE.png 
+[2021-09-24 05:20:39.433] [FINE   ] BarcodeRecognition Number of white pixels 1 
+[2021-09-24 05:20:39.434] [FINE   ] BarcodeRecognition The stripe contains < 3 white pixels. 
+[2021-09-24 05:20:39.435] [FINE   ] RingRecognition Found Team Scoring Element at position BARCODE_ELEMENT_NPOS 
+[2021-09-24 05:20:39.436] [FINE   ] RingRecognition Shipping Hub Level SHIPPING_HUB_LEVEL_3 
+[2021-09-24 05:20:39.683] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2021-09-24 05:20:39.684] [INFO   ] RobotCommonLog Shutting down log 

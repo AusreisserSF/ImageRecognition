@@ -136,8 +136,8 @@ public class BarcodeRecognition {
 
         //## Remember: white pixels now represent the Team Scoring Element.
         //**TODO use a const with better minimum number of white pixels.
-        RobotLogCommon.d(TAG, "Number of white pixels " + nzLocations.size().width);
-        if (nzLocations.size().width < 3) {
+        RobotLogCommon.d(TAG, "Number of white pixels " + nzLocations.cols());
+        if (nzLocations.cols() < 3) {
             RobotLogCommon.d(TAG, "The stripe contains < 3 white pixels.");
             return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWithinROI.BARCODE_ELEMENT_NPOS);
         }

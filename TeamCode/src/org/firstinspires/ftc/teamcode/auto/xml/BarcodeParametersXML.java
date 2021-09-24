@@ -71,7 +71,7 @@ public class BarcodeParametersXML {
         imageParameters = imageXml.parseImageParameters(image_parameters_node);
 
         // Point to <gray_parameters>
-        Node gray_node = image_node.getNextSibling();
+        Node gray_node = image_parameters_node.getNextSibling();
         Node gray_parameters_node = getNextElement(gray_node);
         if (gray_parameters_node == null)
             throw new AutonomousRobotException(TAG, "Element '//barcode_parameters/gray_parameters' not found");
