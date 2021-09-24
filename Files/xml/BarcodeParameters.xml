@@ -1,0 +1,22 @@
+﻿<barcode_parameters>
+  <image_parameters>
+    <file>Image_02230735_02246_IMG.png</file>
+    <resolution>
+      <width>640</width>
+      <height>360</height>
+    </resolution>
+    <!-- The ROI is the area cropped out of the original image.
+         OpenCV algorithms will be applied to the ROI. -->
+    <!-- Define the ROI as a narrow stripe across all 3 barcodes. -->
+    <roi>
+      <x_origin>128</x_origin>
+      <y_origin>200</y_origin>
+      <width>400</width>
+      <height>50</height>
+    </roi>
+  </image_parameters>
+  <gray_parameters>
+    <target>150</target>
+    <low_threshold>175</low_threshold>
+  </gray_parameters>
+</barcode_parameters>

@@ -16,8 +16,8 @@ import java.io.File;
 import java.io.IOException;
 
 // Class whose job it is to read an XML file that contains all of the information
-// needed for our OpenCV methods to recognize our Team Scoring Element in the
-// Freight Frenzy barcode during Autonomous.
+// needed for our OpenCV methods to recognize our Freight Frenzy Team Scoring
+// Element in the barcode during Autonomous.
 public class BarcodeParametersXML {
     public static final String TAG = "BarcodeParametersXML";
     private static final String BCP_FILE_NAME = "BarcodeParameters.xml";
@@ -71,13 +71,12 @@ public class BarcodeParametersXML {
         imageParameters = imageXml.parseImageParameters(image_parameters_node);
 
         // Point to <gray_parameters>
-        expr = xpath.compile("//barcode_parameters/gray_parameters");
-        Node gray_parameters_node = (Node) expr.evaluate(document, XPathConstants.NODE);
+        Node gray_node = image_node.getNextSibling();
+        Node gray_parameters_node = getNextElement(gray_node);
         if (gray_parameters_node == null)
             throw new AutonomousRobotException(TAG, "Element '//barcode_parameters/gray_parameters' not found");
 
         grayParameters = imageXml.parseGrayParameters(gray_parameters_node);
-
 
         return new BarcodeParameters(imageParameters, grayParameters);
     }

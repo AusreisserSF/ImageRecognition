@@ -57,7 +57,7 @@ public class RecognitionDispatcher extends Application {
     //!! Default constructor is required.
     public RecognitionDispatcher() {
         RobotLogCommon.initialize(WorkingDirectory.getWorkingDirectory() + RobotConstants.logDir);
-        RobotLogCommon.i(TAG, "Starting ring recognition");
+        RobotLogCommon.i(TAG, "Starting barcode recognition");
 
         if (!openCVInitialized)
             throw new AutonomousRobotException(TAG, "Failure in OpenCV initialization");
@@ -68,7 +68,7 @@ public class RecognitionDispatcher extends Application {
         stage = pStage;
         field = new Pane();
 
-        // Use RobotAction.xml but for a single action only.
+        // Use RobotAction.xml but for a single OpMode with a single action only.
         RobotActionXML robotActionXML = new RobotActionXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
         RobotActionXML.RobotActionData actionData = robotActionXML.getOpModeData("TEST");
         List<RobotXMLElement> actions = actionData.actions;
@@ -86,8 +86,9 @@ public class RecognitionDispatcher extends Application {
 
         String commandName = actionElement.getRobotXMLElementName().toUpperCase();
         switch (commandName) {
-            case "RECOGNIZE_RINGS": {
 
+            // Ultimate Goal 2020-2021
+            case "RECOGNIZE_RINGS": {
                 // Read the parameters for ring recognition from the xml file.
                 RingParametersXML ringParametersXML = new RingParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
                 RingParameters ringParameters = ringParametersXML.getRingParameters();
@@ -104,17 +105,17 @@ public class RecognitionDispatcher extends Application {
                 displayResults(imagePath + ringParameters.imageParameters.file_name,
                         "Rings indicate " + ringReturn.targetZone,
                         "FTC 2020 - 2021 Ultimate Goal");
-
             break;
             }
-            case "ANALYZE_BARCODE": {
 
+            // Freight Frenzy 2021-2022
+            case "ANALYZE_BARCODE": {
                 // Read the parameters for barcode recognition from the xml file.
                 BarcodeParametersXML barcodeParametersXML = new BarcodeParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
                 BarcodeParameters barcodeParameters = barcodeParametersXML.getBarcodeParameters();
                 BarcodeRecognition barcodeRecognition = new BarcodeRecognition();
 
-                // Call the OpenCV subsystem.
+                // Prepare for image recognition.
                 String imagePath = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
                 ImageProvider fileImage = new FileImage(imagePath + barcodeParameters.imageParameters.file_name);
 
@@ -122,8 +123,8 @@ public class RecognitionDispatcher extends Application {
                 Map<RobotConstantsFreightFrenzy.BarcodeElementWithinROI, BarcodeParameters.BarcodeElement> barcodeElements =
                         new HashMap<>();
 
-                // First get the boundaries for the barcode element on the left side
-                // of the ROI.
+                // Get the boundaries for the barcode element on the left side of the
+                // ROI.
                 int left_x = commandXPath.getInt("barcode_recognition/left_within_roi/x");
                 int left_width = commandXPath.getInt("barcode_recognition/left_within_roi/width");
                 RobotConstantsFreightFrenzy.ShippingHubLevels left_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/left_within_roi/shipping_hub_level"));
@@ -137,7 +138,7 @@ public class RecognitionDispatcher extends Application {
                 barcodeElements.put(RobotConstantsFreightFrenzy.BarcodeElementWithinROI.RIGHT_WITHIN_ROI, new BarcodeParameters.BarcodeElement(right_x, right_width));
                 barcodeParameters.setBarcodeElements(barcodeElements);
 
-                // Set the shipping hub level to infer if left and right are not present.
+                // Set the shipping hub level to infer if the Shipping Hub Element is not on the left or right.
                 RobotConstantsFreightFrenzy.ShippingHubLevels npos_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/barcode_element_npos/shipping_hub_level"));
 
                 // At last perform the image recognition.

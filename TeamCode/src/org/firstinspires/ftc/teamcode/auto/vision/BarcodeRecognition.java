@@ -157,12 +157,10 @@ public class BarcodeRecognition {
 
         //**TODO hardcode center of circle - dependent on stripeROI above
         //Imgproc.circle(markTeamScoringElement, new Point(whiteStripeCenter, 67), 10, new Scalar(0, 0, 255), 3, 8, 0);
-        //Imgcodecs.imwrite(pOutputFilenamePreamble + "_CIR.png", markmarkTeamScoringElement);
+        //Imgcodecs.imwrite(pOutputFilenamePreamble + "_CIR.png", markTeamScoringElement);
         //RobotLogCommon.d(TAG, "Writing " + pOutputFilenamePreamble + "_CIR.png");
 
         // Calculate the barcode position.
-        RobotConstantsFreightFrenzy.BarcodeElementWithinROI positionFound = RobotConstantsFreightFrenzy.BarcodeElementWithinROI.BARCODE_ELEMENT_NPOS;
-
         // Get the left window within the ROI from the barcode parameters.
         Map<RobotConstantsFreightFrenzy.BarcodeElementWithinROI, BarcodeParameters.BarcodeElement> barcodeElements =
                 pBarcodeParameters.getBarcodeElements();
