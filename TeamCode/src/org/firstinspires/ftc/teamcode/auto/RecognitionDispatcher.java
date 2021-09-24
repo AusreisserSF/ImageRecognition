@@ -32,7 +32,7 @@ import java.util.Map;
 
 public class RecognitionDispatcher extends Application {
 
-    private static final String TAG = "RingRecognition";
+    private static final String TAG = "RecognitionDispatcher";
 
     public static final double FIELD_WIDTH = 410;
     public static final double FIELD_HEIGHT = 300;

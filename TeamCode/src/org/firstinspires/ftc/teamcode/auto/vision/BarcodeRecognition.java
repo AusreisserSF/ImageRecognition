@@ -16,6 +16,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 public class BarcodeRecognition {
@@ -131,20 +132,21 @@ public class BarcodeRecognition {
 
         // Locate the white (because inverted) pixels that belong to the black Team Shipping Element.
         // See https://stackoverflow.com/questions/18147611/opencv-java-how-to-access-coordinates-returned-by-findnonzero
-        MatOfPoint nzLocations = new MatOfPoint();
-        Core.findNonZero(reduced, nzLocations);
+        Mat rawNonZeroLocations = new Mat();
+        Core.findNonZero(reduced, rawNonZeroLocations);
+        MatOfPoint nzLocations = new MatOfPoint(rawNonZeroLocations);
+        List<Point> nzList = nzLocations.toList(); // crucial: I added this
 
         //## Remember: white pixels now represent the Team Scoring Element.
         //**TODO use a const with better minimum number of white pixels.
-        RobotLogCommon.d(TAG, "Number of white pixels " + nzLocations.cols());
-        if (nzLocations.cols() < 3) {
+        RobotLogCommon.d(TAG, "Number of white pixels " + nzList.size());
+        if (nzList.size() < 3) {
             RobotLogCommon.d(TAG, "The stripe contains < 3 white pixels.");
             return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWithinROI.BARCODE_ELEMENT_NPOS);
         }
 
-        // MatOfPoint.get returns double[] where [0] = x, [1] = y
-        double firstWhitePixel = nzLocations.get(0, 0)[0];
-        double lastWhitePixel = nzLocations.get(0, nzLocations.cols() - 1)[1];
+        double firstWhitePixel = nzList.get(0).x;
+        double lastWhitePixel = nzList.get(nzList.size() - 1).x;
         double whiteStripeCenter = firstWhitePixel + ((lastWhitePixel - firstWhitePixel) / 2);
         RobotLogCommon.d(TAG, "Found first white pixel at x position " + firstWhitePixel);
         RobotLogCommon.d(TAG, "Found last white pixel at x position " + lastWhitePixel);
