@@ -23,6 +23,7 @@ public class BarcodeRecognition {
 
     private static final String TAG = "BarcodeRecognition";
     private static final String imageFilePrefix = "Image_";
+    private static final int MIN_WHITE_PIXELS = 20;
 
     private final String workingDirectory;
     private final ImageUtils imageUtils;
@@ -33,12 +34,6 @@ public class BarcodeRecognition {
     }
 
     // Returns the result of image analysis.
-
-    //**TODO Watch out for glare (see Image_04170921_15573_ROI_2021_07_14_19-18-10_214_GRAY.png)
-    // Matte black may be best.
-    // and shadows (see Image_04170921_15573_ROI_2021_07_14_19-18-10_214_SHARP.png)
-    //** Make sure the height of the custom element allows us to define an ROI that cuts off its
-    // shadow.
     public BarcodeReturn findTeamScoringElement(ImageProvider pImageProvider, BarcodeParameters pBarcodeParameters) throws InterruptedException {
 
         RobotLogCommon.d(TAG, "In BarcodeRecognition.findTeamScoringElement");
@@ -92,21 +87,6 @@ public class BarcodeRecognition {
         Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ.png", adjustedGray);
         RobotLogCommon.d(TAG, "Writing adjusted grayscale image " + outputFilenamePreamble + "_ADJ.png");
 
-        //??TODO Do you need a sharpening kernel? First try without.
-        /*
-	    // 7/14/2021 Try an image sharpening kernel. See also pyimagesearch Lesson
-	    // 102 for a different kernel and the scratchpad file UnsharpMask.cpp for
-	    // more. 
-	    // See https://learnopencv.com/image-filtering-using-convolution-in-opencv/
-	    Mat sharp_img;
-	    Mat kernel3 = (Mat_<double>(3, 3) << 0, -1, 0,
-		-1, 5, -1,
-		0, -1, 0);
-	    filter2D(adjustedGray, sharp_img, -1, kernel3, Point(-1, -1), 0, BORDER_DEFAULT);
-	    imwrite(pOutputFilenamePreamble + "_SHARP.png", sharp_img);
-	    LogManager::log("Writing sharpened grayscale image " + pOutputFilenamePreamble + "_SHARP.png");
-        */
-
         int grayThresholdLow = pBarcodeParameters.grayParameters.low_threshold;
         RobotLogCommon.d(TAG, "Inverse threshold values: low " + grayThresholdLow + ", max 255 (white)");
 
@@ -118,8 +98,6 @@ public class BarcodeRecognition {
 
         Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ_THR.png", thresholded);
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ADJ_THR.png");
-
-        //??TODO erode/dilate to eliminate white noise?
 
         // The next step is to reduce the thresholded image by column to a single row
         // of pixels that contains the maximum value for each column. Since our thresholded
@@ -144,10 +122,9 @@ public class BarcodeRecognition {
         List<Point> nzList = nzLocations.toList(); // crucial: I added this
 
         //## Remember: white pixels now represent the Team Scoring Element.
-        //**TODO use a const with better minimum number of white pixels.
         RobotLogCommon.d(TAG, "Number of white pixels " + nzList.size());
-        if (nzList.size() < 4) {
-            RobotLogCommon.d(TAG, "The stripe contains between 1 and 3 white pixels.");
+        if (nzList.size() < MIN_WHITE_PIXELS) {
+            RobotLogCommon.d(TAG, "The stripe contains " + nzList.size() + " white pixels, min = " + MIN_WHITE_PIXELS);
             return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWithinROI.BARCODE_ELEMENT_NPOS);
         }
 
@@ -158,15 +135,6 @@ public class BarcodeRecognition {
         RobotLogCommon.d(TAG, "Found last white pixel at x position " + lastWhitePixel);
         RobotLogCommon.d(TAG, "Length of white pixel stripe " + (lastWhitePixel - firstWhitePixel));
         RobotLogCommon.d(TAG, "Center of white stripe at x position " + whiteStripeCenter);
-
-        // Draw a small circle in the original image at the center of the white stripe. The circle should
-        // appear n the Team Scoring Element.
-        Mat markTeamScoringElement = imageROI.clone();
-
-        //**TODO hardcode center of circle - dependent on stripeROI above
-        //Imgproc.circle(markTeamScoringElement, new Point(whiteStripeCenter, 67), 10, new Scalar(0, 0, 255), 3, 8, 0);
-        //Imgcodecs.imwrite(pOutputFilenamePreamble + "_CIR.png", markTeamScoringElement);
-        //RobotLogCommon.d(TAG, "Writing " + pOutputFilenamePreamble + "_CIR.png");
 
         // Calculate the barcode position.
         // Get the left window within the ROI from the barcode parameters.
