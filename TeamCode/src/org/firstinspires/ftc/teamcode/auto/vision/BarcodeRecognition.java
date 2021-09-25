@@ -134,14 +134,20 @@ public class BarcodeRecognition {
         // See https://stackoverflow.com/questions/18147611/opencv-java-how-to-access-coordinates-returned-by-findnonzero
         Mat rawNonZeroLocations = new Mat();
         Core.findNonZero(reduced, rawNonZeroLocations);
+        if (rawNonZeroLocations.empty())
+        {
+            RobotLogCommon.d(TAG, "The stripe contains no white pixels.");
+            return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWithinROI.BARCODE_ELEMENT_NPOS);
+        }
+
         MatOfPoint nzLocations = new MatOfPoint(rawNonZeroLocations);
         List<Point> nzList = nzLocations.toList(); // crucial: I added this
 
         //## Remember: white pixels now represent the Team Scoring Element.
         //**TODO use a const with better minimum number of white pixels.
         RobotLogCommon.d(TAG, "Number of white pixels " + nzList.size());
-        if (nzList.size() < 3) {
-            RobotLogCommon.d(TAG, "The stripe contains < 3 white pixels.");
+        if (nzList.size() < 4) {
+            RobotLogCommon.d(TAG, "The stripe contains between 1 and 3 white pixels.");
             return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWithinROI.BARCODE_ELEMENT_NPOS);
         }
 

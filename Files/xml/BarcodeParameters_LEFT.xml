@@ -1,6 +1,6 @@
 ﻿<barcode_parameters>
   <image_parameters>
-    <file>GIMP_flipped.png</file>
+    <file>Image_02230735_02246_IMG.png</file>
     <resolution>
       <width>640</width>
       <height>360</height>
@@ -11,7 +11,7 @@
     <image_roi>
       <x>125</x>
       <y>240</y>
-      <width>220</width>
+      <width>310</width>
       <height>30</height>
     </image_roi>
   </image_parameters>
