@@ -75,6 +75,32 @@ public class BarcodeRecognition {
         RobotLogCommon.d(TAG, "Writing image ROI " + imageFilename);
         Imgcodecs.imwrite(imageFilename, imageROI);
 
+        // Draw the barcode element windows (sub-ROIs) on the original image
+        // so that we can see the placement during debugging.
+        Mat barcodeElementWindows = imgOriginal.clone();
+
+        // Get the left window within the ROI from the barcode parameters.
+        // Remember - the barcode element windows are relative to the overall ROI.
+        Map<RobotConstantsFreightFrenzy.BarcodeElementWithinROI, BarcodeParameters.BarcodeElement> barcodeElements =
+                pBarcodeParameters.getBarcodeElements();
+        BarcodeParameters.BarcodeElement leftBarcodeElement = barcodeElements.get(RobotConstantsFreightFrenzy.BarcodeElementWithinROI.LEFT_WITHIN_ROI);
+        Point leftWindowUpperLeft =
+                new Point(pBarcodeParameters.imageParameters.image_roi.x + leftBarcodeElement.x, pBarcodeParameters.imageParameters.image_roi.y);
+        Point leftWindowLowerRight = new Point(pBarcodeParameters.imageParameters.image_roi.x + leftBarcodeElement.x + leftBarcodeElement.width,
+                pBarcodeParameters.imageParameters.image_roi.y + pBarcodeParameters.imageParameters.image_roi.height);
+
+        // Get the right window within the ROI from the barcode parameters.
+        BarcodeParameters.BarcodeElement rightBarcodeElement = barcodeElements.get(RobotConstantsFreightFrenzy.BarcodeElementWithinROI.RIGHT_WITHIN_ROI);
+        Point rightWindowUpperLeft = new Point(pBarcodeParameters.imageParameters.image_roi.x + rightBarcodeElement.x, pBarcodeParameters.imageParameters.image_roi.y);
+        Point rightWindowLowerRight = new Point(pBarcodeParameters.imageParameters.image_roi.x + rightBarcodeElement.x + rightBarcodeElement.width,
+                pBarcodeParameters.imageParameters.image_roi.y + pBarcodeParameters.imageParameters.image_roi.height);
+
+        // Draw the windows in red.
+        Imgproc.rectangle(barcodeElementWindows, leftWindowUpperLeft, leftWindowLowerRight, new Scalar(0, 0, 255), 3);
+        Imgproc.rectangle(barcodeElementWindows, rightWindowUpperLeft, rightWindowLowerRight, new Scalar(0, 0, 255), 3);
+        Imgcodecs.imwrite(outputFilenamePreamble + "_WIN.png", barcodeElementWindows);
+        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_WIN.png");
+
         // Adapted from ...\OpenCV_Projects\OpenCVTestbed2\OpenCVTestbed2\GeneralTarget::analyzeSkystoneStripe
         // We're on the grayscale path.
         Mat grayROI = new Mat();
@@ -112,8 +138,7 @@ public class BarcodeRecognition {
         // See https://stackoverflow.com/questions/18147611/opencv-java-how-to-access-coordinates-returned-by-findnonzero
         Mat rawNonZeroLocations = new Mat();
         Core.findNonZero(reduced, rawNonZeroLocations);
-        if (rawNonZeroLocations.empty())
-        {
+        if (rawNonZeroLocations.empty()) {
             RobotLogCommon.d(TAG, "The stripe contains no white pixels.");
             return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWithinROI.BARCODE_ELEMENT_NPOS);
         }
@@ -137,15 +162,9 @@ public class BarcodeRecognition {
         RobotLogCommon.d(TAG, "Center of white stripe at x position " + whiteStripeCenter);
 
         // Calculate the barcode position.
-        // Get the left window within the ROI from the barcode parameters.
-        Map<RobotConstantsFreightFrenzy.BarcodeElementWithinROI, BarcodeParameters.BarcodeElement> barcodeElements =
-                pBarcodeParameters.getBarcodeElements();
-        BarcodeParameters.BarcodeElement leftBarcodeElement = barcodeElements.get(RobotConstantsFreightFrenzy.BarcodeElementWithinROI.LEFT_WITHIN_ROI);
         if ((firstWhitePixel >= leftBarcodeElement.x) && (firstWhitePixel <= leftBarcodeElement.x + leftBarcodeElement.width))
             return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWithinROI.LEFT_WITHIN_ROI);
 
-        // Get the right window within the ROI from the barcode parameters.
-        BarcodeParameters.BarcodeElement rightBarcodeElement = barcodeElements.get(RobotConstantsFreightFrenzy.BarcodeElementWithinROI.RIGHT_WITHIN_ROI);
         if ((firstWhitePixel >= rightBarcodeElement.x) && (firstWhitePixel <= rightBarcodeElement.x + rightBarcodeElement.width))
             return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWithinROI.RIGHT_WITHIN_ROI);
 

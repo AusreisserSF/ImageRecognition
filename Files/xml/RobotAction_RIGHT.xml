@@ -13,10 +13,7 @@
             </image_roi>
         </parameters>
         <actions>
-            <!-- RECOGNIZE_RINGS>
-                <ocv_image_provider>file</ocv_image_provider>
-            </RECOGNIZE_RINGS -->
-            <ANALYZE_BARCODE>
+             <ANALYZE_BARCODE>
                 <ocv_image_provider>file</ocv_image_provider>
                 <barcode_recognition>
                     <left_within_roi>
