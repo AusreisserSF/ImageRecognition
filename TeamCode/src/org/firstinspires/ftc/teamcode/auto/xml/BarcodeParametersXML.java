@@ -51,7 +51,6 @@ public class BarcodeParametersXML {
     public BarcodeParameters getBarcodeParameters() throws XPathExpressionException {
         ImageXML imageXml = new ImageXML();
         XPathExpression expr;
-        VisionParameters.ImageParameters imageParameters;
         VisionParameters.GrayParameters grayParameters;
 
         // Point to the first node.
@@ -62,23 +61,15 @@ public class BarcodeParametersXML {
         if (barcode_parameters_node == null)
             throw new AutonomousRobotException(TAG, "Element '//barcode_parameters' not found");
 
-        // Point to <image_parameters>
-        Node image_node = barcode_parameters_node.getFirstChild();
-        Node image_parameters_node = getNextElement(image_node);
-        if ((image_parameters_node == null) || !image_parameters_node.getNodeName().equals("image_parameters"))
-            throw new AutonomousRobotException(TAG, "Element 'image_parameters' not found");
-
-        imageParameters = imageXml.parseImageParameters(image_parameters_node);
-
         // Point to <gray_parameters>
-        Node gray_node = image_parameters_node.getNextSibling();
+        Node gray_node = barcode_parameters_node.getFirstChild();
         Node gray_parameters_node = getNextElement(gray_node);
-        if (gray_parameters_node == null)
-            throw new AutonomousRobotException(TAG, "Element '//barcode_parameters/gray_parameters' not found");
+        if ((gray_parameters_node == null) || !gray_parameters_node.getNodeName().equals("gray_parameters"))
+            throw new AutonomousRobotException(TAG, "Element 'gray_parameters' not found");
 
         grayParameters = imageXml.parseGrayParameters(gray_parameters_node);
 
-        return new BarcodeParameters(imageParameters, grayParameters);
+        return new BarcodeParameters(grayParameters);
     }
 
     private Node getNextElement(Node pNode) {

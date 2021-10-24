@@ -8,8 +8,8 @@ import org.firstinspires.ftc.ftcdevcommon.intellij.TimeStamp;
 import org.firstinspires.ftc.ftcdevcommon.Pair;
 import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
-import org.firstinspires.ftc.teamcode.common.RobotConstants;
-import org.firstinspires.ftc.teamcode.common.RobotConstantsUltimateGoal;
+import org.firstinspires.ftc.teamcode.constants.RobotConstants;
+import org.firstinspires.ftc.teamcode.constants.RobotConstantsUltimateGoal;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
@@ -18,7 +18,6 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class RingRecognition {
 

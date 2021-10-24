@@ -18,9 +18,9 @@ import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.auto.vision.*;
 import org.firstinspires.ftc.teamcode.auto.xml.BarcodeParametersXML;
 import org.firstinspires.ftc.teamcode.auto.xml.RingParametersXML;
-import org.firstinspires.ftc.teamcode.common.RobotActionXML;
-import org.firstinspires.ftc.teamcode.common.RobotConstants;
-import org.firstinspires.ftc.teamcode.common.RobotConstantsFreightFrenzy;
+import org.firstinspires.ftc.teamcode.auto.xml.RobotActionXML;
+import org.firstinspires.ftc.teamcode.constants.RobotConstants;
+import org.firstinspires.ftc.teamcode.constants.RobotConstantsFreightFrenzy;
 import org.opencv.core.Core;
 
 import java.io.FileInputStream;

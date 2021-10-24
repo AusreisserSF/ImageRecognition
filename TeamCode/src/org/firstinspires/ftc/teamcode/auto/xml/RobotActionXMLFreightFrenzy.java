@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.common;
+package org.firstinspires.ftc.teamcode.auto.xml;
 
 import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
 import org.firstinspires.ftc.ftcdevcommon.RobotXMLElement;
 import org.firstinspires.ftc.teamcode.auto.vision.VisionParameters;
-import org.firstinspires.ftc.teamcode.auto.xml.ImageXML;
+import org.firstinspires.ftc.teamcode.constants.RobotConstantsFreightFrenzy;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -26,15 +26,15 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-public class RobotActionXML {
+public class RobotActionXMLFreightFrenzy {
 
-    public static final String TAG = "RobotActionXML";
+    public static final String TAG = "RobotActionXMLFF";
     private static final String FILE_NAME = "RobotAction.xml";
 
     private final Document document;
     private final XPath xpath;
+    private final ImageXML imageXml = new ImageXML();
 
-    // In IntelliJ we can use a non-validating parser as we do in Android.
     /*
     // IntelliJ only
     private static final String JAXP_SCHEMA_LANGUAGE =
@@ -43,7 +43,7 @@ public class RobotActionXML {
             "http://www.w3.org/2001/XMLSchema";
      */
 
-    public RobotActionXML(String pWorkingDirectory) throws ParserConfigurationException, SAXException, IOException {
+    public RobotActionXMLFreightFrenzy(String pWorkingDirectory) throws ParserConfigurationException, SAXException, IOException {
 
 /*
 // IntelliJ only
@@ -78,12 +78,12 @@ public class RobotActionXML {
 
     // Find the requested opMode in the RobotAction.xml file.
     // Package and return all data associated with the OpMode.
-    public RobotActionData getOpModeData(String pOpMode) throws XPathExpressionException {
+    public RobotActionDataFreightFrenzy getOpModeData(String pOpMode) throws XPathExpressionException {
 
         Level lowestLoggingLevel = null; // null means use the default lowest logging level
         StartingPositionData startingPositionData = null;
-        VisionParameters.FTCRect imageROI = new VisionParameters.FTCRect(0, 0, 0, 0); // default is an empty ROI; use the values from RingParameters.xml.
-        List<RobotConstantsUltimateGoal.SupportedVumark> vumarksOfInterest = new ArrayList<>();
+        VisionParameters.ImageParameters imageParameters = null;
+        List<RobotConstantsFreightFrenzy.SupportedVumark> vumarksOfInterest = new ArrayList<>();
         List<RobotXMLElement> actions = new ArrayList<>();
 
         // Use XPath to locate the desired OpMode.
@@ -102,9 +102,11 @@ public class RobotActionXML {
         // The four possible elements under <parameters> are:
         //   <lowest_logging_level>
         //   <starting_position>
-        //   <image_roi>
+        //   <image_parameters>
         //   <vumarks>
-        // All are optional.
+        // All are optional but if any action for the current OpMode in
+        // RobotAction.xml involves image recognition then the
+        // image_parameters element must be present.
 
         // A missing or empty optional lowest_logging_level will eventually return null, which
         // means to use the logger's default.
@@ -176,9 +178,9 @@ public class RobotActionXML {
             nextParameterNode = getNextElement(nextParameterNode.getNextSibling());
         }
 
-        // The next optional element in the XML is <image_roi>.
-        if ((nextParameterNode != null) && nextParameterNode.getNodeName().equals("image_roi")) {
-            imageROI = ImageXML.parseROI(nextParameterNode);
+        // The next optional element in the XML is <image_parameters>.
+        if ((nextParameterNode != null) && nextParameterNode.getNodeName().equals("image_parameters")) {
+            imageParameters = imageXml.parseImageParameters(nextParameterNode);
             nextParameterNode = getNextElement(nextParameterNode.getNextSibling());
         }
 
@@ -192,7 +194,7 @@ public class RobotActionXML {
                 if (oneVumarkNode.getNodeType() != Node.ELEMENT_NODE)
                     continue;
 
-                RobotConstantsUltimateGoal.SupportedVumark oneVumark = RobotConstantsUltimateGoal.SupportedVumark.valueOf(oneVumarkNode.getNodeName());
+                RobotConstantsFreightFrenzy.SupportedVumark oneVumark = RobotConstantsFreightFrenzy.SupportedVumark.valueOf(oneVumarkNode.getNodeName());
                 vumarksOfInterest.add(oneVumark);
             }
             nextParameterNode = getNextElement(nextParameterNode.getNextSibling());
@@ -213,8 +215,8 @@ public class RobotActionXML {
         Node actionNode;
 
         RobotXMLElement actionXMLElement;
-        boolean foundOcvChoice = false;
-        HashMap<RobotConstantsUltimateGoal.TargetZone, List<RobotXMLElement>> targetZoneActions = null;
+        boolean foundShippingHubLevelChoice = false;
+        EnumMap<RobotConstantsFreightFrenzy.ShippingHubLevels, List<RobotXMLElement>> shippingHubLevelActions = null;
         for (int i = 0; i < actionChildren.getLength(); i++) {
             actionNode = actionChildren.item(i);
 
@@ -224,20 +226,20 @@ public class RobotActionXML {
             actionXMLElement = new RobotXMLElement((Element) actionNode);
             actions.add(actionXMLElement);
 
-            if (actionNode.getNodeName().equals("OCV_CHOICE")) {
-                if (foundOcvChoice)
-                    throw new AutonomousRobotException(TAG, "Only one OCV_CHOICE element is allowed");
-                foundOcvChoice = true;
+            if (actionNode.getNodeName().equals("SHIPPING_HUB_LEVEL_CHOICE")) {
+                if (foundShippingHubLevelChoice)
+                    throw new AutonomousRobotException(TAG, "Only one SHIPPING_HUB_LEVEL_CHOICE element is allowed");
+                foundShippingHubLevelChoice = true;
 
-                // Collect all of the RobotXMLElement(s) for each target zone.
+                // Collect all of the RobotXMLElement(s) for each shipping hub level.
                 // The elements will be fed into the stream of actions at run-time
-                // depending on the outcome of the OCV recognition
-                targetZoneActions = getTargetZoneActions(actionNode);
+                // depending on the outcome of the barcode recognition
+                shippingHubLevelActions = getShippingHubLevelActions(actionNode);
             }
         }
 
-        return new RobotActionData(lowestLoggingLevel, imageROI, vumarksOfInterest, startingPositionData,
-                actions, targetZoneActions);
+        return new RobotActionDataFreightFrenzy(lowestLoggingLevel, imageParameters, vumarksOfInterest, startingPositionData,
+                actions, shippingHubLevelActions);
     }
 
     private Node getNextElement(Node pNode) {
@@ -251,42 +253,42 @@ public class RobotActionXML {
         return null;
     }
 
-    // Get the target zone actions associated with an OpMode.
-    // The key of the return map is the target zone.
-    private HashMap<RobotConstantsUltimateGoal.TargetZone, List<RobotXMLElement>> getTargetZoneActions(Node pOcvChoiceNode) {
-        HashMap<RobotConstantsUltimateGoal.TargetZone, List<RobotXMLElement>> targetZoneActions = new HashMap<>();
+    // Get the shipping hub level actions associated with an OpMode.
+    // The key of the return map is the shipping hub level.
+    private EnumMap<RobotConstantsFreightFrenzy.ShippingHubLevels, List<RobotXMLElement>> getShippingHubLevelActions(Node pShippingHubLevelChoiceNode) {
+        EnumMap<RobotConstantsFreightFrenzy.ShippingHubLevels, List<RobotXMLElement>> shippingHubActions = new EnumMap<>(RobotConstantsFreightFrenzy.ShippingHubLevels.class);
         List<RobotXMLElement> actions;
 
-        RobotLogCommon.i(TAG, "Processing xml for target zones");
+        RobotLogCommon.i(TAG, "Processing xml for shipping hub levels");
 
-        NodeList ocvChoiceChildren = pOcvChoiceNode.getChildNodes();
-        if (ocvChoiceChildren == null)
-            throw new AutonomousRobotException(TAG, "Missing TARGET_ZONE elements");
+        NodeList shippingHubLevelChoiceChildren = pShippingHubLevelChoiceNode.getChildNodes();
+        if (shippingHubLevelChoiceChildren == null)
+            throw new AutonomousRobotException(TAG, "Missing SHIPPING_HUB_LEVEL elements");
 
-        Node targetZoneNode;
-        int targetZoneCount = 0;
-        for (int i = 0; i < ocvChoiceChildren.getLength(); i++) {
-            targetZoneNode = ocvChoiceChildren.item(i);
+        Node shippingHubLevelNode;
+        int shippingHubLevelCount = 0;
+        for (int i = 0; i < shippingHubLevelChoiceChildren.getLength(); i++) {
+            shippingHubLevelNode = shippingHubLevelChoiceChildren.item(i);
 
-            if (targetZoneNode.getNodeType() != Node.ELEMENT_NODE)
+            if (shippingHubLevelNode.getNodeType() != Node.ELEMENT_NODE)
                 continue;
 
-            targetZoneCount++;
-            RobotConstantsUltimateGoal.TargetZone targetZone = RobotConstantsUltimateGoal.TargetZone.valueOf(targetZoneNode.getNodeName());
-            actions = collectActions(targetZoneNode.getChildNodes());
-            targetZoneActions.put(targetZone, actions);
+            shippingHubLevelCount++;
+            RobotConstantsFreightFrenzy.ShippingHubLevels shippingHubLevel = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(shippingHubLevelNode.getNodeName());
+            actions = collectShippingHubLevelActions(shippingHubLevelNode.getChildNodes());
+            shippingHubActions.put(shippingHubLevel, actions);
         }
 
-        if (targetZoneCount != 3)
-          throw new AutonomousRobotException(TAG, "Missing one or more TARGET_ZONE elements");
+        if (shippingHubLevelCount != 3)
+          throw new AutonomousRobotException(TAG, "Missing one or more SHIPPING_HUB_LEVEL elements");
 
-        return targetZoneActions;
+        return shippingHubActions;
     }
 
-    // Iterate through the children of the selected target zone node
-    // and collect the elements. Note: a TARGET_ZONE element with no
+    // Iterate through the children of the shipping hub level node
+    // and collect the elements. Note: a SHIPPING_HUB_LEVEL element with no
     // children is valid.
-    private List<RobotXMLElement> collectActions(NodeList pNodeList) {
+    private List<RobotXMLElement> collectShippingHubLevelActions(NodeList pNodeList) {
 
         List<RobotXMLElement> actions = new ArrayList<>();
         Node oneActionNode;
@@ -305,25 +307,24 @@ public class RobotActionXML {
         return actions;
     }
 
-    public static class RobotActionData {
+    public static class RobotActionDataFreightFrenzy {
         public final Level lowestLoggingLevel;
-        public final VisionParameters.FTCRect imageROI;
-        public final List<RobotConstantsUltimateGoal.SupportedVumark> vumarksOfInterest;
+        public final VisionParameters.ImageParameters imageParameters;
+        public final List<RobotConstantsFreightFrenzy.SupportedVumark> vumarksOfInterest;
         public final StartingPositionData startingPositionData;
         public final List<RobotXMLElement> actions;
-        public final HashMap<RobotConstantsUltimateGoal.TargetZone, List<RobotXMLElement>> targetZoneActions;
+        public final EnumMap<RobotConstantsFreightFrenzy.ShippingHubLevels, List<RobotXMLElement>> shippingHubActions;
 
-
-        public RobotActionData(Level pLevel, VisionParameters.FTCRect pROI,
-                               List<RobotConstantsUltimateGoal.SupportedVumark> pVumarks,
-                               StartingPositionData pStartingPositionData,
-                               List<RobotXMLElement> pActions,
-                               HashMap<RobotConstantsUltimateGoal.TargetZone, List<RobotXMLElement>> pTargetZoneActions) {
+        public RobotActionDataFreightFrenzy(Level pLevel, VisionParameters.ImageParameters pImageParameters,
+                                            List<RobotConstantsFreightFrenzy.SupportedVumark> pVumarks,
+                                            StartingPositionData pStartingPositionData,
+                                            List<RobotXMLElement> pActions,
+                                            EnumMap<RobotConstantsFreightFrenzy.ShippingHubLevels, List<RobotXMLElement>> pShippingHubActions) {
             lowestLoggingLevel = pLevel;
-            imageROI = pROI;
+            imageParameters = pImageParameters;
             vumarksOfInterest = pVumarks;
             actions = pActions;
-            targetZoneActions = pTargetZoneActions;
+            shippingHubActions = pShippingHubActions;
             startingPositionData = pStartingPositionData;
         }
     }
@@ -332,7 +333,7 @@ public class RobotActionXML {
 
         public final double startingX; // FTC field coordinates
         public final double startingY; // FTC field coordinates
-        public final double startingAngle; // with repsect to the wall
+        public final double startingAngle; // with respect to the wall
 
         public StartingPositionData(double pStartingX, double pStartingY, double pStartingAngle) {
             startingX = pStartingX;

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common;
+package org.firstinspires.ftc.teamcode.constants;
 
 public class RobotConstantsFreightFrenzy {
 
@@ -15,6 +15,11 @@ public class RobotConstantsFreightFrenzy {
     public enum ShippingHubLevels {
         SHIPPING_HUB_LEVEL_1, SHIPPING_HUB_LEVEL_2, SHIPPING_HUB_LEVEL_3,
         SHIPPING_HUB_LEVEL_NPOS
+    }
+
+    // Vumark identifiers
+    public enum SupportedVumark {BLUE_ALLIANCE_WALL_TARGET, SHARED_STORAGE_WALL_BLUE_STORAGE_TARGET,
+        RED_ALLIANCE_WALL_TARGET, SHARED_STORAGE_WALL_RED_STORAGE_TARGET
     }
 
     // Vumark identifiers

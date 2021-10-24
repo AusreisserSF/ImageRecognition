@@ -1,16 +1,24 @@
+<!-- BLUE_CAROUSEL -->
 <RobotAction>
     <OpMode id="TEST">
         <parameters>
             <lowest_logging_level>v</lowest_logging_level>
-            <!-- Not used in FTCAuto but provides a means of overriding the common
-                 ROI definition in the image parameters with one that is specific
-                 to the current OpMode. -->
-            <image_roi>
-                <x>0</x>
-                <y>0</y>
-                <width>0</width>
-                <height>0</height>
-            </image_roi>
+            <image_parameters>
+                <!-- LEFT Image_10221451_23560_IMG.png -->
+                <!-- CENTER Image_10221502_16448_IMG.png -->
+                <!-- RIGHT Image_10221507_03568_IMG.png -->
+                <file>Image_10221507_03568_IMG.png</file>
+                <resolution>
+                    <width>848</width>
+                    <height>480</height>
+                </resolution>
+                <image_roi>
+                    <x>275</x>
+                    <y>390</y>
+                    <width>380</width>
+                    <height>65</height>
+                </image_roi>
+            </image_parameters>
         </parameters>
         <actions>
             <ANALYZE_BARCODE>
@@ -18,12 +26,12 @@
                 <barcode_recognition>
                     <left_within_roi>
                         <x>0</x>
-                        <width>140</width>
+                        <width>165</width>
                         <shipping_hub_level>SHIPPING_HUB_LEVEL_1</shipping_hub_level>
                     </left_within_roi>
                     <right_within_roi>
-                        <x>230</x>
-                        <width>140</width>
+                        <x>166</x>
+                        <width>220</width>
                         <shipping_hub_level>SHIPPING_HUB_LEVEL_2</shipping_hub_level>
                     </right_within_roi>
                     <barcode_element_npos>

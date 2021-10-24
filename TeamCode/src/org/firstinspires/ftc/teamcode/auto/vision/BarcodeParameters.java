@@ -1,27 +1,24 @@
 package org.firstinspires.ftc.teamcode.auto.vision;
 
-import org.firstinspires.ftc.teamcode.common.RobotConstantsFreightFrenzy;
+import org.firstinspires.ftc.teamcode.constants.RobotConstantsFreightFrenzy;
 
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.EnumMap;
 
 // Input parameters to barcode recognition.
 public class BarcodeParameters {
 
-    public final VisionParameters.ImageParameters imageParameters; // extracted from BarcodeParameters.xml.
     public final VisionParameters.GrayParameters grayParameters; // extracted from BarcodeParameters.xml.
-    private Map<RobotConstantsFreightFrenzy.BarcodeElementWithinROI, BarcodeElement> barcodeElements;
+    private EnumMap<RobotConstantsFreightFrenzy.BarcodeElementWithinROI, BarcodeElement> barcodeElements;
  
-    public BarcodeParameters(VisionParameters.ImageParameters pImageParameters, VisionParameters.GrayParameters pGrayParameters) {
-        imageParameters = pImageParameters;
+    public BarcodeParameters(VisionParameters.GrayParameters pGrayParameters) {
         grayParameters = pGrayParameters;
     }
 
-    public void setBarcodeElements(Map<RobotConstantsFreightFrenzy.BarcodeElementWithinROI, BarcodeElement> pBarcodeElements) {
+    public void setBarcodeElements(EnumMap<RobotConstantsFreightFrenzy.BarcodeElementWithinROI, BarcodeElement> pBarcodeElements) {
         barcodeElements = pBarcodeElements;
     }
 
-    public Map<RobotConstantsFreightFrenzy.BarcodeElementWithinROI, BarcodeElement> getBarcodeElements() {
+    public EnumMap<RobotConstantsFreightFrenzy.BarcodeElementWithinROI, BarcodeElement> getBarcodeElements() {
         return barcodeElements;
     }
 
