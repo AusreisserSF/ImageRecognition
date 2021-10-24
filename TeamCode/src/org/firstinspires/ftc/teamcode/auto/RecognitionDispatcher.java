@@ -18,7 +18,7 @@ import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.auto.vision.*;
 import org.firstinspires.ftc.teamcode.auto.xml.BarcodeParametersXML;
 import org.firstinspires.ftc.teamcode.auto.xml.RingParametersXML;
-import org.firstinspires.ftc.teamcode.auto.xml.RobotActionXML;
+import org.firstinspires.ftc.teamcode.auto.xml.RobotActionXMLFreightFrenzy;
 import org.firstinspires.ftc.teamcode.constants.RobotConstants;
 import org.firstinspires.ftc.teamcode.constants.RobotConstantsFreightFrenzy;
 import org.opencv.core.Core;
@@ -26,10 +26,14 @@ import org.opencv.core.Core;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//**TODO Use a command line switch for "ultimate" vs "freight" and take different
+// paths via a separate class for each. Currently hard-coded for Freight Frenzy
+// so **Ultimate Goal Ring Recognition WILL NOT WORK. **
 public class RecognitionDispatcher extends Application {
 
     private static final String TAG = "RecognitionDispatcher";
@@ -69,8 +73,8 @@ public class RecognitionDispatcher extends Application {
         field = new Pane();
 
         // Use RobotAction.xml but for a single OpMode with a single action only.
-        RobotActionXML robotActionXML = new RobotActionXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
-        RobotActionXML.RobotActionData actionData = robotActionXML.getOpModeData("TEST");
+        RobotActionXMLFreightFrenzy robotActionXMLFreightFrenzy = new RobotActionXMLFreightFrenzy(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
+        RobotActionXMLFreightFrenzy.RobotActionDataFreightFrenzy actionData = robotActionXMLFreightFrenzy.getOpModeData("TEST");
         List<RobotXMLElement> actions = actionData.actions;
         if (actions.size() != 1)
             throw new AutonomousRobotException(TAG, "TEST OpMode must contain a single action");
@@ -116,22 +120,23 @@ public class RecognitionDispatcher extends Application {
                 BarcodeRecognition barcodeRecognition = new BarcodeRecognition();
 
                 // Prepare for image recognition.
+                if (actionData.imageParameters == null)
+                    throw new AutonomousRobotException(TAG, "Missing image_parameters");
+
                 String imagePath = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
-                ImageProvider fileImage = new FileImage(imagePath + barcodeParameters.imageParameters.file_name);
+                ImageProvider fileImage = new FileImage(imagePath + actionData.imageParameters.file_name);
 
                 // Set the barcode recognition parameters for the current OpMode.
-                Map<RobotConstantsFreightFrenzy.BarcodeElementWithinROI, BarcodeParameters.BarcodeElement> barcodeElements =
-                        new HashMap<>();
+                EnumMap<RobotConstantsFreightFrenzy.BarcodeElementWithinROI, BarcodeParameters.BarcodeElement> barcodeElements =
+                        new EnumMap<>(RobotConstantsFreightFrenzy.BarcodeElementWithinROI.class);
 
-                // Get the boundaries for the barcode element on the left side of the
-                // ROI.
+                // Get the boundaries for the barcode element on the left side of the ROI.
                 int left_x = commandXPath.getInt("barcode_recognition/left_within_roi/x");
                 int left_width = commandXPath.getInt("barcode_recognition/left_within_roi/width");
                 RobotConstantsFreightFrenzy.ShippingHubLevels left_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/left_within_roi/shipping_hub_level", true));
                 barcodeElements.put(RobotConstantsFreightFrenzy.BarcodeElementWithinROI.LEFT_WITHIN_ROI, new BarcodeParameters.BarcodeElement(left_x, left_width));
 
-                // Get the boundaries for the barcode element on the right side of the
-                // ROI.
+                // Get the boundaries for the barcode element on the right side of the ROI.
                 int right_x = commandXPath.getInt("barcode_recognition/right_within_roi/x");
                 int right_width = commandXPath.getInt("barcode_recognition/right_within_roi/width");
                 RobotConstantsFreightFrenzy.ShippingHubLevels right_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/right_within_roi/shipping_hub_level", true));
@@ -142,7 +147,8 @@ public class RecognitionDispatcher extends Application {
                 RobotConstantsFreightFrenzy.ShippingHubLevels npos_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/barcode_element_npos/shipping_hub_level", true));
 
                 // At last perform the image recognition.
-                BarcodeReturn barcodeReturn = barcodeRecognition.findTeamScoringElement(fileImage, barcodeParameters);
+                BarcodeReturn barcodeReturn =
+                        barcodeRecognition.findTeamScoringElement(fileImage, actionData.imageParameters, barcodeParameters);
                 if (barcodeReturn.fatalComputerVisionError)
                     throw new AutonomousRobotException(TAG, "Error in computer vision subsystem");
 
@@ -166,7 +172,7 @@ public class RecognitionDispatcher extends Application {
 
                 RobotLogCommon.d(TAG, "Found Team Scoring Element at position " + barcodeReturn.barcodeElementWithinROI);
                 RobotLogCommon.d(TAG, "Shipping Hub Level " + shippingHubLevel);
-                displayResults(imagePath + barcodeParameters.imageParameters.file_name,
+                displayResults(imagePath + actionData.imageParameters.file_name,
                         shippingHubLevel.toString(),
                         "FTC 2021 - 2022 Freight Frenzy");
                 break;

@@ -27,7 +27,7 @@ public class ImageXML {
 </image_parameters>
 */
 // Parse the children of the <image_parameters> element in the XML file.
-    public VisionParameters.ImageParameters parseImageParameters(Node pImageParametersNode) {
+    public static VisionParameters.ImageParameters parseImageParameters(Node pImageParametersNode) {
         String file_name;
         int resolution_width;
         int resolution_height;
@@ -148,7 +148,7 @@ public class ImageXML {
     }
 
     // Parse the children of the <gray_parameters> element in the XML file.
-    public VisionParameters.GrayParameters parseGrayParameters(Node pGrayNode) {
+    public static VisionParameters.GrayParameters parseGrayParameters(Node pGrayNode) {
         int target;
         int low_threshold;
 
@@ -192,7 +192,7 @@ public class ImageXML {
 </hsv_parameters>
 */
     // At this point pHSVNode points to the <hsv_parameters> element.
-    public VisionParameters.HSVParameters parseHSVParameters(Node pHSVNode) {
+    public static VisionParameters.HSVParameters parseHSVParameters(Node pHSVNode) {
         String hue_name;
         int hue_low;
         int hue_high;
@@ -281,7 +281,7 @@ public class ImageXML {
                 value_target, value_low_threshold);
     }
 
-    public static Node getNextElement(Node pNode) {
+    private static Node getNextElement(Node pNode) {
         Node nd = pNode;
         while (nd != null) {
             if (nd.getNodeType() == Node.ELEMENT_NODE) {

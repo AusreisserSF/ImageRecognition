@@ -26,7 +26,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-public class RobotActionXML {
+public class RobotActionXMLUltimateGoal {
 
     public static final String TAG = "RobotActionXML";
     private static final String FILE_NAME = "RobotAction.xml";
@@ -43,7 +43,7 @@ public class RobotActionXML {
             "http://www.w3.org/2001/XMLSchema";
      */
 
-    public RobotActionXML(String pWorkingDirectory) throws ParserConfigurationException, SAXException, IOException {
+    public RobotActionXMLUltimateGoal(String pWorkingDirectory) throws ParserConfigurationException, SAXException, IOException {
 
 /*
 // IntelliJ only

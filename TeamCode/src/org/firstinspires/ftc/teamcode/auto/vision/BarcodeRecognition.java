@@ -34,7 +34,7 @@ public class BarcodeRecognition {
     }
 
     // Returns the result of image analysis.
-    public BarcodeReturn findTeamScoringElement(ImageProvider pImageProvider, BarcodeParameters pBarcodeParameters) throws InterruptedException {
+    public BarcodeReturn findTeamScoringElement(ImageProvider pImageProvider, VisionParameters.ImageParameters pImageParameters, BarcodeParameters pBarcodeParameters) throws InterruptedException {
 
         RobotLogCommon.d(TAG, "In BarcodeRecognition.findTeamScoringElement");
 
@@ -59,18 +59,18 @@ public class BarcodeRecognition {
         Imgcodecs.imwrite(imageFilename, imgOriginal);
 
         RobotLogCommon.d(TAG, "Image width " + imgOriginal.cols() + ", height " + imgOriginal.rows());
-        if ((imgOriginal.cols() != pBarcodeParameters.imageParameters.resolution_width) ||
-                (imgOriginal.rows() != pBarcodeParameters.imageParameters.resolution_height))
+        if ((imgOriginal.cols() != pImageParameters.resolution_width) ||
+                (imgOriginal.rows() != pImageParameters.resolution_height))
             throw new AutonomousRobotException(TAG,
-                    "Mismatch between actual image width and expected image width " + pBarcodeParameters.imageParameters.resolution_width +
-                            ", height " + pBarcodeParameters.imageParameters.resolution_height);
+                    "Mismatch between actual image width and expected image width " + pImageParameters.resolution_width +
+                            ", height " + pImageParameters.resolution_height);
 
         // Crop the image to reduce distractions.
         Mat imageROI = imageUtils.getImageROI(imgOriginal,
-                new Rect(pBarcodeParameters.imageParameters.image_roi.x,
-                        pBarcodeParameters.imageParameters.image_roi.y,
-                        pBarcodeParameters.imageParameters.image_roi.width,
-                        pBarcodeParameters.imageParameters.image_roi.height));
+                new Rect(pImageParameters.image_roi.x,
+                        pImageParameters.image_roi.y,
+                        pImageParameters.image_roi.width,
+                        pImageParameters.image_roi.height));
         imageFilename = outputFilenamePreamble + "_ROI.png";
         RobotLogCommon.d(TAG, "Writing image ROI " + imageFilename);
         Imgcodecs.imwrite(imageFilename, imageROI);
@@ -85,15 +85,15 @@ public class BarcodeRecognition {
                 pBarcodeParameters.getBarcodeElements();
         BarcodeParameters.BarcodeElement leftBarcodeElement = barcodeElements.get(RobotConstantsFreightFrenzy.BarcodeElementWithinROI.LEFT_WITHIN_ROI);
         Point leftWindowUpperLeft =
-                new Point(pBarcodeParameters.imageParameters.image_roi.x + leftBarcodeElement.x, pBarcodeParameters.imageParameters.image_roi.y);
-        Point leftWindowLowerRight = new Point(pBarcodeParameters.imageParameters.image_roi.x + leftBarcodeElement.x + leftBarcodeElement.width,
-                pBarcodeParameters.imageParameters.image_roi.y + pBarcodeParameters.imageParameters.image_roi.height);
+                new Point(pImageParameters.image_roi.x + leftBarcodeElement.x, pImageParameters.image_roi.y);
+        Point leftWindowLowerRight = new Point(pImageParameters.image_roi.x + leftBarcodeElement.x + leftBarcodeElement.width,
+                pImageParameters.image_roi.y + pImageParameters.image_roi.height);
 
         // Get the right window within the ROI from the barcode parameters.
         BarcodeParameters.BarcodeElement rightBarcodeElement = barcodeElements.get(RobotConstantsFreightFrenzy.BarcodeElementWithinROI.RIGHT_WITHIN_ROI);
-        Point rightWindowUpperLeft = new Point(pBarcodeParameters.imageParameters.image_roi.x + rightBarcodeElement.x, pBarcodeParameters.imageParameters.image_roi.y);
-        Point rightWindowLowerRight = new Point(pBarcodeParameters.imageParameters.image_roi.x + rightBarcodeElement.x + rightBarcodeElement.width,
-                pBarcodeParameters.imageParameters.image_roi.y + pBarcodeParameters.imageParameters.image_roi.height);
+        Point rightWindowUpperLeft = new Point(pImageParameters.image_roi.x + rightBarcodeElement.x, pImageParameters.image_roi.y);
+        Point rightWindowLowerRight = new Point(pImageParameters.image_roi.x + rightBarcodeElement.x + rightBarcodeElement.width,
+                pImageParameters.image_roi.y + pImageParameters.image_roi.height);
 
         // Draw the windows in red.
         Imgproc.rectangle(barcodeElementWindows, leftWindowUpperLeft, leftWindowLowerRight, new Scalar(0, 0, 255), 3);

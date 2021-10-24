@@ -33,7 +33,6 @@ public class RobotActionXMLFreightFrenzy {
 
     private final Document document;
     private final XPath xpath;
-    private final ImageXML imageXml = new ImageXML();
 
     /*
     // IntelliJ only
@@ -180,7 +179,7 @@ public class RobotActionXMLFreightFrenzy {
 
         // The next optional element in the XML is <image_parameters>.
         if ((nextParameterNode != null) && nextParameterNode.getNodeName().equals("image_parameters")) {
-            imageParameters = imageXml.parseImageParameters(nextParameterNode);
+            imageParameters = ImageXML.parseImageParameters(nextParameterNode);
             nextParameterNode = getNextElement(nextParameterNode.getNextSibling());
         }
 
@@ -231,7 +230,7 @@ public class RobotActionXMLFreightFrenzy {
                     throw new AutonomousRobotException(TAG, "Only one SHIPPING_HUB_LEVEL_CHOICE element is allowed");
                 foundShippingHubLevelChoice = true;
 
-                // Collect all of the RobotXMLElement(s) for each shipping hub level.
+                // Collect all the RobotXMLElement(s) for each shipping hub level.
                 // The elements will be fed into the stream of actions at run-time
                 // depending on the outcome of the barcode recognition
                 shippingHubLevelActions = getShippingHubLevelActions(actionNode);
@@ -315,7 +314,8 @@ public class RobotActionXMLFreightFrenzy {
         public final List<RobotXMLElement> actions;
         public final EnumMap<RobotConstantsFreightFrenzy.ShippingHubLevels, List<RobotXMLElement>> shippingHubActions;
 
-        public RobotActionDataFreightFrenzy(Level pLevel, VisionParameters.ImageParameters pImageParameters,
+        public RobotActionDataFreightFrenzy(Level pLevel,
+                                            VisionParameters.ImageParameters pImageParameters,
                                             List<RobotConstantsFreightFrenzy.SupportedVumark> pVumarks,
                                             StartingPositionData pStartingPositionData,
                                             List<RobotXMLElement> pActions,
