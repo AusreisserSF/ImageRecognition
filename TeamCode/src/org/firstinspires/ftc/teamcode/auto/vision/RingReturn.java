@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto.vision;
 
-import org.firstinspires.ftc.teamcode.constants.RobotConstantsUltimateGoal;
+import org.firstinspires.ftc.teamcode.common.RobotConstantsUltimateGoal;
 
 // Holds the results of image recognition.
 public class RingReturn {

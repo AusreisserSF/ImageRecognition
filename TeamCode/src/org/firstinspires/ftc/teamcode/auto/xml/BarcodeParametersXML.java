@@ -49,7 +49,6 @@ public class BarcodeParametersXML {
     }
 
     public BarcodeParameters getBarcodeParameters() throws XPathExpressionException {
-        ImageXML imageXml = new ImageXML();
         XPathExpression expr;
         VisionParameters.GrayParameters grayParameters;
 
@@ -67,7 +66,7 @@ public class BarcodeParametersXML {
         if ((gray_parameters_node == null) || !gray_parameters_node.getNodeName().equals("gray_parameters"))
             throw new AutonomousRobotException(TAG, "Element 'gray_parameters' not found");
 
-        grayParameters = imageXml.parseGrayParameters(gray_parameters_node);
+        grayParameters = ImageXML.parseGrayParameters(gray_parameters_node);
 
         return new BarcodeParameters(grayParameters);
     }

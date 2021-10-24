@@ -19,17 +19,15 @@ import org.firstinspires.ftc.teamcode.auto.vision.*;
 import org.firstinspires.ftc.teamcode.auto.xml.BarcodeParametersXML;
 import org.firstinspires.ftc.teamcode.auto.xml.RingParametersXML;
 import org.firstinspires.ftc.teamcode.auto.xml.RobotActionXMLFreightFrenzy;
-import org.firstinspires.ftc.teamcode.constants.RobotConstants;
-import org.firstinspires.ftc.teamcode.constants.RobotConstantsFreightFrenzy;
+import org.firstinspires.ftc.teamcode.common.RobotConstants;
+import org.firstinspires.ftc.teamcode.common.RobotConstantsFreightFrenzy;
 import org.opencv.core.Core;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 //**TODO Use a command line switch for "ultimate" vs "freight" and take different
 // paths via a separate class for each. Currently hard-coded for Freight Frenzy

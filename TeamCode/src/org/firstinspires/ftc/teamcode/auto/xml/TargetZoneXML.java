@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.auto.xml;
 import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
 import org.firstinspires.ftc.ftcdevcommon.RobotXMLElement;
-import org.firstinspires.ftc.teamcode.constants.RobotConstantsUltimateGoal;
+import org.firstinspires.ftc.teamcode.common.RobotConstantsUltimateGoal;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

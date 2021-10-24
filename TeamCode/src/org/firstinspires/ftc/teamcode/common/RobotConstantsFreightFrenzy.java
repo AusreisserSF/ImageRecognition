@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.constants;
+package org.firstinspires.ftc.teamcode.common;
 
 public class RobotConstantsFreightFrenzy {
 
