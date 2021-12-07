@@ -79,7 +79,7 @@ public class RobotActionXMLFreightFrenzy {
     // Package and return all data associated with the OpMode.
     public RobotActionDataFreightFrenzy getOpModeData(String pOpMode) throws XPathExpressionException {
 
-        Level lowestLoggingLevel = null; // null means use the default lowest logging level
+        Level logLevel = null; // null means use the default lowest logging level
         StartingPositionData startingPositionData = null;
         VisionParameters.ImageParameters imageParameters = null;
         List<RobotConstantsFreightFrenzy.SupportedVumark> vumarksOfInterest = new ArrayList<>();
@@ -99,7 +99,7 @@ public class RobotActionXMLFreightFrenzy {
             throw new AutonomousRobotException(TAG, "Missing required <parameters> element");
 
         // The four possible elements under <parameters> are:
-        //   <lowest_logging_level>
+        //   <logging_level>
         //   <starting_position>
         //   <image_parameters>
         //   <vumarks>
@@ -107,27 +107,27 @@ public class RobotActionXMLFreightFrenzy {
         // RobotAction.xml involves image recognition then the
         // image_parameters element must be present.
 
-        // A missing or empty optional lowest_logging_level will eventually return null, which
+        // A missing or empty optional logging_level will eventually return null, which
         // means to use the logger's default.
         Node nextParameterNode = getNextElement(parametersNode.getFirstChild());
-        if ((nextParameterNode != null) && (nextParameterNode.getNodeName().equals("lowest_logging_level"))) {
-            String lowestLoggingLevelString = nextParameterNode.getTextContent().trim();
-            if (!lowestLoggingLevelString.isEmpty()) {
-                switch (lowestLoggingLevelString) {
+        if ((nextParameterNode != null) && (nextParameterNode.getNodeName().equals("log_level"))) {
+            String logLevelString = nextParameterNode.getTextContent().trim();
+            if (!logLevelString.isEmpty()) {
+                switch (logLevelString) {
                     case "d": {
-                        lowestLoggingLevel = Level.FINE;
+                        logLevel = Level.FINE;
                         break;
                     }
                     case "v": {
-                        lowestLoggingLevel = Level.FINER;
+                        logLevel = Level.FINER;
                         break;
                     }
                     case "vv": {
-                        lowestLoggingLevel = Level.FINEST;
+                        logLevel = Level.FINEST;
                         break;
                     }
                     default: {
-                        throw new AutonomousRobotException(TAG, "Invalid lowest logging level");
+                        throw new AutonomousRobotException(TAG, "Invalid logging level");
                     }
                 }
             }
@@ -237,7 +237,7 @@ public class RobotActionXMLFreightFrenzy {
             }
         }
 
-        return new RobotActionDataFreightFrenzy(lowestLoggingLevel, imageParameters, vumarksOfInterest, startingPositionData,
+        return new RobotActionDataFreightFrenzy(logLevel, imageParameters, vumarksOfInterest, startingPositionData,
                 actions, shippingHubLevelActions);
     }
 
@@ -307,20 +307,20 @@ public class RobotActionXMLFreightFrenzy {
     }
 
     public static class RobotActionDataFreightFrenzy {
-        public final Level lowestLoggingLevel;
+        public final Level logLevel;
         public final VisionParameters.ImageParameters imageParameters;
         public final List<RobotConstantsFreightFrenzy.SupportedVumark> vumarksOfInterest;
         public final StartingPositionData startingPositionData;
         public final List<RobotXMLElement> actions;
         public final EnumMap<RobotConstantsFreightFrenzy.ShippingHubLevels, List<RobotXMLElement>> shippingHubActions;
 
-        public RobotActionDataFreightFrenzy(Level pLevel,
+        public RobotActionDataFreightFrenzy(Level pLogLevel,
                                             VisionParameters.ImageParameters pImageParameters,
                                             List<RobotConstantsFreightFrenzy.SupportedVumark> pVumarks,
                                             StartingPositionData pStartingPositionData,
                                             List<RobotXMLElement> pActions,
                                             EnumMap<RobotConstantsFreightFrenzy.ShippingHubLevels, List<RobotXMLElement>> pShippingHubActions) {
-            lowestLoggingLevel = pLevel;
+            logLevel = pLogLevel;
             imageParameters = pImageParameters;
             vumarksOfInterest = pVumarks;
             actions = pActions;

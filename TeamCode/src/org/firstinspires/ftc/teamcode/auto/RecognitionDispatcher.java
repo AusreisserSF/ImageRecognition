@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.auto.xml.RobotActionXMLFreightFrenzy;
 import org.firstinspires.ftc.teamcode.common.RobotConstants;
 import org.firstinspires.ftc.teamcode.common.RobotConstantsFreightFrenzy;
 import org.opencv.core.Core;
+import org.opencv.core.Rect;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -70,12 +71,12 @@ public class RecognitionDispatcher extends Application {
         stage = pStage;
         field = new Pane();
 
-        // Use RobotAction.xml but for a single OpMode with a single action only.
+        // Use RobotAction.xml but for the single OpMode TEST with a single action only.
         RobotActionXMLFreightFrenzy robotActionXMLFreightFrenzy = new RobotActionXMLFreightFrenzy(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
         RobotActionXMLFreightFrenzy.RobotActionDataFreightFrenzy actionData = robotActionXMLFreightFrenzy.getOpModeData("TEST");
         List<RobotXMLElement> actions = actionData.actions;
-        if (actions.size() != 1)
-            throw new AutonomousRobotException(TAG, "TEST OpMode must contain a single action");
+        if (actions.size() != 1 || !actions.get(0).getRobotXMLElementName().equals("ANALYZE_BARCODE"))
+            throw new AutonomousRobotException(TAG, "TEST OpMode must contain a single action ANALYZE_BARCODE");
 
         // Set up XPath access to the current action command.
         RobotXMLElement actionElement = actions.get(0);
@@ -125,23 +126,29 @@ public class RecognitionDispatcher extends Application {
                 ImageProvider fileImage = new FileImage(imagePath + actionData.imageParameters.file_name);
 
                 // Set the barcode recognition parameters for the current OpMode.
-                EnumMap<RobotConstantsFreightFrenzy.BarcodeElementWithinROI, BarcodeParameters.BarcodeElement> barcodeElements =
-                        new EnumMap<>(RobotConstantsFreightFrenzy.BarcodeElementWithinROI.class);
+                EnumMap<RobotConstantsFreightFrenzy.BarcodeElementWindow, Rect> barcodeElements =
+                        new EnumMap<>(RobotConstantsFreightFrenzy.BarcodeElementWindow.class);
 
-                // Get the boundaries for the barcode element on the left side of the ROI.
-                int left_x = commandXPath.getInt("barcode_recognition/left_within_roi/x");
-                int left_width = commandXPath.getInt("barcode_recognition/left_within_roi/width");
-                RobotConstantsFreightFrenzy.ShippingHubLevels left_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/left_within_roi/shipping_hub_level", true));
-                barcodeElements.put(RobotConstantsFreightFrenzy.BarcodeElementWithinROI.LEFT_WITHIN_ROI, new BarcodeParameters.BarcodeElement(left_x, left_width));
+                // The left window onto the barcode may be the leftmost barcode element or the
+                // center barcode element. The right window is always immediately to the right
+                // of the left window.
+                // Get the boundaries for the left window onto the barcode.
+                int left_x = commandXPath.getInt("barcode_recognition/left_window/x");
+                int left_y = commandXPath.getInt("barcode_recognition/left_window/y");
+                int left_width = commandXPath.getInt("barcode_recognition/left_window/width");
+                int left_height = commandXPath.getInt("barcode_recognition/left_window/height");
+                RobotConstantsFreightFrenzy.ShippingHubLevels left_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/left_window/shipping_hub_level"));
+                barcodeElements.put(RobotConstantsFreightFrenzy.BarcodeElementWindow.LEFT, new Rect(left_x, left_y, left_width, left_height));
 
-                // Get the boundaries for the barcode element on the right side of the ROI.
-                int right_x = commandXPath.getInt("barcode_recognition/right_within_roi/x");
-                int right_width = commandXPath.getInt("barcode_recognition/right_within_roi/width");
-                RobotConstantsFreightFrenzy.ShippingHubLevels right_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/right_within_roi/shipping_hub_level", true));
-                barcodeElements.put(RobotConstantsFreightFrenzy.BarcodeElementWithinROI.RIGHT_WITHIN_ROI, new BarcodeParameters.BarcodeElement(right_x, right_width));
+                // Get the boundaries for the right window onto the barcode.
+                int right_width = commandXPath.getInt("barcode_recognition/right_window/width");
+                RobotConstantsFreightFrenzy.ShippingHubLevels right_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/right_window/shipping_hub_level"));
+                // Note: the right window starts 1 pixel past the left element. The height of the right
+                // window is the same as that of the left window.
+                barcodeElements.put(RobotConstantsFreightFrenzy.BarcodeElementWindow.RIGHT, new Rect(left_x + left_width + 1, left_y, right_width, left_height));
                 barcodeParameters.setBarcodeElements(barcodeElements);
 
-                // Set the shipping hub level to infer if the Shipping Hub Element is not on the left or right.
+                // Set the shipping hub level to infer if the Shipping Hub Element is either the left or right window.
                 RobotConstantsFreightFrenzy.ShippingHubLevels npos_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/barcode_element_npos/shipping_hub_level", true));
 
                 // At last perform the image recognition.
@@ -151,24 +158,24 @@ public class RecognitionDispatcher extends Application {
                     throw new AutonomousRobotException(TAG, "Error in computer vision subsystem");
 
                 // Set the shipping hub level based on the barcode recognition.
-                switch (barcodeReturn.barcodeElementWithinROI) {
-                    case LEFT_WITHIN_ROI: {
+                switch (barcodeReturn.barcodeElementWindow) {
+                    case LEFT: {
                         shippingHubLevel = left_shipping_hub_level;
                         break;
                     }
-                    case RIGHT_WITHIN_ROI: {
+                    case RIGHT: {
                         shippingHubLevel = right_shipping_hub_level;
                         break;
                     }
-                    case BARCODE_ELEMENT_NPOS: {
+                    case WINDOW_NPOS: {
                         shippingHubLevel = npos_shipping_hub_level;
                         break;
                     }
                     default:
-                        throw new AutonomousRobotException(TAG, "Unrecognized enum value " + barcodeReturn.barcodeElementWithinROI);
+                        throw new AutonomousRobotException(TAG, "Unrecognized enum value " + barcodeReturn.barcodeElementWindow);
                 }
 
-                RobotLogCommon.d(TAG, "Found Team Scoring Element at position " + barcodeReturn.barcodeElementWithinROI);
+                RobotLogCommon.d(TAG, "Found Team Scoring Element at position " + barcodeReturn.barcodeElementWindow);
                 RobotLogCommon.d(TAG, "Shipping Hub Level " + shippingHubLevel);
                 displayResults(imagePath + actionData.imageParameters.file_name,
                         shippingHubLevel.toString(),

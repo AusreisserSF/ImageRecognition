@@ -1,41 +1,44 @@
-<!-- BLUE_CAROUSEL -->
+<!-- RED_WAREHOUSE -->
 <RobotAction>
     <OpMode id="TEST">
         <parameters>
-            <lowest_logging_level>v</lowest_logging_level>
+            <log_level>v</log_level>
+            <!-- image_parameters element is required if you include ANALYZE_BARCODE -->
             <image_parameters>
-                <!-- LEFT Image_10221451_23560_IMG.png -->
-                <!-- CENTER Image_10221502_16448_IMG.png -->
-                <!-- RIGHT Image_10221507_03568_IMG.png -->
-                <file>Image_10221507_03568_IMG.png</file>
+                <file>Image_12051249_49376_IMG.png</file>
                 <resolution>
                     <width>848</width>
                     <height>480</height>
                 </resolution>
                 <image_roi>
-                    <x>275</x>
-                    <y>390</y>
-                    <width>380</width>
-                    <height>65</height>
+                    <x>210</x>
+                    <y>400</y>
+                    <width>440</width>
+                    <height>85</height>
                 </image_roi>
             </image_parameters>
-        </parameters>
+           </parameters>
         <actions>
             <ANALYZE_BARCODE>
                 <ocv_image_provider>file</ocv_image_provider>
                 <barcode_recognition>
-                    <left_within_roi>
+                    <!-- These values are relative to the image ROI -->
+                    <left_window>
                         <x>0</x>
+                        <y>0</y>
                         <width>165</width>
-                        <shipping_hub_level>SHIPPING_HUB_LEVEL_1</shipping_hub_level>
-                    </left_within_roi>
-                    <right_within_roi>
-                        <x>166</x>
-                        <width>220</width>
+                        <height>85</height>
                         <shipping_hub_level>SHIPPING_HUB_LEVEL_2</shipping_hub_level>
-                    </right_within_roi>
-                    <barcode_element_npos>
+                    </left_window>
+                    <right_window>
+                        <!-- x starts at left_window.x + left_window.width + 1 -->
+                        <width>180</width>
+                        <!-- y is the same as that of the left_window -->
+                        <!-- height is the same as that of the left_window -->
                         <shipping_hub_level>SHIPPING_HUB_LEVEL_3</shipping_hub_level>
+                    </right_window>
+                    <barcode_element_npos>
+                        <shipping_hub_level>SHIPPING_HUB_LEVEL_1</shipping_hub_level>
                     </barcode_element_npos>
                 </barcode_recognition>
             </ANALYZE_BARCODE>

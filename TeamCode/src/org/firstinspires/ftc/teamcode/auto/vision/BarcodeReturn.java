@@ -6,11 +6,11 @@ import org.firstinspires.ftc.teamcode.common.RobotConstantsFreightFrenzy;
 public class BarcodeReturn {
 
     public final boolean fatalComputerVisionError;
-    public final RobotConstantsFreightFrenzy.BarcodeElementWithinROI barcodeElementWithinROI;
+    public final RobotConstantsFreightFrenzy.BarcodeElementWindow barcodeElementWindow;
 
-    public BarcodeReturn(boolean pFatalComputerVisionError, RobotConstantsFreightFrenzy.BarcodeElementWithinROI pBarcodeElementWithinROI) {
+    public BarcodeReturn(boolean pFatalComputerVisionError, RobotConstantsFreightFrenzy.BarcodeElementWindow pBarcodeElementWindow) {
         fatalComputerVisionError = pFatalComputerVisionError;
-        barcodeElementWithinROI = pBarcodeElementWithinROI;
+        barcodeElementWindow = pBarcodeElementWindow;
     }
 
 }

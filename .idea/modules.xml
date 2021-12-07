@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/RingRecognition.iml" filepath="$PROJECT_DIR$/RingRecognition.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ImageRecognition.iml" filepath="$PROJECT_DIR$/ImageRecognition.iml" />
       <module fileurl="file://$PROJECT_DIR$/TeamCode/TeamCode.iml" filepath="$PROJECT_DIR$/TeamCode/TeamCode.iml" />
     </modules>
   </component>

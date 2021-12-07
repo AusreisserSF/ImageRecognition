@@ -2,13 +2,11 @@ package org.firstinspires.ftc.teamcode.auto.vision;
 
 //!! IntelliJ only
 
-import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
-import org.firstinspires.ftc.ftcdevcommon.intellij.TimeStamp;
-
 import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.Pair;
 import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
-
+import org.firstinspires.ftc.ftcdevcommon.intellij.TimeStamp;
+import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.common.RobotConstants;
 import org.firstinspires.ftc.teamcode.common.RobotConstantsFreightFrenzy;
 import org.opencv.core.*;
@@ -16,14 +14,13 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
+import java.util.EnumMap;
 
 public class BarcodeRecognition {
 
     private static final String TAG = "BarcodeRecognition";
     private static final String imageFilePrefix = "Image_";
-    private static final int MIN_WHITE_PIXELS = 20;
+    private static final int MIN_WHITE_PIXELS = 500;
 
     private final String workingDirectory;
     private final ImageUtils imageUtils;
@@ -41,7 +38,7 @@ public class BarcodeRecognition {
         // LocalDateTime requires Android minSdkVersion 26  public Pair<Mat, LocalDateTime> getImage() throws InterruptedException;
         Pair<Mat, LocalDateTime> barcodeImage = pImageProvider.getImage();
         if (barcodeImage.first == null)
-            return new BarcodeReturn(true, RobotConstantsFreightFrenzy.BarcodeElementWithinROI.BARCODE_ELEMENT_NPOS); // don't crash
+            return new BarcodeReturn(true, RobotConstantsFreightFrenzy.BarcodeElementWindow.WINDOW_NPOS); // don't crash
 
         String fileDate = TimeStamp.getLocalDateTimeStamp(barcodeImage.second);
         String outputFilenamePreamble = workingDirectory + imageFilePrefix + fileDate;
@@ -79,21 +76,22 @@ public class BarcodeRecognition {
         // so that we can see the placement during debugging.
         Mat barcodeElementWindows = imgOriginal.clone();
 
-        // Get the left window within the ROI from the barcode parameters.
-        // Remember - the barcode element windows are relative to the overall ROI.
-        Map<RobotConstantsFreightFrenzy.BarcodeElementWithinROI, BarcodeParameters.BarcodeElement> barcodeElements =
+        // Get the left window from the barcode parameters.
+        // Remember - the barcode element windows are relative to the overall ROI,
+        // not the original image.
+        EnumMap<RobotConstantsFreightFrenzy.BarcodeElementWindow, Rect> barcodeElements =
                 pBarcodeParameters.getBarcodeElements();
-        BarcodeParameters.BarcodeElement leftBarcodeElement = barcodeElements.get(RobotConstantsFreightFrenzy.BarcodeElementWithinROI.LEFT_WITHIN_ROI);
+        Rect leftBarcodeElementWindow = barcodeElements.get(RobotConstantsFreightFrenzy.BarcodeElementWindow.LEFT);
         Point leftWindowUpperLeft =
-                new Point(pImageParameters.image_roi.x + leftBarcodeElement.x, pImageParameters.image_roi.y);
-        Point leftWindowLowerRight = new Point(pImageParameters.image_roi.x + leftBarcodeElement.x + leftBarcodeElement.width,
-                pImageParameters.image_roi.y + pImageParameters.image_roi.height);
+                new Point(pImageParameters.image_roi.x + leftBarcodeElementWindow.x, pImageParameters.image_roi.y + leftBarcodeElementWindow.y);
+        Point leftWindowLowerRight = new Point(pImageParameters.image_roi.x + leftBarcodeElementWindow.x + leftBarcodeElementWindow.width,
+                pImageParameters.image_roi.y + leftBarcodeElementWindow.y + leftBarcodeElementWindow.height);
 
-        // Get the right window within the ROI from the barcode parameters.
-        BarcodeParameters.BarcodeElement rightBarcodeElement = barcodeElements.get(RobotConstantsFreightFrenzy.BarcodeElementWithinROI.RIGHT_WITHIN_ROI);
-        Point rightWindowUpperLeft = new Point(pImageParameters.image_roi.x + rightBarcodeElement.x, pImageParameters.image_roi.y);
-        Point rightWindowLowerRight = new Point(pImageParameters.image_roi.x + rightBarcodeElement.x + rightBarcodeElement.width,
-                pImageParameters.image_roi.y + pImageParameters.image_roi.height);
+        // Get the right window from the barcode parameters.
+        Rect rightBarcodeElementWindow = barcodeElements.get(RobotConstantsFreightFrenzy.BarcodeElementWindow.RIGHT);
+        Point rightWindowUpperLeft = new Point(pImageParameters.image_roi.x + rightBarcodeElementWindow.x, pImageParameters.image_roi.y + rightBarcodeElementWindow.y);
+        Point rightWindowLowerRight = new Point(pImageParameters.image_roi.x + rightBarcodeElementWindow.x + rightBarcodeElementWindow.width,
+                pImageParameters.image_roi.y + rightBarcodeElementWindow.y + rightBarcodeElementWindow.height);
 
         // Draw the windows in red.
         Imgproc.rectangle(barcodeElementWindows, leftWindowUpperLeft, leftWindowLowerRight, new Scalar(0, 0, 255), 3);
@@ -116,61 +114,43 @@ public class BarcodeRecognition {
         int grayThresholdLow = pBarcodeParameters.grayParameters.low_threshold;
         RobotLogCommon.d(TAG, "Inverse threshold values: low " + grayThresholdLow + ", max 255 (white)");
 
+        // Threshold the image with inversion, i.e. set pixels *under* the threshold
+        // value to white.
         Mat thresholded = new Mat(); // output binary image
         Imgproc.threshold(adjustedGray, thresholded,
                 grayThresholdLow,    // threshold value
-                255,   // value assigned to pixels *under* the threshold value
+                255,   // white
                 Imgproc.THRESH_BINARY_INV); // thresholding type
 
+        // Our target will now appear white in the thresholded image.
         Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ_THR.png", thresholded);
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ADJ_THR.png");
 
-        // The next step is to reduce the thresholded image by column to a single row
-        // of pixels that contains the maximum value for each column. Since our thresholded
-        // image is binary there are only two values, 0 (black) and 255 (white), that figure
-        // into the reduction.
-        Mat reduced = new Mat();
-        Core.reduce(thresholded, reduced, 0, Core.REDUCE_MAX);
-        Imgcodecs.imwrite(outputFilenamePreamble + "_STRIPE.png", reduced);
-        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_STRIPE.png");
+        // We're going to concentrate only on the two windows. Create a sub-matrix for
+        // each.
+        Mat leftWindow = thresholded.submat(leftBarcodeElementWindow);
+        Mat rightWindow = thresholded.submat(rightBarcodeElementWindow);
 
-        // Locate the white (because inverted) pixels that belong to the black Team Shipping Element.
-        // See https://stackoverflow.com/questions/18147611/opencv-java-how-to-access-coordinates-returned-by-findnonzero
-        Mat rawNonZeroLocations = new Mat();
-        Core.findNonZero(reduced, rawNonZeroLocations);
-        if (rawNonZeroLocations.empty()) {
-            RobotLogCommon.d(TAG, "The stripe contains no white pixels.");
-            return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWithinROI.BARCODE_ELEMENT_NPOS);
+        // Count the non-zero pixels in each window.
+        int leftWindowNonZeroPixelCount = Core.countNonZero(leftWindow);
+        RobotLogCommon.d(TAG, "Left window: number of non-zero pixels " + leftWindowNonZeroPixelCount);
+
+        int rightWindowNonZeroPixelCount = Core.countNonZero(rightWindow);
+        RobotLogCommon.d(TAG, "Right window: number of non-zero pixels " + rightWindowNonZeroPixelCount);
+
+        // Check the minimum non-zero pixel count.
+        if (leftWindowNonZeroPixelCount < MIN_WHITE_PIXELS && rightWindowNonZeroPixelCount < MIN_WHITE_PIXELS) {
+            // Didn't find the Team Shipping Element on either of the barcode elements
+            // we looked at.
+            RobotLogCommon.d(TAG, "Neither window contains the minimum number of noon-zero pixels.");
+            return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWindow.WINDOW_NPOS);
         }
 
-        MatOfPoint nzLocations = new MatOfPoint(rawNonZeroLocations);
-        List<Point> nzList = nzLocations.toList(); // crucial: I added this
+        // Determine which window the shipping element is in.
+        if (leftWindowNonZeroPixelCount >= rightWindowNonZeroPixelCount)
+            return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWindow.LEFT);
 
-        //## Remember: white pixels now represent the Team Scoring Element.
-        RobotLogCommon.d(TAG, "Number of white pixels " + nzList.size());
-        if (nzList.size() < MIN_WHITE_PIXELS) {
-            RobotLogCommon.d(TAG, "The stripe contains " + nzList.size() + " white pixels, min = " + MIN_WHITE_PIXELS);
-            return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWithinROI.BARCODE_ELEMENT_NPOS);
-        }
-
-        double firstWhitePixel = nzList.get(0).x;
-        double lastWhitePixel = nzList.get(nzList.size() - 1).x;
-        double whiteStripeCenter = firstWhitePixel + ((lastWhitePixel - firstWhitePixel) / 2);
-        RobotLogCommon.d(TAG, "Found first white pixel at x position " + firstWhitePixel);
-        RobotLogCommon.d(TAG, "Found last white pixel at x position " + lastWhitePixel);
-        RobotLogCommon.d(TAG, "Length of white pixel stripe " + (lastWhitePixel - firstWhitePixel));
-        RobotLogCommon.d(TAG, "Center of white stripe at x position " + whiteStripeCenter);
-
-        // Calculate the barcode position.
-        if ((firstWhitePixel >= leftBarcodeElement.x) && (firstWhitePixel <= leftBarcodeElement.x + leftBarcodeElement.width))
-            return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWithinROI.LEFT_WITHIN_ROI);
-
-        if ((firstWhitePixel >= rightBarcodeElement.x) && (firstWhitePixel <= rightBarcodeElement.x + rightBarcodeElement.width))
-            return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWithinROI.RIGHT_WITHIN_ROI);
-
-        // Didn't find the Team Shipping Element on either of the barcode elements
-        // we looked at.
-        return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWithinROI.BARCODE_ELEMENT_NPOS);
+        return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWindow.RIGHT);
     }
 
 }

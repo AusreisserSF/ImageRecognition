@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto.vision;
 
 import org.firstinspires.ftc.teamcode.common.RobotConstantsFreightFrenzy;
+import org.opencv.core.Rect;
 
 import java.util.EnumMap;
 
@@ -8,32 +9,18 @@ import java.util.EnumMap;
 public class BarcodeParameters {
 
     public final VisionParameters.GrayParameters grayParameters; // extracted from BarcodeParameters.xml.
-    private EnumMap<RobotConstantsFreightFrenzy.BarcodeElementWithinROI, BarcodeElement> barcodeElements;
+    private EnumMap<RobotConstantsFreightFrenzy.BarcodeElementWindow, Rect> barcodeElements;
  
     public BarcodeParameters(VisionParameters.GrayParameters pGrayParameters) {
         grayParameters = pGrayParameters;
     }
 
-    public void setBarcodeElements(EnumMap<RobotConstantsFreightFrenzy.BarcodeElementWithinROI, BarcodeElement> pBarcodeElements) {
+    public void setBarcodeElements(EnumMap<RobotConstantsFreightFrenzy.BarcodeElementWindow, Rect> pBarcodeElements) {
         barcodeElements = pBarcodeElements;
     }
 
-    public EnumMap<RobotConstantsFreightFrenzy.BarcodeElementWithinROI, BarcodeElement> getBarcodeElements() {
+    public EnumMap<RobotConstantsFreightFrenzy.BarcodeElementWindow, Rect> getBarcodeElements() {
         return barcodeElements;
-    }
-
-    // Each barcode element is associated with an x-coordinate relative to
-    // the current region of interest (ROI) and width in pixels within which
-    // a barcode element should be found
-    public static class BarcodeElement {
-
-        public final int x;
-        public final int width;
-
-        public BarcodeElement(int pX, int pWidth) {
-            x = pX;
-            width = pWidth;
-        }
     }
     
 }
