@@ -51,6 +51,7 @@ public class BarcodeParametersXML {
     public BarcodeParameters getBarcodeParameters() throws XPathExpressionException {
         XPathExpression expr;
         VisionParameters.GrayParameters grayParameters;
+        VisionParameters.HSVParameters hsvParameters;
 
         // Point to the first node.
         RobotLogCommon.d(TAG, "Parsing XML barcode_parameters");
@@ -68,7 +69,15 @@ public class BarcodeParametersXML {
 
         grayParameters = ImageXML.parseGrayParameters(gray_parameters_node);
 
-        return new BarcodeParameters(grayParameters);
+        // Point to <hsv_parameters>
+        Node hsv_node = gray_parameters_node.getNextSibling();
+        Node hsv_parameters_node = getNextElement(hsv_node);
+        if ((hsv_parameters_node == null) || !hsv_parameters_node.getNodeName().equals("hsv_parameters"))
+            throw new AutonomousRobotException(TAG, "Element 'hsv_parameters' not found");
+
+        hsvParameters = ImageXML.parseHSVParameters(hsv_parameters_node);
+
+        return new BarcodeParameters(grayParameters, hsvParameters);
     }
 
     private Node getNextElement(Node pNode) {

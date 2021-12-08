@@ -29,8 +29,9 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
-//**TODO Use a command line switch for "ultimate" vs "freight" and take different
+//**TODO Use a command line switch for "ultimate" vs "frenzy" and take different
 // paths via a separate class for each. Currently hard-coded for Freight Frenzy
 // so **Ultimate Goal Ring Recognition WILL NOT WORK. **
 public class RecognitionDispatcher extends Application {
@@ -46,7 +47,7 @@ public class RecognitionDispatcher extends Application {
 
     private Stage stage;
     private Pane field;
-    private RobotConstantsFreightFrenzy.ShippingHubLevels shippingHubLevel = RobotConstantsFreightFrenzy.ShippingHubLevels.SHIPPING_HUB_LEVEL_NPOS;
+    private final RobotConstantsFreightFrenzy.RecognitionPath recognitionPath;
 
     // Load OpenCV.
     private static final boolean openCVInitialized;
@@ -64,7 +65,21 @@ public class RecognitionDispatcher extends Application {
 
         if (!openCVInitialized)
             throw new AutonomousRobotException(TAG, "Failure in OpenCV initialization");
-    }
+
+        // Process the command line parameters common.
+        Parameters parameters = getParameters();
+        Map<String, String> namedParameters = parameters.getNamed();
+
+        String recognitionPathParameter = namedParameters.get("frenzy");
+        if (recognitionPathParameter == null)
+            throw new AutonomousRobotException(TAG, "Required parameter --frenzy is missing");
+
+        try {
+            recognitionPath = RobotConstantsFreightFrenzy.RecognitionPath.valueOf(recognitionPathParameter.toUpperCase());
+        } catch (IllegalArgumentException iex) {
+            throw new AutonomousRobotException(TAG, "Invalid recognition path");
+        }
+     }
 
     @Override
     public void start(Stage pStage) throws Exception {
@@ -137,12 +152,12 @@ public class RecognitionDispatcher extends Application {
                 int left_y = commandXPath.getInt("barcode_recognition/left_window/y");
                 int left_width = commandXPath.getInt("barcode_recognition/left_window/width");
                 int left_height = commandXPath.getInt("barcode_recognition/left_window/height");
-                RobotConstantsFreightFrenzy.ShippingHubLevels left_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/left_window/shipping_hub_level"));
+                RobotConstantsFreightFrenzy.ShippingHubLevels left_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/left_window/shipping_hub_level", true));
                 barcodeElements.put(RobotConstantsFreightFrenzy.BarcodeElementWindow.LEFT, new Rect(left_x, left_y, left_width, left_height));
 
                 // Get the boundaries for the right window onto the barcode.
                 int right_width = commandXPath.getInt("barcode_recognition/right_window/width");
-                RobotConstantsFreightFrenzy.ShippingHubLevels right_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/right_window/shipping_hub_level"));
+                RobotConstantsFreightFrenzy.ShippingHubLevels right_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/right_window/shipping_hub_level", true));
                 // Note: the right window starts 1 pixel past the left element. The height of the right
                 // window is the same as that of the left window.
                 barcodeElements.put(RobotConstantsFreightFrenzy.BarcodeElementWindow.RIGHT, new Rect(left_x + left_width + 1, left_y, right_width, left_height));
@@ -153,11 +168,13 @@ public class RecognitionDispatcher extends Application {
 
                 // At last perform the image recognition.
                 BarcodeReturn barcodeReturn =
-                        barcodeRecognition.findTeamScoringElement(fileImage, actionData.imageParameters, barcodeParameters);
+                        barcodeRecognition.findTeamScoringElement(fileImage, actionData.imageParameters, barcodeParameters,
+                                recognitionPath);
                 if (barcodeReturn.fatalComputerVisionError)
                     throw new AutonomousRobotException(TAG, "Error in computer vision subsystem");
 
                 // Set the shipping hub level based on the barcode recognition.
+                RobotConstantsFreightFrenzy.ShippingHubLevels shippingHubLevel;
                 switch (barcodeReturn.barcodeElementWindow) {
                     case LEFT: {
                         shippingHubLevel = left_shipping_hub_level;

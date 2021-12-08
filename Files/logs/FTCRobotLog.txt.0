@@ -631,3 +631,70 @@
 [2021-12-06 16:37:14.220] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_2 
 [2021-12-06 16:37:14.502] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
 [2021-12-06 16:37:14.503] [INFO   ] RobotCommonLog Shutting down log 
+[2021-12-07 19:24:13.343] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-07 19:24:13.519] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2021-12-07 19:24:13.521] [FINE   ] ImageXML Parsing XML image_parameters 
+[2021-12-07 19:24:13.536] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2021-12-07 19:24:13.538] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2021-12-07 19:26:45.147] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-07 19:26:45.271] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2021-12-07 19:26:45.272] [FINE   ] ImageXML Parsing XML image_parameters 
+[2021-12-07 19:26:45.285] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2021-12-07 19:26:45.286] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2021-12-07 19:26:45.300] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2021-12-07 19:26:45.301] [FINE   ] ImageUtils File name Files/images/Image_12051249_49376_IMG.png 
+[2021-12-07 19:26:45.322] [FINE   ] ImageUtils Image width 848, height 480 
+[2021-12-07 19:26:45.346] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12071926_45333_IMG.png 
+[2021-12-07 19:26:45.363] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2021-12-07 19:31:56.504] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-07 19:31:56.634] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2021-12-07 19:31:56.636] [FINE   ] ImageXML Parsing XML image_parameters 
+[2021-12-07 19:31:56.652] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2021-12-07 19:31:56.654] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2021-12-07 19:31:56.668] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2021-12-07 19:31:56.669] [FINE   ] ImageUtils File name Files/images/Image_12051249_49376_IMG.png 
+[2021-12-07 19:31:56.682] [FINE   ] ImageUtils Image width 848, height 480 
+[2021-12-07 19:31:56.698] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12071931_56690_IMG.png 
+[2021-12-07 19:31:56.718] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2021-12-07 19:31:56.731] [FINE   ] ImageUtils Image ROI x 275, y 375, width 430, height 80 
+[2021-12-07 19:31:56.731] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12071931_56690_ROI.png 
+[2021-12-07 19:31:56.763] [FINE   ] BarcodeRecognition Writing Files/images/Image_12071931_56690_WIN.png 
+[2021-12-07 19:31:56.767] [FINE   ] BarcodeRecognition Writing Files/images/Image_12071931_56690_GRAY.png 
+[2021-12-07 19:31:56.784] [FINE   ] ImageUtils Original image: grayscale median 136 
+[2021-12-07 19:31:56.784] [FINE   ] ImageUtils Grayscale median target 150 
+[2021-12-07 19:31:56.785] [FINE   ] ImageUtils Grayscale adjustment 14 
+[2021-12-07 19:31:56.787] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_12071931_56690_ADJ.png 
+[2021-12-07 19:31:56.788] [FINE   ] BarcodeRecognition Inverse threshold values: low 75, max 255 (white) 
+[2021-12-07 19:31:56.790] [FINE   ] BarcodeRecognition Writing Files/images/Image_12071931_56690_ADJ_THR.png 
+[2021-12-07 19:31:56.792] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 4591 
+[2021-12-07 19:31:56.793] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 0 
+[2021-12-07 19:31:56.794] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position LEFT 
+[2021-12-07 19:31:56.795] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_2 
+[2021-12-07 19:31:57.068] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2021-12-07 19:31:57.068] [INFO   ] RobotCommonLog Shutting down log 
+[2021-12-07 19:34:07.637] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-07 19:34:07.759] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2021-12-07 19:34:07.760] [FINE   ] ImageXML Parsing XML image_parameters 
+[2021-12-07 19:34:07.775] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2021-12-07 19:34:07.776] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2021-12-07 19:34:07.791] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2021-12-07 19:34:07.791] [FINE   ] ImageUtils File name Files/images/Image_12051249_49376_IMG.png 
+[2021-12-07 19:34:07.805] [FINE   ] ImageUtils Image width 848, height 480 
+[2021-12-07 19:34:07.828] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12071934_07819_IMG.png 
+[2021-12-07 19:34:07.843] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2021-12-07 19:34:07.849] [FINE   ] ImageUtils Image ROI x 275, y 375, width 430, height 80 
+[2021-12-07 19:34:07.849] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12071934_07819_ROI.png 
+[2021-12-07 19:34:07.886] [FINE   ] BarcodeRecognition Writing Files/images/Image_12071934_07819_WIN.png 
+[2021-12-07 19:34:07.890] [FINE   ] BarcodeRecognition Writing Files/images/Image_12071934_07819_GRAY.png 
+[2021-12-07 19:34:07.902] [FINE   ] ImageUtils Original image: grayscale median 136 
+[2021-12-07 19:34:07.902] [FINE   ] ImageUtils Grayscale median target 150 
+[2021-12-07 19:34:07.903] [FINE   ] ImageUtils Grayscale adjustment 14 
+[2021-12-07 19:34:07.904] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_12071934_07819_ADJ.png 
+[2021-12-07 19:34:07.905] [FINE   ] BarcodeRecognition Inverse threshold values: low 75, max 255 (white) 
+[2021-12-07 19:34:07.907] [FINE   ] BarcodeRecognition Writing Files/images/Image_12071934_07819_ADJ_THR.png 
+[2021-12-07 19:34:07.908] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 4591 
+[2021-12-07 19:34:07.908] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 0 
+[2021-12-07 19:34:07.908] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position LEFT 
+[2021-12-07 19:34:07.909] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_2 
+[2021-12-07 19:34:08.165] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2021-12-07 19:34:08.165] [INFO   ] RobotCommonLog Shutting down log 

@@ -18,7 +18,7 @@ import java.util.EnumMap;
 
 public class BarcodeRecognition {
 
-    private static final String TAG = "BarcodeRecognition";
+    private static final String TAG = BarcodeRecognition.class.getSimpleName();
     private static final String imageFilePrefix = "Image_";
     private static final int MIN_WHITE_PIXELS = 500;
 
@@ -31,7 +31,10 @@ public class BarcodeRecognition {
     }
 
     // Returns the result of image analysis.
-    public BarcodeReturn findTeamScoringElement(ImageProvider pImageProvider, VisionParameters.ImageParameters pImageParameters, BarcodeParameters pBarcodeParameters) throws InterruptedException {
+    public BarcodeReturn findTeamScoringElement(ImageProvider pImageProvider,
+                                                VisionParameters.ImageParameters pImageParameters,
+                                                BarcodeParameters pBarcodeParameters,
+                                                RobotConstantsFreightFrenzy.RecognitionPath pRecognitionPath) throws InterruptedException {
 
         RobotLogCommon.d(TAG, "In BarcodeRecognition.findTeamScoringElement");
 
@@ -99,37 +102,87 @@ public class BarcodeRecognition {
         Imgcodecs.imwrite(outputFilenamePreamble + "_WIN.png", barcodeElementWindows);
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_WIN.png");
 
-        // Adapted from ...\OpenCV_Projects\OpenCVTestbed2\OpenCVTestbed2\GeneralTarget::analyzeSkystoneStripe
-        // We're on the grayscale path.
-        Mat grayROI = new Mat();
-        Imgproc.cvtColor(imageROI, grayROI, Imgproc.COLOR_BGR2GRAY);
+        BarcodeReturn retVal;
+        RobotLogCommon.d(TAG, "Recognition path " + pRecognitionPath);
+        if (pRecognitionPath == RobotConstantsFreightFrenzy.RecognitionPath.GRAY) {
+            // Adapted from ...\OpenCV_Projects\OpenCVTestbed2\OpenCVTestbed2\GeneralTarget::analyzeSkystoneStripe
+            // We're on the grayscale path.
+            Mat grayROI = new Mat();
+            Imgproc.cvtColor(imageROI, grayROI, Imgproc.COLOR_BGR2GRAY);
 
-        Imgcodecs.imwrite(outputFilenamePreamble + "_GRAY.png", grayROI);
-        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_GRAY.png");
+            Imgcodecs.imwrite(outputFilenamePreamble + "_GRAY.png", grayROI);
+            RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_GRAY.png");
 
-        Mat adjustedGray = imageUtils.adjustGrayscaleBrightness(grayROI, pBarcodeParameters.grayParameters.target);
-        Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ.png", adjustedGray);
-        RobotLogCommon.d(TAG, "Writing adjusted grayscale image " + outputFilenamePreamble + "_ADJ.png");
+            Mat adjustedGray = imageUtils.adjustGrayscaleBrightness(grayROI, pBarcodeParameters.grayParameters.target);
+            Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ.png", adjustedGray);
+            RobotLogCommon.d(TAG, "Writing adjusted grayscale image " + outputFilenamePreamble + "_ADJ.png");
 
-        int grayThresholdLow = pBarcodeParameters.grayParameters.low_threshold;
-        RobotLogCommon.d(TAG, "Inverse threshold values: low " + grayThresholdLow + ", max 255 (white)");
+            int grayThresholdLow = pBarcodeParameters.grayParameters.low_threshold;
+            RobotLogCommon.d(TAG, "Inverse threshold values: low " + grayThresholdLow + ", max 255 (white)");
 
-        // Threshold the image with inversion, i.e. set pixels *under* the threshold
-        // value to white.
-        Mat thresholded = new Mat(); // output binary image
-        Imgproc.threshold(adjustedGray, thresholded,
-                grayThresholdLow,    // threshold value
-                255,   // white
-                Imgproc.THRESH_BINARY_INV); // thresholding type
+            // Threshold the image with inversion, i.e. set pixels *under* the threshold
+            // value to white.
+            Mat thresholded = new Mat(); // output binary image
+            Imgproc.threshold(adjustedGray, thresholded,
+                    grayThresholdLow,    // threshold value
+                    255,   // white
+                    Imgproc.THRESH_BINARY_INV); // thresholding type
 
-        // Our target will now appear white in the thresholded image.
-        Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ_THR.png", thresholded);
-        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ADJ_THR.png");
+            // Our target will now appear white in the thresholded image.
+            Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ_THR.png", thresholded);
+            RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ADJ_THR.png");
 
+            retVal = lookThroughWindows(thresholded, leftBarcodeElementWindow, rightBarcodeElementWindow);
+        } else {
+            // This is the HSV color path.
+            // Adapted from ...\OpenCV_Projects\OpenCVTestbed2\OpenCVTestbed2\GeneralTarget.cpp
+            Mat hsvROI = new Mat();
+            Imgproc.cvtColor(imageROI, hsvROI, Imgproc.COLOR_BGR2HSV);
+
+            // Adjust the HSV saturation and value levels in the image to match the targets.
+            int hueLow = pBarcodeParameters.hsvParameters.hue_low;
+            int hueHigh = pBarcodeParameters.hsvParameters.hue_high;
+            int satTarget = pBarcodeParameters.hsvParameters.saturation_target;
+            int satHigh = 255;
+            int valTarget = pBarcodeParameters.hsvParameters.value_target;
+            int valHigh = 255;
+            RobotLogCommon.d(TAG, "Target hue levels: low " + hueLow + ", high " + hueHigh);
+
+            // Adjust saturation and value to the target levels.
+            Mat adjusted = imageUtils.adjustSaturationAndValue(hsvROI, satTarget, valTarget);
+            RobotLogCommon.d(TAG, "Adjusted image levels: saturation low " + satTarget + ", value low " + valTarget);
+
+            // Convert back to BGR.
+            //## This debugging step will not be needed in production.
+            Mat adjustedBGR = new Mat();
+            Imgproc.cvtColor(adjusted, adjustedBGR, Imgproc.COLOR_HSV2BGR);
+            Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ.png", adjustedBGR);
+            RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ADJ.png");
+
+            // Use inRange to threshold to binary.
+            Mat thresholded = new Mat();
+            int inRangeSatLow = pBarcodeParameters.hsvParameters.saturation_low_threshold;
+            int inrangeValLow = pBarcodeParameters.hsvParameters.value_low_threshold;
+            RobotLogCommon.d(TAG, "Actual inRange HSV levels: hue low " + hueLow + ", hue high " + hueHigh);
+            RobotLogCommon.d(TAG, "Actual inRange HSV levels: saturation low " + inRangeSatLow + ", value low " + inrangeValLow);
+
+            Core.inRange(adjusted, new Scalar(hueLow, inRangeSatLow, inrangeValLow), new Scalar(hueHigh, satHigh, valHigh), thresholded);
+            Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ_THR.png", thresholded);
+            RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ADJ_THR.png");
+
+            retVal = lookThroughWindows(thresholded, leftBarcodeElementWindow, rightBarcodeElementWindow);
+        }
+
+        return retVal;
+    }
+
+    // Look through the left and right windows and determine if the team shipping
+    // element is in the left window, the right window, or neither.
+    private BarcodeReturn lookThroughWindows(Mat pThresholded, Rect pLeftBarcodeElementWindow, Rect pRightBarcodeElementWindow) {
         // We're going to concentrate only on the two windows. Create a sub-matrix for
         // each.
-        Mat leftWindow = thresholded.submat(leftBarcodeElementWindow);
-        Mat rightWindow = thresholded.submat(rightBarcodeElementWindow);
+        Mat leftWindow = pThresholded.submat(pLeftBarcodeElementWindow);
+        Mat rightWindow = pThresholded.submat(pRightBarcodeElementWindow);
 
         // Count the non-zero pixels in each window.
         int leftWindowNonZeroPixelCount = Core.countNonZero(leftWindow);

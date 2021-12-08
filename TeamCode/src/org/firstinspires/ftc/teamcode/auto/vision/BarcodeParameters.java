@@ -9,10 +9,13 @@ import java.util.EnumMap;
 public class BarcodeParameters {
 
     public final VisionParameters.GrayParameters grayParameters; // extracted from BarcodeParameters.xml.
+    public final VisionParameters.HSVParameters hsvParameters;
     private EnumMap<RobotConstantsFreightFrenzy.BarcodeElementWindow, Rect> barcodeElements;
  
-    public BarcodeParameters(VisionParameters.GrayParameters pGrayParameters) {
+    public BarcodeParameters(VisionParameters.GrayParameters pGrayParameters,
+                             VisionParameters.HSVParameters pHSVParameters) {
         grayParameters = pGrayParameters;
+        hsvParameters = pHSVParameters;
     }
 
     public void setBarcodeElements(EnumMap<RobotConstantsFreightFrenzy.BarcodeElementWindow, Rect> pBarcodeElements) {
