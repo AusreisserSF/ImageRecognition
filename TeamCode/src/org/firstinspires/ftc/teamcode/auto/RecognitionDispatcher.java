@@ -47,7 +47,7 @@ public class RecognitionDispatcher extends Application {
 
     private Stage stage;
     private Pane field;
-    private final RobotConstantsFreightFrenzy.RecognitionPath recognitionPath;
+    private RobotConstantsFreightFrenzy.RecognitionPath recognitionPath;
 
     // Load OpenCV.
     private static final boolean openCVInitialized;
@@ -65,6 +65,12 @@ public class RecognitionDispatcher extends Application {
 
         if (!openCVInitialized)
             throw new AutonomousRobotException(TAG, "Failure in OpenCV initialization");
+     }
+
+    @Override
+    public void start(Stage pStage) throws Exception {
+        stage = pStage;
+        field = new Pane();
 
         // Process the command line parameters common.
         Parameters parameters = getParameters();
@@ -79,12 +85,6 @@ public class RecognitionDispatcher extends Application {
         } catch (IllegalArgumentException iex) {
             throw new AutonomousRobotException(TAG, "Invalid recognition path");
         }
-     }
-
-    @Override
-    public void start(Stage pStage) throws Exception {
-        stage = pStage;
-        field = new Pane();
 
         // Use RobotAction.xml but for the single OpMode TEST with a single action only.
         RobotActionXMLFreightFrenzy robotActionXMLFreightFrenzy = new RobotActionXMLFreightFrenzy(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);

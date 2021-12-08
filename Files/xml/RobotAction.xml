@@ -1,11 +1,11 @@
-<!-- RED_WAREHOUSE -->
+<!-- RED_CAROUSEL -->
 <RobotAction>
     <OpMode id="TEST">
         <parameters>
             <log_level>v</log_level>
             <!-- image_parameters element is required if you include ANALYZE_BARCODE -->
             <image_parameters>
-                <file>Image_12051249_49376_IMG.png</file>
+                <file>Image_12071617_42693_IMG_RC3.png</file>
                 <resolution>
                     <width>848</width>
                     <height>480</height>

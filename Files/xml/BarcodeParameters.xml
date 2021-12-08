@@ -4,12 +4,13 @@
     <low_threshold>75</low_threshold>
   </gray_parameters>
   <hsv_parameters>
-    <hue_name>gold</hue_name>
-    <hue_low>5</hue_low>
-    <hue_high>30</hue_high>
-    <saturation_target>12</saturation_target>
-    <saturation_low_threshold>10</saturation_low_threshold>
-    <value_target>160</value_target>
-    <value_low_threshold>120</value_low_threshold>
+    <!-- values from the color analyzer -->
+    <hue_name>yellow</hue_name>
+    <hue_low>20</hue_low>
+    <hue_high>36</hue_high>
+    <saturation_target>170</saturation_target>
+    <saturation_low_threshold>150</saturation_low_threshold>
+    <value_target>180</value_target>
+    <value_low_threshold>160</value_low_threshold>
 </hsv_parameters>
 </barcode_parameters>

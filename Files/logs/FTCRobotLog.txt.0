@@ -698,3 +698,36 @@
 [2021-12-07 19:34:07.909] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_2 
 [2021-12-07 19:34:08.165] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
 [2021-12-07 19:34:08.165] [INFO   ] RobotCommonLog Shutting down log 
+[2021-12-08 05:23:31.995] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-08 05:24:17.176] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-08 05:26:00.771] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-08 05:26:00.963] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2021-12-08 05:26:00.965] [FINE   ] ImageXML Parsing XML image_parameters 
+[2021-12-08 05:26:00.982] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2021-12-08 05:26:00.983] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2021-12-08 05:26:00.983] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2021-12-08 05:26:01.000] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2021-12-08 05:26:01.001] [FINE   ] ImageUtils File name Files/images/Image_12071617_42693_IMG_RC3.png 
+[2021-12-08 05:26:01.020] [FINE   ] ImageUtils Image width 848, height 480 
+[2021-12-08 05:26:01.048] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12080526_01031_IMG.png 
+[2021-12-08 05:26:01.070] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2021-12-08 05:26:01.075] [FINE   ] ImageUtils Image ROI x 275, y 375, width 430, height 80 
+[2021-12-08 05:26:01.076] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12080526_01031_ROI.png 
+[2021-12-08 05:26:01.115] [FINE   ] BarcodeRecognition Writing Files/images/Image_12080526_01031_WIN.png 
+[2021-12-08 05:26:01.116] [FINE   ] BarcodeRecognition Recognition path HSV 
+[2021-12-08 05:26:01.119] [FINE   ] BarcodeRecognition Target hue levels: low 20, high 36 
+[2021-12-08 05:26:01.135] [FINE   ] ImageUtils HSV saturation channel median 6 
+[2021-12-08 05:26:01.136] [FINE   ] ImageUtils HSV value channel median 172 
+[2021-12-08 05:26:01.137] [FINE   ] ImageUtils Adjust HSV saturation by 164 
+[2021-12-08 05:26:01.138] [FINE   ] ImageUtils Adjust HSV value by 8 
+[2021-12-08 05:26:01.140] [FINE   ] BarcodeRecognition Adjusted image levels: saturation low 170, value low 180 
+[2021-12-08 05:26:01.144] [FINE   ] BarcodeRecognition Writing Files/images/Image_12080526_01031_ADJ.png 
+[2021-12-08 05:26:01.144] [FINE   ] BarcodeRecognition Actual inRange HSV levels: hue low 20, hue high 36 
+[2021-12-08 05:26:01.145] [FINE   ] BarcodeRecognition Actual inRange HSV levels: saturation low 150, value low 160 
+[2021-12-08 05:26:01.147] [FINE   ] BarcodeRecognition Writing Files/images/Image_12080526_01031_ADJ_THR.png 
+[2021-12-08 05:26:01.148] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 1541 
+[2021-12-08 05:26:01.149] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 486 
+[2021-12-08 05:26:01.150] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position LEFT 
+[2021-12-08 05:26:01.154] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_2 
+[2021-12-08 05:26:01.426] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2021-12-08 05:26:01.427] [INFO   ] RobotCommonLog Shutting down log 
