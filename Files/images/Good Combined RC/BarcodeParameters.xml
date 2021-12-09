@@ -9,8 +9,8 @@
     <hue_low>170</hue_low>
     <hue_high>70</hue_high>
     <saturation_target>6</saturation_target>
-    <saturation_low_threshold>50</saturation_low_threshold>
+    <saturation_low_threshold>140</saturation_low_threshold>
     <value_target>172</value_target>
-    <value_low_threshold>100</value_low_threshold>
+    <value_low_threshold>160</value_low_threshold>
 </hsv_parameters>
 </barcode_parameters>

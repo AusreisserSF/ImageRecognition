@@ -5,12 +5,12 @@
   </gray_parameters>
   <hsv_parameters>
     <!-- values from the color analyzer -->
-    <hue_name>red</hue_name>
-    <hue_low>170</hue_low>
-    <hue_high>70</hue_high>
+    <hue_name>yellow</hue_name>
+    <hue_low>20</hue_low>
+    <hue_high>36</hue_high>
     <saturation_target>6</saturation_target>
     <saturation_low_threshold>50</saturation_low_threshold>
     <value_target>172</value_target>
-    <value_low_threshold>100</value_low_threshold>
+    <value_low_threshold>160</value_low_threshold>
 </hsv_parameters>
 </barcode_parameters>

@@ -171,16 +171,63 @@ public class BarcodeRecognition {
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ADJ.png");
 
         // Use inRange to threshold to binary.
-        //**TODO account for hue ranges that cross the 180 degree boundary.
+        // Account for hue ranges that cross the 180 degree boundary.
         // Red, for example, might have a hueLow of 170 and a hueHigh of
-        // 10. See https://stackoverflow.com/questions/32522989/opencv-better-detection-of-red-color
+        // 10.
+        // See https://stackoverflow.com/questions/32522989/opencv-better-detection-of-red-color
+
+ /*
+ #include <opencv2\opencv.hpp>
+using namespace cv;
+
+int main()
+{
+    Mat3b bgr = imread("path_to_image");
+
+    Mat3b hsv;
+    cvtColor(bgr, hsv, COLOR_BGR2HSV);
+
+    Mat1b mask1, mask2;
+    inRange(hsv, Scalar(0, 70, 50), Scalar(10, 255, 255), mask1);
+    inRange(hsv, Scalar(170, 70, 50), Scalar(180, 255, 255), mask2);
+
+    Mat1b mask = mask1 | mask2;
+
+    imshow("Mask", mask);
+    waitKey();
+
+    return 0;
+}
+  */
         Mat thresholded = new Mat();
         int inRangeSatLow = pHSVParameters.saturation_low_threshold;
         int inrangeValLow = pHSVParameters.value_low_threshold;
         RobotLogCommon.d(TAG, "Actual inRange HSV levels: hue low " + hueLow + ", hue high " + hueHigh);
         RobotLogCommon.d(TAG, "Actual inRange HSV levels: saturation low " + inRangeSatLow + ", value low " + inrangeValLow);
 
-        Core.inRange(adjusted, new Scalar(hueLow, inRangeSatLow, inrangeValLow), new Scalar(hueHigh, satHigh, valHigh), thresholded);
+        // Sanity check for hue.
+        if (!((hueLow >= 0 && hueLow <= 180) && (hueHigh >= 0 && hueHigh <= 180) &&
+                (hueLow != hueHigh)))
+            throw new AutonomousRobotException(TAG, "Hue out of range");
+
+        // Normal hue range.
+        if (hueLow < hueHigh)
+            Core.inRange(adjusted, new Scalar(hueLow, inRangeSatLow, inrangeValLow), new Scalar(hueHigh, satHigh, valHigh), thresholded);
+         else {
+            // For a hue range from the XML file of low 170, high 10
+            // the following yields two new ranges: 170 - 180 and 0 - 10.
+            int hueLow1 = hueLow;
+            int hueHigh1 = 180;
+            int hueLow2 = 0;
+            int hueHigh2 = hueHigh;
+
+            Mat range1 = new Mat();
+            Mat range2 = new Mat();
+            Core.inRange(adjusted, new Scalar(hueLow1, inRangeSatLow, inrangeValLow), new Scalar(hueHigh1, satHigh, valHigh), range1);
+            Core.inRange(adjusted, new Scalar(hueLow2, inRangeSatLow, inrangeValLow), new Scalar(hueHigh2, satHigh, valHigh), range2);
+            Core.bitwise_or(range1, range2, thresholded);
+        }
+
         Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ_THR.png", thresholded);
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ADJ_THR.png");
 
