@@ -76,6 +76,7 @@ public class BarcodeRecognition {
                         pImageParameters.image_roi.y,
                         pImageParameters.image_roi.width,
                         pImageParameters.image_roi.height));
+                        
         imageFilename = outputFilenamePreamble + "_ROI.png";
         RobotLogCommon.d(TAG, "Writing image ROI " + imageFilename);
         Imgcodecs.imwrite(imageFilename, imageROI);
@@ -176,29 +177,6 @@ public class BarcodeRecognition {
         // 10.
         // See https://stackoverflow.com/questions/32522989/opencv-better-detection-of-red-color
 
- /*
- #include <opencv2\opencv.hpp>
-using namespace cv;
-
-int main()
-{
-    Mat3b bgr = imread("path_to_image");
-
-    Mat3b hsv;
-    cvtColor(bgr, hsv, COLOR_BGR2HSV);
-
-    Mat1b mask1, mask2;
-    inRange(hsv, Scalar(0, 70, 50), Scalar(10, 255, 255), mask1);
-    inRange(hsv, Scalar(170, 70, 50), Scalar(180, 255, 255), mask2);
-
-    Mat1b mask = mask1 | mask2;
-
-    imshow("Mask", mask);
-    waitKey();
-
-    return 0;
-}
-  */
         Mat thresholded = new Mat();
         int inRangeSatLow = pHSVParameters.saturation_low_threshold;
         int inrangeValLow = pHSVParameters.value_low_threshold;

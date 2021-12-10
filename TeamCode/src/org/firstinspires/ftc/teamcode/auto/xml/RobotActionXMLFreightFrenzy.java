@@ -99,7 +99,7 @@ public class RobotActionXMLFreightFrenzy {
             throw new AutonomousRobotException(TAG, "Missing required <parameters> element");
 
         // The four possible elements under <parameters> are:
-        //   <logging_level>
+        //   <log_level>
         //   <starting_position>
         //   <image_parameters>
         //   <vumarks>
