@@ -44,7 +44,6 @@ public class RecognitionDispatcher extends Application {
 
     private Stage stage;
     private Pane field;
-    private RobotConstantsFreightFrenzy.RecognitionPath recognitionPath;
 
     // Load OpenCV.
     private static final boolean openCVInitialized;
@@ -93,12 +92,12 @@ public class RecognitionDispatcher extends Application {
         switch (gameParameter) {
             case "Freight Frenzy": {
                 if (!recognitionAction.equals("ANALYZE_BARCODE"))
-                    throw new AutonomousRobotException(TAG, "Missign required action ANALYZE_BARCODE");
+                    throw new AutonomousRobotException(TAG, "Missing required action ANALYZE_BARCODE");
                 break;
             }
-            case "Ultiimate Goal": {
+            case "Ultimate Goal": {
                 if (!recognitionAction.equals("RECOGNIZE_RINGS"))
-                    throw new AutonomousRobotException(TAG, "Missign required action RECOGNIZE_RINGS");
+                    throw new AutonomousRobotException(TAG, "Missing required action RECOGNIZE_RINGS");
                 break;
             }
             default:
@@ -110,7 +109,7 @@ public class RecognitionDispatcher extends Application {
         XPathAccess commandXPath = new XPathAccess(actionElement);
 
         // The only allowed image_provider is "file".
-        String imageProviderId = commandXPath.getStringInRange("ocv_image_provider", commandXPath.validRange("vuforia", "file"));
+        String imageProviderId = commandXPath.getRequiredStringInRange("ocv_image_provider", commandXPath.validRange("vuforia", "file"));
         if (!imageProviderId.equals("file"))
             throw new AutonomousRobotException(TAG, "image_provider must be 'file'");
 
@@ -153,7 +152,8 @@ public class RecognitionDispatcher extends Application {
                 ImageProvider fileImage = new FileImage(imagePath + actionData.imageParameters.file_name);
 
                 // Get the recognition path from the XML file.
-                String recognitionPathString = commandXPath.getString("barcode_recognition/recognition_path");
+                String recognitionPathString = commandXPath.getRequiredString("barcode_recognition/recognition_path");
+                RobotConstantsFreightFrenzy.RecognitionPath recognitionPath;
                 try {
                     recognitionPath = RobotConstantsFreightFrenzy.RecognitionPath.valueOf(recognitionPathString.toUpperCase());
                 } catch (IllegalArgumentException iex) {
@@ -170,23 +170,23 @@ public class RecognitionDispatcher extends Application {
                 // center barcode element. The right window is always immediately to the right
                 // of the left window.
                 // Get the boundaries for the left window onto the barcode.
-                int left_x = commandXPath.getInt("barcode_recognition/left_window/x");
-                int left_y = commandXPath.getInt("barcode_recognition/left_window/y");
-                int left_width = commandXPath.getInt("barcode_recognition/left_window/width");
-                int left_height = commandXPath.getInt("barcode_recognition/left_window/height");
-                RobotConstantsFreightFrenzy.ShippingHubLevels left_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/left_window/shipping_hub_level", true));
+                int left_x = commandXPath.getRequiredInt("barcode_recognition/left_window/x");
+                int left_y = commandXPath.getRequiredInt("barcode_recognition/left_window/y");
+                int left_width = commandXPath.getRequiredInt("barcode_recognition/left_window/width");
+                int left_height = commandXPath.getRequiredInt("barcode_recognition/left_window/height");
+                RobotConstantsFreightFrenzy.ShippingHubLevels left_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getRequiredString("barcode_recognition/left_window/shipping_hub_level").toUpperCase());
                 barcodeElements.put(RobotConstantsFreightFrenzy.BarcodeElementWindow.LEFT, new Rect(left_x, left_y, left_width, left_height));
 
                 // Get the boundaries for the right window onto the barcode.
-                int right_width = commandXPath.getInt("barcode_recognition/right_window/width");
-                RobotConstantsFreightFrenzy.ShippingHubLevels right_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/right_window/shipping_hub_level", true));
+                int right_width = commandXPath.getRequiredInt("barcode_recognition/right_window/width");
+                RobotConstantsFreightFrenzy.ShippingHubLevels right_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getRequiredString("barcode_recognition/right_window/shipping_hub_level").toUpperCase());
                 // Note: the right window starts 1 pixel past the left element. The height of the right
                 // window is the same as that of the left window.
                 barcodeElements.put(RobotConstantsFreightFrenzy.BarcodeElementWindow.RIGHT, new Rect(left_x + left_width + 1, left_y, right_width, left_height));
                 barcodeParameters.setBarcodeElements(barcodeElements);
 
                 // Set the shipping hub level to infer if the Shipping Hub Element is either the left or right window.
-                RobotConstantsFreightFrenzy.ShippingHubLevels npos_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getString("barcode_recognition/barcode_element_npos/shipping_hub_level", true));
+                RobotConstantsFreightFrenzy.ShippingHubLevels npos_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getRequiredString("barcode_recognition/barcode_element_npos/shipping_hub_level").toUpperCase());
 
                 // At last perform the image recognition.
                 BarcodeReturn barcodeReturn =
