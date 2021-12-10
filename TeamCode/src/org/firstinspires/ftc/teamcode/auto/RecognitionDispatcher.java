@@ -31,9 +31,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-//**TODO Use a command line switch for "ultimate" vs "frenzy" and take different
-// paths via a separate class for each. Currently hard-coded for Freight Frenzy
-// so **Ultimate Goal Ring Recognition WILL NOT WORK. **
 public class RecognitionDispatcher extends Application {
 
     private static final String TAG = "RecognitionDispatcher";
@@ -76,22 +73,37 @@ public class RecognitionDispatcher extends Application {
         Parameters parameters = getParameters();
         Map<String, String> namedParameters = parameters.getNamed();
 
-        String recognitionPathParameter = namedParameters.get("frenzy");
-        if (recognitionPathParameter == null)
-            throw new AutonomousRobotException(TAG, "Required parameter --frenzy is missing");
+        String gameParameter = namedParameters.get("game");
+        if (gameParameter == null)
+            throw new AutonomousRobotException(TAG, "Required parameter --game is missing");
 
-        try {
-            recognitionPath = RobotConstantsFreightFrenzy.RecognitionPath.valueOf(recognitionPathParameter.toUpperCase());
-        } catch (IllegalArgumentException iex) {
-            throw new AutonomousRobotException(TAG, "Invalid recognition path");
-        }
+        if (!(gameParameter.equals("Freight Frenzy") || gameParameter.equals("Ultimate Goal")))
+            throw new AutonomousRobotException(TAG, "Unrecognized game " + gameParameter);
+
+        RobotLogCommon.c(TAG, "Game " + gameParameter);
 
         // Use RobotAction.xml but for the single OpMode TEST with a single action only.
         RobotActionXMLFreightFrenzy robotActionXMLFreightFrenzy = new RobotActionXMLFreightFrenzy(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
         RobotActionXMLFreightFrenzy.RobotActionDataFreightFrenzy actionData = robotActionXMLFreightFrenzy.getOpModeData("TEST");
         List<RobotXMLElement> actions = actionData.actions;
-        if (actions.size() != 1 || !actions.get(0).getRobotXMLElementName().equals("ANALYZE_BARCODE"))
-            throw new AutonomousRobotException(TAG, "TEST OpMode must contain a single action ANALYZE_BARCODE");
+        if (actions.size() != 1)
+            throw new AutonomousRobotException(TAG, "TEST OpMode must contain a single action");
+
+        String recognitionAction = actions.get(0).getRobotXMLElementName();
+        switch (gameParameter) {
+            case "Freight Frenzy": {
+                if (!recognitionAction.equals("ANALYZE_BARCODE"))
+                    throw new AutonomousRobotException(TAG, "Missign required action ANALYZE_BARCODE");
+                break;
+            }
+            case "Ultiimate Goal": {
+                if (!recognitionAction.equals("RECOGNIZE_RINGS"))
+                    throw new AutonomousRobotException(TAG, "Missign required action RECOGNIZE_RINGS");
+                break;
+            }
+            default:
+                throw new AutonomousRobotException(TAG, "Unrecognized game " + gameParameter);
+        }
 
         // Set up XPath access to the current action command.
         RobotXMLElement actionElement = actions.get(0);
@@ -139,6 +151,16 @@ public class RecognitionDispatcher extends Application {
 
                 String imagePath = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
                 ImageProvider fileImage = new FileImage(imagePath + actionData.imageParameters.file_name);
+
+                // Get the recognition path from the XML file.
+                String recognitionPathString = commandXPath.getString("barcode_recognition/recognition_path");
+                try {
+                    recognitionPath = RobotConstantsFreightFrenzy.RecognitionPath.valueOf(recognitionPathString.toUpperCase());
+                } catch (IllegalArgumentException iex) {
+                    throw new AutonomousRobotException(TAG, "Invalid recognition path");
+                }
+
+                RobotLogCommon.c(TAG, "Recognition path " + recognitionPathString);
 
                 // Set the barcode recognition parameters for the current OpMode.
                 EnumMap<RobotConstantsFreightFrenzy.BarcodeElementWindow, Rect> barcodeElements =
