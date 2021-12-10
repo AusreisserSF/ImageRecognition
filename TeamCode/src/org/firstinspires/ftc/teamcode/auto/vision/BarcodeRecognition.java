@@ -216,15 +216,10 @@ int main()
          else {
             // For a hue range from the XML file of low 170, high 10
             // the following yields two new ranges: 170 - 180 and 0 - 10.
-            int hueLow1 = hueLow;
-            int hueHigh1 = 180;
-            int hueLow2 = 0;
-            int hueHigh2 = hueHigh;
-
             Mat range1 = new Mat();
             Mat range2 = new Mat();
-            Core.inRange(adjusted, new Scalar(hueLow1, inRangeSatLow, inrangeValLow), new Scalar(hueHigh1, satHigh, valHigh), range1);
-            Core.inRange(adjusted, new Scalar(hueLow2, inRangeSatLow, inrangeValLow), new Scalar(hueHigh2, satHigh, valHigh), range2);
+            Core.inRange(adjusted, new Scalar(hueLow, inRangeSatLow, inrangeValLow), new Scalar(180, satHigh, valHigh), range1);
+            Core.inRange(adjusted, new Scalar(0, inRangeSatLow, inrangeValLow), new Scalar(hueHigh, satHigh, valHigh), range2);
             Core.bitwise_or(range1, range2, thresholded);
         }
 
