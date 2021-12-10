@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.ringrecognition;
+package org.firstinspires.ftc.imagerecognition;
 
 import javafx.application.Application;
 import org.firstinspires.ftc.teamcode.auto.RecognitionDispatcher;
