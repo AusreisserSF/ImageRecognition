@@ -5,7 +5,7 @@
   </gray_parameters>
   <hsv_parameters>
     <!-- values from the color analyzer -->
-    <hue_name>red</hue_name>
+    <hue_name>red+yellow+green</hue_name>
     <hue_low>170</hue_low>
     <hue_high>70</hue_high>
     <saturation_target>6</saturation_target>

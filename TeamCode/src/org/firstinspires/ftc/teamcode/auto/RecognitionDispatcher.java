@@ -10,10 +10,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
-import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
-import org.firstinspires.ftc.ftcdevcommon.RobotXMLElement;
-import org.firstinspires.ftc.ftcdevcommon.XPathAccess;
+import org.firstinspires.ftc.ftcdevcommon.*;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.auto.vision.*;
 import org.firstinspires.ftc.teamcode.auto.xml.BarcodeParametersXML;
@@ -30,6 +27,7 @@ import java.io.InputStream;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class RecognitionDispatcher extends Application {
 
