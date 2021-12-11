@@ -1,274 +1,33 @@
-[2021-12-10 14:18:44.215] [INFO   ] RecognitionDispatcher Starting barcode recognition 
-[2021-12-10 14:18:44.281] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
-[2021-12-10 14:18:44.345] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
-[2021-12-10 14:18:44.347] [FINE   ] ImageXML Parsing XML image_parameters 
-[2021-12-10 14:18:44.360] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
-[2021-12-10 14:18:44.360] [FINE   ] ImageXML Parsing XML gray_parameters 
-[2021-12-10 14:18:44.361] [FINE   ] ImageXML Parsing XML hsv_parameters 
-[2021-12-10 14:18:44.371] [CONFIG ] RecognitionDispatcher Recognition path hsv 
-[2021-12-10 14:18:44.380] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
-[2021-12-10 14:18:44.380] [FINE   ] ImageUtils File name Files/images/Image_12071619_45185_IMG_BC3.png 
-[2021-12-10 14:18:44.397] [FINE   ] ImageUtils Image width 848, height 480 
-[2021-12-10 14:18:44.415] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12101418_44407_IMG.png 
-[2021-12-10 14:18:44.434] [FINE   ] BarcodeRecognition Image width 848, height 480 
-[2021-12-10 14:18:44.444] [FINE   ] ImageUtils Image ROI x 225, y 315, width 430, height 130 
-[2021-12-10 14:18:44.444] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12101418_44407_ROI.png 
-[2021-12-10 14:18:44.482] [FINE   ] BarcodeRecognition Writing Files/images/Image_12101418_44407_WIN.png 
-[2021-12-10 14:18:44.483] [FINE   ] BarcodeRecognition Recognition path HSV 
-[2021-12-10 14:18:44.485] [FINE   ] BarcodeRecognition Target hue levels: low 170, high 70 
-[2021-12-10 14:18:44.507] [FINE   ] ImageUtils HSV saturation channel median 9 
-[2021-12-10 14:18:44.508] [FINE   ] ImageUtils HSV value channel median 112 
-[2021-12-10 14:18:44.508] [FINE   ] ImageUtils Adjust HSV saturation by -3 
-[2021-12-10 14:18:44.509] [FINE   ] ImageUtils Adjust HSV value by 60 
-[2021-12-10 14:18:44.510] [FINE   ] BarcodeRecognition Adjusted image levels: saturation low 6, value low 172 
-[2021-12-10 14:18:44.515] [FINE   ] BarcodeRecognition Writing Files/images/Image_12101418_44407_ADJ.png 
-[2021-12-10 14:18:44.516] [FINE   ] BarcodeRecognition Actual inRange HSV levels: hue low 170, hue high 70 
-[2021-12-10 14:18:44.516] [FINE   ] BarcodeRecognition Actual inRange HSV levels: saturation low 50, value low 100 
-[2021-12-10 14:18:44.523] [FINE   ] BarcodeRecognition Writing Files/images/Image_12101418_44407_ADJ_THR.png 
-[2021-12-10 14:18:44.524] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
-[2021-12-10 14:18:44.525] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 2766 
-[2021-12-10 14:18:44.527] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position RIGHT 
-[2021-12-10 14:18:44.528] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_2 
-[2021-12-10 14:18:44.761] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
-[2021-12-10 14:18:44.762] [INFO   ] RobotCommonLog Shutting down log 
-[2021-12-10 14:55:56.798] [INFO   ] RecognitionDispatcher Starting barcode recognition 
-[2021-12-10 14:55:56.868] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
-[2021-12-10 14:55:56.927] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
-[2021-12-10 14:55:56.928] [FINE   ] ImageXML Parsing XML image_parameters 
-[2021-12-10 14:55:56.938] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
-[2021-12-10 14:55:56.939] [FINE   ] ImageXML Parsing XML gray_parameters 
-[2021-12-10 14:55:56.940] [FINE   ] ImageXML Parsing XML hsv_parameters 
-[2021-12-10 14:55:56.948] [CONFIG ] RecognitionDispatcher Recognition path hsv 
-[2021-12-10 14:55:56.958] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
-[2021-12-10 14:55:56.959] [FINE   ] ImageUtils File name Files/images/Image_12071619_45185_IMG_BC3.png 
-[2021-12-10 14:55:56.973] [FINE   ] ImageUtils Image width 848, height 480 
-[2021-12-10 14:55:57.001] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12101455_56988_IMG.png 
-[2021-12-10 14:55:57.017] [FINE   ] BarcodeRecognition Image width 848, height 480 
-[2021-12-10 14:55:57.023] [FINE   ] ImageUtils Image ROI x 225, y 315, width 430, height 130 
-[2021-12-10 14:55:57.024] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12101455_56988_ROI.png 
-[2021-12-10 14:55:57.056] [FINE   ] BarcodeRecognition Writing Files/images/Image_12101455_56988_WIN.png 
-[2021-12-10 14:55:57.057] [FINE   ] BarcodeRecognition Recognition path HSV 
-[2021-12-10 14:55:57.058] [FINE   ] BarcodeRecognition Target hue levels: low 170, high 70 
-[2021-12-10 14:55:57.080] [FINE   ] ImageUtils HSV saturation channel median 9 
-[2021-12-10 14:55:57.080] [FINE   ] ImageUtils HSV value channel median 112 
-[2021-12-10 14:55:57.081] [FINE   ] ImageUtils Adjust HSV saturation by -3 
-[2021-12-10 14:55:57.082] [FINE   ] ImageUtils Adjust HSV value by 60 
-[2021-12-10 14:55:57.082] [FINE   ] BarcodeRecognition Adjusted image levels: saturation low 6, value low 172 
-[2021-12-10 14:55:57.089] [FINE   ] BarcodeRecognition Writing Files/images/Image_12101455_56988_ADJ.png 
-[2021-12-10 14:55:57.089] [FINE   ] BarcodeRecognition Actual inRange HSV levels: hue low 170, hue high 70 
-[2021-12-10 14:55:57.090] [FINE   ] BarcodeRecognition Actual inRange HSV levels: saturation low 50, value low 100 
-[2021-12-10 14:55:57.092] [FINE   ] BarcodeRecognition Writing Files/images/Image_12101455_56988_ADJ_THR.png 
-[2021-12-10 14:55:57.093] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
-[2021-12-10 14:55:57.094] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 2766 
-[2021-12-10 14:55:57.096] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position RIGHT 
-[2021-12-10 14:55:57.096] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_2 
-[2021-12-10 14:55:57.366] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
-[2021-12-10 14:55:57.367] [INFO   ] RobotCommonLog Shutting down log 
-[2021-12-10 20:43:06.494] [INFO   ] RecognitionDispatcher Starting barcode recognition 
-[2021-12-10 20:43:06.603] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
-[2021-12-10 20:43:06.691] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
-[2021-12-10 20:43:06.693] [FINE   ] ImageXML Parsing XML image_parameters 
-[2021-12-10 20:43:06.709] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
-[2021-12-10 20:43:06.712] [FINE   ] ImageXML Parsing XML gray_parameters 
-[2021-12-10 20:43:06.712] [FINE   ] ImageXML Parsing XML hsv_parameters 
-[2021-12-10 20:43:06.721] [CONFIG ] RecognitionDispatcher Recognition path hsv 
-[2021-12-10 20:43:06.732] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
-[2021-12-10 20:43:06.733] [FINE   ] ImageUtils File name Files/images/Image_12071557_33866_IMG.png 
-[2021-12-10 20:43:06.751] [FINE   ] ImageUtils Image width 848, height 480 
-[2021-12-10 20:43:06.773] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12102043_06762_IMG.png 
-[2021-12-10 20:43:06.798] [FINE   ] BarcodeRecognition Image width 848, height 480 
-[2021-12-10 20:43:06.808] [FINE   ] ImageUtils Image ROI x 225, y 315, width 430, height 130 
-[2021-12-10 20:43:06.808] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12102043_06762_ROI.png 
-[2021-12-10 20:43:06.849] [FINE   ] BarcodeRecognition Writing Files/images/Image_12102043_06762_WIN.png 
-[2021-12-10 20:43:06.849] [FINE   ] BarcodeRecognition Recognition path HSV 
-[2021-12-10 20:43:06.850] [FINE   ] BarcodeRecognition Target hue levels: low 170, high 70 
-[2021-12-10 20:43:06.872] [FINE   ] ImageUtils HSV saturation channel median 9 
-[2021-12-10 20:43:06.873] [FINE   ] ImageUtils HSV value channel median 112 
-[2021-12-10 20:43:06.874] [FINE   ] ImageUtils Adjust HSV saturation by -3 
-[2021-12-10 20:43:06.874] [FINE   ] ImageUtils Adjust HSV value by 60 
-[2021-12-10 20:43:06.875] [FINE   ] BarcodeRecognition Adjusted image levels: saturation low 6, value low 172 
-[2021-12-10 20:43:06.879] [FINE   ] BarcodeRecognition Writing Files/images/Image_12102043_06762_ADJ.png 
-[2021-12-10 20:43:06.880] [FINE   ] BarcodeRecognition Actual inRange HSV levels: hue low 170, hue high 70 
-[2021-12-10 20:43:06.880] [FINE   ] BarcodeRecognition Actual inRange HSV levels: saturation low 50, value low 100 
-[2021-12-10 20:43:06.882] [FINE   ] BarcodeRecognition Writing Files/images/Image_12102043_06762_ADJ_THR.png 
-[2021-12-10 20:43:06.883] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
-[2021-12-10 20:43:06.884] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 293 
-[2021-12-10 20:43:06.884] [FINE   ] BarcodeRecognition Neither window contains the minimum number of noon-zero pixels. 
-[2021-12-10 20:43:06.888] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position WINDOW_NPOS 
-[2021-12-10 20:43:06.889] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_1 
-[2021-12-10 20:43:07.205] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
-[2021-12-10 20:43:07.206] [INFO   ] RobotCommonLog Shutting down log 
-[2021-12-10 20:50:11.435] [INFO   ] RecognitionDispatcher Starting barcode recognition 
-[2021-12-10 20:50:11.501] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
-[2021-12-10 20:50:11.592] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
-[2021-12-10 20:50:11.596] [FINE   ] ImageXML Parsing XML image_parameters 
-[2021-12-10 20:50:11.616] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
-[2021-12-10 20:50:11.617] [FINE   ] ImageXML Parsing XML gray_parameters 
-[2021-12-10 20:50:11.618] [FINE   ] ImageXML Parsing XML hsv_parameters 
-[2021-12-10 20:50:11.628] [CONFIG ] RecognitionDispatcher Recognition path hsv 
-[2021-12-10 20:50:11.636] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
-[2021-12-10 20:50:11.637] [FINE   ] ImageUtils File name Files/images/Image_12071557_33866_IMG.png 
-[2021-12-10 20:50:11.651] [FINE   ] ImageUtils Image width 848, height 480 
-[2021-12-10 20:50:11.672] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12102050_11660_IMG.png 
-[2021-12-10 20:50:11.693] [FINE   ] BarcodeRecognition Image width 848, height 480 
-[2021-12-10 20:50:11.706] [FINE   ] ImageUtils Image ROI x 275, y 350, width 430, height 130 
-[2021-12-10 20:50:11.706] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12102050_11660_ROI.png 
-[2021-12-10 20:50:11.749] [FINE   ] BarcodeRecognition Writing Files/images/Image_12102050_11660_WIN.png 
-[2021-12-10 20:50:11.750] [FINE   ] BarcodeRecognition Recognition path HSV 
-[2021-12-10 20:50:11.751] [FINE   ] BarcodeRecognition Target hue levels: low 170, high 70 
-[2021-12-10 20:50:11.772] [FINE   ] ImageUtils HSV saturation channel median 9 
-[2021-12-10 20:50:11.772] [FINE   ] ImageUtils HSV value channel median 108 
-[2021-12-10 20:50:11.773] [FINE   ] ImageUtils Adjust HSV saturation by -3 
-[2021-12-10 20:50:11.774] [FINE   ] ImageUtils Adjust HSV value by 64 
-[2021-12-10 20:50:11.775] [FINE   ] BarcodeRecognition Adjusted image levels: saturation low 6, value low 172 
-[2021-12-10 20:50:11.779] [FINE   ] BarcodeRecognition Writing Files/images/Image_12102050_11660_ADJ.png 
-[2021-12-10 20:50:11.780] [FINE   ] BarcodeRecognition Actual inRange HSV levels: hue low 170, hue high 70 
-[2021-12-10 20:50:11.780] [FINE   ] BarcodeRecognition Actual inRange HSV levels: saturation low 50, value low 100 
-[2021-12-10 20:50:11.784] [FINE   ] BarcodeRecognition Writing Files/images/Image_12102050_11660_ADJ_THR.png 
-[2021-12-10 20:50:11.785] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
-[2021-12-10 20:50:11.785] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 3505 
-[2021-12-10 20:50:11.788] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position RIGHT 
-[2021-12-10 20:50:11.789] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_2 
-[2021-12-10 20:50:12.095] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
-[2021-12-10 20:50:12.096] [INFO   ] RobotCommonLog Shutting down log 
-[2021-12-11 05:23:47.732] [INFO   ] RecognitionDispatcher Starting barcode recognition 
-[2021-12-11 05:24:45.819] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
-[2021-12-11 05:27:40.858] [INFO   ] RecognitionDispatcher Starting barcode recognition 
-[2021-12-11 05:30:22.213] [INFO   ] RecognitionDispatcher Starting barcode recognition 
-[2021-12-11 05:30:24.373] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
-[2021-12-11 05:30:26.445] [INFO   ] RecognitionDispatcher Starting barcode recognition 
-[2021-12-11 05:31:30.736] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
-[2021-12-11 05:32:21.829] [INFO   ] RecognitionDispatcher Starting barcode recognition 
-[2021-12-11 05:34:40.405] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
-[2021-12-11 05:34:45.897] [INFO   ] RecognitionDispatcher Starting barcode recognition 
-[2021-12-11 05:34:45.964] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
-[2021-12-11 05:34:46.044] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
-[2021-12-11 05:34:46.047] [FINE   ] ImageXML Parsing XML image_parameters 
-[2021-12-11 05:34:46.061] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
-[2021-12-11 05:34:46.064] [FINE   ] ImageXML Parsing XML gray_parameters 
-[2021-12-11 05:34:46.064] [FINE   ] ImageXML Parsing XML hsv_parameters 
-[2021-12-11 05:34:46.070] [CONFIG ] RecognitionDispatcher Recognition path hsv 
-[2021-12-11 05:34:46.078] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
-[2021-12-11 05:34:46.078] [FINE   ] ImageUtils File name Files/images/Image_12071557_33866_IMG.png 
-[2021-12-11 05:34:46.101] [FINE   ] ImageUtils Image width 848, height 480 
-[2021-12-11 05:34:46.136] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12110534_46121_IMG.png 
-[2021-12-11 05:34:46.164] [FINE   ] BarcodeRecognition Image width 848, height 480 
-[2021-12-11 05:34:46.172] [FINE   ] ImageUtils Image ROI x 275, y 350, width 430, height 130 
-[2021-12-11 05:34:46.172] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12110534_46121_ROI.png 
-[2021-12-11 05:34:46.219] [FINE   ] BarcodeRecognition Writing Files/images/Image_12110534_46121_WIN.png 
-[2021-12-11 05:34:46.220] [FINE   ] BarcodeRecognition Recognition path HSV 
-[2021-12-11 05:34:46.223] [FINE   ] BarcodeRecognition Target hue levels: low 170, high 70 
-[2021-12-11 05:34:46.244] [FINE   ] ImageUtils HSV saturation channel median 9 
-[2021-12-11 05:34:46.244] [FINE   ] ImageUtils HSV value channel median 108 
-[2021-12-11 05:34:46.246] [FINE   ] ImageUtils Adjust HSV saturation by -3 
-[2021-12-11 05:34:46.247] [FINE   ] ImageUtils Adjust HSV value by 64 
-[2021-12-11 05:34:46.249] [FINE   ] BarcodeRecognition Adjusted image levels: saturation low 6, value low 172 
-[2021-12-11 05:34:46.254] [FINE   ] BarcodeRecognition Writing Files/images/Image_12110534_46121_ADJ.png 
-[2021-12-11 05:34:46.255] [FINE   ] BarcodeRecognition Actual inRange HSV levels: hue low 170, hue high 70 
-[2021-12-11 05:34:46.255] [FINE   ] BarcodeRecognition Actual inRange HSV levels: saturation low 50, value low 100 
-[2021-12-11 05:34:46.260] [FINE   ] BarcodeRecognition Writing Files/images/Image_12110534_46121_ADJ_THR.png 
-[2021-12-11 05:34:46.261] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
-[2021-12-11 05:34:46.262] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 3505 
-[2021-12-11 05:34:46.264] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position RIGHT 
-[2021-12-11 05:34:46.264] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_2 
-[2021-12-11 05:34:46.520] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
-[2021-12-11 05:34:46.520] [INFO   ] RobotCommonLog Shutting down log 
-[2021-12-11 05:37:52.659] [INFO   ] RecognitionDispatcher Starting barcode recognition 
-[2021-12-11 05:37:52.726] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
-[2021-12-11 05:37:52.785] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
-[2021-12-11 05:37:52.787] [FINE   ] ImageXML Parsing XML image_parameters 
-[2021-12-11 05:37:52.800] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
-[2021-12-11 05:37:52.801] [FINE   ] ImageXML Parsing XML gray_parameters 
-[2021-12-11 05:37:52.802] [FINE   ] ImageXML Parsing XML hsv_parameters 
-[2021-12-11 05:37:52.811] [CONFIG ] RecognitionDispatcher Recognition path hsv 
-[2021-12-11 05:37:52.820] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
-[2021-12-11 05:37:52.821] [FINE   ] ImageUtils File name Files/images/Image_12071557_33866_IMG.png 
-[2021-12-11 05:37:52.837] [FINE   ] ImageUtils Image width 848, height 480 
-[2021-12-11 05:37:52.853] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12110537_52845_IMG.png 
-[2021-12-11 05:37:52.867] [FINE   ] BarcodeRecognition Image width 848, height 480 
-[2021-12-11 05:37:52.873] [FINE   ] ImageUtils Image ROI x 275, y 350, width 430, height 130 
-[2021-12-11 05:37:52.873] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12110537_52845_ROI.png 
-[2021-12-11 05:37:52.911] [FINE   ] BarcodeRecognition Writing Files/images/Image_12110537_52845_WIN.png 
-[2021-12-11 05:37:52.912] [FINE   ] BarcodeRecognition Recognition path HSV 
-[2021-12-11 05:37:52.912] [FINE   ] BarcodeRecognition Target hue levels: low 170, high 70 
-[2021-12-11 05:37:52.929] [FINE   ] ImageUtils HSV saturation channel median 9 
-[2021-12-11 05:37:52.930] [FINE   ] ImageUtils HSV value channel median 108 
-[2021-12-11 05:37:52.930] [FINE   ] ImageUtils Adjust HSV saturation by -3 
-[2021-12-11 05:37:52.930] [FINE   ] ImageUtils Adjust HSV value by 64 
-[2021-12-11 05:37:52.931] [FINE   ] BarcodeRecognition Adjusted image levels: saturation low 6, value low 172 
-[2021-12-11 05:37:52.934] [FINE   ] BarcodeRecognition Writing Files/images/Image_12110537_52845_ADJ.png 
-[2021-12-11 05:37:52.934] [FINE   ] BarcodeRecognition Actual inRange HSV levels: hue low 170, hue high 70 
-[2021-12-11 05:37:52.934] [FINE   ] BarcodeRecognition Actual inRange HSV levels: saturation low 50, value low 100 
-[2021-12-11 05:37:52.936] [FINE   ] BarcodeRecognition Writing Files/images/Image_12110537_52845_ADJ_THR.png 
-[2021-12-11 05:37:52.937] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
-[2021-12-11 05:37:52.937] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 3505 
-[2021-12-11 05:37:52.941] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position RIGHT 
-[2021-12-11 05:37:52.941] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_2 
-[2021-12-11 05:37:53.197] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
-[2021-12-11 05:37:53.197] [INFO   ] RobotCommonLog Shutting down log 
-[2021-12-11 05:39:59.224] [INFO   ] RecognitionDispatcher Starting barcode recognition 
-[2021-12-11 05:39:59.288] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
-[2021-12-11 05:39:59.348] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
-[2021-12-11 05:39:59.350] [FINE   ] ImageXML Parsing XML image_parameters 
-[2021-12-11 05:39:59.364] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
-[2021-12-11 05:39:59.365] [FINE   ] ImageXML Parsing XML gray_parameters 
-[2021-12-11 05:39:59.366] [FINE   ] ImageXML Parsing XML hsv_parameters 
-[2021-12-11 05:39:59.374] [CONFIG ] RecognitionDispatcher Recognition path hsv 
-[2021-12-11 05:39:59.381] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
-[2021-12-11 05:39:59.381] [FINE   ] ImageUtils File name Files/images/Image_12071557_33866_IMG.png 
-[2021-12-11 05:39:59.393] [FINE   ] ImageUtils Image width 848, height 480 
-[2021-12-11 05:39:59.410] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12110539_59401_IMG.png 
-[2021-12-11 05:39:59.431] [FINE   ] BarcodeRecognition Image width 848, height 480 
-[2021-12-11 05:39:59.436] [FINE   ] ImageUtils Image ROI x 275, y 350, width 430, height 130 
-[2021-12-11 05:39:59.436] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12110539_59401_ROI.png 
-[2021-12-11 05:39:59.475] [FINE   ] BarcodeRecognition Writing Files/images/Image_12110539_59401_WIN.png 
-[2021-12-11 05:39:59.476] [FINE   ] BarcodeRecognition Recognition path HSV 
-[2021-12-11 05:39:59.476] [FINE   ] BarcodeRecognition Target hue levels: low 170, high 70 
-[2021-12-11 05:39:59.492] [FINE   ] ImageUtils HSV saturation channel median 9 
-[2021-12-11 05:39:59.492] [FINE   ] ImageUtils HSV value channel median 108 
-[2021-12-11 05:39:59.493] [FINE   ] ImageUtils Adjust HSV saturation by -3 
-[2021-12-11 05:39:59.493] [FINE   ] ImageUtils Adjust HSV value by 64 
-[2021-12-11 05:39:59.494] [FINE   ] BarcodeRecognition Adjusted image levels: saturation low 6, value low 172 
-[2021-12-11 05:39:59.497] [FINE   ] BarcodeRecognition Writing Files/images/Image_12110539_59401_ADJ.png 
-[2021-12-11 05:39:59.498] [FINE   ] BarcodeRecognition Actual inRange HSV levels: hue low 170, hue high 70 
-[2021-12-11 05:39:59.498] [FINE   ] BarcodeRecognition Actual inRange HSV levels: saturation low 50, value low 100 
-[2021-12-11 05:39:59.500] [FINE   ] BarcodeRecognition Writing Files/images/Image_12110539_59401_ADJ_THR.png 
-[2021-12-11 05:39:59.501] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
-[2021-12-11 05:39:59.502] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 3505 
-[2021-12-11 05:39:59.512] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position RIGHT 
-[2021-12-11 05:39:59.513] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_2 
-[2021-12-11 05:39:59.793] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
-[2021-12-11 05:39:59.793] [INFO   ] RobotCommonLog Shutting down log 
-[2021-12-11 05:44:31.669] [INFO   ] RecognitionDispatcher Starting barcode recognition 
-[2021-12-11 05:44:31.753] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
-[2021-12-11 05:44:31.836] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
-[2021-12-11 05:44:31.838] [FINE   ] ImageXML Parsing XML image_parameters 
-[2021-12-11 05:44:31.857] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
-[2021-12-11 05:44:31.859] [FINE   ] ImageXML Parsing XML gray_parameters 
-[2021-12-11 05:44:31.861] [FINE   ] ImageXML Parsing XML hsv_parameters 
-[2021-12-11 05:44:31.872] [CONFIG ] RecognitionDispatcher Recognition path hsv 
-[2021-12-11 05:44:31.883] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
-[2021-12-11 05:44:31.884] [FINE   ] ImageUtils File name Files/images/Image_12071557_33866_IMG.png 
-[2021-12-11 05:44:31.902] [FINE   ] ImageUtils Image width 848, height 480 
-[2021-12-11 05:44:31.924] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12110544_31912_IMG.png 
-[2021-12-11 05:44:31.953] [FINE   ] BarcodeRecognition Image width 848, height 480 
-[2021-12-11 05:44:31.960] [FINE   ] ImageUtils Image ROI x 275, y 350, width 430, height 130 
-[2021-12-11 05:44:31.960] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12110544_31912_ROI.png 
-[2021-12-11 05:44:32.007] [FINE   ] BarcodeRecognition Writing Files/images/Image_12110544_31912_WIN.png 
-[2021-12-11 05:44:32.008] [FINE   ] BarcodeRecognition Recognition path HSV 
-[2021-12-11 05:44:32.009] [FINE   ] BarcodeRecognition Target hue levels: low 170, high 70 
-[2021-12-11 05:44:32.031] [FINE   ] ImageUtils HSV saturation channel median 9 
-[2021-12-11 05:44:32.031] [FINE   ] ImageUtils HSV value channel median 108 
-[2021-12-11 05:44:32.032] [FINE   ] ImageUtils Adjust HSV saturation by -3 
-[2021-12-11 05:44:32.032] [FINE   ] ImageUtils Adjust HSV value by 64 
-[2021-12-11 05:44:32.033] [FINE   ] BarcodeRecognition Adjusted image levels: saturation low 6, value low 172 
-[2021-12-11 05:44:32.039] [FINE   ] BarcodeRecognition Writing Files/images/Image_12110544_31912_ADJ.png 
-[2021-12-11 05:44:32.039] [FINE   ] BarcodeRecognition Actual inRange HSV levels: hue low 170, hue high 70 
-[2021-12-11 05:44:32.040] [FINE   ] BarcodeRecognition Actual inRange HSV levels: saturation low 50, value low 100 
-[2021-12-11 05:44:32.045] [FINE   ] BarcodeRecognition Writing Files/images/Image_12110544_31912_ADJ_THR.png 
-[2021-12-11 05:44:32.046] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
-[2021-12-11 05:44:32.047] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 3505 
-[2021-12-11 05:44:32.048] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position RIGHT 
-[2021-12-11 05:44:32.049] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_2 
-[2021-12-11 05:44:32.373] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
-[2021-12-11 05:44:32.374] [INFO   ] RobotCommonLog Shutting down log 
+[2021-12-11 05:52:34.225] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-11 05:52:34.292] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2021-12-11 05:52:34.352] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2021-12-11 05:52:34.353] [FINE   ] ImageXML Parsing XML image_parameters 
+[2021-12-11 05:52:34.364] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2021-12-11 05:52:34.365] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2021-12-11 05:52:34.366] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2021-12-11 05:52:34.373] [CONFIG ] RecognitionDispatcher Recognition path hsv 
+[2021-12-11 05:52:34.382] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2021-12-11 05:52:34.384] [FINE   ] ImageUtils File name Files/images/Image_12071557_33866_IMG.png 
+[2021-12-11 05:52:34.395] [FINE   ] ImageUtils Image width 848, height 480 
+[2021-12-11 05:52:34.411] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12110552_34403_IMG.png 
+[2021-12-11 05:52:34.426] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2021-12-11 05:52:34.431] [FINE   ] ImageUtils Image ROI x 275, y 350, width 430, height 130 
+[2021-12-11 05:52:34.432] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12110552_34403_ROI.png 
+[2021-12-11 05:52:34.466] [FINE   ] BarcodeRecognition Writing Files/images/Image_12110552_34403_WIN.png 
+[2021-12-11 05:52:34.466] [FINE   ] BarcodeRecognition Recognition path HSV 
+[2021-12-11 05:52:34.467] [FINE   ] BarcodeRecognition Target hue levels: low 170, high 70 
+[2021-12-11 05:52:34.481] [FINE   ] ImageUtils HSV saturation channel median 9 
+[2021-12-11 05:52:34.482] [FINE   ] ImageUtils HSV value channel median 108 
+[2021-12-11 05:52:34.482] [FINE   ] ImageUtils Adjust HSV saturation by -3 
+[2021-12-11 05:52:34.482] [FINE   ] ImageUtils Adjust HSV value by 64 
+[2021-12-11 05:52:34.483] [FINE   ] BarcodeRecognition Adjusted image levels: saturation low 6, value low 172 
+[2021-12-11 05:52:34.486] [FINE   ] BarcodeRecognition Writing Files/images/Image_12110552_34403_ADJ.png 
+[2021-12-11 05:52:34.486] [FINE   ] BarcodeRecognition Actual inRange HSV levels: hue low 170, hue high 70 
+[2021-12-11 05:52:34.487] [FINE   ] BarcodeRecognition Actual inRange HSV levels: saturation low 50, value low 100 
+[2021-12-11 05:52:34.488] [FINE   ] BarcodeRecognition Writing Files/images/Image_12110552_34403_ADJ_THR.png 
+[2021-12-11 05:52:34.489] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
+[2021-12-11 05:52:34.489] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 3505 
+[2021-12-11 05:52:34.491] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position RIGHT 
+[2021-12-11 05:52:34.491] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_2 
+[2021-12-11 05:52:34.767] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2021-12-11 05:52:34.768] [INFO   ] RobotCommonLog Shutting down log 
