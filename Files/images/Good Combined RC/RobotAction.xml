@@ -22,6 +22,7 @@
             <ANALYZE_BARCODE>
                 <ocv_image_provider>file</ocv_image_provider>
                 <barcode_recognition>
+                    <recognition_path>hsv</recognition_path>
                     <!-- These values are relative to the image ROI -->
                     <left_window>
                         <x>0</x>
