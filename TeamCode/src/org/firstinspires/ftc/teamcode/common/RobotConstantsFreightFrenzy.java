@@ -8,7 +8,7 @@ public class RobotConstantsFreightFrenzy {
     }
 
     public enum RecognitionPath {
-        GRAY, HSV
+        GRAY, HSV, REFLECTIVE_TAPE
     }
 
     // Relative position of a barcode element within the ROI.

@@ -76,7 +76,7 @@ public class BarcodeRecognition {
                         pImageParameters.image_roi.y,
                         pImageParameters.image_roi.width,
                         pImageParameters.image_roi.height));
-                        
+
         imageFilename = outputFilenamePreamble + "_ROI.png";
         RobotLogCommon.d(TAG, "Writing image ROI " + imageFilename);
         Imgcodecs.imwrite(imageFilename, imageROI);
@@ -109,9 +109,25 @@ public class BarcodeRecognition {
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_WIN.png");
 
         RobotLogCommon.d(TAG, "Recognition path " + pRecognitionPath);
-        if (pRecognitionPath == RobotConstantsFreightFrenzy.RecognitionPath.GRAY)
-            return grayRecognitionPath(pBarcodeParameters.grayParameters);
-        return hsvRecognitionPath(pBarcodeParameters.hsvParameters);
+        BarcodeReturn retVal;
+        switch (pRecognitionPath) {
+            case GRAY: {
+                retVal = grayRecognitionPath(pBarcodeParameters.grayParameters);
+                break;
+            }
+            case HSV: {
+                retVal = hsvRecognitionPath(pBarcodeParameters.hsvParameters);
+                break;
+            }
+            case REFLECTIVE_TAPE: {
+                retVal = reflectiveTapeRecognitionPath(pBarcodeParameters.grayParameters);
+                break;
+            }
+            default:
+                throw new AutonomousRobotException(TAG, "Unsupported recognition path " + pRecognitionPath);
+        }
+
+        return retVal;
     }
 
     private BarcodeReturn grayRecognitionPath(VisionParameters.GrayParameters pGrayParameters) {
@@ -191,7 +207,7 @@ public class BarcodeRecognition {
         // Normal hue range.
         if (hueLow < hueHigh)
             Core.inRange(adjusted, new Scalar(hueLow, inRangeSatLow, inrangeValLow), new Scalar(hueHigh, satHigh, valHigh), thresholded);
-         else {
+        else {
             // For a hue range from the XML file of low 170, high 10
             // the following yields two new ranges: 170 - 180 and 0 - 10.
             Mat range1 = new Mat();
@@ -203,6 +219,35 @@ public class BarcodeRecognition {
 
         Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ_THR.png", thresholded);
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ADJ_THR.png");
+
+        return lookThroughWindows(thresholded);
+    }
+
+    private BarcodeReturn reflectiveTapeRecognitionPath(VisionParameters.GrayParameters pGrayParameters) {
+        // We're on the grayscale path.
+        Mat grayROI = new Mat();
+        Imgproc.cvtColor(imageROI, grayROI, Imgproc.COLOR_BGR2GRAY);
+
+        Imgcodecs.imwrite(outputFilenamePreamble + "_REF_GRAY.png", grayROI);
+        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_GRAY.png");
+
+        Mat adjustedGray = imageUtils.adjustGrayscaleBrightness(grayROI, pGrayParameters.target);
+        Imgcodecs.imwrite(outputFilenamePreamble + "_REF_ADJ.png", adjustedGray);
+        RobotLogCommon.d(TAG, "Writing adjusted grayscale image " + outputFilenamePreamble + "_REF_ADJ.png");
+
+        int grayThresholdLow = pGrayParameters.low_threshold;
+        RobotLogCommon.d(TAG, "Threshold value: low " + grayThresholdLow);
+
+        // Threshold the image: set pixels over the threshold value to white.
+        Mat thresholded = new Mat(); // output binary image
+        Imgproc.threshold(adjustedGray, thresholded,
+                grayThresholdLow,    // threshold value
+                255,   // white
+                Imgproc.THRESH_BINARY); // thresholding type
+
+        // Our target will now appear white in the thresholded image.
+        Imgcodecs.imwrite(outputFilenamePreamble + "_REF_ADJ_THR.png", thresholded);
+        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_REF_ADJ_THR.png");
 
         return lookThroughWindows(thresholded);
     }
