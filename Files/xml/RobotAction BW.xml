@@ -1,0 +1,49 @@
+<!-- BLUE_WAREHOUSE -->
+<RobotAction>
+    <OpMode id="TEST">
+        <parameters>
+            <log_level>v</log_level>
+            <!-- image_parameters element is required if you include ANALYZE_BARCODE -->
+            <image_parameters>
+                <!-- BW right Image_12290959_09264_IMG_BW.png -->
+                <file>Image_12290959_09264_IMG_BW.png</file>
+                <resolution>
+                    <width>848</width>
+                    <height>480</height>
+                </resolution>
+                <image_roi>
+                    <x>290</x>
+                    <y>375</y>
+                    <width>430</width>
+                    <height>80</height>
+                </image_roi>
+            </image_parameters>
+           </parameters>
+        <actions>
+            <ANALYZE_BARCODE>
+                <ocv_image_provider>file</ocv_image_provider>
+                <barcode_recognition>
+                    <recognition_path>reflective_tape</recognition_path>
+                    <!-- These values are relative to the image ROI -->
+                    <left_window>
+                        <x>0</x>
+                        <y>0</y>
+                        <width>165</width>
+                        <height>80</height>
+                        <shipping_hub_level>SHIPPING_HUB_LEVEL_2</shipping_hub_level>
+                    </left_window>
+                    <right_window>
+                        <!-- x starts at left_window.x + left_window.width + 1 -->
+                        <width>200</width>
+                        <!-- y is the same as that of the left_window -->
+                        <!-- height is the same as that of the left_window -->
+                        <shipping_hub_level>SHIPPING_HUB_LEVEL_3</shipping_hub_level>
+                    </right_window>
+                    <barcode_element_npos>
+                        <shipping_hub_level>SHIPPING_HUB_LEVEL_1</shipping_hub_level>
+                    </barcode_element_npos>
+                </barcode_recognition>
+            </ANALYZE_BARCODE>
+        </actions>
+    </OpMode>
+</RobotAction>
