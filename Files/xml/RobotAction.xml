@@ -1,21 +1,22 @@
-<!-- RED_CAROUSEL -->
+<!-- BLUE_WAREHOUSE -->
 <RobotAction>
     <OpMode id="TEST">
         <parameters>
             <log_level>v</log_level>
             <!-- image_parameters element is required if you include ANALYZE_BARCODE -->
             <image_parameters>
-                <file>Image_12201622_24791_REFLECTIVE.png</file>
+                <!-- BW right Image_12290959_09264_IMG_BW.png -->
+                <file>Image_12290959_09264_IMG_BW.png</file>
                 <resolution>
                     <width>848</width>
                     <height>480</height>
                 </resolution>
                 <image_roi>
-                    <x>325</x>
-                    <y>285</y>
-                    <width>370</width>
-                    <height>165</height>
-                 </image_roi>
+                    <x>290</x>
+                    <y>375</y>
+                    <width>430</width>
+                    <height>80</height>
+                </image_roi>
             </image_parameters>
            </parameters>
         <actions>
@@ -28,12 +29,12 @@
                         <x>0</x>
                         <y>0</y>
                         <width>165</width>
-                        <height>160</height>
+                        <height>80</height>
                         <shipping_hub_level>SHIPPING_HUB_LEVEL_2</shipping_hub_level>
                     </left_window>
                     <right_window>
                         <!-- x starts at left_window.x + left_window.width + 1 -->
-                        <width>165</width>
+                        <width>200</width>
                         <!-- y is the same as that of the left_window -->
                         <!-- height is the same as that of the left_window -->
                         <shipping_hub_level>SHIPPING_HUB_LEVEL_3</shipping_hub_level>

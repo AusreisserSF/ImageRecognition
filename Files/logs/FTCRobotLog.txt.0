@@ -1,0 +1,516 @@
+[2021-12-28 15:59:49.751] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-28 15:59:49.809] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2021-12-28 15:59:49.889] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2021-12-28 15:59:49.890] [FINE   ] ImageXML Parsing XML image_parameters 
+[2021-12-28 15:59:49.901] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2021-12-28 15:59:49.901] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2021-12-28 15:59:49.903] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2021-12-28 15:59:49.911] [CONFIG ] RecognitionDispatcher Recognition path reflective_tape 
+[2021-12-28 15:59:49.917] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2021-12-28 15:59:49.917] [FINE   ] ImageUtils File name Files/images/Image_12281145_18050_IMG.png 
+[2021-12-28 15:59:49.929] [FINE   ] ImageUtils Image width 848, height 480 
+[2021-12-28 15:59:49.946] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12281559_49938_IMG.png 
+[2021-12-28 15:59:49.959] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2021-12-28 15:59:49.965] [FINE   ] ImageUtils Image ROI x 300, y 360, width 380, height 110 
+[2021-12-28 15:59:49.965] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12281559_49938_ROI.png 
+[2021-12-28 15:59:49.990] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281559_49938_WIN.png 
+[2021-12-28 15:59:49.991] [FINE   ] BarcodeRecognition Recognition path REFLECTIVE_TAPE 
+[2021-12-28 15:59:49.993] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281559_49938_GRAY.png 
+[2021-12-28 15:59:50.001] [FINE   ] ImageUtils Original image: grayscale median 160 
+[2021-12-28 15:59:50.001] [FINE   ] ImageUtils Grayscale median target 150 
+[2021-12-28 15:59:50.001] [FINE   ] ImageUtils Grayscale adjustment -10 
+[2021-12-28 15:59:50.003] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_12281559_49938_REF_ADJ.png 
+[2021-12-28 15:59:50.003] [FINE   ] BarcodeRecognition Threshold value: low 200 
+[2021-12-28 15:59:50.004] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281559_49938_REF_ADJ_THR.png 
+[2021-12-28 15:59:50.004] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
+[2021-12-28 15:59:50.004] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 2813 
+[2021-12-28 15:59:50.006] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position RIGHT 
+[2021-12-28 15:59:50.007] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_2 
+[2021-12-28 15:59:50.216] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2021-12-28 15:59:50.216] [INFO   ] RobotCommonLog Shutting down log 
+[2021-12-28 16:04:03.190] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-28 16:04:03.267] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2021-12-28 16:04:03.340] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2021-12-28 16:04:03.343] [FINE   ] ImageXML Parsing XML image_parameters 
+[2021-12-28 16:04:03.356] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2021-12-28 16:04:03.358] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2021-12-28 16:04:03.358] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2021-12-28 16:04:03.365] [CONFIG ] RecognitionDispatcher Recognition path reflective_tape 
+[2021-12-28 16:04:03.374] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2021-12-28 16:04:03.374] [FINE   ] ImageUtils File name Files/images/Image_12281145_18050_IMG.png 
+[2021-12-28 16:04:03.389] [FINE   ] ImageUtils Image width 848, height 480 
+[2021-12-28 16:04:03.408] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12281604_03399_IMG.png 
+[2021-12-28 16:04:03.427] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2021-12-28 16:04:03.437] [FINE   ] ImageUtils Image ROI x 275, y 360, width 380, height 110 
+[2021-12-28 16:04:03.437] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12281604_03399_ROI.png 
+[2021-12-28 16:04:03.472] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281604_03399_WIN.png 
+[2021-12-28 16:04:03.473] [FINE   ] BarcodeRecognition Recognition path REFLECTIVE_TAPE 
+[2021-12-28 16:04:03.476] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281604_03399_GRAY.png 
+[2021-12-28 16:04:03.492] [FINE   ] ImageUtils Original image: grayscale median 160 
+[2021-12-28 16:04:03.492] [FINE   ] ImageUtils Grayscale median target 150 
+[2021-12-28 16:04:03.493] [FINE   ] ImageUtils Grayscale adjustment -10 
+[2021-12-28 16:04:03.495] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_12281604_03399_REF_ADJ.png 
+[2021-12-28 16:04:03.496] [FINE   ] BarcodeRecognition Threshold value: low 200 
+[2021-12-28 16:04:03.497] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281604_03399_REF_ADJ_THR.png 
+[2021-12-28 16:04:03.497] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
+[2021-12-28 16:04:03.498] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 2813 
+[2021-12-28 16:04:03.499] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position RIGHT 
+[2021-12-28 16:04:03.499] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_2 
+[2021-12-28 16:04:03.825] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2021-12-28 16:04:03.828] [INFO   ] RobotCommonLog Shutting down log 
+[2021-12-28 16:05:50.317] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-28 16:05:50.388] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2021-12-28 16:05:50.451] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2021-12-28 16:05:50.453] [FINE   ] ImageXML Parsing XML image_parameters 
+[2021-12-28 16:05:50.466] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2021-12-28 16:05:50.466] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2021-12-28 16:05:50.467] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2021-12-28 16:05:50.474] [CONFIG ] RecognitionDispatcher Recognition path reflective_tape 
+[2021-12-28 16:05:50.483] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2021-12-28 16:05:50.484] [FINE   ] ImageUtils File name Files/images/Image_12281145_18050_IMG.png 
+[2021-12-28 16:05:50.498] [FINE   ] ImageUtils Image width 848, height 480 
+[2021-12-28 16:05:50.516] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12281605_50505_IMG.png 
+[2021-12-28 16:05:50.534] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2021-12-28 16:05:50.540] [FINE   ] ImageUtils Image ROI x 275, y 360, width 380, height 110 
+[2021-12-28 16:05:50.541] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12281605_50505_ROI.png 
+[2021-12-28 16:05:50.584] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281605_50505_WIN.png 
+[2021-12-28 16:05:50.584] [FINE   ] BarcodeRecognition Recognition path REFLECTIVE_TAPE 
+[2021-12-28 16:05:50.587] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281605_50505_GRAY.png 
+[2021-12-28 16:05:50.603] [FINE   ] ImageUtils Original image: grayscale median 160 
+[2021-12-28 16:05:50.604] [FINE   ] ImageUtils Grayscale median target 150 
+[2021-12-28 16:05:50.604] [FINE   ] ImageUtils Grayscale adjustment -10 
+[2021-12-28 16:05:50.607] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_12281605_50505_REF_ADJ.png 
+[2021-12-28 16:05:50.607] [FINE   ] BarcodeRecognition Threshold value: low 200 
+[2021-12-28 16:05:50.609] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281605_50505_REF_ADJ_THR.png 
+[2021-12-28 16:05:50.609] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
+[2021-12-28 16:05:50.610] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 2813 
+[2021-12-28 16:05:50.611] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position RIGHT 
+[2021-12-28 16:05:50.611] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_2 
+[2021-12-28 16:05:50.887] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2021-12-28 16:05:50.887] [INFO   ] RobotCommonLog Shutting down log 
+[2021-12-28 16:10:18.071] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-28 16:10:18.139] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2021-12-28 16:10:18.206] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2021-12-28 16:10:18.207] [FINE   ] ImageXML Parsing XML image_parameters 
+[2021-12-28 16:10:18.221] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2021-12-28 16:10:18.221] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2021-12-28 16:10:18.222] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2021-12-28 16:10:18.228] [CONFIG ] RecognitionDispatcher Recognition path reflective_tape 
+[2021-12-28 16:10:18.235] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2021-12-28 16:10:18.235] [FINE   ] ImageUtils File name Files/images/Image_12281125_19502_IMG.png 
+[2021-12-28 16:10:18.251] [FINE   ] ImageUtils Image width 848, height 480 
+[2021-12-28 16:10:18.272] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12281610_18262_IMG.png 
+[2021-12-28 16:10:18.291] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2021-12-28 16:10:18.300] [FINE   ] ImageUtils Image ROI x 275, y 360, width 380, height 110 
+[2021-12-28 16:10:18.302] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12281610_18262_ROI.png 
+[2021-12-28 16:10:18.338] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281610_18262_WIN.png 
+[2021-12-28 16:10:18.339] [FINE   ] BarcodeRecognition Recognition path REFLECTIVE_TAPE 
+[2021-12-28 16:10:18.343] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281610_18262_GRAY.png 
+[2021-12-28 16:10:18.358] [FINE   ] ImageUtils Original image: grayscale median 151 
+[2021-12-28 16:10:18.358] [FINE   ] ImageUtils Grayscale median target 150 
+[2021-12-28 16:10:18.359] [FINE   ] ImageUtils Grayscale adjustment -1 
+[2021-12-28 16:10:18.360] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_12281610_18262_REF_ADJ.png 
+[2021-12-28 16:10:18.361] [FINE   ] BarcodeRecognition Threshold value: low 200 
+[2021-12-28 16:10:18.363] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281610_18262_REF_ADJ_THR.png 
+[2021-12-28 16:10:18.364] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 815 
+[2021-12-28 16:10:18.364] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 0 
+[2021-12-28 16:10:18.366] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position LEFT 
+[2021-12-28 16:10:18.367] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_2 
+[2021-12-28 16:10:18.638] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2021-12-28 16:10:18.638] [INFO   ] RobotCommonLog Shutting down log 
+[2021-12-28 16:13:45.611] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-28 16:13:45.687] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2021-12-28 16:13:45.763] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2021-12-28 16:13:45.765] [FINE   ] ImageXML Parsing XML image_parameters 
+[2021-12-28 16:13:45.778] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2021-12-28 16:13:45.779] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2021-12-28 16:13:45.780] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2021-12-28 16:13:45.787] [CONFIG ] RecognitionDispatcher Recognition path reflective_tape 
+[2021-12-28 16:13:45.796] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2021-12-28 16:13:45.796] [FINE   ] ImageUtils File name Files/images/Image_12281125_19502_IMG.png 
+[2021-12-28 16:13:45.809] [FINE   ] ImageUtils Image width 848, height 480 
+[2021-12-28 16:13:45.835] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12281613_45818_IMG.png 
+[2021-12-28 16:13:45.852] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2021-12-28 16:13:45.857] [FINE   ] ImageUtils Image ROI x 275, y 360, width 380, height 110 
+[2021-12-28 16:13:45.858] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12281613_45818_ROI.png 
+[2021-12-28 16:13:45.893] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281613_45818_WIN.png 
+[2021-12-28 16:13:45.893] [FINE   ] BarcodeRecognition Recognition path REFLECTIVE_TAPE 
+[2021-12-28 16:13:45.898] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281613_45818_GRAY.png 
+[2021-12-28 16:13:45.916] [FINE   ] ImageUtils Original image: grayscale median 151 
+[2021-12-28 16:13:45.917] [FINE   ] ImageUtils Grayscale median target 150 
+[2021-12-28 16:13:45.917] [FINE   ] ImageUtils Grayscale adjustment -1 
+[2021-12-28 16:13:45.920] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_12281613_45818_REF_ADJ.png 
+[2021-12-28 16:13:45.920] [FINE   ] BarcodeRecognition Threshold value: low 200 
+[2021-12-28 16:13:45.923] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281613_45818_REF_ADJ_THR.png 
+[2021-12-28 16:13:45.923] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 815 
+[2021-12-28 16:13:45.924] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 0 
+[2021-12-28 16:13:45.924] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position LEFT 
+[2021-12-28 16:13:45.925] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_1 
+[2021-12-28 16:13:46.196] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2021-12-28 16:13:46.196] [INFO   ] RobotCommonLog Shutting down log 
+[2021-12-28 16:17:22.354] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-28 16:17:22.423] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2021-12-28 16:17:22.478] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2021-12-28 16:17:22.480] [FINE   ] ImageXML Parsing XML image_parameters 
+[2021-12-28 16:17:22.491] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2021-12-28 16:17:22.492] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2021-12-28 16:17:22.493] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2021-12-28 16:17:22.500] [CONFIG ] RecognitionDispatcher Recognition path reflective_tape 
+[2021-12-28 16:17:22.509] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2021-12-28 16:17:22.509] [FINE   ] ImageUtils File name Files/images/Image_12281125_19502_IMG.png 
+[2021-12-28 16:17:22.524] [FINE   ] ImageUtils Image width 848, height 480 
+[2021-12-28 16:17:22.546] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12281617_22536_IMG.png 
+[2021-12-28 16:17:22.567] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2021-12-28 16:17:22.574] [FINE   ] ImageUtils Image ROI x 275, y 335, width 380, height 110 
+[2021-12-28 16:17:22.574] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12281617_22536_ROI.png 
+[2021-12-28 16:17:22.612] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281617_22536_WIN.png 
+[2021-12-28 16:17:22.612] [FINE   ] BarcodeRecognition Recognition path REFLECTIVE_TAPE 
+[2021-12-28 16:17:22.615] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281617_22536_GRAY.png 
+[2021-12-28 16:17:22.634] [FINE   ] ImageUtils Original image: grayscale median 153 
+[2021-12-28 16:17:22.635] [FINE   ] ImageUtils Grayscale median target 150 
+[2021-12-28 16:17:22.635] [FINE   ] ImageUtils Grayscale adjustment -3 
+[2021-12-28 16:17:22.638] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_12281617_22536_REF_ADJ.png 
+[2021-12-28 16:17:22.638] [FINE   ] BarcodeRecognition Threshold value: low 200 
+[2021-12-28 16:17:22.641] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281617_22536_REF_ADJ_THR.png 
+[2021-12-28 16:17:22.641] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 703 
+[2021-12-28 16:17:22.642] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 0 
+[2021-12-28 16:17:22.643] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position LEFT 
+[2021-12-28 16:17:22.643] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_1 
+[2021-12-28 16:17:22.905] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2021-12-28 16:17:22.906] [INFO   ] RobotCommonLog Shutting down log 
+[2021-12-28 16:18:53.201] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-28 16:18:53.280] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2021-12-28 16:18:53.365] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2021-12-28 16:18:53.367] [FINE   ] ImageXML Parsing XML image_parameters 
+[2021-12-28 16:18:53.384] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2021-12-28 16:18:53.385] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2021-12-28 16:18:53.386] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2021-12-28 16:18:53.394] [CONFIG ] RecognitionDispatcher Recognition path reflective_tape 
+[2021-12-28 16:18:53.402] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2021-12-28 16:18:53.402] [FINE   ] ImageUtils File name Files/images/Image_12281125_19502_IMG.png 
+[2021-12-28 16:18:53.416] [FINE   ] ImageUtils Image width 848, height 480 
+[2021-12-28 16:18:53.435] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12281618_53425_IMG.png 
+[2021-12-28 16:18:53.454] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2021-12-28 16:18:53.469] [FINE   ] ImageUtils Image ROI x 275, y 350, width 380, height 110 
+[2021-12-28 16:18:53.470] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12281618_53425_ROI.png 
+[2021-12-28 16:18:53.513] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281618_53425_WIN.png 
+[2021-12-28 16:18:53.513] [FINE   ] BarcodeRecognition Recognition path REFLECTIVE_TAPE 
+[2021-12-28 16:18:53.520] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281618_53425_GRAY.png 
+[2021-12-28 16:18:53.536] [FINE   ] ImageUtils Original image: grayscale median 151 
+[2021-12-28 16:18:53.536] [FINE   ] ImageUtils Grayscale median target 150 
+[2021-12-28 16:18:53.537] [FINE   ] ImageUtils Grayscale adjustment -1 
+[2021-12-28 16:18:53.540] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_12281618_53425_REF_ADJ.png 
+[2021-12-28 16:18:53.541] [FINE   ] BarcodeRecognition Threshold value: low 200 
+[2021-12-28 16:18:53.543] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281618_53425_REF_ADJ_THR.png 
+[2021-12-28 16:18:53.543] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 815 
+[2021-12-28 16:18:53.544] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 0 
+[2021-12-28 16:18:53.545] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position LEFT 
+[2021-12-28 16:18:53.546] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_1 
+[2021-12-28 16:18:53.825] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2021-12-28 16:18:53.825] [INFO   ] RobotCommonLog Shutting down log 
+[2021-12-28 16:33:21.861] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-28 16:33:21.927] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2021-12-28 16:33:21.994] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2021-12-28 16:33:21.995] [FINE   ] ImageXML Parsing XML image_parameters 
+[2021-12-28 16:33:22.007] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2021-12-28 16:33:22.008] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2021-12-28 16:33:22.008] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2021-12-28 16:33:22.015] [CONFIG ] RecognitionDispatcher Recognition path reflective_tape 
+[2021-12-28 16:33:22.021] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2021-12-28 16:33:22.022] [FINE   ] ImageUtils File name Files/images/Image_12281024_37996_IMG.png 
+[2021-12-28 16:33:22.036] [FINE   ] ImageUtils Image width 848, height 480 
+[2021-12-28 16:33:22.056] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12281633_22046_IMG.png 
+[2021-12-28 16:33:22.074] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2021-12-28 16:33:22.082] [FINE   ] ImageUtils Image ROI x 275, y 350, width 380, height 110 
+[2021-12-28 16:33:22.082] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12281633_22046_ROI.png 
+[2021-12-28 16:33:22.115] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281633_22046_WIN.png 
+[2021-12-28 16:33:22.116] [FINE   ] BarcodeRecognition Recognition path REFLECTIVE_TAPE 
+[2021-12-28 16:33:22.118] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281633_22046_GRAY.png 
+[2021-12-28 16:33:22.125] [FINE   ] ImageUtils Original image: grayscale median 169 
+[2021-12-28 16:33:22.126] [FINE   ] ImageUtils Grayscale median target 150 
+[2021-12-28 16:33:22.126] [FINE   ] ImageUtils Grayscale adjustment -19 
+[2021-12-28 16:33:22.130] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_12281633_22046_REF_ADJ.png 
+[2021-12-28 16:33:22.131] [FINE   ] BarcodeRecognition Threshold value: low 200 
+[2021-12-28 16:33:22.132] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281633_22046_REF_ADJ_THR.png 
+[2021-12-28 16:33:22.132] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
+[2021-12-28 16:33:22.133] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 0 
+[2021-12-28 16:33:22.133] [FINE   ] BarcodeRecognition Neither window contains the minimum number of noon-zero pixels. 
+[2021-12-28 16:33:22.133] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position WINDOW_NPOS 
+[2021-12-28 16:33:22.134] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_1 
+[2021-12-28 16:33:22.383] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2021-12-28 16:33:22.384] [INFO   ] RobotCommonLog Shutting down log 
+[2021-12-28 16:36:39.190] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-28 16:36:39.258] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2021-12-28 16:36:39.320] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2021-12-28 16:36:39.321] [FINE   ] ImageXML Parsing XML image_parameters 
+[2021-12-28 16:36:39.331] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2021-12-28 16:36:39.333] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2021-12-28 16:36:39.333] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2021-12-28 16:36:39.340] [CONFIG ] RecognitionDispatcher Recognition path reflective_tape 
+[2021-12-28 16:36:39.347] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2021-12-28 16:36:39.348] [FINE   ] ImageUtils File name Files/images/Image_12281028_31986_IMG.png 
+[2021-12-28 16:36:39.362] [FINE   ] ImageUtils Image width 848, height 480 
+[2021-12-28 16:36:39.382] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12281636_39369_IMG.png 
+[2021-12-28 16:36:39.400] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2021-12-28 16:36:39.408] [FINE   ] ImageUtils Image ROI x 275, y 350, width 380, height 110 
+[2021-12-28 16:36:39.409] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12281636_39369_ROI.png 
+[2021-12-28 16:36:39.453] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281636_39369_WIN.png 
+[2021-12-28 16:36:39.454] [FINE   ] BarcodeRecognition Recognition path REFLECTIVE_TAPE 
+[2021-12-28 16:36:39.457] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281636_39369_GRAY.png 
+[2021-12-28 16:36:39.472] [FINE   ] ImageUtils Original image: grayscale median 164 
+[2021-12-28 16:36:39.472] [FINE   ] ImageUtils Grayscale median target 150 
+[2021-12-28 16:36:39.473] [FINE   ] ImageUtils Grayscale adjustment -14 
+[2021-12-28 16:36:39.476] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_12281636_39369_REF_ADJ.png 
+[2021-12-28 16:36:39.477] [FINE   ] BarcodeRecognition Threshold value: low 200 
+[2021-12-28 16:36:39.478] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281636_39369_REF_ADJ_THR.png 
+[2021-12-28 16:36:39.478] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 194 
+[2021-12-28 16:36:39.479] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 0 
+[2021-12-28 16:36:39.479] [FINE   ] BarcodeRecognition Neither window contains the minimum number of noon-zero pixels. 
+[2021-12-28 16:36:39.480] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position WINDOW_NPOS 
+[2021-12-28 16:36:39.480] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_1 
+[2021-12-28 16:36:39.735] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2021-12-28 16:36:39.736] [INFO   ] RobotCommonLog Shutting down log 
+[2021-12-28 16:40:48.348] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-28 16:40:48.413] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2021-12-28 16:40:48.478] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2021-12-28 16:40:48.479] [FINE   ] ImageXML Parsing XML image_parameters 
+[2021-12-28 16:40:48.492] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2021-12-28 16:40:48.493] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2021-12-28 16:40:48.494] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2021-12-28 16:40:48.500] [CONFIG ] RecognitionDispatcher Recognition path reflective_tape 
+[2021-12-28 16:40:48.507] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2021-12-28 16:40:48.508] [FINE   ] ImageUtils File name Files/images/Image_12281028_31986_IMG.png 
+[2021-12-28 16:40:48.520] [FINE   ] ImageUtils Image width 848, height 480 
+[2021-12-28 16:40:48.536] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12281640_48527_IMG.png 
+[2021-12-28 16:40:48.554] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2021-12-28 16:40:48.561] [FINE   ] ImageUtils Image ROI x 225, y 350, width 380, height 110 
+[2021-12-28 16:40:48.562] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12281640_48527_ROI.png 
+[2021-12-28 16:40:48.590] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281640_48527_WIN.png 
+[2021-12-28 16:40:48.591] [FINE   ] BarcodeRecognition Recognition path REFLECTIVE_TAPE 
+[2021-12-28 16:40:48.595] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281640_48527_GRAY.png 
+[2021-12-28 16:40:48.616] [FINE   ] ImageUtils Original image: grayscale median 164 
+[2021-12-28 16:40:48.617] [FINE   ] ImageUtils Grayscale median target 150 
+[2021-12-28 16:40:48.618] [FINE   ] ImageUtils Grayscale adjustment -14 
+[2021-12-28 16:40:48.621] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_12281640_48527_REF_ADJ.png 
+[2021-12-28 16:40:48.622] [FINE   ] BarcodeRecognition Threshold value: low 200 
+[2021-12-28 16:40:48.623] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281640_48527_REF_ADJ_THR.png 
+[2021-12-28 16:40:48.623] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 502 
+[2021-12-28 16:40:48.624] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 0 
+[2021-12-28 16:40:48.625] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position LEFT 
+[2021-12-28 16:40:48.625] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_2 
+[2021-12-28 16:40:48.897] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2021-12-28 16:40:48.897] [INFO   ] RobotCommonLog Shutting down log 
+[2021-12-28 16:41:48.922] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-28 16:41:49.003] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2021-12-28 16:41:49.066] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2021-12-28 16:41:49.067] [FINE   ] ImageXML Parsing XML image_parameters 
+[2021-12-28 16:41:49.080] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2021-12-28 16:41:49.081] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2021-12-28 16:41:49.081] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2021-12-28 16:41:49.088] [CONFIG ] RecognitionDispatcher Recognition path reflective_tape 
+[2021-12-28 16:41:49.097] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2021-12-28 16:41:49.097] [FINE   ] ImageUtils File name Files/images/Image_12281028_31986_IMG.png 
+[2021-12-28 16:41:49.112] [FINE   ] ImageUtils Image width 848, height 480 
+[2021-12-28 16:41:49.128] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12281641_49119_IMG.png 
+[2021-12-28 16:41:49.147] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2021-12-28 16:41:49.154] [FINE   ] ImageUtils Image ROI x 215, y 360, width 380, height 110 
+[2021-12-28 16:41:49.155] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12281641_49119_ROI.png 
+[2021-12-28 16:41:49.193] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281641_49119_WIN.png 
+[2021-12-28 16:41:49.193] [FINE   ] BarcodeRecognition Recognition path REFLECTIVE_TAPE 
+[2021-12-28 16:41:49.196] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281641_49119_GRAY.png 
+[2021-12-28 16:41:49.210] [FINE   ] ImageUtils Original image: grayscale median 164 
+[2021-12-28 16:41:49.210] [FINE   ] ImageUtils Grayscale median target 150 
+[2021-12-28 16:41:49.210] [FINE   ] ImageUtils Grayscale adjustment -14 
+[2021-12-28 16:41:49.213] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_12281641_49119_REF_ADJ.png 
+[2021-12-28 16:41:49.213] [FINE   ] BarcodeRecognition Threshold value: low 200 
+[2021-12-28 16:41:49.214] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281641_49119_REF_ADJ_THR.png 
+[2021-12-28 16:41:49.215] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 474 
+[2021-12-28 16:41:49.215] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 0 
+[2021-12-28 16:41:49.216] [FINE   ] BarcodeRecognition Neither window contains the minimum number of noon-zero pixels. 
+[2021-12-28 16:41:49.216] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position WINDOW_NPOS 
+[2021-12-28 16:41:49.216] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_1 
+[2021-12-28 16:41:49.475] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2021-12-28 16:41:49.476] [INFO   ] RobotCommonLog Shutting down log 
+[2021-12-28 16:43:55.411] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2021-12-28 16:43:55.482] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2021-12-28 16:43:55.550] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2021-12-28 16:43:55.551] [FINE   ] ImageXML Parsing XML image_parameters 
+[2021-12-28 16:43:55.562] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2021-12-28 16:43:55.563] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2021-12-28 16:43:55.563] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2021-12-28 16:43:55.569] [CONFIG ] RecognitionDispatcher Recognition path reflective_tape 
+[2021-12-28 16:43:55.577] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2021-12-28 16:43:55.577] [FINE   ] ImageUtils File name Files/images/Image_12281024_37996_IMG.png 
+[2021-12-28 16:43:55.590] [FINE   ] ImageUtils Image width 848, height 480 
+[2021-12-28 16:43:55.610] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_12281643_55601_IMG.png 
+[2021-12-28 16:43:55.630] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2021-12-28 16:43:55.636] [FINE   ] ImageUtils Image ROI x 215, y 360, width 380, height 110 
+[2021-12-28 16:43:55.637] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_12281643_55601_ROI.png 
+[2021-12-28 16:43:55.670] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281643_55601_WIN.png 
+[2021-12-28 16:43:55.671] [FINE   ] BarcodeRecognition Recognition path REFLECTIVE_TAPE 
+[2021-12-28 16:43:55.673] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281643_55601_GRAY.png 
+[2021-12-28 16:43:55.681] [FINE   ] ImageUtils Original image: grayscale median 169 
+[2021-12-28 16:43:55.681] [FINE   ] ImageUtils Grayscale median target 150 
+[2021-12-28 16:43:55.682] [FINE   ] ImageUtils Grayscale adjustment -19 
+[2021-12-28 16:43:55.683] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_12281643_55601_REF_ADJ.png 
+[2021-12-28 16:43:55.684] [FINE   ] BarcodeRecognition Threshold value: low 200 
+[2021-12-28 16:43:55.686] [FINE   ] BarcodeRecognition Writing Files/images/Image_12281643_55601_REF_ADJ_THR.png 
+[2021-12-28 16:43:55.686] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
+[2021-12-28 16:43:55.687] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 0 
+[2021-12-28 16:43:55.689] [FINE   ] BarcodeRecognition Neither window contains the minimum number of noon-zero pixels. 
+[2021-12-28 16:43:55.689] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position WINDOW_NPOS 
+[2021-12-28 16:43:55.690] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_1 
+[2021-12-28 16:43:55.947] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2021-12-28 16:43:55.948] [INFO   ] RobotCommonLog Shutting down log 
+[2022-01-04 04:46:14.734] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2022-01-04 04:46:14.849] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2022-01-04 04:46:14.977] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2022-01-04 04:46:14.979] [FINE   ] ImageXML Parsing XML image_parameters 
+[2022-01-04 04:46:15.000] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2022-01-04 04:46:15.002] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2022-01-04 04:46:15.004] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-01-04 04:46:15.018] [CONFIG ] RecognitionDispatcher Recognition path reflective_tape 
+[2022-01-04 04:46:15.029] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2022-01-04 04:46:15.030] [FINE   ] ImageUtils File name Files/images/Image_12281024_37996_IMG.png 
+[2022-01-04 04:46:15.051] [FINE   ] ImageUtils Image width 848, height 480 
+[2022-01-04 04:46:15.085] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_01040446_15066_IMG.png 
+[2022-01-04 04:46:15.110] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2022-01-04 04:46:15.120] [FINE   ] ImageUtils Image ROI x 235, y 360, width 380, height 110 
+[2022-01-04 04:46:15.121] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_01040446_15066_ROI.png 
+[2022-01-04 04:46:15.166] [FINE   ] BarcodeRecognition Writing Files/images/Image_01040446_15066_WIN.png 
+[2022-01-04 04:46:15.167] [FINE   ] BarcodeRecognition Recognition path REFLECTIVE_TAPE 
+[2022-01-04 04:46:15.173] [FINE   ] BarcodeRecognition Writing Files/images/Image_01040446_15066_GRAY.png 
+[2022-01-04 04:46:15.185] [FINE   ] ImageUtils Original image: grayscale median 169 
+[2022-01-04 04:46:15.186] [FINE   ] ImageUtils Grayscale median target 150 
+[2022-01-04 04:46:15.187] [FINE   ] ImageUtils Grayscale adjustment -19 
+[2022-01-04 04:46:15.190] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_01040446_15066_REF_ADJ.png 
+[2022-01-04 04:46:15.191] [FINE   ] BarcodeRecognition Threshold value: low 200 
+[2022-01-04 04:46:15.194] [FINE   ] BarcodeRecognition Writing Files/images/Image_01040446_15066_REF_ADJ_THR.png 
+[2022-01-04 04:46:15.196] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
+[2022-01-04 04:46:15.197] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 0 
+[2022-01-04 04:46:15.197] [FINE   ] BarcodeRecognition Neither window contains the minimum number of noon-zero pixels. 
+[2022-01-04 04:46:15.200] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position WINDOW_NPOS 
+[2022-01-04 04:46:15.200] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_1 
+[2022-01-04 04:46:15.530] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2022-01-04 04:46:15.531] [INFO   ] RobotCommonLog Shutting down log 
+[2022-01-04 04:53:16.649] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2022-01-04 04:53:16.718] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2022-01-04 04:53:16.787] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2022-01-04 04:53:16.789] [FINE   ] ImageXML Parsing XML image_parameters 
+[2022-01-04 04:53:16.802] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2022-01-04 04:53:16.803] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2022-01-04 04:53:16.803] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-01-04 04:53:16.811] [CONFIG ] RecognitionDispatcher Recognition path reflective_tape 
+[2022-01-04 04:53:16.820] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2022-01-04 04:53:16.821] [FINE   ] ImageUtils File name Files/images/Image_12300948_24420_IMG_RC.png 
+[2022-01-04 04:53:16.837] [FINE   ] ImageUtils Image width 848, height 480 
+[2022-01-04 04:53:16.858] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_01040453_16847_IMG.png 
+[2022-01-04 04:53:16.877] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2022-01-04 04:53:16.882] [FINE   ] ImageUtils Image ROI x 235, y 360, width 380, height 110 
+[2022-01-04 04:53:16.883] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_01040453_16847_ROI.png 
+[2022-01-04 04:53:16.916] [FINE   ] BarcodeRecognition Writing Files/images/Image_01040453_16847_WIN.png 
+[2022-01-04 04:53:16.917] [FINE   ] BarcodeRecognition Recognition path REFLECTIVE_TAPE 
+[2022-01-04 04:53:16.920] [FINE   ] BarcodeRecognition Writing Files/images/Image_01040453_16847_GRAY.png 
+[2022-01-04 04:53:16.934] [FINE   ] ImageUtils Original image: grayscale median 174 
+[2022-01-04 04:53:16.935] [FINE   ] ImageUtils Grayscale median target 150 
+[2022-01-04 04:53:16.936] [FINE   ] ImageUtils Grayscale adjustment -24 
+[2022-01-04 04:53:16.938] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_01040453_16847_REF_ADJ.png 
+[2022-01-04 04:53:16.939] [FINE   ] BarcodeRecognition Threshold value: low 200 
+[2022-01-04 04:53:16.940] [FINE   ] BarcodeRecognition Writing Files/images/Image_01040453_16847_REF_ADJ_THR.png 
+[2022-01-04 04:53:16.940] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
+[2022-01-04 04:53:16.941] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 2983 
+[2022-01-04 04:53:16.942] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position RIGHT 
+[2022-01-04 04:53:16.943] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_3 
+[2022-01-04 04:53:17.218] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2022-01-04 04:53:17.219] [INFO   ] RobotCommonLog Shutting down log 
+[2022-01-04 04:54:48.763] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2022-01-04 04:54:48.832] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2022-01-04 04:54:48.901] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2022-01-04 04:54:48.903] [FINE   ] ImageXML Parsing XML image_parameters 
+[2022-01-04 04:54:48.919] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2022-01-04 04:54:48.920] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2022-01-04 04:54:48.920] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-01-04 04:54:48.928] [CONFIG ] RecognitionDispatcher Recognition path reflective_tape 
+[2022-01-04 04:54:48.938] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2022-01-04 04:54:48.938] [FINE   ] ImageUtils File name Files/images/Image_12300948_24420_IMG_RC.png 
+[2022-01-04 04:54:48.954] [FINE   ] ImageUtils Image width 848, height 480 
+[2022-01-04 04:54:48.974] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_01040454_48963_IMG.png 
+[2022-01-04 04:54:49.000] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2022-01-04 04:54:49.006] [FINE   ] ImageUtils Image ROI x 235, y 360, width 380, height 110 
+[2022-01-04 04:54:49.007] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_01040454_48963_ROI.png 
+[2022-01-04 04:54:49.047] [FINE   ] BarcodeRecognition Writing Files/images/Image_01040454_48963_WIN.png 
+[2022-01-04 04:54:49.047] [FINE   ] BarcodeRecognition Recognition path REFLECTIVE_TAPE 
+[2022-01-04 04:54:49.051] [FINE   ] BarcodeRecognition Writing Files/images/Image_01040454_48963_GRAY.png 
+[2022-01-04 04:54:49.066] [FINE   ] ImageUtils Original image: grayscale median 174 
+[2022-01-04 04:54:49.066] [FINE   ] ImageUtils Grayscale median target 150 
+[2022-01-04 04:54:49.067] [FINE   ] ImageUtils Grayscale adjustment -24 
+[2022-01-04 04:54:49.070] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_01040454_48963_REF_ADJ.png 
+[2022-01-04 04:54:49.071] [FINE   ] BarcodeRecognition Threshold value: low 200 
+[2022-01-04 04:54:49.072] [FINE   ] BarcodeRecognition Writing Files/images/Image_01040454_48963_REF_ADJ_THR.png 
+[2022-01-04 04:54:49.073] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
+[2022-01-04 04:54:49.073] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 2983 
+[2022-01-04 04:54:49.075] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position RIGHT 
+[2022-01-04 04:54:49.076] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_3 
+[2022-01-04 04:54:49.346] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2022-01-04 04:54:49.347] [INFO   ] RobotCommonLog Shutting down log 
+[2022-01-04 04:55:57.872] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2022-01-04 04:55:57.952] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2022-01-04 04:55:58.015] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2022-01-04 04:55:58.017] [FINE   ] ImageXML Parsing XML image_parameters 
+[2022-01-04 04:55:58.031] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2022-01-04 04:55:58.032] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2022-01-04 04:55:58.034] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-01-04 04:55:58.042] [CONFIG ] RecognitionDispatcher Recognition path reflective_tape 
+[2022-01-04 04:55:58.051] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2022-01-04 04:55:58.052] [FINE   ] ImageUtils File name Files/images/Image_12281024_37996_IMG.png 
+[2022-01-04 04:55:58.066] [FINE   ] ImageUtils Image width 848, height 480 
+[2022-01-04 04:55:58.082] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_01040455_58074_IMG.png 
+[2022-01-04 04:55:58.100] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2022-01-04 04:55:58.107] [FINE   ] ImageUtils Image ROI x 235, y 360, width 380, height 110 
+[2022-01-04 04:55:58.108] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_01040455_58074_ROI.png 
+[2022-01-04 04:55:58.144] [FINE   ] BarcodeRecognition Writing Files/images/Image_01040455_58074_WIN.png 
+[2022-01-04 04:55:58.145] [FINE   ] BarcodeRecognition Recognition path REFLECTIVE_TAPE 
+[2022-01-04 04:55:58.149] [FINE   ] BarcodeRecognition Writing Files/images/Image_01040455_58074_GRAY.png 
+[2022-01-04 04:55:58.158] [FINE   ] ImageUtils Original image: grayscale median 169 
+[2022-01-04 04:55:58.159] [FINE   ] ImageUtils Grayscale median target 150 
+[2022-01-04 04:55:58.160] [FINE   ] ImageUtils Grayscale adjustment -19 
+[2022-01-04 04:55:58.162] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_01040455_58074_REF_ADJ.png 
+[2022-01-04 04:55:58.162] [FINE   ] BarcodeRecognition Threshold value: low 200 
+[2022-01-04 04:55:58.165] [FINE   ] BarcodeRecognition Writing Files/images/Image_01040455_58074_REF_ADJ_THR.png 
+[2022-01-04 04:55:58.165] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
+[2022-01-04 04:55:58.165] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 0 
+[2022-01-04 04:55:58.166] [FINE   ] BarcodeRecognition Neither window contains the minimum number of noon-zero pixels. 
+[2022-01-04 04:55:58.167] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position WINDOW_NPOS 
+[2022-01-04 04:55:58.168] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_1 
+[2022-01-04 04:55:58.449] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2022-01-04 04:55:58.450] [INFO   ] RobotCommonLog Shutting down log 
+[2022-01-04 05:11:13.676] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2022-01-04 05:11:13.746] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2022-01-04 05:11:13.812] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2022-01-04 05:11:13.813] [FINE   ] ImageXML Parsing XML image_parameters 
+[2022-01-04 05:11:13.825] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2022-01-04 05:11:13.826] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2022-01-04 05:11:13.827] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-01-04 05:11:13.834] [CONFIG ] RecognitionDispatcher Recognition path reflective_tape 
+[2022-01-04 05:11:13.840] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2022-01-04 05:11:13.841] [FINE   ] ImageUtils File name Files/images/Image_12290959_09264_IMG_BW.png 
+[2022-01-04 05:11:13.855] [FINE   ] ImageUtils Image width 848, height 480 
+[2022-01-04 05:11:13.874] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_01040511_13865_IMG.png 
+[2022-01-04 05:11:13.895] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2022-01-04 05:11:13.902] [FINE   ] ImageUtils Image ROI x 290, y 375, width 430, height 80 
+[2022-01-04 05:11:13.903] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_01040511_13865_ROI.png 
+[2022-01-04 05:11:13.941] [FINE   ] BarcodeRecognition Writing Files/images/Image_01040511_13865_WIN.png 
+[2022-01-04 05:11:13.942] [FINE   ] BarcodeRecognition Recognition path REFLECTIVE_TAPE 
+[2022-01-04 05:11:13.944] [FINE   ] BarcodeRecognition Writing Files/images/Image_01040511_13865_GRAY.png 
+[2022-01-04 05:11:13.962] [FINE   ] ImageUtils Original image: grayscale median 113 
+[2022-01-04 05:11:13.962] [FINE   ] ImageUtils Grayscale median target 150 
+[2022-01-04 05:11:13.963] [FINE   ] ImageUtils Grayscale adjustment 37 
+[2022-01-04 05:11:13.965] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_01040511_13865_REF_ADJ.png 
+[2022-01-04 05:11:13.965] [FINE   ] BarcodeRecognition Threshold value: low 200 
+[2022-01-04 05:11:13.967] [FINE   ] BarcodeRecognition Writing Files/images/Image_01040511_13865_REF_ADJ_THR.png 
+[2022-01-04 05:11:13.968] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
+[2022-01-04 05:11:13.969] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 2683 
+[2022-01-04 05:11:13.970] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position RIGHT 
+[2022-01-04 05:11:13.970] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_3 
+[2022-01-04 05:11:14.256] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2022-01-04 05:11:14.257] [INFO   ] RobotCommonLog Shutting down log 
