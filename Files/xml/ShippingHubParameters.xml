@@ -1,0 +1,34 @@
+<shipping_hub_parameters>
+  <alliance_parameters>
+    <BLUE>
+      <hsv_parameters>
+        <hue_name>blue</hue_name>
+        <hue_low>95</hue_low>
+        <hue_high>125</hue_high>
+        <saturation_target>10</saturation_target>
+        <saturation_low_threshold>20</saturation_low_threshold>
+        <value_target>100</value_target>
+        <value_low_threshold>30</value_low_threshold>
+      </hsv_parameters>
+    </BLUE>
+    <RED>
+      <hsv_parameters>
+        <hue_name>red</hue_name>
+        <hue_low>0</hue_low>
+        <hue_high>40</hue_high>
+        <saturation_target>10</saturation_target>
+        <saturation_low_threshold>20</saturation_low_threshold>
+        <value_target>100</value_target>
+        <value_low_threshold>30</value_low_threshold>
+      </hsv_parameters>
+    </RED>
+  </alliance_parameters>
+  <distance_parameters>
+    <known_distance>22.0</known_distance>
+    <known_width>15.0</known_width> <!-- Shipping Hub Level 2 platter -->
+    <!-- If the focal_length is 0 then this is a calibration run.
+         The image must match the known_distance and known_width
+         values below. -->
+    <focal_length>0.0</focal_length>
+  </distance_parameters>
+</shipping_hub_parameters>

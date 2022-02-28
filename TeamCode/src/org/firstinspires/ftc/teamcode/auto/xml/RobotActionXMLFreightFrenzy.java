@@ -241,6 +241,19 @@ public class RobotActionXMLFreightFrenzy {
                 actions, shippingHubLevelActions);
     }
 
+    // Helper method to convert a nested <image_parameters> element into a class.
+    public VisionParameters.ImageParameters
+    getImageParametersFromXPath(RobotXMLElement pElement, String pPath) throws XPathExpressionException {
+        Node ipNode = (Node) xpath.evaluate(pPath, pElement.getRobotXMLElement(), XPathConstants.NODE);
+        if (ipNode == null)
+            throw new AutonomousRobotException(TAG, "Missing " + pPath + " element");
+
+        if (!ipNode.getNodeName().equals("image_parameters"))
+            throw new AutonomousRobotException(TAG, "Expected <image_parameters> element");
+
+        return ImageXML.parseImageParameters(ipNode);
+    }
+
     private Node getNextElement(Node pNode) {
         Node nd = pNode;
         while (nd != null) {

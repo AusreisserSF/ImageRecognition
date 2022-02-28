@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.auto.vision.*;
 import org.firstinspires.ftc.teamcode.auto.xml.BarcodeParametersXML;
 import org.firstinspires.ftc.teamcode.auto.xml.RingParametersXML;
 import org.firstinspires.ftc.teamcode.auto.xml.RobotActionXMLFreightFrenzy;
+import org.firstinspires.ftc.teamcode.auto.xml.ShippingHubParametersXML;
 import org.firstinspires.ftc.teamcode.common.RobotConstants;
 import org.firstinspires.ftc.teamcode.common.RobotConstantsFreightFrenzy;
 import org.opencv.core.Core;
@@ -74,12 +75,14 @@ public class RecognitionDispatcher extends Application {
         if (gameParameter == null)
             throw new AutonomousRobotException(TAG, "Required parameter --game is missing");
 
-        if (!(gameParameter.equals("Freight Frenzy") || gameParameter.equals("Ultimate Goal")))
+        //**TODO 2/27/2022 HARDCODED for FreightFrenzy; BROKEN for UltimateGoal
+        if (!(gameParameter.equals("Freight Frenzy")))
             throw new AutonomousRobotException(TAG, "Unrecognized game " + gameParameter);
 
         RobotLogCommon.c(TAG, "Game " + gameParameter);
 
         // Use RobotAction.xml but for the single OpMode TEST with a single action only.
+        //** FreightFrenzy only
         RobotActionXMLFreightFrenzy robotActionXMLFreightFrenzy = new RobotActionXMLFreightFrenzy(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
         RobotActionXMLFreightFrenzy.RobotActionDataFreightFrenzy actionData = robotActionXMLFreightFrenzy.getOpModeData("TEST");
         List<RobotXMLElement> actions = actionData.actions;
@@ -89,32 +92,31 @@ public class RecognitionDispatcher extends Application {
         String recognitionAction = actions.get(0).getRobotXMLElementName();
         switch (gameParameter) {
             case "Freight Frenzy": {
-                if (!recognitionAction.equals("ANALYZE_BARCODE"))
-                    throw new AutonomousRobotException(TAG, "Missing required action ANALYZE_BARCODE");
+                if (!((recognitionAction.equals("ANALYZE_BARCODE") || recognitionAction.equals("APPROACH_SHIPPING_HUB_BY_VISION"))))
+                    throw new AutonomousRobotException(TAG, "Missing required action ANALYZE_BARCODE or APPROACH_SHIPPING_BY_WITH_VISION");
                 break;
             }
+            /*
             case "Ultimate Goal": {
                 if (!recognitionAction.equals("RECOGNIZE_RINGS"))
                     throw new AutonomousRobotException(TAG, "Missing required action RECOGNIZE_RINGS");
                 break;
             }
+             */
             default:
                 throw new AutonomousRobotException(TAG, "Unrecognized game " + gameParameter);
         }
 
-        // Set up XPath access to the current action command.
+        // Set up XPath access to the current action.
         RobotXMLElement actionElement = actions.get(0);
-        XPathAccess commandXPath = new XPathAccess(actionElement);
+        XPathAccess actionXPath = new XPathAccess(actionElement);
 
-        // The only allowed image_provider is "file".
-        String imageProviderId = commandXPath.getRequiredStringInRange("ocv_image_provider", commandXPath.validRange("vuforia", "file"));
-        if (!imageProviderId.equals("file"))
-            throw new AutonomousRobotException(TAG, "image_provider must be 'file'");
-
-        String commandName = actionElement.getRobotXMLElementName().toUpperCase();
-        switch (commandName) {
+        String actionName = actionElement.getRobotXMLElementName().toUpperCase();
+        RobotLogCommon.d(TAG, "Executing action " + actionName);
+        switch (actionName) {
 
             // Ultimate Goal 2020-2021
+            //**TODO 2/27/2022 NOT reachable
             case "RECOGNIZE_RINGS": {
                 // Read the parameters for ring recognition from the xml file.
                 RingParametersXML ringParametersXML = new RingParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
@@ -150,7 +152,7 @@ public class RecognitionDispatcher extends Application {
                 ImageProvider fileImage = new FileImage(imagePath + actionData.imageParameters.file_name);
 
                 // Get the recognition path from the XML file.
-                String recognitionPathString = commandXPath.getRequiredString("barcode_recognition/recognition_path");
+                String recognitionPathString = actionXPath.getRequiredString("barcode_recognition/recognition_path");
                 RobotConstantsFreightFrenzy.RecognitionPath recognitionPath;
                 try {
                     recognitionPath = RobotConstantsFreightFrenzy.RecognitionPath.valueOf(recognitionPathString.toUpperCase());
@@ -168,23 +170,23 @@ public class RecognitionDispatcher extends Application {
                 // center barcode element. The right window is always immediately to the right
                 // of the left window.
                 // Get the boundaries for the left window onto the barcode.
-                int left_x = commandXPath.getRequiredInt("barcode_recognition/left_window/x");
-                int left_y = commandXPath.getRequiredInt("barcode_recognition/left_window/y");
-                int left_width = commandXPath.getRequiredInt("barcode_recognition/left_window/width");
-                int left_height = commandXPath.getRequiredInt("barcode_recognition/left_window/height");
-                RobotConstantsFreightFrenzy.ShippingHubLevels left_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getRequiredString("barcode_recognition/left_window/shipping_hub_level").toUpperCase());
+                int left_x = actionXPath.getRequiredInt("barcode_recognition/left_window/x");
+                int left_y = actionXPath.getRequiredInt("barcode_recognition/left_window/y");
+                int left_width = actionXPath.getRequiredInt("barcode_recognition/left_window/width");
+                int left_height = actionXPath.getRequiredInt("barcode_recognition/left_window/height");
+                RobotConstantsFreightFrenzy.ShippingHubLevels left_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(actionXPath.getRequiredString("barcode_recognition/left_window/shipping_hub_level").toUpperCase());
                 barcodeElements.put(RobotConstantsFreightFrenzy.BarcodeElementWindow.LEFT, new Rect(left_x, left_y, left_width, left_height));
 
                 // Get the boundaries for the right window onto the barcode.
-                int right_width = commandXPath.getRequiredInt("barcode_recognition/right_window/width");
-                RobotConstantsFreightFrenzy.ShippingHubLevels right_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getRequiredString("barcode_recognition/right_window/shipping_hub_level").toUpperCase());
+                int right_width = actionXPath.getRequiredInt("barcode_recognition/right_window/width");
+                RobotConstantsFreightFrenzy.ShippingHubLevels right_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(actionXPath.getRequiredString("barcode_recognition/right_window/shipping_hub_level").toUpperCase());
                 // Note: the right window starts 1 pixel past the left element. The height of the right
                 // window is the same as that of the left window.
                 barcodeElements.put(RobotConstantsFreightFrenzy.BarcodeElementWindow.RIGHT, new Rect(left_x + left_width + 1, left_y, right_width, left_height));
                 barcodeParameters.setBarcodeElements(barcodeElements);
 
                 // Set the shipping hub level to infer if the Shipping Hub Element is either the left or right window.
-                RobotConstantsFreightFrenzy.ShippingHubLevels npos_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(commandXPath.getRequiredString("barcode_recognition/barcode_element_npos/shipping_hub_level").toUpperCase());
+                RobotConstantsFreightFrenzy.ShippingHubLevels npos_shipping_hub_level = RobotConstantsFreightFrenzy.ShippingHubLevels.valueOf(actionXPath.getRequiredString("barcode_recognition/barcode_element_npos/shipping_hub_level").toUpperCase());
 
                 // At last perform the image recognition.
                 BarcodeReturn barcodeReturn =
@@ -219,6 +221,45 @@ public class RecognitionDispatcher extends Application {
                         "FTC 2021 - 2022 Freight Frenzy");
                 break;
             }
+
+            case "APPROACH_SHIPPING_HUB_BY_VISION": {
+                // This action needs a command line switch of --alliance=["BLUE" | "RED"]
+                String allianceString = namedParameters.get("alliance");
+                RobotConstants.Alliance alliance = RobotConstants.Alliance.valueOf(allianceString);
+                RobotLogCommon.c(TAG, "Alliance " + alliance);
+
+                // Read the parameters for the Shipping Hub from the xml file.
+                ShippingHubParametersXML shippingHubParametersXML = new ShippingHubParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
+                ShippingHubParameters shippingHubParameters = shippingHubParametersXML.getShippingHubParameters();
+                //**TODO ShippingHubRecognition shippingHubRecognition = new ShippingHubRecognition();
+
+                //**TODO Parse
+                /*
+                    <angle>
+                      <ocv_image_provider>file</ocv_image_provider>
+                      <image_parameters>
+                 */
+                VisionParameters.ImageParameters shippingHubImage1 =
+                        robotActionXMLFreightFrenzy.getImageParametersFromXPath(actionElement, "angle/image_parameters");
+
+                String shImage1Path = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
+                ImageProvider fileImage = new FileImage(shImage1Path + shippingHubImage1.file_name);
+
+                // Depending on the OpMode get the BLUE or RED HSV parameters.
+                VisionParameters.HSVParameters shHSVParameters;
+                if (alliance == RobotConstants.Alliance.BLUE)
+                    shHSVParameters = shippingHubParameters.blueAllianceHSVParameters;
+                else
+                    if (alliance == RobotConstants.Alliance.RED)
+                        shHSVParameters = shippingHubParameters.redAllianceHSVParameters;
+                    else
+                        throw new AutonomousRobotException(TAG, "Shipping Hub allaince must be BLUE or RED");
+
+                // First get the angle of the robot to the Shipping Hub.
+                //**TODO double angle = shippingHubRecognition.getAngleToShippingHub(actionData.imageParameters);
+                break;
+            }
+
             default:
                 throw new AutonomousRobotException(TAG, "Unrecognized image recognition action");
         }

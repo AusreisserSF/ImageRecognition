@@ -514,3 +514,30 @@
 [2022-01-04 05:11:13.970] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_3 
 [2022-01-04 05:11:14.256] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
 [2022-01-04 05:11:14.257] [INFO   ] RobotCommonLog Shutting down log 
+[2022-02-27 20:05:39.315] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2022-02-27 20:06:05.261] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2022-02-27 20:06:30.880] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2022-02-27 20:07:33.419] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2022-02-27 20:07:50.742] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2022-02-27 20:07:50.799] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2022-02-27 20:08:29.997] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2022-02-27 20:08:35.188] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2022-02-27 20:08:35.271] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2022-02-27 20:09:01.322] [FINE   ] RecognitionDispatcher Executing action APPROACH_SHIPPING_HUB_BY_VISION 
+[2022-02-27 20:09:09.486] [CONFIG ] RecognitionDispatcher Alliance BLUE 
+[2022-02-27 20:09:47.670] [FINE   ] ShippingHubParametersXML Parsing XML shipping_hub_parameters 
+[2022-02-27 20:10:14.992] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-02-27 20:10:21.312] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-02-28 06:25:34.782] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2022-02-28 06:25:45.093] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2022-02-28 06:25:45.181] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2022-02-28 06:25:45.184] [FINE   ] RecognitionDispatcher Executing action APPROACH_SHIPPING_HUB_BY_VISION 
+[2022-02-28 06:25:45.184] [CONFIG ] RecognitionDispatcher Alliance BLUE 
+[2022-02-28 06:25:45.188] [FINE   ] ShippingHubParametersXML Parsing XML shipping_hub_parameters 
+[2022-02-28 06:25:45.191] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-02-28 06:25:45.193] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-02-28 06:25:55.281] [FINE   ] ImageXML Parsing XML image_parameters 
+[2022-02-28 06:26:18.051] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2022-02-28 06:26:18.051] [INFO   ] RobotCommonLog Shutting down log 
+[2022-02-28 06:26:20.250] [INFO   ] RecognitionDispatcher Starting barcode recognition 
+[2022-02-28 06:26:32.954] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
