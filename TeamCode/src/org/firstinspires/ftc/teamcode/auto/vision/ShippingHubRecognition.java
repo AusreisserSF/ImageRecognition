@@ -159,7 +159,7 @@ public class ShippingHubRecognition {
         Scalar color = new Scalar(0, 255, 0); // BGR green - good against dark background
 
         for (int i = 0; i < pContours.size(); i++) {
-            Imgproc.drawContours(pImageOut, pContours, i, color, -1);
+            Imgproc.drawContours(pImageOut, pContours, i, color, 2);
         }
     }
 
