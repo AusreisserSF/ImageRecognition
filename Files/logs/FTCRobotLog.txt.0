@@ -541,3 +541,66 @@
 [2022-02-28 06:26:18.051] [INFO   ] RobotCommonLog Shutting down log 
 [2022-02-28 06:26:20.250] [INFO   ] RecognitionDispatcher Starting barcode recognition 
 [2022-02-28 06:26:32.954] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2022-03-01 06:04:19.882] [INFO   ] RecognitionDispatcher Starting image recognition 
+[2022-03-01 06:04:23.875] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2022-03-01 06:04:23.968] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2022-03-01 06:04:23.972] [FINE   ] RecognitionDispatcher Executing action APPROACH_SHIPPING_HUB_BY_VISION 
+[2022-03-01 06:04:23.973] [CONFIG ] RecognitionDispatcher Alliance BLUE 
+[2022-03-01 06:04:23.978] [FINE   ] ShippingHubParametersXML Parsing XML shipping_hub_parameters 
+[2022-03-01 06:04:23.984] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-03-01 06:04:23.986] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-03-01 06:04:36.472] [FINE   ] ImageXML Parsing XML image_parameters 
+[2022-03-01 06:04:54.299] [FINE   ] ShippingHubRecognition In ShippingHubRecognition.getAngleToShippingHub 
+[2022-03-01 06:04:58.464] [FINE   ] ImageUtils File name Files/images/Image_02111549_13013_IMG.png 
+[2022-03-01 06:04:58.529] [FINE   ] ImageUtils Image width 848, height 480 
+[2022-03-01 06:04:58.608] [FINE   ] ShippingHubRecognition Image width 848, height 480 
+[2022-03-01 06:04:58.629] [FINE   ] ImageUtils Image ROI x 0, y 140, width 846, height 200 
+[2022-03-01 06:04:58.636] [FINE   ] ShippingHubRecognition Writing image ROI Files/images/Image_03010604_58584_ROI.png 
+[2022-03-01 06:04:58.658] [FINE   ] ImageUtils Target hue levels: low 95, high 125 
+[2022-03-01 06:04:58.756] [FINE   ] ImageUtils HSV saturation channel median 28 
+[2022-03-01 06:04:58.756] [FINE   ] ImageUtils HSV value channel median 144 
+[2022-03-01 06:04:58.759] [FINE   ] ImageUtils Adjust HSV saturation by -18 
+[2022-03-01 06:04:58.760] [FINE   ] ImageUtils Adjust HSV value by -44 
+[2022-03-01 06:04:58.762] [FINE   ] ImageUtils Adjusted image levels: saturation low 10, value low 100 
+[2022-03-01 06:04:58.770] [FINE   ] ImageUtils Writing Files/images/Image_03010604_58584_ADJ.png 
+[2022-03-01 06:04:58.770] [FINE   ] ImageUtils Actual inRange HSV levels: hue low 95, hue high 125 
+[2022-03-01 06:04:58.771] [FINE   ] ImageUtils Actual inRange HSV levels: saturation low 20, value low 30 
+[2022-03-01 06:04:58.777] [FINE   ] ImageUtils Writing Files/images/Image_03010604_58584_ADJ_THR.png 
+[2022-03-01 06:04:58.806] [FINE   ] ShippingHubRecognition drawContours: number of contours 8 
+[2022-03-01 06:04:58.821] [FINE   ] ShippingHubRecognition Writing Files/images/Image_03010604_58584_CON.png 
+[2022-03-01 06:04:58.824] [FINE   ] ShippingHubRecognition Width of largest contour 413 
+[2022-03-01 06:04:58.838] [FINE   ] ShippingHubRecognition Writing Files/images/Image_03010604_58584_BRECT.png 
+[2022-03-01 06:05:15.311] [FINE   ] ShippingHubRecognition Angle to Shipping Hub -19.167245761225153 
+[2022-03-01 06:05:15.699] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2022-03-01 06:05:15.700] [INFO   ] RobotCommonLog Shutting down log [2022-03-01 06:26:39.842] [INFO   ] RecognitionDispatcher Starting image recognition 
+[2022-03-01 06:26:39.910] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2022-03-01 06:26:39.976] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2022-03-01 06:26:39.980] [FINE   ] RecognitionDispatcher Executing action APPROACH_SHIPPING_HUB_BY_VISION 
+[2022-03-01 06:26:39.981] [CONFIG ] RecognitionDispatcher Alliance BLUE 
+[2022-03-01 06:26:39.987] [FINE   ] ShippingHubParametersXML Parsing XML shipping_hub_parameters 
+[2022-03-01 06:26:39.990] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-03-01 06:26:39.991] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-03-01 06:26:39.996] [FINE   ] ImageXML Parsing XML image_parameters 
+[2022-03-01 06:26:39.998] [FINE   ] ShippingHubRecognition In ShippingHubRecognition.getAngleToShippingHub 
+[2022-03-01 06:26:39.998] [FINE   ] ImageUtils File name Files/images/Image_02111549_13013_IMG.png 
+[2022-03-01 06:26:40.014] [FINE   ] ImageUtils Image width 848, height 480 
+[2022-03-01 06:26:40.031] [FINE   ] ShippingHubRecognition Image width 848, height 480 
+[2022-03-01 06:26:40.040] [FINE   ] ImageUtils Image ROI x 0, y 140, width 846, height 200 
+[2022-03-01 06:26:40.063] [FINE   ] ShippingHubRecognition Writing image ROI Files/images/Image_03010626_40022_ROI.png 
+[2022-03-01 06:26:40.071] [FINE   ] ImageUtils Target hue levels: low 95, high 125 
+[2022-03-01 06:26:40.129] [FINE   ] ImageUtils HSV saturation channel median 28 
+[2022-03-01 06:26:40.129] [FINE   ] ImageUtils HSV value channel median 144 
+[2022-03-01 06:26:40.130] [FINE   ] ImageUtils Adjust HSV saturation by -18 
+[2022-03-01 06:26:40.130] [FINE   ] ImageUtils Adjust HSV value by -44 
+[2022-03-01 06:26:40.131] [FINE   ] ImageUtils Adjusted image levels: saturation low 10, value low 100 
+[2022-03-01 06:26:40.145] [FINE   ] ImageUtils Writing Files/images/Image_03010626_40022_ADJ.png 
+[2022-03-01 06:26:40.146] [FINE   ] ImageUtils Actual inRange HSV levels: hue low 95, hue high 125 
+[2022-03-01 06:26:40.146] [FINE   ] ImageUtils Actual inRange HSV levels: saturation low 20, value low 30 
+[2022-03-01 06:26:40.151] [FINE   ] ImageUtils Writing Files/images/Image_03010626_40022_ADJ_THR.png 
+[2022-03-01 06:26:40.153] [FINE   ] ShippingHubRecognition drawContours: number of contours 8 
+[2022-03-01 06:26:40.163] [FINE   ] ShippingHubRecognition Writing Files/images/Image_03010626_40022_CON.png 
+[2022-03-01 06:26:40.168] [FINE   ] ShippingHubRecognition Width of largest contour 413 
+[2022-03-01 06:26:40.180] [FINE   ] ShippingHubRecognition Writing Files/images/Image_03010626_40022_BRECT.png 
+[2022-03-01 06:26:40.184] [FINE   ] ShippingHubRecognition Angle to Shipping Hub -19.167245761225153 
+[2022-03-01 06:26:40.450] [INFO   ] RobotCommonLog Closing log and writing out the last 1 entries on the queue 
+[2022-03-01 06:26:40.451] [INFO   ] RobotCommonLog Shutting down log 

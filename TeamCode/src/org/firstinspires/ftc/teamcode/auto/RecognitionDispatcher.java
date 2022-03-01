@@ -10,7 +10,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.firstinspires.ftc.ftcdevcommon.*;
+import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
+import org.firstinspires.ftc.ftcdevcommon.RobotLogCommon;
+import org.firstinspires.ftc.ftcdevcommon.RobotXMLElement;
+import org.firstinspires.ftc.ftcdevcommon.XPathAccess;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.auto.vision.*;
 import org.firstinspires.ftc.teamcode.auto.xml.BarcodeParametersXML;
@@ -28,7 +31,6 @@ import java.io.InputStream;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 public class RecognitionDispatcher extends Application {
 
@@ -43,6 +45,7 @@ public class RecognitionDispatcher extends Application {
 
     private Stage stage;
     private Pane field;
+    private String imagePath;
 
     // Load OpenCV.
     private static final boolean openCVInitialized;
@@ -56,7 +59,7 @@ public class RecognitionDispatcher extends Application {
     //!! Default constructor is required.
     public RecognitionDispatcher() {
         RobotLogCommon.initialize(WorkingDirectory.getWorkingDirectory() + RobotConstants.logDir);
-        RobotLogCommon.i(TAG, "Starting barcode recognition");
+        RobotLogCommon.i(TAG, "Starting image recognition");
 
         if (!openCVInitialized)
             throw new AutonomousRobotException(TAG, "Failure in OpenCV initialization");
@@ -66,6 +69,7 @@ public class RecognitionDispatcher extends Application {
     public void start(Stage pStage) throws Exception {
         stage = pStage;
         field = new Pane();
+        imagePath = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
 
         // Process the command line parameters common.
         Parameters parameters = getParameters();
@@ -124,7 +128,6 @@ public class RecognitionDispatcher extends Application {
                 RingRecognition ringRecognition = new RingRecognition();
 
                 // Call the OpenCV subsystem.
-                String imagePath = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
                 ImageProvider fileImage = new FileImage(imagePath + ringParameters.imageParameters.file_name);
                 RingReturn ringReturn = ringRecognition.findGoldRings(fileImage, ringParameters);
                 if (ringReturn.fatalComputerVisionError)
@@ -148,7 +151,6 @@ public class RecognitionDispatcher extends Application {
                 if (actionData.imageParameters == null)
                     throw new AutonomousRobotException(TAG, "Missing image_parameters");
 
-                String imagePath = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
                 ImageProvider fileImage = new FileImage(imagePath + actionData.imageParameters.file_name);
 
                 // Get the recognition path from the XML file.
@@ -231,19 +233,17 @@ public class RecognitionDispatcher extends Application {
                 // Read the parameters for the Shipping Hub from the xml file.
                 ShippingHubParametersXML shippingHubParametersXML = new ShippingHubParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
                 ShippingHubParameters shippingHubParameters = shippingHubParametersXML.getShippingHubParameters();
-                //**TODO ShippingHubRecognition shippingHubRecognition = new ShippingHubRecognition();
+                ShippingHubRecognition shippingHubRecognition = new ShippingHubRecognition();
 
-                //**TODO Parse
                 /*
                     <angle>
                       <ocv_image_provider>file</ocv_image_provider>
                       <image_parameters>
                  */
-                VisionParameters.ImageParameters shippingHubImage1 =
+                VisionParameters.ImageParameters shippingHubImage1Parameters =
                         robotActionXMLFreightFrenzy.getImageParametersFromXPath(actionElement, "angle/image_parameters");
 
-                String shImage1Path = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
-                ImageProvider fileImage = new FileImage(shImage1Path + shippingHubImage1.file_name);
+                ImageProvider fileImage = new FileImage(imagePath + shippingHubImage1Parameters.file_name);
 
                 // Depending on the OpMode get the BLUE or RED HSV parameters.
                 VisionParameters.HSVParameters shHSVParameters;
@@ -253,10 +253,14 @@ public class RecognitionDispatcher extends Application {
                     if (alliance == RobotConstants.Alliance.RED)
                         shHSVParameters = shippingHubParameters.redAllianceHSVParameters;
                     else
-                        throw new AutonomousRobotException(TAG, "Shipping Hub allaince must be BLUE or RED");
+                        throw new AutonomousRobotException(TAG, "Shipping Hub alliance must be BLUE or RED");
 
-                // First get the angle of the robot to the Shipping Hub.
-                //**TODO double angle = shippingHubRecognition.getAngleToShippingHub(actionData.imageParameters);
+                // Get the angle of the robot to the Shipping Hub.
+                ShippingHubAngleReturn angleReturn = shippingHubRecognition.getAngleToShippingHub(fileImage, shippingHubImage1Parameters, shHSVParameters);
+                displayResults(imagePath + shippingHubImage1Parameters.file_name,
+                        "Angle to Shipping Hub " + String.format("%.2f", angleReturn.angleToShippingHub),
+                        "FTC 2021 - 2022 Freight Frenzy");
+
                 break;
             }
 
