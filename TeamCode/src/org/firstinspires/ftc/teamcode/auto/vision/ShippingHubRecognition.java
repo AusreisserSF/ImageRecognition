@@ -47,7 +47,7 @@ public class ShippingHubRecognition {
 
         // The largest bounding rectangle in the image should be the Level 2
         // platter of the Shipping Hub.
-        Rect largestBoundingRect = getlargestBoundingRectangle(pImageProvider, pImageParameters, pHSVParameters);
+        Rect largestBoundingRect = getLargestBoundingRectangle(pImageProvider, pImageParameters, pHSVParameters);
         if (largestBoundingRect == null)
             return new ShippingHubAngleReturn(true, SHIPPING_HUB_ANGLE_NPOS);
 
@@ -67,15 +67,28 @@ public class ShippingHubRecognition {
                                                               ShippingHubParameters pShippingHubParameters) throws InterruptedException {
         // The largest bounding rectangle in the image should be the Level 2
         // platter of the Shipping Hub.
-        Rect largestBoundingRect = getlargestBoundingRectangle(pImageProvider, pImageParameters, pHSVParameters);
+        Rect largestBoundingRect = getLargestBoundingRectangle(pImageProvider, pImageParameters, pHSVParameters);
         if (largestBoundingRect == null)
             return new ShippingHubDistanceReturn(true, SHIPPING_HUB_DISTANCE_NPOS);
 
-        //**TODO code goes here
-        return new ShippingHubDistanceReturn(false, 0.0);
+        // Test for calibration run.
+        if (pShippingHubParameters.distanceParameters.focal_length == 0.0) {
+            RobotLogCommon.d(TAG, "Calibration run");
+            double focalLength = (largestBoundingRect.width * pShippingHubParameters.distanceParameters.known_distance) / pShippingHubParameters.distanceParameters.known_width;
+            RobotLogCommon.d(TAG, "Focal length " + focalLength);
+
+            return new ShippingHubDistanceReturn(false, pShippingHubParameters.distanceParameters.known_distance);
+        }
+        else {
+            // Distance determination (non-calibration) path.
+            double inches2 = (pShippingHubParameters.distanceParameters.known_width * pShippingHubParameters.distanceParameters.focal_length) / largestBoundingRect.width;
+            RobotLogCommon.d(TAG, "Distance to Shipping Hub " + inches2 + " inches");
+
+            return new ShippingHubDistanceReturn(false, inches2);
+        }
     }
 
-    private Rect getlargestBoundingRectangle(ImageProvider pImageProvider,
+    private Rect getLargestBoundingRectangle(ImageProvider pImageProvider,
                                              VisionParameters.ImageParameters pImageParameters,
                                              VisionParameters.HSVParameters pHSVParameters) throws InterruptedException {
 
@@ -164,7 +177,6 @@ public class ShippingHubRecognition {
     }
 
     private void drawOneRectangle(Rect pRect, Mat pImageOut) {
-        Mat drawnRect = new Mat();
         Imgproc.rectangle(pImageOut, pRect, new Scalar(0, 255, 0)); // GREEN
     }
 }

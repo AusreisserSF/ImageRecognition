@@ -1,4 +1,4 @@
-// Partial port of ImageUtils.cpp: only thos functions that are
+// Partial port of ImageUtils.cpp: only those functions that are
 // needed for ring recognition.
 package org.firstinspires.ftc.teamcode.auto.vision;
 
@@ -163,7 +163,7 @@ public class ImageUtils {
     public boolean hueInRange(int pHue, int pTargetLow, int pTargetHigh) {
 
         // Sanity check for hue.
-        if (!((pTargetLow >= 0 && pTargetLow <= 180) && (pTargetHigh >= 0 && pTargetHigh <= pTargetHigh) &&
+        if (!((pTargetLow >= 0 && pTargetLow <= 180) && (pTargetHigh >= 0 && pTargetHigh <= 180) &&
                 (pTargetLow != pTargetHigh)))
             throw new AutonomousRobotException(TAG, "Hue out of range");
 

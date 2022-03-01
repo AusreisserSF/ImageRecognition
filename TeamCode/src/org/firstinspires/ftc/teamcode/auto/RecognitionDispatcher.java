@@ -246,6 +246,7 @@ public class RecognitionDispatcher extends Application {
                 ImageProvider fileImage = new FileImage(imagePath + shippingHubImage1Parameters.file_name);
 
                 // Depending on the OpMode get the BLUE or RED HSV parameters.
+                //**TODO common private method
                 VisionParameters.HSVParameters shHSVParameters;
                 if (alliance == RobotConstants.Alliance.BLUE)
                     shHSVParameters = shippingHubParameters.blueAllianceHSVParameters;
@@ -257,6 +258,30 @@ public class RecognitionDispatcher extends Application {
 
                 // Get the angle of the robot to the Shipping Hub.
                 ShippingHubAngleReturn angleReturn = shippingHubRecognition.getAngleToShippingHub(fileImage, shippingHubImage1Parameters, shHSVParameters);
+
+                /*
+                    <distance>
+                      <ocv_image_provider>file</ocv_image_provider>
+                      <image_parameters>
+                 */
+                //**TODO Get parameters, call getDistanceToShippingHub, display results
+                VisionParameters.ImageParameters shippingHubImage2Parameters =
+                        robotActionXMLFreightFrenzy.getImageParametersFromXPath(actionElement, "distance/image_parameters");
+
+                ImageProvider fileImage2 = new FileImage(imagePath + shippingHubImage2Parameters.file_name);
+
+                // Depending on the OpMode get the BLUE or RED HSV parameters.
+                VisionParameters.HSVParameters shHSVParameters2;
+                if (alliance == RobotConstants.Alliance.BLUE)
+                    shHSVParameters2 = shippingHubParameters.blueAllianceHSVParameters;
+                else
+                if (alliance == RobotConstants.Alliance.RED)
+                    shHSVParameters2 = shippingHubParameters.redAllianceHSVParameters;
+                else
+                    throw new AutonomousRobotException(TAG, "Shipping Hub alliance must be BLUE or RED");
+
+                ShippingHubDistanceReturn distanceReturn = shippingHubRecognition.getDistanceToShippingHub(fileImage2, shippingHubImage2Parameters, shHSVParameters2, shippingHubParameters);
+
                 displayResults(imagePath + shippingHubImage1Parameters.file_name,
                         "Angle to Shipping Hub " + String.format("%.2f", angleReturn.angleToShippingHub),
                         "FTC 2021 - 2022 Freight Frenzy");
