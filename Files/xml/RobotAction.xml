@@ -10,7 +10,7 @@
                     <ocv_image_provider>file</ocv_image_provider>
                     <image_parameters>
                         <!-- File to be used in the angle calculation; the Shipping Hub may or may not be centered. -->
-                        <file>Image_02111549_13013_IMG.png</file>
+                        <file>Shipping Hub blue 25 in.png</file>
                         <resolution>
                             <width>848</width>
                             <height>480</height>
@@ -27,7 +27,7 @@
                     <ocv_image_provider>file</ocv_image_provider>
                     <image_parameters>
                         <!-- File to be used in the distance calculation; the Shipping Hub must be centered. -->
-                        <file>Shipping Hub blue 22 inches.png</file>
+                        <file>Shipping Hub blue 25 in.png</file>
                         <resolution>
                             <width>848</width>
                             <height>480</height>

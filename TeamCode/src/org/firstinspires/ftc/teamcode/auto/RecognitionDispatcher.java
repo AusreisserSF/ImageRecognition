@@ -282,8 +282,10 @@ public class RecognitionDispatcher extends Application {
 
                 ShippingHubDistanceReturn distanceReturn = shippingHubRecognition.getDistanceToShippingHub(fileImage2, shippingHubImage2Parameters, shHSVParameters2, shippingHubParameters);
 
+                String displayText = "Angle to Shipping Hub " + String.format("%.2f", angleReturn.angleToShippingHub) +
+                        '\n' + "Distance to Shipping Hub " + String.format("%.2f", distanceReturn.distanceToShippingHub);
                 displayResults(imagePath + shippingHubImage1Parameters.file_name,
-                        "Angle to Shipping Hub " + String.format("%.2f", angleReturn.angleToShippingHub),
+                        displayText,
                         "FTC 2021 - 2022 Freight Frenzy");
 
                 break;

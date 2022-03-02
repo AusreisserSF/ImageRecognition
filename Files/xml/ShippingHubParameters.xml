@@ -14,8 +14,8 @@
     <RED>
       <hsv_parameters>
         <hue_name>red</hue_name>
-        <hue_low>0</hue_low>
-        <hue_high>40</hue_high>
+        <hue_low>155</hue_low>
+        <hue_high>180</hue_high>
         <saturation_target>10</saturation_target>
         <saturation_low_threshold>20</saturation_low_threshold>
         <value_target>100</value_target>
@@ -29,6 +29,6 @@
     <!-- If the focal_length is 0 then this is a calibration run.
          The image must match the known_distance and known_width
          values below. -->
-    <focal_length>0.0</focal_length>
+    <focal_length>601.33</focal_length>
   </distance_parameters>
 </shipping_hub_parameters>

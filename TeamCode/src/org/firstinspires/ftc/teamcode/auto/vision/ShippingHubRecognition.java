@@ -81,6 +81,7 @@ public class ShippingHubRecognition {
         }
         else {
             // Distance determination (non-calibration) path.
+            RobotLogCommon.d(TAG, "Using focal length from calibration run of " + pShippingHubParameters.distanceParameters.focal_length);
             double inches2 = (pShippingHubParameters.distanceParameters.known_width * pShippingHubParameters.distanceParameters.focal_length) / largestBoundingRect.width;
             RobotLogCommon.d(TAG, "Distance to Shipping Hub " + inches2 + " inches");
 
