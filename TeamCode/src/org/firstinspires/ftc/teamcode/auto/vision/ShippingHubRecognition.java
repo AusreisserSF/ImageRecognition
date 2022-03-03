@@ -65,6 +65,9 @@ public class ShippingHubRecognition {
                                                               VisionParameters.ImageParameters pImageParameters,
                                                               VisionParameters.HSVParameters pHSVParameters,
                                                               ShippingHubParameters pShippingHubParameters) throws InterruptedException {
+
+        RobotLogCommon.d(TAG, "In ShippingHubRecognition.getDistanceToShippingHub");
+
         // The largest bounding rectangle in the image should be the Level 2
         // platter of the Shipping Hub.
         Rect largestBoundingRect = getLargestBoundingRectangle(pImageProvider, pImageParameters, pHSVParameters);

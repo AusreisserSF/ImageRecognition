@@ -41,7 +41,7 @@ public class RecognitionDispatcher extends Application {
 
     public static final double NOTIFICATION_TEXT_POSITION_Y = (FIELD_HEIGHT / 2) + 20;
     public static final double NOTIFICATION_TEXT_POSITION_X = 10;
-    public static final Font NOTIFICATION_TEXT_FONT = Font.font("Comic Sans MS", FontWeight.BOLD, 24);
+    public static final Font NOTIFICATION_TEXT_FONT = Font.font("Comic Sans MS", FontWeight.BOLD, 16);
 
     private Stage stage;
     private Pane field;
@@ -264,7 +264,6 @@ public class RecognitionDispatcher extends Application {
                       <ocv_image_provider>file</ocv_image_provider>
                       <image_parameters>
                  */
-                //**TODO Get parameters, call getDistanceToShippingHub, display results
                 VisionParameters.ImageParameters shippingHubImage2Parameters =
                         robotActionXMLFreightFrenzy.getImageParametersFromXPath(actionElement, "distance/image_parameters");
 
@@ -282,8 +281,17 @@ public class RecognitionDispatcher extends Application {
 
                 ShippingHubDistanceReturn distanceReturn = shippingHubRecognition.getDistanceToShippingHub(fileImage2, shippingHubImage2Parameters, shHSVParameters2, shippingHubParameters);
 
-                String displayText = "Angle to Shipping Hub " + String.format("%.2f", angleReturn.angleToShippingHub) +
-                        '\n' + "Distance to Shipping Hub " + String.format("%.2f", distanceReturn.distanceToShippingHub);
+                // Now that we know the angle and distance to the Shipping Hub from the
+                // camera, compute the angle from the center of the robot to the
+                // Shipping Hub.
+                //**TODO Don't hardcode distance from center of robot to camera.
+                double trueBearing = TrueBearing.computeTrueBearing(distanceReturn.distanceToShippingHub, angleReturn.angleToShippingHub, 4.0);
+                RobotLogCommon.d(TAG, "Angle to Shipping Hub from robot center " + trueBearing);
+
+                String displayText = "Angle from camera to Shipping Hub " + String.format("%.2f", angleReturn.angleToShippingHub) +
+                        '\n' + "Distance from camera to Shipping Hub " + String.format("%.2f", distanceReturn.distanceToShippingHub) +
+                        '\n' + "Angle from robot center to Shipping Hub " + String.format("%.2f", trueBearing);
+
                 displayResults(imagePath + shippingHubImage1Parameters.file_name,
                         displayText,
                         "FTC 2021 - 2022 Freight Frenzy");
@@ -312,12 +320,12 @@ public class RecognitionDispatcher extends Application {
         field.getChildren().add(imageView);
 
         // Write text to field.
-        Text ringText = new Text(pResultText);
-        ringText.setFont(NOTIFICATION_TEXT_FONT);
-        ringText.setFill(Color.CYAN);
-        ringText.setX(NOTIFICATION_TEXT_POSITION_X);
-        ringText.setY(NOTIFICATION_TEXT_POSITION_Y);
-        field.getChildren().add(ringText);
+        Text displayText = new Text(pResultText);
+        displayText.setFont(NOTIFICATION_TEXT_FONT);
+        displayText.setFill(Color.CYAN);
+        displayText.setX(NOTIFICATION_TEXT_POSITION_X);
+        displayText.setY(NOTIFICATION_TEXT_POSITION_Y);
+        field.getChildren().add(displayText);
 
         Scene scene = new Scene(field, FIELD_WIDTH, FIELD_HEIGHT, Color.GRAY);
         stage.setTitle(pTitle);
