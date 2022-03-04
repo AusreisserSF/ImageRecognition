@@ -260,14 +260,14 @@ public class RecognitionDispatcher extends Application {
                     else
                         throw new AutonomousRobotException(TAG, "Shipping Hub alliance must be BLUE or RED");
 
-                // Get the angle of the robot to the Shipping Hub.
+                // Get the angle and distance of the robot to the Shipping Hub.
                 ShippingHubReturn shReturn = shippingHubRecognition.getAngleAndDistanceToShippingHub(fileImage, shippingHubImageParameters, shHSVParameters, shippingHubParameters);
                 if (shReturn.fatalComputerVisionError) {
                     RobotLogCommon.d(TAG, "Error in OpenCV processing during getAngleAndDistanceToShippingHub");
                     break;
                 }
 
-                if (shReturn.angleToShippingHub == ShippingHubRecognition.SHIPPING_HUB_DISTANCE_NPOS) {
+                if (shReturn.distanceToShippingHub == ShippingHubRecognition.SHIPPING_HUB_DISTANCE_NPOS) {
                     RobotLogCommon.d(TAG, "Unable to compute distance to Shipping Hub");
                     break;
                 }

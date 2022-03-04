@@ -14,6 +14,7 @@ public class RobotConstants {
         BLUE, RED, UNKNOWN
     }
 
+    //**TODO switch from boolean to this enum
     public enum OpenCVResults {
         INTERNAL_ERROR, RECOGNITION_SUCCESSFUL, RECOGNITION_UNSUCCESSFUL
     }
