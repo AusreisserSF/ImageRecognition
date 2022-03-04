@@ -24,8 +24,8 @@ public class ShippingHubRecognition {
     private static final String TAG = ShippingHubRecognition.class.getSimpleName();
     private static final String imageFilePrefix = "Image_";
 
-    private static final double SHIPPING_HUB_ANGLE_NPOS = -360.0;
-    private static final double SHIPPING_HUB_DISTANCE_NPOS = -1.0;
+    public static final double SHIPPING_HUB_ANGLE_NPOS = -360.0;
+    public static final double SHIPPING_HUB_DISTANCE_NPOS = -1.0;
     private static final double LOGITECH_BRIO_FIELD_OF_VIEW = 78.0;
 
     private final String workingDirectory;
@@ -39,57 +39,46 @@ public class ShippingHubRecognition {
     }
 
     // Returns the result of image analysis.
-    public ShippingHubAngleReturn getAngleToShippingHub(ImageProvider pImageProvider,
-                                                        VisionParameters.ImageParameters pImageParameters,
-                                                        VisionParameters.HSVParameters pHSVParameters) throws InterruptedException {
-
-        RobotLogCommon.d(TAG, "In ShippingHubRecognition.getAngleToShippingHub");
-
-        // The largest bounding rectangle in the image should be the Level 2
-        // platter of the Shipping Hub.
-        Rect largestBoundingRect = getLargestBoundingRectangle(pImageProvider, pImageParameters, pHSVParameters);
-        if (largestBoundingRect == null)
-            return new ShippingHubAngleReturn(true, SHIPPING_HUB_ANGLE_NPOS);
-
-        // Calculate the angle from the camera to the center of the bounding rectangle.
-        // The centroid of the bounding rectangle is relative to the entire image, not
-        // just the ROI.
-        //**TODO May need a "magic number" parameter to get the correct angle (see 2019)
-        double angleToShippingHub = imageUtils.computeAngleToObjectCenter(pImageParameters.resolution_width, pImageParameters.image_roi.x + largestBoundingRect.x + (largestBoundingRect.width / 2), LOGITECH_BRIO_FIELD_OF_VIEW);
-        RobotLogCommon.d(TAG, "Angle to Shipping Hub " + angleToShippingHub);
-
-        return new ShippingHubAngleReturn(false, angleToShippingHub);
-    }
-
-    public ShippingHubDistanceReturn getDistanceToShippingHub(ImageProvider pImageProvider,
+    public ShippingHubReturn getAngleAndDistanceToShippingHub(ImageProvider pImageProvider,
                                                               VisionParameters.ImageParameters pImageParameters,
                                                               VisionParameters.HSVParameters pHSVParameters,
                                                               ShippingHubParameters pShippingHubParameters) throws InterruptedException {
 
-        RobotLogCommon.d(TAG, "In ShippingHubRecognition.getDistanceToShippingHub");
+        RobotLogCommon.d(TAG, "In ShippingHubRecognition.getAngleAndDistanceToShippingHub");
 
         // The largest bounding rectangle in the image should be the Level 2
         // platter of the Shipping Hub.
         Rect largestBoundingRect = getLargestBoundingRectangle(pImageProvider, pImageParameters, pHSVParameters);
         if (largestBoundingRect == null)
-            return new ShippingHubDistanceReturn(true, SHIPPING_HUB_DISTANCE_NPOS);
+            return new ShippingHubReturn(true, SHIPPING_HUB_ANGLE_NPOS, SHIPPING_HUB_DISTANCE_NPOS);
+
+        // Calculate the angle from the camera to the center of the bounding rectangle.
+        // The centroid of the bounding rectangle is relative to the entire image, not
+        // just the ROI.
+        double angleFromCameraToShippingHub = imageUtils.computeAngleToObjectCenter(pImageParameters.resolution_width, pImageParameters.image_roi.x + largestBoundingRect.x + (largestBoundingRect.width / 2), LOGITECH_BRIO_FIELD_OF_VIEW);
+        RobotLogCommon.d(TAG, "Angle from camera to Shipping Hub " + angleFromCameraToShippingHub);
 
         // Test for calibration run.
-        if (pShippingHubParameters.distanceParameters.focal_length == 0.0) {
+        double distanceFromCameraToShippingHub;
+        if (pShippingHubParameters.distanceParameters.focalLength == 0.0) {
             RobotLogCommon.d(TAG, "Calibration run");
-            double focalLength = (largestBoundingRect.width * pShippingHubParameters.distanceParameters.known_distance) / pShippingHubParameters.distanceParameters.known_width;
-            RobotLogCommon.d(TAG, "Focal length " + focalLength);
-
-            return new ShippingHubDistanceReturn(false, pShippingHubParameters.distanceParameters.known_distance);
-        }
+            double focalLength = (largestBoundingRect.width * pShippingHubParameters.distanceParameters.calibrationObjectDistance) / pShippingHubParameters.distanceParameters.calibrationObjectWidth;
+            RobotLogCommon.d(TAG, "Calculated focal length " + focalLength);
+            distanceFromCameraToShippingHub = pShippingHubParameters.distanceParameters.calibrationObjectDistance;
+            RobotLogCommon.d(TAG, "Calibration distance from camera to Shipping Hub " + distanceFromCameraToShippingHub);
+       }
         else {
             // Distance determination (non-calibration) path.
-            RobotLogCommon.d(TAG, "Using focal length from calibration run of " + pShippingHubParameters.distanceParameters.focal_length);
-            double inches2 = (pShippingHubParameters.distanceParameters.known_width * pShippingHubParameters.distanceParameters.focal_length) / largestBoundingRect.width;
-            RobotLogCommon.d(TAG, "Distance to Shipping Hub " + inches2 + " inches");
-
-            return new ShippingHubDistanceReturn(false, inches2);
+            RobotLogCommon.d(TAG, "Using focal length from calibration run of " + pShippingHubParameters.distanceParameters.focalLength);
+            distanceFromCameraToShippingHub = (pShippingHubParameters.distanceParameters.calibrationObjectWidth * pShippingHubParameters.distanceParameters.focalLength) / largestBoundingRect.width;
+            RobotLogCommon.d(TAG, "Calculated distance from camera to Shipping Hub " + distanceFromCameraToShippingHub + " inches");
         }
+
+        // Calculate the angle from the robot center to the Shipping Hub.
+        double trueBearing = TrueBearing.computeTrueBearing(distanceFromCameraToShippingHub, angleFromCameraToShippingHub, pShippingHubParameters.distanceParameters.cameraToRobotCenter);
+        RobotLogCommon.d(TAG, "Angle from robot center to Shipping Hub  " + trueBearing);
+
+        return new ShippingHubReturn(false, trueBearing, distanceFromCameraToShippingHub);
     }
 
     private Rect getLargestBoundingRectangle(ImageProvider pImageProvider,

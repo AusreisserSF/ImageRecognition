@@ -14,4 +14,8 @@ public class RobotConstants {
         BLUE, RED, UNKNOWN
     }
 
+    public enum OpenCVResults {
+        INTERNAL_ERROR, RECOGNITION_SUCCESSFUL, RECOGNITION_UNSUCCESSFUL
+    }
+
 }

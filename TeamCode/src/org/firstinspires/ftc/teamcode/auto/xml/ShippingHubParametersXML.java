@@ -93,53 +93,67 @@ public class ShippingHubParametersXML {
     // calculate the distance from the robot to the shipping hub.
     /*
     <distance_parameters>
-     <known_distance>22.0</known_distance>
-     <known_width>2.0</known_width>
-     <focal_length>0.0</focal_length>
+      <calibration_object_distance>22.0</calibration_object_distance>
+      <calibration_object_width>15.0</calibration_object_width>
+      <focal_length>601.33</focal_length>
+      <camera_to_robot_center>2.5</camera_to_robot_center>
     </distance_parameters>
     */
     private ShippingHubParameters.DistanceParameters parseDistanceParameters(Node pDistanceParametersNode) {
-        double known_distance;
-        double known_width;
-        double focal_length;
+        double calibrationDistance;
+        double calibrationWidth;
+        double focalLength;
+        double cameraToRobotCenter;
 
-        // Parse the <known_distance> element.
-        Node known_distance_node = pDistanceParametersNode.getFirstChild();
-        known_distance_node = getNextElement(known_distance_node);
-        if ((known_distance_node == null) || !known_distance_node.getNodeName().equals("known_distance") || known_distance_node.getTextContent().isEmpty())
-            throw new AutonomousRobotException(TAG, "Element 'distance_parameters/known_distance' missing or empty");
+        // Parse the <calibration_object_distance> element.
+        Node calibration_distance_node = pDistanceParametersNode.getFirstChild();
+        calibration_distance_node = getNextElement(calibration_distance_node);
+        if ((calibration_distance_node == null) || !calibration_distance_node.getNodeName().equals("calibration_object_distance") || calibration_distance_node.getTextContent().isEmpty())
+            throw new AutonomousRobotException(TAG, "Element 'distance_parameters/calibration_object_distance' missing or empty");
 
         try {
-            known_distance = Double.parseDouble(known_distance_node.getTextContent());
+            calibrationDistance = Double.parseDouble(calibration_distance_node.getTextContent());
         } catch (NumberFormatException nex) {
-            throw new AutonomousRobotException(TAG, "Invalid number format in element 'distance_parameters/known_distance'");
+            throw new AutonomousRobotException(TAG, "Invalid number format in element 'distance_parameters/calibration_distance'");
         }
 
-        // Parse the <known_width> element.
-        Node known_width_node = known_distance_node.getNextSibling();
-        known_width_node = getNextElement(known_width_node);
-        if ((known_width_node == null) || !known_width_node.getNodeName().equals("known_width") || known_width_node.getTextContent().isEmpty())
-            throw new AutonomousRobotException(TAG, "Element 'distance_parameters/known_width' missing or empty");
+        // Parse the <calibration_object_width> element.
+        Node calibration_object_width_node = calibration_distance_node.getNextSibling();
+        calibration_object_width_node = getNextElement(calibration_object_width_node);
+        if ((calibration_object_width_node == null) || !calibration_object_width_node.getNodeName().equals("calibration_object_width") || calibration_object_width_node.getTextContent().isEmpty())
+            throw new AutonomousRobotException(TAG, "Element 'distance_parameters/calibration_object_width' missing or empty");
 
         try {
-            known_width = Double.parseDouble(known_width_node.getTextContent());
+            calibrationWidth = Double.parseDouble(calibration_object_width_node.getTextContent());
         } catch (NumberFormatException nex) {
-            throw new AutonomousRobotException(TAG, "Invalid number format in element 'distance_parameters/known_width'");
+            throw new AutonomousRobotException(TAG, "Invalid number format in element 'distance_parameters/calibration_object_width'");
         }
     
         // Parse the <focal_length> element.
-        Node focal_length_node = known_width_node.getNextSibling();
+        Node focal_length_node = calibration_object_width_node.getNextSibling();
         focal_length_node = getNextElement(focal_length_node);
-        if ((focal_length_node == null) || !focal_length_node.getNodeName().equals("focal_length") || known_width_node.getTextContent().isEmpty())
+        if ((focal_length_node == null) || !focal_length_node.getNodeName().equals("focal_length") || focal_length_node.getTextContent().isEmpty())
             throw new AutonomousRobotException(TAG, "Element 'distance_parameters/focal_length' missing or empty");
 
         try {
-            focal_length = Double.parseDouble(focal_length_node.getTextContent());
+            focalLength = Double.parseDouble(focal_length_node.getTextContent());
         } catch (NumberFormatException nex) {
             throw new AutonomousRobotException(TAG, "Invalid number format in element 'distance_parameters/focal_length'");
         }
 
-        return new ShippingHubParameters.DistanceParameters(known_distance, known_width, focal_length);
+        // Parse the <camera_to_robot_center> element.
+        Node camera_node = focal_length_node.getNextSibling();
+        camera_node = getNextElement(camera_node);
+        if ((camera_node == null) || !camera_node.getNodeName().equals("camera_to_robot_center") || camera_node.getTextContent().isEmpty())
+            throw new AutonomousRobotException(TAG, "Element 'distance_parameters/camera_to_robot_center' missing or empty");
+
+        try {
+            cameraToRobotCenter = Double.parseDouble(camera_node.getTextContent());
+        } catch (NumberFormatException nex) {
+            throw new AutonomousRobotException(TAG, "Invalid number format in element 'distance_parameters/camera_to_robot_center'");
+        }
+
+        return new ShippingHubParameters.DistanceParameters(calibrationDistance, calibrationWidth, focalLength, cameraToRobotCenter);
     }
 
     private Node getNextElement(Node pNode) {

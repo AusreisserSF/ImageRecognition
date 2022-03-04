@@ -6,40 +6,21 @@
         </parameters>
         <actions>
             <APPROACH_SHIPPING_HUB_BY_VISION>
-                <angle>
-                    <ocv_image_provider>file</ocv_image_provider>
-                    <image_parameters>
-                        <!-- File to be used in the angle calculation; the Shipping Hub may or may not be centered. -->
-                        <file>Image_02111549_13013_IMG.png</file>
-                        <resolution>
-                            <width>848</width>
-                            <height>480</height>
-                        </resolution>
-                        <image_roi>
-                            <x>0</x>
-                            <y>140</y>
-                            <width>846</width>
-                            <height>200</height>
-                        </image_roi>
-                    </image_parameters>
-                </angle>
-                <distance>
-                    <ocv_image_provider>file</ocv_image_provider>
-                    <image_parameters>
-                        <!-- File to be used in the distance calculation; the Shipping Hub must be centered. -->
-                        <file>Image_02111549_13013_IMG.png</file>
-                        <resolution>
-                            <width>848</width>
-                            <height>480</height>
-                        </resolution>
-                        <image_roi>
-                            <x>0</x>
-                            <y>140</y>
-                            <width>846</width>
-                            <height>200</height>
-                        </image_roi>
-                    </image_parameters>
-                </distance>
+                <ocv_image_provider>file</ocv_image_provider>
+                <image_parameters>
+                    <!-- File to be used in the angle and distance calculations; the Shipping Hub may or may not be centered. -->
+                    <file>Image_02111549_13013_IMG.png</file>
+                    <resolution>
+                        <width>848</width>
+                        <height>480</height>
+                    </resolution>
+                    <image_roi>
+                        <x>0</x>
+                        <y>140</y>
+                        <width>846</width>
+                        <height>200</height>
+                    </image_roi>
+                </image_parameters>
             </APPROACH_SHIPPING_HUB_BY_VISION>
         </actions>
     </OpMode>

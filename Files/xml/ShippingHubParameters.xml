@@ -24,11 +24,12 @@
     </RED>
   </alliance_parameters>
   <distance_parameters>
-    <known_distance>22.0</known_distance>
-    <known_width>15.0</known_width> <!-- Shipping Hub Level 2 platter -->
     <!-- If the focal_length is 0 then this is a calibration run.
-         The image must match the known_distance and known_width
-         values below. -->
+         The image must match the calibration_object_distance and calibration_object_width
+         values below. --> 
+    <calibration_object_distance>22.0</calibration_object_distance>
+    <calibration_object_width>15.0</calibration_object_width>
     <focal_length>601.33</focal_length>
+    <camera_to_robot_center>2.5</camera_to_robot_center>
   </distance_parameters>
 </shipping_hub_parameters>

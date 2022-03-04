@@ -16,14 +16,17 @@ public class ShippingHubParameters {
     }
 
     public static class DistanceParameters {
-        public final double known_distance;
-        public final double known_width;
-        public final double focal_length;
+        public final double calibrationObjectDistance;
+        public final double calibrationObjectWidth;
+        public final double focalLength;
+        public final double cameraToRobotCenter; // inches
 
-        public DistanceParameters(double pKnownDistance, double pKnownWidth, double pFocalWidth) {
-            known_distance = pKnownDistance;
-            known_width = pKnownWidth;
-            focal_length = pFocalWidth;
+        public DistanceParameters(double pCalibrationDistance, double pCalibrationWidth,
+                                  double pFocalLength, double pCameraToRobotCenter) {
+            calibrationObjectDistance = pCalibrationDistance;
+            calibrationObjectWidth = pCalibrationWidth;
+            focalLength = pFocalLength;
+            cameraToRobotCenter = pCameraToRobotCenter;
         }
     }
 
