@@ -161,66 +161,16 @@ public class BarcodeRecognition {
         return lookThroughWindows(thresholded);
     }
 
+    // Send the ROI from the original BGR input down the HSV recognition path.
     private BarcodeReturn hsvRecognitionPath(VisionParameters.HSVParameters pHSVParameters) {
-        // This is the HSV color path.
-        // Adapted from ...\OpenCV_Projects\OpenCVTestbed2\OpenCVTestbed2\GeneralTarget.cpp
-        Mat hsvROI = new Mat();
-        Imgproc.cvtColor(imageROI, hsvROI, Imgproc.COLOR_BGR2HSV);
+        Mat thresholded = imageUtils.applyInRange(imageROI, outputFilenamePreamble, pHSVParameters);
 
-        // Adjust the HSV saturation and value levels in the image to match the targets.
-        int hueLow = pHSVParameters.hue_low;
-        int hueHigh = pHSVParameters.hue_high;
-        int satTarget = pHSVParameters.saturation_target;
-        int satHigh = 255;
-        int valTarget = pHSVParameters.value_target;
-        int valHigh = 255;
-        RobotLogCommon.d(TAG, "Target hue levels: low " + hueLow + ", high " + hueHigh);
+        // Clean up the thresholded image via morphological opening.
+        Mat morphed = new Mat();
+        Imgproc.erode(thresholded, morphed, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5)));
+        Imgproc.dilate(morphed, morphed, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5)));
 
-        // Adjust saturation and value to the target levels.
-        Mat adjusted = imageUtils.adjustSaturationAndValue(hsvROI, satTarget, valTarget);
-        RobotLogCommon.d(TAG, "Adjusted image levels: saturation low " + satTarget + ", value low " + valTarget);
-
-        // Convert back to BGR.
-        //## This debugging step will not be needed in production.
-        Mat adjustedBGR = new Mat();
-        Imgproc.cvtColor(adjusted, adjustedBGR, Imgproc.COLOR_HSV2BGR);
-        Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ.png", adjustedBGR);
-        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ADJ.png");
-
-        // Use inRange to threshold to binary.
-        // Account for hue ranges that cross the 180 degree boundary.
-        // Red, for example, might have a hueLow of 170 and a hueHigh of
-        // 10.
-        // See https://stackoverflow.com/questions/32522989/opencv-better-detection-of-red-color
-
-        Mat thresholded = new Mat();
-        int inRangeSatLow = pHSVParameters.saturation_low_threshold;
-        int inrangeValLow = pHSVParameters.value_low_threshold;
-        RobotLogCommon.d(TAG, "Actual inRange HSV levels: hue low " + hueLow + ", hue high " + hueHigh);
-        RobotLogCommon.d(TAG, "Actual inRange HSV levels: saturation low " + inRangeSatLow + ", value low " + inrangeValLow);
-
-        // Sanity check for hue.
-        if (!((hueLow >= 0 && hueLow <= 180) && (hueHigh >= 0 && hueHigh <= 180) &&
-                (hueLow != hueHigh)))
-            throw new AutonomousRobotException(TAG, "Hue out of range");
-
-        // Normal hue range.
-        if (hueLow < hueHigh)
-            Core.inRange(adjusted, new Scalar(hueLow, inRangeSatLow, inrangeValLow), new Scalar(hueHigh, satHigh, valHigh), thresholded);
-        else {
-            // For a hue range from the XML file of low 170, high 10
-            // the following yields two new ranges: 170 - 180 and 0 - 10.
-            Mat range1 = new Mat();
-            Mat range2 = new Mat();
-            Core.inRange(adjusted, new Scalar(hueLow, inRangeSatLow, inrangeValLow), new Scalar(180, satHigh, valHigh), range1);
-            Core.inRange(adjusted, new Scalar(0, inRangeSatLow, inrangeValLow), new Scalar(hueHigh, satHigh, valHigh), range2);
-            Core.bitwise_or(range1, range2, thresholded);
-        }
-
-        Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ_THR.png", thresholded);
-        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ADJ_THR.png");
-
-        return lookThroughWindows(thresholded);
+        return lookThroughWindows(morphed);
     }
 
     private BarcodeReturn reflectiveTapeRecognitionPath(VisionParameters.GrayParameters pGrayParameters) {

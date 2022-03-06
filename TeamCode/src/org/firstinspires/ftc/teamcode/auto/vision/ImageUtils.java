@@ -159,7 +159,7 @@ public class ImageUtils {
     }
 
     // The target low hue may be greater than the target high hue. For example,
-// target low 170, target high 10.
+    // target low 170, target high 10.
     public boolean hueInRange(int pHue, int pTargetLow, int pTargetHigh) {
 
         // Sanity check for hue.
@@ -187,7 +187,7 @@ public class ImageUtils {
 // thresholding, even though the standard path is to pass grayscale
 // images in to HoughCircles (because it calls Canny).
 
-    // Note that pyimagesearch always blurs grayscale images before thresholding:
+// Note that pyimagesearch always blurs grayscale images before thresholding:
 // https://www.pyimagesearch.com/2021/04/28/opencv-thresholding-cv2-threshold/
 // This OpenCV tutorial does not:
 // https://docs.opencv.org/3.4/db/d8e/tutorial_threshold.html
@@ -230,8 +230,10 @@ public class ImageUtils {
         return thresholded;
     }
 
+    //**TODO 03/05/2022 REVIEW!! only called after inRange. If called after
+    // grayscale thresholding this would result in a double opening.
     // 2/20/2022 Benchmarked duckieDistanceTarget with morphological
-// opening only.
+    // opening only.
     public List<MatOfPoint> findContoursInThresholdedImage(Mat pThresholded) {
 
         //!! findContours works without blurring and morphological opening.
