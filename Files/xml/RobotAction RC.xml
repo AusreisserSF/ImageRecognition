@@ -5,38 +5,35 @@
             <log_level>v</log_level>
             <!-- image_parameters element is required if you include ANALYZE_BARCODE -->
             <image_parameters>
-                <!-- RC left Image_12281024_37996_IMG.png -->
-                <!-- RC right Image_12300948_24420_IMG_RC.png -->
-                <!-- RC center Image_12281028_31986_IMG.png -->
-                <file>Image_12281024_37996_IMG.png</file>
+                <file>Image_03071724_32968_IMG.png</file>
                 <resolution>
                     <width>848</width>
                     <height>480</height>
                 </resolution>
                 <image_roi>
-                    <x>235</x>
-                    <y>360</y>
-                    <width>380</width>
-                    <height>110</height>
-                 </image_roi>
+                    <x>225</x>
+                    <y>315</y>
+                    <width>430</width>
+                    <height>130</height>
+                                </image_roi>
             </image_parameters>
            </parameters>
         <actions>
             <ANALYZE_BARCODE>
                 <ocv_image_provider>file</ocv_image_provider>
                 <barcode_recognition>
-                    <recognition_path>reflective_tape</recognition_path>
+                    <recognition_path>hsv</recognition_path>
                     <!-- These values are relative to the image ROI -->
                     <left_window>
                         <x>0</x>
                         <y>0</y>
                         <width>165</width>
-                        <height>110</height>
+                        <height>130</height>
                         <shipping_hub_level>SHIPPING_HUB_LEVEL_2</shipping_hub_level>
                     </left_window>
                     <right_window>
                         <!-- x starts at left_window.x + left_window.width + 1 -->
-                        <width>200</width>
+                        <width>165</width>
                         <!-- y is the same as that of the left_window -->
                         <!-- height is the same as that of the left_window -->
                         <shipping_hub_level>SHIPPING_HUB_LEVEL_3</shipping_hub_level>

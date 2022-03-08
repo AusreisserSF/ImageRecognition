@@ -8,14 +8,17 @@ import java.util.EnumMap;
 // Input parameters to barcode recognition.
 public class BarcodeParameters {
 
-    public final VisionParameters.GrayParameters grayParameters; // extracted from BarcodeParameters.xml.
+    public final VisionParameters.GrayParameters grayParameters;
     public final VisionParameters.HSVParameters hsvParameters;
+    public final int minWhitePixels;
     private EnumMap<RobotConstantsFreightFrenzy.BarcodeElementWindow, Rect> barcodeElements;
  
     public BarcodeParameters(VisionParameters.GrayParameters pGrayParameters,
-                             VisionParameters.HSVParameters pHSVParameters) {
+                             VisionParameters.HSVParameters pHSVParameters,
+                             int pMinWhitePixels) {
         grayParameters = pGrayParameters;
         hsvParameters = pHSVParameters;
+        minWhitePixels = pMinWhitePixels;
     }
 
     public void setBarcodeElements(EnumMap<RobotConstantsFreightFrenzy.BarcodeElementWindow, Rect> pBarcodeElements) {

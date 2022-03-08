@@ -77,7 +77,26 @@ public class BarcodeParametersXML {
 
         hsvParameters = ImageXML.parseHSVParameters(hsv_parameters_node);
 
-        return new BarcodeParameters(grayParameters, hsvParameters);
+        // Point to <criteria>
+        Node criteria_node = hsv_parameters_node.getNextSibling();
+        criteria_node = getNextElement(criteria_node);
+        if ((criteria_node == null) || !criteria_node.getNodeName().equals("criteria"))
+            throw new AutonomousRobotException(TAG, "Element 'criteria' not found");
+
+        // Point to <min_white_pixels>
+        Node pixel_count_node = criteria_node.getFirstChild();
+        pixel_count_node = getNextElement(pixel_count_node);
+        if ((pixel_count_node == null) || !pixel_count_node.getNodeName().equals("min_white_pixels") || pixel_count_node.getTextContent().isEmpty())
+            throw new AutonomousRobotException(TAG, "Element 'criteria/min_white_pixels' missing or empty");
+
+        int minWhitePixels;
+        try {
+            minWhitePixels = Integer.parseInt(pixel_count_node.getTextContent());
+        } catch (NumberFormatException nex) {
+            throw new AutonomousRobotException(TAG, "Invalid number format in element 'criteria/min_pixel_count'");
+        }
+
+        return new BarcodeParameters(grayParameters, hsvParameters, minWhitePixels);
     }
 
     private Node getNextElement(Node pNode) {

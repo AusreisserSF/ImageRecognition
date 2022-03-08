@@ -20,7 +20,6 @@ public class BarcodeRecognition {
 
     private static final String TAG = BarcodeRecognition.class.getSimpleName();
     private static final String imageFilePrefix = "Image_";
-    private static final int MIN_WHITE_PIXELS = 500;
 
     private final String workingDirectory;
     private final ImageUtils imageUtils;
@@ -29,6 +28,7 @@ public class BarcodeRecognition {
     private Mat imageROI;
     private Rect leftBarcodeElementWindow;
     private Rect rightBarcodeElementWindow;
+    private int minWhitePixels;
 
     public BarcodeRecognition() {
         workingDirectory = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
@@ -107,6 +107,9 @@ public class BarcodeRecognition {
         Imgproc.rectangle(barcodeElementWindows, rightWindowUpperLeft, rightWindowLowerRight, new Scalar(0, 0, 255), 3);
         Imgcodecs.imwrite(outputFilenamePreamble + "_WIN.png", barcodeElementWindows);
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_WIN.png");
+
+        // Set the minimum pixel count for recognition.
+        minWhitePixels = pBarcodeParameters.minWhitePixels;
 
         RobotLogCommon.d(TAG, "Recognition path " + pRecognitionPath);
         BarcodeReturn retVal;
@@ -218,7 +221,8 @@ public class BarcodeRecognition {
         RobotLogCommon.d(TAG, "Right window: number of non-zero pixels " + rightWindowNonZeroPixelCount);
 
         // Check the minimum non-zero pixel count.
-        if (leftWindowNonZeroPixelCount < MIN_WHITE_PIXELS && rightWindowNonZeroPixelCount < MIN_WHITE_PIXELS) {
+        RobotLogCommon.d(TAG, "Minimum non-zero-pixel count " + minWhitePixels);
+        if (leftWindowNonZeroPixelCount < minWhitePixels && rightWindowNonZeroPixelCount < minWhitePixels) {
             // Didn't find the Team Shipping Element on either of the barcode elements
             // we looked at.
             RobotLogCommon.d(TAG, "Neither window contains the minimum number of noon-zero pixels.");

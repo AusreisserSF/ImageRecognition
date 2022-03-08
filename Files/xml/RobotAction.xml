@@ -1,25 +1,29 @@
-<!-- RED_CAROUSEL -->
 <RobotAction>
     <OpMode id="TEST">
-        <parameters>
+           <parameters>
             <log_level>v</log_level>
             <!-- image_parameters element is required if you include ANALYZE_BARCODE -->
+            <!-- BLUE_CAROUSEL -->
             <image_parameters>
-                <file>Image_12071617_42693_IMG_RC3.png</file>
+                <file>Image_03071729_42540_IMG.png</file>
                 <resolution>
                     <width>848</width>
                     <height>480</height>
                 </resolution>
                 <image_roi>
-                    <x>225</x>
-                    <y>315</y>
-                    <width>430</width>
-                    <height>130</height>
-                                </image_roi>
+                    <x>300</x>
+                    <y>360</y>
+                    <width>380</width>
+                    <height>110</height>
+                </image_roi>
             </image_parameters>
-           </parameters>
+        </parameters>
         <actions>
             <ANALYZE_BARCODE>
+                <!-- If the contents of the ocv_image_provider element is "file"
+                     then the file name must be present in the above element
+                     image_parameters/file. Otherwise image_parameters/file is
+                     not used. -->
                 <ocv_image_provider>file</ocv_image_provider>
                 <barcode_recognition>
                     <recognition_path>hsv</recognition_path>
@@ -28,18 +32,18 @@
                         <x>0</x>
                         <y>0</y>
                         <width>165</width>
-                        <height>130</height>
-                        <shipping_hub_level>SHIPPING_HUB_LEVEL_2</shipping_hub_level>
+                        <height>110</height>
+                        <shipping_hub_level>SHIPPING_HUB_LEVEL_1</shipping_hub_level>
                     </left_window>
                     <right_window>
                         <!-- x starts at left_window.x + left_window.width + 1 -->
-                        <width>165</width>
+                        <width>200</width>
                         <!-- y is the same as that of the left_window -->
                         <!-- height is the same as that of the left_window -->
-                        <shipping_hub_level>SHIPPING_HUB_LEVEL_3</shipping_hub_level>
+                        <shipping_hub_level>SHIPPING_HUB_LEVEL_2</shipping_hub_level>
                     </right_window>
                     <barcode_element_npos>
-                        <shipping_hub_level>SHIPPING_HUB_LEVEL_1</shipping_hub_level>
+                        <shipping_hub_level>SHIPPING_HUB_LEVEL_3</shipping_hub_level>
                     </barcode_element_npos>
                 </barcode_recognition>
             </ANALYZE_BARCODE>
