@@ -22,10 +22,10 @@
       </library>
     </orderEntry>
     <orderEntry type="library" exported="" name="lib" level="project" />
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../Files/dev_common_lib/ftcdevcommon_1_6.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../FTCDevCommonIntelliJ/out/artifacts/ftcdevcommon_2_0_jar/ftcdevcommon_2_0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
