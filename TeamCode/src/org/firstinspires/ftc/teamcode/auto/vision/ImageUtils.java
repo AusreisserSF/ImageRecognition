@@ -174,11 +174,6 @@ public class ImageUtils {
                 (pHue >= 0 && pHue <= pTargetHigh);
     }
 
-//**TODO At some point you will decide between performThreshold and
-// performThreshold2. See applyInRange, which does not morph or blur;
-// these operations are left for downstream processing,
-// e.g. findContours.
-
 // Attempt at a common path for converting an RGB (OpenCV BGR) image
 // to grayscale, adjusting the grayscale image to a target, performing
 // morphological opening, blurring the image, and thresholding it.

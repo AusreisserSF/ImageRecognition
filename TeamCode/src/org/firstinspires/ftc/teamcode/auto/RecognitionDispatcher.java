@@ -194,7 +194,7 @@ public class RecognitionDispatcher extends Application {
                 BarcodeReturn barcodeReturn =
                         barcodeRecognition.findTeamScoringElement(fileImage, actionData.imageParameters, barcodeParameters,
                                 recognitionPath);
-                if (barcodeReturn.fatalComputerVisionError)
+                if (barcodeReturn.openCVResults == RobotConstants.OpenCVResults.OCV_ERROR)
                     throw new AutonomousRobotException(TAG, "Error in computer vision subsystem");
 
                 // Set the shipping hub level based on the barcode recognition.

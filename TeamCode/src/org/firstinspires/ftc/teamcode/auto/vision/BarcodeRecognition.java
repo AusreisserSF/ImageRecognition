@@ -46,7 +46,7 @@ public class BarcodeRecognition {
         // LocalDateTime requires Android minSdkVersion 26  public Pair<Mat, LocalDateTime> getImage() throws InterruptedException;
         Pair<Mat, LocalDateTime> barcodeImage = pImageProvider.getImage();
         if (barcodeImage.first == null)
-            return new BarcodeReturn(true, RobotConstantsFreightFrenzy.BarcodeElementWindow.WINDOW_NPOS); // don't crash
+            return new BarcodeReturn(RobotConstants.OpenCVResults.OCV_ERROR); // don't crash
 
         String fileDate = TimeStamp.getLocalDateTimeStamp(barcodeImage.second);
         outputFilenamePreamble = workingDirectory + imageFilePrefix + fileDate;
@@ -225,15 +225,15 @@ public class BarcodeRecognition {
         if (leftWindowNonZeroPixelCount < minWhitePixels && rightWindowNonZeroPixelCount < minWhitePixels) {
             // Didn't find the Team Shipping Element on either of the barcode elements
             // we looked at.
-            RobotLogCommon.d(TAG, "Neither window contains the minimum number of noon-zero pixels.");
-            return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWindow.WINDOW_NPOS);
+            RobotLogCommon.d(TAG, "Neither window contains the minimum number of non-zero pixels.");
+            return new BarcodeReturn(RobotConstants.OpenCVResults.RECOGNITION_SUCCESSFUL, RobotConstantsFreightFrenzy.BarcodeElementWindow.WINDOW_NPOS);
         }
 
         // Determine which window the shipping element is in.
         if (leftWindowNonZeroPixelCount >= rightWindowNonZeroPixelCount)
-            return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWindow.LEFT);
+            return new BarcodeReturn(RobotConstants.OpenCVResults.RECOGNITION_SUCCESSFUL, RobotConstantsFreightFrenzy.BarcodeElementWindow.LEFT);
 
-        return new BarcodeReturn(false, RobotConstantsFreightFrenzy.BarcodeElementWindow.RIGHT);
+        return new BarcodeReturn(RobotConstants.OpenCVResults.RECOGNITION_SUCCESSFUL, RobotConstantsFreightFrenzy.BarcodeElementWindow.RIGHT);
     }
 
 }

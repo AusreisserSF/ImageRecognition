@@ -1,0 +1,34 @@
+[2022-03-10 22:03:06.791] [INFO   ] RecognitionDispatcher Starting image recognition 
+[2022-03-10 22:03:06.870] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2022-03-10 22:03:06.934] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2022-03-10 22:03:06.935] [FINE   ] ImageXML Parsing XML image_parameters 
+[2022-03-10 22:03:06.940] [FINE   ] RecognitionDispatcher Executing action ANALYZE_BARCODE 
+[2022-03-10 22:03:06.947] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2022-03-10 22:03:06.948] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2022-03-10 22:03:06.951] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-03-10 22:03:06.955] [CONFIG ] RecognitionDispatcher Recognition path hsv 
+[2022-03-10 22:03:06.964] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2022-03-10 22:03:06.965] [FINE   ] ImageUtils File name Files/images/Image_03071729_42540_IMG.png 
+[2022-03-10 22:03:06.979] [FINE   ] ImageUtils Image width 848, height 480 
+[2022-03-10 22:03:06.981] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_03102203_06979_IMG.png 
+[2022-03-10 22:03:06.998] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2022-03-10 22:03:07.005] [FINE   ] ImageUtils Image ROI x 300, y 360, width 380, height 110 
+[2022-03-10 22:03:07.006] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_03102203_06979_ROI.png 
+[2022-03-10 22:03:07.044] [FINE   ] BarcodeRecognition Writing Files/images/Image_03102203_06979_WIN.png 
+[2022-03-10 22:03:07.044] [FINE   ] BarcodeRecognition Recognition path HSV 
+[2022-03-10 22:03:07.046] [FINE   ] ImageUtils Target hue levels: low 50, high 100 
+[2022-03-10 22:03:07.071] [FINE   ] ImageUtils HSV saturation channel median 45 
+[2022-03-10 22:03:07.072] [FINE   ] ImageUtils HSV value channel median 128 
+[2022-03-10 22:03:07.072] [FINE   ] ImageUtils Adjust HSV saturation by -39 
+[2022-03-10 22:03:07.073] [FINE   ] ImageUtils Adjust HSV value by 44 
+[2022-03-10 22:03:07.073] [FINE   ] ImageUtils Adjusted image levels: saturation low 6, value low 172 
+[2022-03-10 22:03:07.076] [FINE   ] ImageUtils Writing Files/images/Image_03102203_06979_ADJ.png 
+[2022-03-10 22:03:07.076] [FINE   ] ImageUtils Actual inRange HSV levels: hue low 50, hue high 100 
+[2022-03-10 22:03:07.077] [FINE   ] ImageUtils Actual inRange HSV levels: saturation low 30, value low 100 
+[2022-03-10 22:03:07.079] [FINE   ] ImageUtils Writing Files/images/Image_03102203_06979_ADJ_THR.png 
+[2022-03-10 22:03:07.081] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 2302 
+[2022-03-10 22:03:07.082] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 0 
+[2022-03-10 22:03:07.082] [FINE   ] BarcodeRecognition Minimum non-zero-pixel count 500 
+[2022-03-10 22:03:07.085] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position LEFT 
+[2022-03-10 22:03:07.085] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_1 
+[2022-03-10 22:03:07.432] [INFO   ] Closing the log with 0 entries on the queue 
