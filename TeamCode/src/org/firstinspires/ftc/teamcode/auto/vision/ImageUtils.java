@@ -12,6 +12,7 @@ import java.util.*;
 
 import static org.opencv.imgcodecs.Imgcodecs.IMREAD_COLOR;
 
+//**TODO 3/11/2022 Ahead of Android - migrate.
 public class ImageUtils {
 
     public static final String TAG = ImageUtils.class.getSimpleName();
@@ -267,15 +268,11 @@ public class ImageUtils {
         return median;
     }
 
+    //**TODO Migrate lambda to Android
 // From https://stackoverflow.com/questions/40669684/opencv-sorting-contours-by-area-in-java
-//**TODO See lambda in https://stackoverflow.com/questions/24378646/finding-max-with-lambda-expression-in-java
+// See lambda in https://stackoverflow.com/questions/24378646/finding-max-with-lambda-expression-in-java
 public Optional<MatOfPoint> getLargestContour(List<MatOfPoint> pContours) {
-Optional<MatOfPoint> largest = pContours.stream().max(new Comparator<MatOfPoint>() {
-        public int compare(MatOfPoint c1, MatOfPoint c2) {
-            return (int) (Imgproc.contourArea(c1)- Imgproc.contourArea(c2));
-        }
-    });
-
+Optional<MatOfPoint> largest = pContours.stream().max(Comparator.comparing(c -> Imgproc.contourArea(c)));
 return largest;
 }
 
