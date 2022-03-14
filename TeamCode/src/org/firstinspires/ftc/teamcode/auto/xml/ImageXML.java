@@ -15,7 +15,7 @@ public class ImageXML {
     /*
     <image_parameters>
       <!-- The ocv_image element contains a file name (ending in .png or .jpg)
-           or a real-time source such as "vuforia. -->
+           or a real-time source such as "vuforia". -->
       <ocv_image></ocv_image>
       <resolution>
 	    <width></width>

@@ -12,7 +12,7 @@ public class RobotConstants {
     }
 
     public enum Alliance {
-        BLUE, RED, UNKNOWN
+        BLUE, RED, NONE
     }
 
     public enum OpenCVResults {
