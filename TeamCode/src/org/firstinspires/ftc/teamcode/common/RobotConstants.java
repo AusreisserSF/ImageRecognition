@@ -5,6 +5,7 @@ public class RobotConstants {
     public static final String imageDir = "/images/";
     public static final String logDir = "/logs/";
     public static final String xmlDir = "/xml/";
+    public static final String imageFilePrefix = "Image_";
 
     public enum RunType {
         AUTONOMOUS, TELEOP

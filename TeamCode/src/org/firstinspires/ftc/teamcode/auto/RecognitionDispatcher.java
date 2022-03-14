@@ -32,11 +32,9 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-//**TODO 3/14/2022 Significant change to <image_parameters> - both
-// placement and contents. TEST and port to Android.
 public class RecognitionDispatcher extends Application {
 
-    private static final String TAG = "RecognitionDispatcher";
+    private static final String TAG = RecognitionDispatcher.class.getSimpleName();
 
     public static final double FIELD_WIDTH = 410;
     public static final double FIELD_HEIGHT = 300;
@@ -81,7 +79,7 @@ public class RecognitionDispatcher extends Application {
         if (gameParameter == null)
             throw new AutonomousRobotException(TAG, "Required parameter --game is missing");
 
-        //**TODO 2/27/2022 HARDCODED for FreightFrenzy; BROKEN for UltimateGoal
+        //## 2/27/2022 HARDCODED for FreightFrenzy; BROKEN for UltimateGoal
         if (!(gameParameter.equals("Freight Frenzy")))
             throw new AutonomousRobotException(TAG, "Unrecognized game " + gameParameter);
 
@@ -122,7 +120,7 @@ public class RecognitionDispatcher extends Application {
         switch (actionName) {
 
             // Ultimate Goal 2020-2021
-            //**TODO 2/27/2022 NOT reachable
+            //## 2/27/2022 NOT reachable; keep for reference/technique
             case "RECOGNIZE_RINGS": {
                 // Read the parameters for ring recognition from the xml file.
                 RingParametersXML ringParametersXML = new RingParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
@@ -237,7 +235,6 @@ public class RecognitionDispatcher extends Application {
             // Combine shippingHubRecognition.getAngleToShippingHub and
             // getDistanceToShippingHub into getAngleAndDistanceToShippingHub.
 
-            //**TODO Test updates to ImageUtils and check against Android.
             case "APPROACH_SHIPPING_HUB_BY_VISION": {
                 // This action needs a command line switch of --alliance=["BLUE" | "RED"]
                 String allianceString = namedParameters.get("alliance");

@@ -7,10 +7,7 @@ import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
 import org.firstinspires.ftc.ftcdevcommon.intellij.TimeStamp;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.common.RobotConstants;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
+import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -21,8 +18,6 @@ import java.util.Optional;
 public class ShippingHubRecognition {
 
     private static final String TAG = ShippingHubRecognition.class.getSimpleName();
-    private static final String imageFilePrefix = "Image_";
-
     private static final double LOGITECH_BRIO_FIELD_OF_VIEW = 78.0;
 
     private final String workingDirectory;
@@ -88,7 +83,7 @@ public class ShippingHubRecognition {
         Mat imgOriginal = shippingHubImage.first.clone();
 
         String fileDate = TimeStamp.getLocalDateTimeStamp(shippingHubImage.second);
-        String outputFilenamePreamble = imageUtils.createOutputFilePreamble(pImageParameters.ocv_image, workingDirectory, imageFilePrefix, fileDate);
+        String outputFilenamePreamble = imageUtils.createOutputFilePreamble(pImageParameters.ocv_image, workingDirectory, RobotConstants.imageFilePrefix, fileDate);
         Mat imageROI = imageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
 
         List<MatOfPoint> contours = imageUtils.applyInRangeAndFindContours(imageROI, outputFilenamePreamble, pHSVParameters);

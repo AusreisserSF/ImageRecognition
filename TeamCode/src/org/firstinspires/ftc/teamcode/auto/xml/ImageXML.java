@@ -209,6 +209,7 @@ public class ImageXML {
             throw new AutonomousRobotException(TAG, "Element 'hue_name' missing or empty");
 
         hue_name = hue_name_node.getTextContent();
+        RobotLogCommon.d(TAG, "Parsed XML hsv_parameters; hue name = " + hue_name);
 
         Node hue_low_node = hue_name_node.getNextSibling();
         hue_low_node = getNextElement(hue_low_node);

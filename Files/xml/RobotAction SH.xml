@@ -6,10 +6,9 @@
         </parameters>
         <actions>
             <APPROACH_SHIPPING_HUB_BY_VISION>
-                <ocv_image_provider>file</ocv_image_provider>
                 <image_parameters>
                     <!-- File to be used in the angle and distance calculations; the Shipping Hub may or may not be centered. -->
-                    <file>Image_02111549_13013_IMG.png</file>
+                    <ocv_image>Image_02111549_13013_IMG.png</ocv_image>
                     <resolution>
                         <width>848</width>
                         <height>480</height>

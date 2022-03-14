@@ -3,26 +3,24 @@
     <OpMode id="TEST">
         <parameters>
             <log_level>v</log_level>
-            <!-- image_parameters element is required if you include ANALYZE_BARCODE -->
-            <image_parameters>
-                <file>Image_03071724_32968_IMG.png</file>
-                <resolution>
-                    <width>848</width>
-                    <height>480</height>
-                </resolution>
-                <image_roi>
-                    <x>225</x>
-                    <y>315</y>
-                    <width>430</width>
-                    <height>130</height>
-                                </image_roi>
-            </image_parameters>
-           </parameters>
+        </parameters>
         <actions>
             <ANALYZE_BARCODE>
-                <ocv_image_provider>file</ocv_image_provider>
+                <image_parameters>
+                    <ocv_image>Image_12300948_24420_IMG_RC.png</ocv_image>
+                    <resolution>
+                        <width>848</width>
+                        <height>480</height>
+                    </resolution>
+                    <image_roi>
+                        <x>225</x>
+                        <y>315</y>
+                        <width>430</width>
+                        <height>130</height>
+                    </image_roi>
+                </image_parameters>
                 <barcode_recognition>
-                    <recognition_path>hsv</recognition_path>
+                    <recognition_path>reflective_tape</recognition_path>
                     <!-- These values are relative to the image ROI -->
                     <left_window>
                         <x>0</x>

@@ -46,7 +46,7 @@ public class ImageUtils {
         // extension, an underscore, and the file date.
         if (pOCVImage.endsWith(".png") || pOCVImage.endsWith(".jpg")) {
             String originalFN = pOCVImage.substring(0, pOCVImage.lastIndexOf('.'));
-            return pWorkingDirectory + pPrefix + originalFN + "_" + pFileDate;
+            return pWorkingDirectory + originalFN + "_" + pFileDate;
         }
 
         // Camera image; use the file date only.
@@ -131,7 +131,6 @@ public class ImageUtils {
         return adjustedImage;
     }
 
-    //**TODO TEST and correct in Android.
     // See https://docs.opencv.org/3.4/d8/dbc/tutorial_histogram_calculation.html
     public int getDominantHSVHue(Mat pHSVImageIn, Mat pMask) {
 
@@ -140,13 +139,12 @@ public class ImageUtils {
 
         // Set the number of bins and range for HSV hue in OpenCV.
         int hueHistSize = 180; // number of bins
-        float hueRange[] = {0, 180};
+        float[] hueRange = {0, 180};
         MatOfFloat hueHistRange = new MatOfFloat(hueRange);
 
         Mat hueHist = new Mat();
-        boolean accumulate = false;
         // MatOfInt(0) indicates channel 0 -> hue
-        Imgproc.calcHist(channelsHSV, new MatOfInt(0), new Mat(), hueHist, new MatOfInt(hueHistSize), hueHistRange, accumulate);
+        Imgproc.calcHist(channelsHSV, new MatOfInt(0), pMask, hueHist, new MatOfInt(hueHistSize), hueHistRange, false);
 
         // Normalize the result to [ 0, hue_hist.rows ]
         //## Normalization is done for graphings, which we don't need.
@@ -352,12 +350,10 @@ public class ImageUtils {
         return pContours.stream().max(Comparator.comparing(Imgproc::contourArea));
     }
 
-    //**TODO TEST and correct in Android.
     public Point getContourCentroid(MatOfPoint pOneContour) {
         Moments moments = Imgproc.moments(pOneContour);
-        Point centroid = new Point(moments.get_m10() / moments.get_m00(),
+        return new Point(moments.get_m10() / moments.get_m00(),
                 moments.get_m01() / moments.get_m00());
-        return centroid;
     }
 
     // Ported from 2018-2019 auto/VisionOCV.java
