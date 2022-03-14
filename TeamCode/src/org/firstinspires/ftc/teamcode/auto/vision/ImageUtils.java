@@ -317,7 +317,7 @@ public class ImageUtils {
 
     // Ported from 2018-2019 auto/VisionOCV.java
     // Compute the angle from the front-center of the robot to the center of the
-    // object of interest. The parameeter pImageWidth is the width of the entire
+    // object of interest. The parameter pImageWidth is the width of the entire
     // image, not just the ROI, and the parameter pObjectCentroidX is the x
     // offset from the left-hand edge of the emtire image to the center of the
     // object of interest.

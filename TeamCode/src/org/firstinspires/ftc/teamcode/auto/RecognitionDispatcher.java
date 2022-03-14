@@ -230,6 +230,7 @@ public class RecognitionDispatcher extends Application {
             // Combine shippingHubRecognition.getAngleToShippingHub and
             // getDistanceToShippingHub into getAngleAndDistanceToShippingHub.
 
+                //**TODO Test updates to ImageUtils and check against Android.
             case "APPROACH_SHIPPING_HUB_BY_VISION": {
                 // This action needs a command line switch of --alliance=["BLUE" | "RED"]
                 String allianceString = namedParameters.get("alliance");
