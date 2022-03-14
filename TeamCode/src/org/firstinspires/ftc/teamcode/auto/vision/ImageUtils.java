@@ -7,12 +7,12 @@ import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.imgproc.Moments;
 
 import java.util.*;
 
 import static org.opencv.imgcodecs.Imgcodecs.IMREAD_COLOR;
 
-//**TODO 3/11/2022 Ahead of Android - migrate.
 public class ImageUtils {
 
     public static final String TAG = ImageUtils.class.getSimpleName();
@@ -45,12 +45,10 @@ public class ImageUtils {
     public Mat adjustGrayscaleBrightness(Mat pGray, int pTarget) {
         int medianGray = getSingleChannelMedian(pGray);
         RobotLogCommon.d(TAG, "Original image: grayscale median " + medianGray);
-
-        int grayMedianTarget = pTarget;
-        RobotLogCommon.d(TAG, "Grayscale median target " + grayMedianTarget);
+        RobotLogCommon.d(TAG, "Grayscale median target " + pTarget);
 
         // adjustment = target - median;
-        int adjustment = grayMedianTarget - medianGray;
+        int adjustment = pTarget - medianGray;
         Mat adjustedGray = new Mat();
         pGray.convertTo(adjustedGray, -1, 1, adjustment);
         RobotLogCommon.d(TAG, "Grayscale adjustment " + adjustment);
@@ -88,8 +86,44 @@ public class ImageUtils {
         return adjustedImage;
     }
 
-    //**TODO Get the dominant HSV hue.
-    //uchar ImageUtils::getDominantHSVHue(const Mat& pHSVImageIn, const Mat& pMask) {
+    //**TODO TEST and correct in Android.
+    // See https://docs.opencv.org/3.4/d8/dbc/tutorial_histogram_calculation.html
+    public int getDominantHSVHue(Mat pHSVImageIn, Mat pMask) {
+
+        List<Mat> channelsHSV = new ArrayList<>();
+        Core.split(pHSVImageIn, channelsHSV);
+
+        // Set the number of bins and range for HSV hue in OpenCV.
+        int hueHistSize = 180; // number of bins
+        float hueRange[] = {0, 180};
+        MatOfFloat hueHistRange = new MatOfFloat(hueRange);
+
+        Mat hueHist = new Mat();
+        boolean accumulate = false;
+        // MatOfInt(0) indicates channel 0 -> hue
+        Imgproc.calcHist(channelsHSV, new MatOfInt(0), new Mat(), hueHist, new MatOfInt(hueHistSize), hueHistRange, accumulate);
+
+        // Normalize the result to [ 0, hue_hist.rows ]
+        //## Normalization is done for graphings, which we don't need.
+        // normalize(hue_hist, hue_hist, 0, hue_hist.rows, NORM_MINMAX, -1, Mat());
+
+        //## DEBUG
+        //RobotLogCommon.d(TAG, "Hue histogram: bins");
+        //for (int i = 0; i < 180; i++)
+        //  if (hue_hist.at<float>(i) != 0.0f)
+        //	RobotLogCommon.d(TAG, "Bin " + to_string(i) + " = " + to_string(hue_hist.at<float>(i)));
+
+        // Get the bin with the greatest pixel count.
+        Core.MinMaxLocResult mmlResult = Core.minMaxLoc(hueHist);
+        RobotLogCommon.d(TAG, "Hue histogram: largest bin x " + mmlResult.maxLoc.x + ", y " + mmlResult.maxLoc.y + ", count " + mmlResult.maxVal);
+
+        // The y-coordinate of the maxLoc Point contains the index to the bin
+        // with the greatest value. The index to the bin is the hue itself.
+        int dominantHue = (int) mmlResult.maxLoc.y;
+        RobotLogCommon.d(TAG, "HSV dominant hue " + dominantHue);
+
+        return dominantHue;
+    }
 
     // The input image is BGR. This function converts it to HSV, adjusts the saturation and value according
     // to the targets in the HSVParameters, and applies the OpenCV thresholding function inRange using
@@ -159,6 +193,25 @@ public class ImageUtils {
         return thresholded;
     }
 
+    // Combine the frequently associated steps of applying inRange to
+    // an HSV image and then finding contours in the thresholded output.
+    //!! findContours works without blurring and morphological opening.
+    //!! But there are fewer artifacts in the contour recognition if only
+    //!! morphological opening is included.
+    public List<MatOfPoint> applyInRangeAndFindContours(Mat pInputROI,
+                                                        String pOutputFilenamePreamble, VisionParameters.HSVParameters pHSVParameters) {
+
+        Mat thresholded = applyInRange(pInputROI, pOutputFilenamePreamble, pHSVParameters);
+        Mat morphed = new Mat();
+        Imgproc.erode(thresholded, morphed, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5)));
+        Imgproc.dilate(morphed, morphed, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5)));
+
+        // Identify the contours
+        List<MatOfPoint> contours = new ArrayList<>();
+        Imgproc.findContours(morphed, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+        return contours;
+    }
+
     // The target low hue may be greater than the target high hue. For example,
     // target low 170, target high 10.
     public boolean hueInRange(int pHue, int pTargetLow, int pTargetHigh) {
@@ -175,20 +228,20 @@ public class ImageUtils {
                 (pHue >= 0 && pHue <= pTargetHigh);
     }
 
-// Attempt at a common path for converting an RGB (OpenCV BGR) image
-// to grayscale, adjusting the grayscale image to a target, performing
-// morphological opening, blurring the image, and thresholding it.
-// This function is designed to work in advance of HoughCircles and
-// findContours. This accords with our policy of controlling the
-// thresholding, even though the standard path is to pass grayscale
-// images in to HoughCircles (because it calls Canny).
+    // Attempt at a common path for converting an RGB (OpenCV BGR) image
+    // to grayscale, adjusting the grayscale image to a target, performing
+    // morphological opening, blurring the image, and thresholding it.
+    // This function is designed to work in advance of HoughCircles and
+    // findContours. This accords with our policy of controlling the
+    // thresholding, even though the standard path is to pass grayscale
+    // images in to HoughCircles (because it calls Canny).
 
-// Note that pyimagesearch always blurs grayscale images before thresholding:
-// https://www.pyimagesearch.com/2021/04/28/opencv-thresholding-cv2-threshold/
-// This OpenCV tutorial does not:
-// https://docs.opencv.org/3.4/db/d8e/tutorial_threshold.html
-// But this one does with convincing results:
-// https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html
+    // Note that pyimagesearch always blurs grayscale images before thresholding:
+    // https://www.pyimagesearch.com/2021/04/28/opencv-thresholding-cv2-threshold/
+    // This OpenCV tutorial does not:
+    // https://docs.opencv.org/3.4/db/d8e/tutorial_threshold.html
+    // But this one does with convincing results:
+    // https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html
     public Mat performThreshold(Mat pBGRInputROI, String pOutputFilenamePreamble,
                                 int pGrayscaleTarget, int pLowThreshold) {
 
@@ -226,25 +279,6 @@ public class ImageUtils {
         return thresholded;
     }
 
-    //**TODO 03/05/2022 REVIEW!! only called after inRange. If called after
-    // grayscale thresholding this would result in a double opening.
-    // 2/20/2022 Benchmarked duckieDistanceTarget with morphological
-    // opening only.
-    public List<MatOfPoint> findContoursInThresholdedImage(Mat pThresholded) {
-
-        //!! findContours works without blurring and morphological opening.
-        //!! But there are fewer artifacts in the contour recognition if only
-        //!! morphological opening is included.
-        Mat morphed = new Mat();
-        Imgproc.erode(pThresholded, morphed, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5)));
-        Imgproc.dilate(morphed, morphed, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5)));
-
-        // Identify the contours
-        List<MatOfPoint> contours = new ArrayList<>();
-        Imgproc.findContours(morphed, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-        return contours;
-    }
-
     // Get the median of any single-channel Mat.
     public int getSingleChannelMedian(Mat pSingleChannelMat) {
 
@@ -264,28 +298,25 @@ public class ImageUtils {
             intBuff[i] = Byte.toUnsignedInt(byteBuff[i]); // or byteBuff[i] & 0xFF;
 
         Arrays.sort(intBuff);
-        int median = (intBuff[buffLength / 2] + (intBuff[(buffLength / 2) - 1])) / 2;
-        return median;
+        return (intBuff[buffLength / 2] + (intBuff[(buffLength / 2) - 1])) / 2;
     }
 
-    //**TODO Migrate lambda to Android
-// From https://stackoverflow.com/questions/40669684/opencv-sorting-contours-by-area-in-java
-// See lambda in https://stackoverflow.com/questions/24378646/finding-max-with-lambda-expression-in-java
-public Optional<MatOfPoint> getLargestContour(List<MatOfPoint> pContours) {
-Optional<MatOfPoint> largest = pContours.stream().max(Comparator.comparing(c -> Imgproc.contourArea(c)));
-return largest;
-}
+    // From https://stackoverflow.com/questions/40669684/opencv-sorting-contours-by-area-in-java
+    // See lambda in https://stackoverflow.com/questions/24378646/finding-max-with-lambda-expression-in-java
+    public Optional<MatOfPoint> getLargestContour(List<MatOfPoint> pContours) {
+        return pContours.stream().max(Comparator.comparing(Imgproc::contourArea));
+    }
 
-   /*
-Point ImageUtils::getContourCentroid(const vector<Point>& pOneContour) {
-	Moments contourMoments = moments(pOneContour);
-	Point centroid(static_cast<int>(contourMoments.m10 / contourMoments.m00), static_cast<int>(contourMoments.m01 / contourMoments.m00));
-	return centroid;
-}
-*/
+    //**TODO TEST and correct in Android.
+    public Point getContourCentroid(MatOfPoint pOneContour) {
+        Moments moments = Imgproc.moments(pOneContour);
+        Point centroid = new Point(moments.get_m10() / moments.get_m00(),
+                moments.get_m01() / moments.get_m00());
+        return centroid;
+    }
 
     // Ported from 2018-2019 auto/VisionOCV.java
-// Compute the angle from the front-center of the robot to the center of the
+    // Compute the angle from the front-center of the robot to the center of the
     // object of interest. The parameeter pImageWidth is the width of the entire
     // image, not just the ROI, and the parameter pObjectCentroidX is the x
     // offset from the left-hand edge of the emtire image to the center of the

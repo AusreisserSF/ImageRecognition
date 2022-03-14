@@ -14,7 +14,6 @@ public class RobotConstants {
         BLUE, RED, UNKNOWN
     }
 
-    //**TODO Migrate to Android.
     public enum OpenCVResults {
         OCV_ERROR, RECOGNITION_SUCCESSFUL, RECOGNITION_UNSUCCESSFUL
     }

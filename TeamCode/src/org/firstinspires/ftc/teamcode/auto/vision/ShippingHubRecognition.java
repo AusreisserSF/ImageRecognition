@@ -125,8 +125,7 @@ public class ShippingHubRecognition {
         Imgcodecs.imwrite(imageFilename, imageROI);
         RobotLogCommon.d(TAG, "Writing image ROI " + imageFilename);
 
-        Mat thresholded = imageUtils.applyInRange(imageROI, outputFilenamePreamble, pHSVParameters);
-        List<MatOfPoint> contours = imageUtils.findContoursInThresholdedImage(thresholded);
+        List<MatOfPoint> contours = imageUtils.applyInRangeAndFindContours(imageROI, outputFilenamePreamble, pHSVParameters);
 
         if (contours.size() == 0) {
             RobotLogCommon.d(TAG, "No contours found");
