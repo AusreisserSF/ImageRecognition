@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.auto.vision;
 
 //!! IntelliJ only
 
-import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.Pair;
 import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
 import org.firstinspires.ftc.ftcdevcommon.intellij.TimeStamp;
@@ -24,14 +23,10 @@ public class ShippingHubRecognition {
     private static final String TAG = ShippingHubRecognition.class.getSimpleName();
     private static final String imageFilePrefix = "Image_";
 
-    public static final double SHIPPING_HUB_ANGLE_NPOS = -360.0;
-    public static final double SHIPPING_HUB_DISTANCE_NPOS = -1.0;
     private static final double LOGITECH_BRIO_FIELD_OF_VIEW = 78.0;
 
     private final String workingDirectory;
     private final ImageUtils imageUtils;
-
-    private String outputFilenamePreamble;
 
     public ShippingHubRecognition() {
         workingDirectory = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
@@ -50,7 +45,7 @@ public class ShippingHubRecognition {
         // platter of the Shipping Hub.
         Rect largestBoundingRect = getLargestBoundingRectangle(pImageProvider, pImageParameters, pHSVParameters);
         if (largestBoundingRect == null)
-            return new ShippingHubReturn(true, SHIPPING_HUB_ANGLE_NPOS, SHIPPING_HUB_DISTANCE_NPOS);
+            return new ShippingHubReturn(RobotConstants.OpenCVResults.OCV_ERROR);
 
         // Calculate the angle from the camera to the center of the bounding rectangle.
         // The centroid of the bounding rectangle is relative to the entire image, not
@@ -66,8 +61,7 @@ public class ShippingHubRecognition {
             RobotLogCommon.d(TAG, "Calculated focal length " + focalLength);
             distanceFromCameraToShippingHub = pShippingHubParameters.distanceParameters.calibrationObjectDistance;
             RobotLogCommon.d(TAG, "Calibration distance from camera to Shipping Hub " + distanceFromCameraToShippingHub);
-       }
-        else {
+        } else {
             // Distance determination (non-calibration) path.
             RobotLogCommon.d(TAG, "Using focal length from calibration run of " + pShippingHubParameters.distanceParameters.focalLength);
             distanceFromCameraToShippingHub = (pShippingHubParameters.distanceParameters.calibrationObjectWidth * pShippingHubParameters.distanceParameters.focalLength) / largestBoundingRect.width;
@@ -78,7 +72,7 @@ public class ShippingHubRecognition {
         double trueBearing = TrueBearing.computeTrueBearing(distanceFromCameraToShippingHub, angleFromCameraToShippingHub, pShippingHubParameters.distanceParameters.cameraToRobotCenter);
         RobotLogCommon.d(TAG, "Angle from robot center to Shipping Hub  " + trueBearing);
 
-        return new ShippingHubReturn(false, trueBearing, distanceFromCameraToShippingHub);
+        return new ShippingHubReturn(RobotConstants.OpenCVResults.RECOGNITION_SUCCESSFUL, trueBearing, distanceFromCameraToShippingHub);
     }
 
     private Rect getLargestBoundingRectangle(ImageProvider pImageProvider,
@@ -90,43 +84,14 @@ public class ShippingHubRecognition {
         if (shippingHubImage.first == null)
             return null; // don't crash
 
-        String fileDate = TimeStamp.getLocalDateTimeStamp(shippingHubImage.second);
-        outputFilenamePreamble = workingDirectory + imageFilePrefix + fileDate;
-
         // The image may be RGB (from a camera) or BGR (OpenCV imread from a file).
         Mat imgOriginal = shippingHubImage.first.clone();
 
-        // If you don't convert RGB to BGR here then the _IMG.png file will be written
-        // out with incorrect colors (gold will show up as blue).
-        if (pImageProvider.getImageFormat() == ImageProvider.ImageFormat.RGB) {
-            // The image came from a camera.
-            Imgproc.cvtColor(imgOriginal, imgOriginal, Imgproc.COLOR_RGB2BGR);
-
-            String imageFilename = outputFilenamePreamble + "_IMG.png";
-            Imgcodecs.imwrite(imageFilename, imgOriginal);
-            RobotLogCommon.d(TAG, "Writing original image " + imageFilename);
-        }
-
-        RobotLogCommon.d(TAG, "Image width " + imgOriginal.cols() + ", height " + imgOriginal.rows());
-        if ((imgOriginal.cols() != pImageParameters.resolution_width) ||
-                (imgOriginal.rows() != pImageParameters.resolution_height))
-            throw new AutonomousRobotException(TAG,
-                    "Mismatch between actual image width and expected image width " + pImageParameters.resolution_width +
-                            ", height " + pImageParameters.resolution_height);
-
-        // Crop the image to reduce distractions.
-        Mat imageROI = imageUtils.getImageROI(imgOriginal,
-                new Rect(pImageParameters.image_roi.x,
-                        pImageParameters.image_roi.y,
-                        pImageParameters.image_roi.width,
-                        pImageParameters.image_roi.height));
-
-        String imageFilename = outputFilenamePreamble + "_ROI.png";
-        Imgcodecs.imwrite(imageFilename, imageROI);
-        RobotLogCommon.d(TAG, "Writing image ROI " + imageFilename);
+        String fileDate = TimeStamp.getLocalDateTimeStamp(shippingHubImage.second);
+        String outputFilenamePreamble = imageUtils.createOutputFilePreamble(pImageParameters.ocv_image, workingDirectory, imageFilePrefix, fileDate);
+        Mat imageROI = imageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
 
         List<MatOfPoint> contours = imageUtils.applyInRangeAndFindContours(imageROI, outputFilenamePreamble, pHSVParameters);
-
         if (contours.size() == 0) {
             RobotLogCommon.d(TAG, "No contours found");
             return null;

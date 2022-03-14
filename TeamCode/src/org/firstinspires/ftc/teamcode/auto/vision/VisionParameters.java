@@ -1,6 +1,8 @@
 // Port of CommonParameters.h
 package org.firstinspires.ftc.teamcode.auto.vision;
 
+import org.opencv.core.Rect;
+
 // Parameters extracted from XML files.
 public class VisionParameters {
 
@@ -11,35 +13,16 @@ public class VisionParameters {
 
     // From the image_parameters element of any XML file.
     public static class ImageParameters {
-        public final String file_name;
+        public final String ocv_image;
         public final int resolution_width;
         public final int resolution_height;
-        public final FTCRect image_roi;
+        public final Rect image_roi;
 
-        public ImageParameters(String pFileName, int pWidth, int pHeight, FTCRect pImageROI) {
-            file_name = pFileName;
+        public ImageParameters(String pOCVImage, int pWidth, int pHeight, Rect pImageROI) {
+            ocv_image = pOCVImage;
             resolution_width = pWidth;
             resolution_height = pHeight;
             image_roi = pImageROI;
-        }
-    }
-
-    // Sorry about this but we need a container for an optional image roi -
-    // in RobotAction.xml. If a project does not need OpenCV then if we use
-    // OpenCv's Rect for this container we have to pull in all of OpenCv
-    // to avoid compilation errors. This simple repackaging avoids this.
-    public static class FTCRect {
-        public final int x;
-        public final int y;
-        public final int width;
-        public final int height;
-
-        // Order of parameters follows OpenCV Rect.
-        public FTCRect(int pX, int pY, int pWidth, int pHeight) {
-            x = pX;
-            y = pY;
-            width = pWidth;
-            height = pHeight;
         }
     }
 

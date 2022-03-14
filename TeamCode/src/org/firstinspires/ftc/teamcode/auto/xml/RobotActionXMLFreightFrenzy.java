@@ -44,8 +44,8 @@ public class RobotActionXMLFreightFrenzy {
 
     public RobotActionXMLFreightFrenzy(String pWorkingDirectory) throws ParserConfigurationException, SAXException, IOException {
 
-/*
-// IntelliJ only
+    /*
+    // IntelliJ only
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         dbFactory.setIgnoringComments(true);
         dbFactory.setNamespaceAware(true);
@@ -55,17 +55,17 @@ public class RobotActionXMLFreightFrenzy {
         //## ONLY works with a validating parser (DTD or schema),
         // which the IntelliJ parser is.
         dbFactory.setIgnoringElementContentWhitespace(true);
-// End IntelliJ only
-*/
+    // End IntelliJ only
+    */
 
-// Android only
+    // Android or IntelliJ
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         dbFactory.setIgnoringComments(true);
         //## ONLY works with a validating parser (DTD or schema),
         // which the Android Studio parser is not.
         // dbFactory.setIgnoringElementContentWhitespace(true);
         //PY 8/17/2019 Android throws UnsupportedOperationException dbFactory.setXIncludeAware(true);
-// End Android only
+    // End Android or IntelliJ
 
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         String actionFilename = pWorkingDirectory + FILE_NAME;
@@ -81,7 +81,6 @@ public class RobotActionXMLFreightFrenzy {
 
         Level logLevel = null; // null means use the default lowest logging level
         StartingPositionData startingPositionData = null;
-        VisionParameters.ImageParameters imageParameters = null;
         List<RobotConstantsFreightFrenzy.SupportedVumark> vumarksOfInterest = new ArrayList<>();
         List<RobotXMLElement> actions = new ArrayList<>();
 
@@ -101,11 +100,8 @@ public class RobotActionXMLFreightFrenzy {
         // The four possible elements under <parameters> are:
         //   <log_level>
         //   <starting_position>
-        //   <image_parameters>
         //   <vumarks>
-        // All are optional but if any action for the current OpMode in
-        // RobotAction.xml involves image recognition then the
-        // image_parameters element must be present.
+        // All are optional.
 
         // A missing or empty optional logging_level will eventually return null, which
         // means to use the logger's default.
@@ -177,12 +173,6 @@ public class RobotActionXMLFreightFrenzy {
             nextParameterNode = getNextElement(nextParameterNode.getNextSibling());
         }
 
-        // The next optional element in the XML is <image_parameters>.
-        if ((nextParameterNode != null) && nextParameterNode.getNodeName().equals("image_parameters")) {
-            imageParameters = ImageXML.parseImageParameters(nextParameterNode);
-            nextParameterNode = getNextElement(nextParameterNode.getNextSibling());
-        }
-
         // The next optional element in the XML is <vumarks>.
         if ((nextParameterNode != null) && nextParameterNode.getNodeName().equals("vumarks")) {
             NodeList vumarkChildren = nextParameterNode.getChildNodes();
@@ -237,7 +227,7 @@ public class RobotActionXMLFreightFrenzy {
             }
         }
 
-        return new RobotActionDataFreightFrenzy(logLevel, imageParameters, vumarksOfInterest, startingPositionData,
+        return new RobotActionDataFreightFrenzy(logLevel, vumarksOfInterest, startingPositionData,
                 actions, shippingHubLevelActions);
     }
 
@@ -321,20 +311,17 @@ public class RobotActionXMLFreightFrenzy {
 
     public static class RobotActionDataFreightFrenzy {
         public final Level logLevel;
-        public final VisionParameters.ImageParameters imageParameters;
         public final List<RobotConstantsFreightFrenzy.SupportedVumark> vumarksOfInterest;
         public final StartingPositionData startingPositionData;
         public final List<RobotXMLElement> actions;
         public final EnumMap<RobotConstantsFreightFrenzy.ShippingHubLevels, List<RobotXMLElement>> shippingHubActions;
 
         public RobotActionDataFreightFrenzy(Level pLogLevel,
-                                            VisionParameters.ImageParameters pImageParameters,
                                             List<RobotConstantsFreightFrenzy.SupportedVumark> pVumarks,
                                             StartingPositionData pStartingPositionData,
                                             List<RobotXMLElement> pActions,
                                             EnumMap<RobotConstantsFreightFrenzy.ShippingHubLevels, List<RobotXMLElement>> pShippingHubActions) {
             logLevel = pLogLevel;
-            imageParameters = pImageParameters;
             vumarksOfInterest = pVumarks;
             actions = pActions;
             shippingHubActions = pShippingHubActions;

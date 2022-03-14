@@ -48,38 +48,12 @@ public class BarcodeRecognition {
         if (barcodeImage.first == null)
             return new BarcodeReturn(RobotConstants.OpenCVResults.OCV_ERROR); // don't crash
 
-        String fileDate = TimeStamp.getLocalDateTimeStamp(barcodeImage.second);
-        outputFilenamePreamble = workingDirectory + imageFilePrefix + fileDate;
-
         // The image may be RGB (from a camera) or BGR (OpenCV imread from a file).
         Mat imgOriginal = barcodeImage.first.clone();
 
-        // If you don't convert RGB to BGR here then the _IMG.png file will be written
-        // out with incorrect colors (gold will show up as blue).
-        if (pImageProvider.getImageFormat() == ImageProvider.ImageFormat.RGB)
-            Imgproc.cvtColor(imgOriginal, imgOriginal, Imgproc.COLOR_RGB2BGR);
-
-        String imageFilename = outputFilenamePreamble + "_IMG.png";
-        RobotLogCommon.d(TAG, "Writing original image " + imageFilename);
-        Imgcodecs.imwrite(imageFilename, imgOriginal);
-
-        RobotLogCommon.d(TAG, "Image width " + imgOriginal.cols() + ", height " + imgOriginal.rows());
-        if ((imgOriginal.cols() != pImageParameters.resolution_width) ||
-                (imgOriginal.rows() != pImageParameters.resolution_height))
-            throw new AutonomousRobotException(TAG,
-                    "Mismatch between actual image width and expected image width " + pImageParameters.resolution_width +
-                            ", height " + pImageParameters.resolution_height);
-
-        // Crop the image to reduce distractions.
-        imageROI = imageUtils.getImageROI(imgOriginal,
-                new Rect(pImageParameters.image_roi.x,
-                        pImageParameters.image_roi.y,
-                        pImageParameters.image_roi.width,
-                        pImageParameters.image_roi.height));
-
-        imageFilename = outputFilenamePreamble + "_ROI.png";
-        RobotLogCommon.d(TAG, "Writing image ROI " + imageFilename);
-        Imgcodecs.imwrite(imageFilename, imageROI);
+        String fileDate = TimeStamp.getLocalDateTimeStamp(barcodeImage.second);
+        outputFilenamePreamble = imageUtils.createOutputFilePreamble(pImageParameters.ocv_image, workingDirectory, imageFilePrefix, fileDate);
+        imageROI = imageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
 
         // Draw the barcode element windows (sub-ROIs) on the original image
         // so that we can see the placement during debugging.

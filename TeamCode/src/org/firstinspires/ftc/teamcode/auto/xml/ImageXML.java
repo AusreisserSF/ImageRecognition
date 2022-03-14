@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.auto.xml;
 import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
 import org.firstinspires.ftc.teamcode.auto.vision.VisionParameters;
+import org.opencv.core.Rect;
 import org.w3c.dom.Node;
 
 public class ImageXML {
@@ -11,45 +12,46 @@ public class ImageXML {
     public static final String TAG = "ImageXML";
 
     // Parse the XML elements that describe the image to be analyzed.
-/*
-<image_parameters>
-<file></file>
-<resolution>
-	<width></width>
-	<height></height>
-</resolution>
-<image_roi>
-	<x></x>
-	<y></y>
-	<width></width>
-	<height></height>
-</image_roi>
-</image_parameters>
-*/
-// Parse the children of the <image_parameters> element in the XML file.
+    /*
+    <image_parameters>
+      <!-- The ocv_image element contains a file name (ending in .png or .jpg)
+           or a real-time source such as "vuforia. -->
+      <ocv_image></ocv_image>
+      <resolution>
+	    <width></width>
+	    <height></height>
+      </resolution>
+      <image_roi>
+	    <x></x>
+	    <y></y>
+	    <width></width>
+	    <height></height>
+      </image_roi>
+    </image_parameters>
+    */
+    // Parse the children of the <image_parameters> element in the XML file.
     public static VisionParameters.ImageParameters parseImageParameters(Node pImageParametersNode) {
-        String file_name;
+        String ocv_image;
         int resolution_width;
         int resolution_height;
-        VisionParameters.FTCRect image_roi;
+        Rect image_roi;
 
         RobotLogCommon.d(TAG, "Parsing XML image_parameters");
 
-        Node file_node = pImageParametersNode.getFirstChild();
-        file_node = getNextElement(file_node);
-        if ((file_node == null) || !file_node.getNodeName().equals("file"))
-            throw new AutonomousRobotException(TAG, "Element 'file' not found");
+        Node image_node = pImageParametersNode.getFirstChild();
+        image_node = getNextElement(image_node);
+        if ((image_node == null) || !image_node.getNodeName().equals("ocv_image") || image_node.getTextContent().isEmpty())
+            throw new AutonomousRobotException(TAG, "Element 'ocv_image' not found");
 
-        // The file_name element may be empty, and certainly won't be used, when we're taking images from a camera.
-        file_name = file_node.getTextContent();
+        ocv_image = image_node.getTextContent();
 
-	/*
-	<resolution>
-		<width></width>
-		<height></height>
-	</resolution>
-	*/
-        Node resolution_node = file_node.getNextSibling();
+	    /*
+	    <resolution>
+		  <width></width>
+		  <height></height>
+	    </resolution>
+	    */
+        Node resolution_node = image_node.getNextSibling();
         resolution_node = getNextElement(resolution_node);
         if ((resolution_node == null) || !resolution_node.getNodeName().equals("resolution"))
             throw new AutonomousRobotException(TAG, "Element 'resolution' not found");
@@ -85,18 +87,18 @@ public class ImageXML {
 
         image_roi = parseROI(image_roi_node);
 
-        return new VisionParameters.ImageParameters(file_name, resolution_width, resolution_height, image_roi);
+        return new VisionParameters.ImageParameters(ocv_image, resolution_width, resolution_height, image_roi);
     }
 
     // Parse any element that contains the 4 ROI children.
-/*
-<!-- any node -->
-	<x></x>
-	<y></y>
-	<width></width>
-	<height></height>
-*/
-    public static VisionParameters.FTCRect parseROI(Node pROINode) {
+    /*
+    <!-- any node -->
+	  <x></x>
+	  <y></y>
+	  <width></width>
+	  <height></height>
+    */
+    public static Rect parseROI(Node pROINode) {
         int roiX, roiY, roiWidth, roiHeight;
 
         Node roi_x_node = pROINode.getFirstChild();
@@ -144,7 +146,7 @@ public class ImageXML {
             throw new AutonomousRobotException(TAG, "Invalid number format in element 'height'");
         }
 
-        return new VisionParameters.FTCRect( roiX, roiY, roiWidth, roiHeight);
+        return new Rect(roiX, roiY, roiWidth, roiHeight);
     }
 
     // Parse the children of the <gray_parameters> element in the XML file.
@@ -178,19 +180,18 @@ public class ImageXML {
         return new VisionParameters.GrayParameters(target, low_threshold);
     }
 
-
-// Parse the children of the <hsv_parameters> element in the XML file.
-/*
-<hsv_parameters>
-    <hue_name>gold</hue_name>
-    <low_hue>10</low_hue>
-    <high_hue>30</high_hue>
-	<saturation_target>200</saturation_target>
-	<saturation_low_threshold>165</saturation_low_threshold>
-	<value_target>200</value_target>
-    <value_low_threshold>180</value_low_threshold>
-</hsv_parameters>
-*/
+    // Parse the children of the <hsv_parameters> element in the XML file.
+    /*
+    <hsv_parameters>
+      <hue_name>gold</hue_name>
+      <low_hue>10</low_hue>
+      <high_hue>30</high_hue>
+	  <saturation_target>200</saturation_target>
+	  <saturation_low_threshold>165</saturation_low_threshold>
+	  <value_target>200</value_target>
+      <value_low_threshold>180</value_low_threshold>
+    </hsv_parameters>
+    */
     // At this point pHSVNode points to the <hsv_parameters> element.
     public static VisionParameters.HSVParameters parseHSVParameters(Node pHSVNode) {
         String hue_name;

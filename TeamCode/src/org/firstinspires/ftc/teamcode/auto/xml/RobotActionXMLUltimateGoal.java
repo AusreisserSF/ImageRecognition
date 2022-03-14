@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.auto.xml;
 import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
 import org.firstinspires.ftc.ftcdevcommon.RobotXMLElement;
-import org.firstinspires.ftc.teamcode.auto.vision.VisionParameters;
 import org.firstinspires.ftc.teamcode.common.RobotConstantsUltimateGoal;
+import org.opencv.core.Rect;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -82,7 +82,7 @@ public class RobotActionXMLUltimateGoal {
 
         Level lowestLoggingLevel = null; // null means use the default lowest logging level
         StartingPositionData startingPositionData = null;
-        VisionParameters.FTCRect imageROI = new VisionParameters.FTCRect(0, 0, 0, 0); // default is an empty ROI; use the values from RingParameters.xml.
+        Rect imageROI = new Rect(0, 0, 0, 0); // default is an empty ROI; use the values from RingParameters.xml.
         List<RobotConstantsUltimateGoal.SupportedVumark> vumarksOfInterest = new ArrayList<>();
         List<RobotXMLElement> actions = new ArrayList<>();
 
@@ -307,14 +307,14 @@ public class RobotActionXMLUltimateGoal {
 
     public static class RobotActionData {
         public final Level lowestLoggingLevel;
-        public final VisionParameters.FTCRect imageROI;
+        public final Rect imageROI;
         public final List<RobotConstantsUltimateGoal.SupportedVumark> vumarksOfInterest;
         public final StartingPositionData startingPositionData;
         public final List<RobotXMLElement> actions;
         public final HashMap<RobotConstantsUltimateGoal.TargetZone, List<RobotXMLElement>> targetZoneActions;
 
 
-        public RobotActionData(Level pLevel, VisionParameters.FTCRect pROI,
+        public RobotActionData(Level pLevel, Rect pROI,
                                List<RobotConstantsUltimateGoal.SupportedVumark> pVumarks,
                                StartingPositionData pStartingPositionData,
                                List<RobotXMLElement> pActions,

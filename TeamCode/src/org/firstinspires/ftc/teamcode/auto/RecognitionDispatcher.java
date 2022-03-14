@@ -32,6 +32,8 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+//**TODO 3/14/2022 Significant change to <image_parameters> - both
+// placement and contents. TEST and port to Android.
 public class RecognitionDispatcher extends Application {
 
     private static final String TAG = "RecognitionDispatcher";
@@ -63,7 +65,7 @@ public class RecognitionDispatcher extends Application {
 
         if (!openCVInitialized)
             throw new AutonomousRobotException(TAG, "Failure in OpenCV initialization");
-     }
+    }
 
     @Override
     public void start(Stage pStage) throws Exception {
@@ -128,16 +130,16 @@ public class RecognitionDispatcher extends Application {
                 RingRecognition ringRecognition = new RingRecognition();
 
                 // Call the OpenCV subsystem.
-                ImageProvider fileImage = new FileImage(imagePath + ringParameters.imageParameters.file_name);
+                ImageProvider fileImage = new FileImage(imagePath + ringParameters.imageParameters.ocv_image);
                 RingReturn ringReturn = ringRecognition.findGoldRings(fileImage, ringParameters);
                 if (ringReturn.fatalComputerVisionError)
                     throw new AutonomousRobotException(TAG, "Error in computer vision subsystem");
 
                 RobotLogCommon.d(TAG, "Found Target Zone " + ringReturn.targetZone);
-                displayResults(imagePath + ringParameters.imageParameters.file_name,
+                displayResults(imagePath + ringParameters.imageParameters.ocv_image,
                         "Rings indicate " + ringReturn.targetZone,
                         "FTC 2020 - 2021 Ultimate Goal");
-            break;
+                break;
             }
 
             // Freight Frenzy 2021-2022
@@ -147,11 +149,16 @@ public class RecognitionDispatcher extends Application {
                 BarcodeParameters barcodeParameters = barcodeParametersXML.getBarcodeParameters();
                 BarcodeRecognition barcodeRecognition = new BarcodeRecognition();
 
-                // Prepare for image recognition.
-                if (actionData.imageParameters == null)
-                    throw new AutonomousRobotException(TAG, "Missing image_parameters");
+                // Get the <image_parameters> for the barcode from the XML file.
+                VisionParameters.ImageParameters barcodeImageParameters =
+                        robotActionXMLFreightFrenzy.getImageParametersFromXPath(actionElement, "image_parameters");
 
-                ImageProvider fileImage = new FileImage(imagePath + actionData.imageParameters.file_name);
+                // Make sure that this tester is reading the image from a file.
+                if (!(barcodeImageParameters.ocv_image.endsWith(".png") ||
+                        barcodeImageParameters.ocv_image.endsWith(".jpg")))
+                    throw new AutonomousRobotException(TAG, "Invalid image file name");
+
+                ImageProvider fileImage = new FileImage(imagePath + barcodeImageParameters.ocv_image);
 
                 // Get the recognition path from the XML file.
                 String recognitionPathString = actionXPath.getRequiredString("barcode_recognition/recognition_path");
@@ -192,7 +199,7 @@ public class RecognitionDispatcher extends Application {
 
                 // At last perform the image recognition.
                 BarcodeReturn barcodeReturn =
-                        barcodeRecognition.findTeamScoringElement(fileImage, actionData.imageParameters, barcodeParameters,
+                        barcodeRecognition.findTeamScoringElement(fileImage, barcodeImageParameters, barcodeParameters,
                                 recognitionPath);
                 if (barcodeReturn.openCVResults == RobotConstants.OpenCVResults.OCV_ERROR)
                     throw new AutonomousRobotException(TAG, "Error in computer vision subsystem");
@@ -218,7 +225,7 @@ public class RecognitionDispatcher extends Application {
 
                 RobotLogCommon.d(TAG, "Found Team Scoring Element at position " + barcodeReturn.barcodeElementWindow);
                 RobotLogCommon.d(TAG, "Shipping Hub Level " + shippingHubLevel);
-                displayResults(imagePath + actionData.imageParameters.file_name,
+                displayResults(imagePath + barcodeImageParameters.ocv_image,
                         shippingHubLevel.toString(),
                         "FTC 2021 - 2022 Freight Frenzy");
                 break;
@@ -230,7 +237,7 @@ public class RecognitionDispatcher extends Application {
             // Combine shippingHubRecognition.getAngleToShippingHub and
             // getDistanceToShippingHub into getAngleAndDistanceToShippingHub.
 
-                //**TODO Test updates to ImageUtils and check against Android.
+            //**TODO Test updates to ImageUtils and check against Android.
             case "APPROACH_SHIPPING_HUB_BY_VISION": {
                 // This action needs a command line switch of --alliance=["BLUE" | "RED"]
                 String allianceString = namedParameters.get("alliance");
@@ -242,46 +249,47 @@ public class RecognitionDispatcher extends Application {
                 ShippingHubParameters shippingHubParameters = shippingHubParametersXML.getShippingHubParameters();
                 ShippingHubRecognition shippingHubRecognition = new ShippingHubRecognition();
 
-                /*
-                      <ocv_image_provider>file</ocv_image_provider>
-                      <image_parameters>
-                 */
+                // Get the <image_parameters> for the Shipping Hub from the XML file.
                 VisionParameters.ImageParameters shippingHubImageParameters =
                         robotActionXMLFreightFrenzy.getImageParametersFromXPath(actionElement, "image_parameters");
 
-                ImageProvider fileImage = new FileImage(imagePath + shippingHubImageParameters.file_name);
+                // Make sure that this tester is reading the image from a file.
+                if (!(shippingHubImageParameters.ocv_image.endsWith(".png") ||
+                        shippingHubImageParameters.ocv_image.endsWith(".jpg")))
+                    throw new AutonomousRobotException(TAG, "Invalid image file name");
+
+                ImageProvider fileImage = new FileImage(imagePath + shippingHubImageParameters.ocv_image);
 
                 // Depending on the OpMode get the BLUE or RED HSV parameters.
                 VisionParameters.HSVParameters shHSVParameters;
                 if (alliance == RobotConstants.Alliance.BLUE)
                     shHSVParameters = shippingHubParameters.blueAllianceHSVParameters;
+                else if (alliance == RobotConstants.Alliance.RED)
+                    shHSVParameters = shippingHubParameters.redAllianceHSVParameters;
                 else
-                    if (alliance == RobotConstants.Alliance.RED)
-                        shHSVParameters = shippingHubParameters.redAllianceHSVParameters;
-                    else
-                        throw new AutonomousRobotException(TAG, "Shipping Hub alliance must be BLUE or RED");
+                    throw new AutonomousRobotException(TAG, "Shipping Hub alliance must be BLUE or RED");
 
                 // Get the angle and distance of the robot to the Shipping Hub.
                 ShippingHubReturn shReturn = shippingHubRecognition.getAngleAndDistanceToShippingHub(fileImage, shippingHubImageParameters, shHSVParameters, shippingHubParameters);
-                if (shReturn.fatalComputerVisionError) {
+                if (shReturn.openCVResults == RobotConstants.OpenCVResults.OCV_ERROR) {
                     RobotLogCommon.d(TAG, "Error in OpenCV processing during getAngleAndDistanceToShippingHub");
                     break;
                 }
 
-                if (shReturn.distanceToShippingHub == ShippingHubRecognition.SHIPPING_HUB_DISTANCE_NPOS) {
-                    RobotLogCommon.d(TAG, "Unable to compute distance to Shipping Hub");
+                if (shReturn.angleToShippingHub == ShippingHubReturn.SHIPPING_HUB_ANGLE_NPOS) {
+                    RobotLogCommon.d(TAG, "Unable to compute angle to Shipping Hub");
                     break;
                 }
 
-                if (shReturn.angleToShippingHub == ShippingHubRecognition.SHIPPING_HUB_ANGLE_NPOS) {
-                    RobotLogCommon.d(TAG, "Unable to compute angle to Shipping Hub");
+                if (shReturn.distanceToShippingHub == ShippingHubReturn.SHIPPING_HUB_DISTANCE_NPOS) {
+                    RobotLogCommon.d(TAG, "Unable to compute distance to Shipping Hub");
                     break;
                 }
 
                 String displayText = "Distance from camera to Shipping Hub " + String.format("%.2f", shReturn.distanceToShippingHub) +
                         '\n' + "Angle from robot center to Shipping Hub " + String.format("%.2f", shReturn.angleToShippingHub);
 
-                displayResults(imagePath + shippingHubImageParameters.file_name,
+                displayResults(imagePath + shippingHubImageParameters.ocv_image,
                         displayText,
                         "FTC 2021 - 2022 Freight Frenzy");
 

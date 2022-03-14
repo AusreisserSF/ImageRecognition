@@ -41,6 +41,51 @@ public class ImageUtils {
         return roi;
     }
 
+    public String createOutputFilePreamble(String pOCVImage, String pWorkingDirectory, String pPrefix, String pFileDate) {
+        // When testing with a file append the original file name without the
+        // extension, an underscore, and the file date.
+        if (pOCVImage.endsWith(".png") || pOCVImage.endsWith(".jpg")) {
+            String originalFN = pOCVImage.substring(0, pOCVImage.lastIndexOf('.'));
+            return pWorkingDirectory + pPrefix + originalFN + "_" + pFileDate;
+        }
+
+        // Camera image; use the file date only.
+        return pWorkingDirectory + pPrefix + pFileDate;
+    }
+
+    public Mat preProcessImage(ImageProvider pImageProvider, Mat pOriginalImage,
+                               String pPreamble, VisionParameters.ImageParameters pImageParameters) {
+
+        // If you don't convert RGB to BGR here then the _IMG.png file will be written
+        // out with incorrect colors (gold will show up as blue).
+        if (pImageProvider.getImageFormat() == ImageProvider.ImageFormat.RGB)
+            Imgproc.cvtColor(pOriginalImage, pOriginalImage, Imgproc.COLOR_RGB2BGR);
+
+        String imageFilename = pPreamble + "_IMG.png";
+        RobotLogCommon.d(TAG, "Writing original image " + imageFilename);
+        Imgcodecs.imwrite(imageFilename, pOriginalImage);
+
+        RobotLogCommon.d(TAG, "Image width " + pOriginalImage.cols() + ", height " + pOriginalImage.rows());
+        if ((pOriginalImage.cols() != pImageParameters.resolution_width) ||
+                (pOriginalImage.rows() != pImageParameters.resolution_height))
+            throw new AutonomousRobotException(TAG,
+                    "Mismatch between actual image width and expected image width " + pImageParameters.resolution_width +
+                            ", height " + pImageParameters.resolution_height);
+
+        // Crop the image to reduce distractions.
+        Mat imageROI = getImageROI(pOriginalImage,
+                new Rect(pImageParameters.image_roi.x,
+                        pImageParameters.image_roi.y,
+                        pImageParameters.image_roi.width,
+                        pImageParameters.image_roi.height));
+
+        imageFilename = pPreamble + "_ROI.png";
+        RobotLogCommon.d(TAG, "Writing image ROI " + imageFilename);
+        Imgcodecs.imwrite(imageFilename, imageROI);
+
+        return imageROI;
+    }
+
     // Adjust the brightness of a grayscale image.
     public Mat adjustGrayscaleBrightness(Mat pGray, int pTarget) {
         int medianGray = getSingleChannelMedian(pGray);

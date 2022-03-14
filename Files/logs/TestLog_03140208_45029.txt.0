@@ -1,0 +1,31 @@
+[2022-03-14 02:08:45.067] [INFO   ] RecognitionDispatcher Starting image recognition 
+[2022-03-14 02:08:45.140] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2022-03-14 02:08:45.205] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2022-03-14 02:08:45.209] [FINE   ] RecognitionDispatcher Executing action ANALYZE_BARCODE 
+[2022-03-14 02:08:45.213] [FINE   ] BarcodeParametersXML Parsing XML barcode_parameters 
+[2022-03-14 02:08:45.215] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2022-03-14 02:08:45.215] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-03-14 02:08:45.225] [FINE   ] ImageXML Parsing XML image_parameters 
+[2022-03-14 02:08:45.226] [CONFIG ] RecognitionDispatcher Recognition path reflective_tape 
+[2022-03-14 02:08:45.233] [FINE   ] BarcodeRecognition In BarcodeRecognition.findTeamScoringElement 
+[2022-03-14 02:08:45.234] [FINE   ] ImageUtils File name Files/images/Image_12300948_24420_IMG_RC.png 
+[2022-03-14 02:08:45.248] [FINE   ] ImageUtils Image width 848, height 480 
+[2022-03-14 02:08:45.250] [FINE   ] BarcodeRecognition Writing original image Files/images/Image_03140208_45248_IMG.png 
+[2022-03-14 02:08:45.268] [FINE   ] BarcodeRecognition Image width 848, height 480 
+[2022-03-14 02:08:45.274] [FINE   ] ImageUtils Image ROI x 225, y 315, width 430, height 130 
+[2022-03-14 02:08:45.275] [FINE   ] BarcodeRecognition Writing image ROI Files/images/Image_03140208_45248_ROI.png 
+[2022-03-14 02:08:45.306] [FINE   ] BarcodeRecognition Writing Files/images/Image_03140208_45248_WIN.png 
+[2022-03-14 02:08:45.307] [FINE   ] BarcodeRecognition Recognition path REFLECTIVE_TAPE 
+[2022-03-14 02:08:45.311] [FINE   ] BarcodeRecognition Writing Files/images/Image_03140208_45248_GRAY.png 
+[2022-03-14 02:08:45.332] [FINE   ] ImageUtils Original image: grayscale median 172 
+[2022-03-14 02:08:45.333] [FINE   ] ImageUtils Grayscale median target 150 
+[2022-03-14 02:08:45.333] [FINE   ] ImageUtils Grayscale adjustment -22 
+[2022-03-14 02:08:45.337] [FINE   ] BarcodeRecognition Writing adjusted grayscale image Files/images/Image_03140208_45248_REF_ADJ.png 
+[2022-03-14 02:08:45.337] [FINE   ] BarcodeRecognition Threshold value: low 200 
+[2022-03-14 02:08:45.340] [FINE   ] BarcodeRecognition Writing Files/images/Image_03140208_45248_REF_ADJ_THR.png 
+[2022-03-14 02:08:45.341] [FINE   ] BarcodeRecognition Left window: number of non-zero pixels 0 
+[2022-03-14 02:08:45.342] [FINE   ] BarcodeRecognition Right window: number of non-zero pixels 2773 
+[2022-03-14 02:08:45.342] [FINE   ] BarcodeRecognition Minimum non-zero-pixel count 500 
+[2022-03-14 02:08:45.343] [FINE   ] RecognitionDispatcher Found Team Scoring Element at position RIGHT 
+[2022-03-14 02:08:45.344] [FINE   ] RecognitionDispatcher Shipping Hub Level SHIPPING_HUB_LEVEL_3 
+[2022-03-14 02:08:45.597] [INFO   ] Closing the log with 0 entries on the queue 
