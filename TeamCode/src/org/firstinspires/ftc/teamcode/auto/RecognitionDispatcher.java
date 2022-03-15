@@ -229,12 +229,13 @@ public class RecognitionDispatcher extends Application {
                 break;
             }
 
-            // Use Dennis's method requires that we calculate the distance using
-            // the same picture that we used for the angle, even if the Shipping
+            // Use Dennis's method, which requires that we calculate the distance
+            // using the same picture that we used for the angle, even if the Shipping
             // Hub is not at the center of the image.
             // Combine shippingHubRecognition.getAngleToShippingHub and
             // getDistanceToShippingHub into getAngleAndDistanceToShippingHub.
 
+            //## 3/15/2022 See notes in getAngleAndDistanceToShippingHub.
             case "APPROACH_SHIPPING_HUB_BY_VISION": {
                 // This action needs a command line switch of --alliance=["BLUE" | "RED"]
                 String allianceString = namedParameters.get("alliance");

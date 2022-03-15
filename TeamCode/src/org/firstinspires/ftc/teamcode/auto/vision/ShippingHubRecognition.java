@@ -28,6 +28,21 @@ public class ShippingHubRecognition {
         imageUtils = new ImageUtils();
     }
 
+    //## 3/15/2022 Notes from Visual Studio: there is a prototype implementation in Java - both
+    // in IntelliJ (project ImageRecognition) and Android Studio (Freight Frenzy). The Java
+    // versions include Dennis's extra calculation to determine the angle from the center of the
+    // robot instead of from the camera. Note that Dennis's algorithm uses the distance to the
+    // Shipping Hub from the similar triangles method - even though the Shipping Hub may not be
+    // at the center of the frame. We need to research and experiment with angular distortion;
+    // what is the width difference in pixels of an object of known size at a known distance
+    // when the object is not at the center of the frame.
+    // Unresolved:  the angle of the Shipping Hub - left, right, towards, or away from the robot.
+    // This may make this method untenable. But save for rectangle recognition and compare with
+    // Vumark outline detection [in Visual Studio]. See also findShippingHubShaftRectangles,
+    // which may be a better path.See also findShippingHubShaftRectangles, which may be a better
+    // path: you should be able to get the angle of the shaft to the left and right but not fore
+    //and aft.
+
     // Returns the result of image analysis.
     public ShippingHubReturn getAngleAndDistanceToShippingHub(ImageProvider pImageProvider,
                                                               VisionParameters.ImageParameters pImageParameters,
