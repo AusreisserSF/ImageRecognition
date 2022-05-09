@@ -1,0 +1,37 @@
+[2022-04-06 01:15:28.546] [INFO   ] RecognitionDispatcher Starting image recognition 
+[2022-04-06 01:15:32.467] [CONFIG ] RecognitionDispatcher Game Freight Frenzy 
+[2022-04-06 01:15:32.551] [CONFIG ] RobotActionXMLFF Extracting data from RobotAction.xml for OpMode TEST 
+[2022-04-06 01:15:32.555] [FINE   ] RecognitionDispatcher Executing action APPROACH_SHIPPING_HUB_BY_VISION 
+[2022-04-06 01:15:32.556] [CONFIG ] RecognitionDispatcher Alliance BLUE 
+[2022-04-06 01:15:32.562] [FINE   ] ShippingHubParametersXML Parsing XML shipping_hub_parameters 
+[2022-04-06 01:15:32.567] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-04-06 01:15:32.578] [FINE   ] ImageXML Parsed XML hsv_parameters; hue name = blue 
+[2022-04-06 01:15:32.578] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-04-06 01:15:32.579] [FINE   ] ImageXML Parsed XML hsv_parameters; hue name = red 
+[2022-04-06 01:15:32.583] [FINE   ] ImageXML Parsing XML image_parameters 
+[2022-04-06 01:15:32.586] [FINE   ] ShippingHubRecognition In ShippingHubRecognition.getAngleAndDistanceToShippingHub 
+[2022-04-06 01:15:32.586] [FINE   ] ImageUtils File name Files/images/Image_02111549_13013_IMG.png 
+[2022-04-06 01:15:32.604] [FINE   ] ImageUtils Image width 848, height 480 
+[2022-04-06 01:15:32.606] [FINE   ] ImageUtils Writing original image Files/images/Image_02111549_13013_IMG_04060115_32604_IMG.png 
+[2022-04-06 01:15:32.625] [FINE   ] ImageUtils Image width 848, height 480 
+[2022-04-06 01:15:32.633] [FINE   ] ImageUtils Image ROI x 0, y 140, width 846, height 200 
+[2022-04-06 01:15:32.633] [FINE   ] ImageUtils Writing image ROI Files/images/Image_02111549_13013_IMG_04060115_32604_ROI.png 
+[2022-04-06 01:15:32.651] [FINE   ] ImageUtils Target hue levels: low 95, high 125 
+[2022-04-06 01:15:32.707] [FINE   ] ImageUtils HSV saturation channel median 28 
+[2022-04-06 01:15:32.707] [FINE   ] ImageUtils HSV value channel median 144 
+[2022-04-06 01:15:32.707] [FINE   ] ImageUtils Adjust HSV saturation by -18 
+[2022-04-06 01:15:32.708] [FINE   ] ImageUtils Adjust HSV value by -44 
+[2022-04-06 01:15:32.708] [FINE   ] ImageUtils Adjusted image levels: saturation low 10, value low 100 
+[2022-04-06 01:15:32.718] [FINE   ] ImageUtils Writing Files/images/Image_02111549_13013_IMG_04060115_32604_ADJ.png 
+[2022-04-06 01:15:32.719] [FINE   ] ImageUtils Actual inRange HSV levels: hue low 95, hue high 125 
+[2022-04-06 01:15:32.719] [FINE   ] ImageUtils Actual inRange HSV levels: saturation low 20, value low 30 
+[2022-04-06 01:15:32.723] [FINE   ] ImageUtils Writing Files/images/Image_02111549_13013_IMG_04060115_32604_ADJ_THR.png 
+[2022-04-06 01:15:32.727] [FINE   ] ShippingHubRecognition drawContours: number of contours 8 
+[2022-04-06 01:15:32.739] [FINE   ] ShippingHubRecognition Writing Files/images/Image_02111549_13013_IMG_04060115_32604_CON.png 
+[2022-04-06 01:15:32.743] [FINE   ] ShippingHubRecognition Width of largest contour 413 
+[2022-04-06 01:15:32.752] [FINE   ] ShippingHubRecognition Writing Files/images/Image_02111549_13013_IMG_04060115_32604_BRECT.png 
+[2022-04-06 01:32:39.582] [FINE   ] ShippingHubRecognition Angle from camera to Shipping Hub -19.167245761225153 
+[2022-04-06 01:32:39.582] [FINE   ] ShippingHubRecognition Using focal length from calibration run of 601.33 
+[2022-04-06 01:32:39.583] [FINE   ] ShippingHubRecognition Calculated distance from camera to Shipping Hub 21.840072639225184 inches 
+[2022-04-06 01:32:39.584] [FINE   ] ShippingHubRecognition Angle from robot center to Shipping Hub  -17.224748342730905 
+[2022-04-06 01:32:39.801] [INFO   ] Closing the log with 0 entries on the queue 

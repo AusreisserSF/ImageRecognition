@@ -1,0 +1,11 @@
+<gold_cube_parameters>
+    <hsv_parameters>
+        <hue_name>gold</hue_name>
+        <hue_low>5</hue_low>
+        <hue_high>30</hue_high>
+        <saturation_target>12</saturation_target>
+        <saturation_low_threshold>10</saturation_low_threshold>
+        <value_target>160</value_target>
+        <value_low_threshold>120</value_low_threshold>
+    </hsv_parameters>
+</gold_cube_parameters>
