@@ -8,4 +8,8 @@
         <value_target>160</value_target>
         <value_low_threshold>120</value_low_threshold>
     </hsv_parameters>
+    <depth_camera model="D455">
+        <scale>.001</scale>
+        <distance_filter>1.00</distance_filter>
+    </depth_camera>
 </gold_cube_parameters>

@@ -134,6 +134,12 @@ public class RecognitionDispatcher extends Application {
         RobotLogCommon.d(TAG, "Executing action " + actionName);
         switch (actionName) {
 
+            // Summer 2022: test Intel Realsense depth camera(s).
+            case "GOLD_CUBE_DEPTH": {
+                //**TODO
+                break;
+            }
+
              // Freight Frenzy 2021-2022
             case "ANALYZE_BARCODE": {
                 // Read the parameters for barcode recognition from the xml file.
