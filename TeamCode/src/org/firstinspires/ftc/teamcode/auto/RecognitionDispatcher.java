@@ -16,10 +16,7 @@ import org.firstinspires.ftc.ftcdevcommon.RobotXMLElement;
 import org.firstinspires.ftc.ftcdevcommon.XPathAccess;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.auto.vision.*;
-import org.firstinspires.ftc.teamcode.auto.xml.BarcodeParametersXML;
-import org.firstinspires.ftc.teamcode.auto.xml.RingParametersXML;
-import org.firstinspires.ftc.teamcode.auto.xml.RobotActionXMLFreightFrenzy;
-import org.firstinspires.ftc.teamcode.auto.xml.ShippingHubParametersXML;
+import org.firstinspires.ftc.teamcode.auto.xml.*;
 import org.firstinspires.ftc.teamcode.common.RobotConstants;
 import org.firstinspires.ftc.teamcode.common.RobotConstantsFreightFrenzy;
 import org.opencv.core.Core;
@@ -46,6 +43,8 @@ public class RecognitionDispatcher extends Application {
     private Stage stage;
     private Pane field;
     private String imagePath;
+    private RobotActionXMLFreightFrenzy robotActionXMLFreightFrenzy;
+    private RobotActionXMLGoldCube robotActionXMLGoldCube;
 
     // Load OpenCV.
     private static final boolean openCVInitialized;
@@ -79,27 +78,43 @@ public class RecognitionDispatcher extends Application {
         if (gameParameter == null)
             throw new AutonomousRobotException(TAG, "Required parameter --game is missing");
 
-        //## 2/27/2022 HARDCODED for FreightFrenzy; BROKEN for UltimateGoal
-        if (!(gameParameter.equals("Freight Frenzy")))
-            throw new AutonomousRobotException(TAG, "Unrecognized game " + gameParameter);
-
         RobotLogCommon.c(TAG, "Game " + gameParameter);
 
-        // Use RobotAction.xml but for the single OpMode TEST with a single action only.
-        //** FreightFrenzy only
-        RobotActionXMLFreightFrenzy robotActionXMLFreightFrenzy = new RobotActionXMLFreightFrenzy(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
-        RobotActionXMLFreightFrenzy.RobotActionDataFreightFrenzy actionData = robotActionXMLFreightFrenzy.getOpModeData("TEST");
-        List<RobotXMLElement> actions = actionData.actions;
-        if (actions.size() != 1)
-            throw new AutonomousRobotException(TAG, "TEST OpMode must contain a single action");
+        // Get the name of the file that contains the robot's actions,
+        // e.g. RobotAction.xml.
+        String actionXMLFilenameParameter = namedParameters.get("xml");
+        if (actionXMLFilenameParameter == null)
+            throw new AutonomousRobotException(TAG, "Required parameter --xml is missing");
 
-        String recognitionAction = actions.get(0).getRobotXMLElementName();
+        // Use RobotAction.xml but for the single OpMode TEST with a single action only.
+        List<RobotXMLElement> actions;
         switch (gameParameter) {
-            case "Freight Frenzy": {
+            case "TEST": {
+                robotActionXMLGoldCube = new RobotActionXMLGoldCube(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
+                RobotActionXMLGoldCube.RobotActionDataGoldCube actionData = robotActionXMLGoldCube.getOpModeData("TEST");
+                actions = actionData.actions;
+                if (actions.size() != 1)
+                    throw new AutonomousRobotException(TAG, "TEST OpMode must contain a single action");
+
+                String recognitionAction = actions.get(0).getRobotXMLElementName();
                 if (!((recognitionAction.equals("ANALYZE_BARCODE") || recognitionAction.equals("APPROACH_SHIPPING_HUB_BY_VISION"))))
                     throw new AutonomousRobotException(TAG, "Missing required action ANALYZE_BARCODE or APPROACH_SHIPPING_BY_WITH_VISION");
                 break;
             }
+
+            case "Freight Frenzy": {
+               robotActionXMLFreightFrenzy = new RobotActionXMLFreightFrenzy(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
+               RobotActionXMLFreightFrenzy.RobotActionDataFreightFrenzy actionData = robotActionXMLFreightFrenzy.getOpModeData("TEST");
+               actions = actionData.actions;
+               if (actions.size() != 1)
+                    throw new AutonomousRobotException(TAG, "TEST OpMode must contain a single action");
+
+               String recognitionAction = actions.get(0).getRobotXMLElementName();
+               if (!((recognitionAction.equals("ANALYZE_BARCODE") || recognitionAction.equals("APPROACH_SHIPPING_HUB_BY_VISION"))))
+                    throw new AutonomousRobotException(TAG, "Missing required action ANALYZE_BARCODE or APPROACH_SHIPPING_BY_WITH_VISION");
+               break;
+            }
+
             /*
             case "Ultimate Goal": {
                 if (!recognitionAction.equals("RECOGNIZE_RINGS"))
@@ -119,28 +134,7 @@ public class RecognitionDispatcher extends Application {
         RobotLogCommon.d(TAG, "Executing action " + actionName);
         switch (actionName) {
 
-            // Ultimate Goal 2020-2021
-            //## 2/27/2022 NOT reachable; keep for reference/technique
-            case "RECOGNIZE_RINGS": {
-                // Read the parameters for ring recognition from the xml file.
-                RingParametersXML ringParametersXML = new RingParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
-                RingParameters ringParameters = ringParametersXML.getRingParameters();
-                RingRecognition ringRecognition = new RingRecognition();
-
-                // Call the OpenCV subsystem.
-                ImageProvider fileImage = new FileImage(imagePath + ringParameters.imageParameters.ocv_image);
-                RingReturn ringReturn = ringRecognition.findGoldRings(fileImage, ringParameters);
-                if (ringReturn.fatalComputerVisionError)
-                    throw new AutonomousRobotException(TAG, "Error in computer vision subsystem");
-
-                RobotLogCommon.d(TAG, "Found Target Zone " + ringReturn.targetZone);
-                displayResults(imagePath + ringParameters.imageParameters.ocv_image,
-                        "Rings indicate " + ringReturn.targetZone,
-                        "FTC 2020 - 2021 Ultimate Goal");
-                break;
-            }
-
-            // Freight Frenzy 2021-2022
+             // Freight Frenzy 2021-2022
             case "ANALYZE_BARCODE": {
                 // Read the parameters for barcode recognition from the xml file.
                 BarcodeParametersXML barcodeParametersXML = new BarcodeParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
@@ -294,6 +288,26 @@ public class RecognitionDispatcher extends Application {
                 break;
             }
 
+            // Ultimate Goal 2020-2021
+            //## 2/27/2022 NOT reachable; keep for reference/technique
+            case "RECOGNIZE_RINGS": {
+                // Read the parameters for ring recognition from the xml file.
+                RingParametersXML ringParametersXML = new RingParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
+                RingParameters ringParameters = ringParametersXML.getRingParameters();
+                RingRecognition ringRecognition = new RingRecognition();
+
+                // Call the OpenCV subsystem.
+                ImageProvider fileImage = new FileImage(imagePath + ringParameters.imageParameters.ocv_image);
+                RingReturn ringReturn = ringRecognition.findGoldRings(fileImage, ringParameters);
+                if (ringReturn.fatalComputerVisionError)
+                    throw new AutonomousRobotException(TAG, "Error in computer vision subsystem");
+
+                RobotLogCommon.d(TAG, "Found Target Zone " + ringReturn.targetZone);
+                displayResults(imagePath + ringParameters.imageParameters.ocv_image,
+                        "Rings indicate " + ringReturn.targetZone,
+                        "FTC 2020 - 2021 Ultimate Goal");
+                break;
+            }
             default:
                 throw new AutonomousRobotException(TAG, "Unrecognized image recognition action");
         }
