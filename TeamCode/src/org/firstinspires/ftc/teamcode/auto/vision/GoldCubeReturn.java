@@ -12,6 +12,7 @@ public class GoldCubeReturn {
     public final double angleToGoldCube;
     public final double distanceToGoldCube;
 
+    //**TODO angleFromRobotCenter; distanceFromRobotCenter
     public GoldCubeReturn(RobotConstants.OpenCVResults pOpenCVResults, double pAngle, double pDistance) {
         openCVResults = pOpenCVResults;
         angleToGoldCube = pAngle;

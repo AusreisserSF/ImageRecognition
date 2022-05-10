@@ -9,6 +9,7 @@
         <value_low_threshold>120</value_low_threshold>
     </hsv_parameters>
     <depth_camera model="D455">
+        <color_camera_fov>90.0</color_camera_fov>
         <scale>.001</scale>
         <distance_filter>1.00</distance_filter>
     </depth_camera>
