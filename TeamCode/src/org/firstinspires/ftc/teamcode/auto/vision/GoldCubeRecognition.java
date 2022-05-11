@@ -14,6 +14,10 @@ import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +37,7 @@ public class GoldCubeRecognition {
     // Returns the result of image analysis.
     public GoldCubeReturn getAngleAndDistanceToGoldCube(ImageProvider pImageProvider,
                                                               VisionParameters.ImageParameters pImageParameters,
-                                                              GoldCubeParameters pGoldCubeParameters) throws InterruptedException {
+                                                              GoldCubeParameters pGoldCubeParameters) throws InterruptedException, IOException {
 
         RobotLogCommon.d(TAG, "In GoldCubeRecognition.getAngleAndDistanceToGoldCube");
 
@@ -52,7 +56,7 @@ public class GoldCubeRecognition {
         List<MatOfPoint> contours = imageUtils.applyInRangeAndFindContours(imageROI, outputFilenamePreamble, pGoldCubeParameters.hsvParameters);
         if (contours.size() == 0) {
             RobotLogCommon.d(TAG, "No contours found");
-            return new GoldCubeReturn(RobotConstants.OpenCVResults.OCV_ERROR); // don't crash
+            return new GoldCubeReturn(RobotConstants.OpenCVResults.RECOGNITION_UNSUCCESSFUL); // don't crash
         }
 
         Mat contoursDrawn = imageROI.clone();
@@ -63,7 +67,7 @@ public class GoldCubeRecognition {
         // The largest contour should be the gold cube.
         Optional<MatOfPoint> largestContour = imageUtils.getLargestContour(contours);
         if (largestContour.isEmpty())
-            return new GoldCubeReturn(RobotConstants.OpenCVResults.OCV_ERROR); // don't crash
+            return new GoldCubeReturn(RobotConstants.OpenCVResults.RECOGNITION_UNSUCCESSFUL); // don't crash
 
         // Get its bounding rectangle.
         Rect largestBoundingRect = Imgproc.boundingRect(largestContour.get());
@@ -86,12 +90,32 @@ public class GoldCubeRecognition {
         double angleFromCameraToGoldCube = imageUtils.computeAngleToObjectCenter(pImageParameters.resolution_width, goldCubeCentroidX, pGoldCubeParameters.colorCameraFOV);
         RobotLogCommon.d(TAG, "Angle from camera to gold cube " + angleFromCameraToGoldCube);
 
-        //**TODO Read the depth file that corresponds to the color image file.
+        // Read the depth file that corresponds to the color image file.
         String depthFilename = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir + ".depth";
+        int[] depth16UC1 = new int[pImageParameters.resolution_width * pImageParameters.resolution_height];
+        try (InputStream output = new FileInputStream(depthFilename)) {
+            try (DataInputStream depthInputStream =
+                         new DataInputStream(output)) {
+                for (int i = 0; i < depth16UC1.length; i++)
+                    depth16UC1[i] = depthInputStream.readUnsignedShort();
+            }
+        }
 
         //**TODO Use the pixel position of the centroid of the gold cube as an index
         // into the array of depth values and get the distance from the camera to the
         // centroid pixel.
+        // 0 .. 639
+        // 640 .. 1279
+        int column = goldCubeCentroidX;
+        int row = goldCubeCentroidY * pImageParameters.resolution_width;
+        int centroidPixelDepth = depth16UC1[column + row];
+        float scaledPixelDepth = centroidPixelDepth * pGoldCubeParameters.depthCameraScale;
+
+        RobotLogCommon.d(TAG, "Distance to pixel at x " + goldCubeCentroidX + ", y " + goldCubeCentroidY + " = " + scaledPixelDepth);
+
+        //**TODO Now we have the hypotenuse from the camera to the center of the gold
+        // cube in meters and we have the angle from the camera to the center of the
+        // gold cube. Solve for the other two sides in meters.
 
         double angleFromRobotCenter = 0.0f;
         double distanceFromRobotCenter = 0.0f;
