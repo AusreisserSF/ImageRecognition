@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.auto.xml;
 
 import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
-import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
 import org.firstinspires.ftc.ftcdevcommon.RobotXMLElement;
+import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
 import org.firstinspires.ftc.teamcode.auto.vision.VisionParameters;
 import org.firstinspires.ftc.teamcode.common.RobotConstantsFreightFrenzy;
 import org.w3c.dom.Document;
@@ -11,13 +11,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.logging.Level;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -25,10 +18,15 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
 
 public class RobotActionXMLGoldCube {
 
-    public static final String TAG = "RobotActionXMLGold";
+    public static final String TAG = RobotActionXMLGoldCube.class.getSimpleName();
 
     private final String robotActionXMLFilename;
     private final Document document;
@@ -74,6 +72,8 @@ public class RobotActionXMLGoldCube {
         XPathFactory xpathFactory = XPathFactory.newInstance();
         xpath = xpathFactory.newXPath();
     }
+
+    //**TODO All of this is common also. Reevaluate starting position and vumarks.
 
     // Find the requested opMode in the RobotActionGoldCube.xml file.
     // Package and return all data associated with the OpMode.

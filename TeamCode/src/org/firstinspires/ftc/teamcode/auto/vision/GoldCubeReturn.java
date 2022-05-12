@@ -9,20 +9,22 @@ public class GoldCubeReturn {
     public static final double GOLD_CUBE_DISTANCE_NPOS = -1.0;
 
     public final RobotConstants.OpenCVResults openCVResults;
-    public final double angleToGoldCube;
-    public final double distanceToGoldCube;
+    public final double angleFromRobotCenter;
+    public final double distanceFromRobotCenter;
 
-    //**TODO angleFromRobotCenter; distanceFromRobotCenter
+    // Parameter pAngle = the angle from the center of the robot to the
+    // center of the gold cube. Parameter pDistance = the distance in
+    // meters from the center of the robot to the center of the gold cube.
     public GoldCubeReturn(RobotConstants.OpenCVResults pOpenCVResults, double pAngle, double pDistance) {
         openCVResults = pOpenCVResults;
-        angleToGoldCube = pAngle;
-        distanceToGoldCube = pDistance;
+        angleFromRobotCenter = pAngle;
+        distanceFromRobotCenter = pDistance;
     }
 
     // Constructor for OpenCV errors such as "no such file".
     public GoldCubeReturn(RobotConstants.OpenCVResults pOpenCVResults) {
         openCVResults = pOpenCVResults;
-        angleToGoldCube = GOLD_CUBE_ANGLE_NPOS;
-        distanceToGoldCube = GOLD_CUBE_DISTANCE_NPOS;
+        angleFromRobotCenter = GOLD_CUBE_ANGLE_NPOS;
+        distanceFromRobotCenter = GOLD_CUBE_DISTANCE_NPOS;
     }
 }

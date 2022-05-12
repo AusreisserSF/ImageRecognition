@@ -18,7 +18,7 @@ import java.io.IOException;
 // Class whose job it is to read an XML file that contains all of the information
 // needed for our OpenCV methods to recognize a gold cube during Autonomous.
 public class GoldCubeParametersXML {
-    public static final String TAG = "GoldCubeParametersXML";
+    public static final String TAG = GoldCubeParametersXML.class.getSimpleName();
     private static final String BCP_FILE_NAME = "GoldCubeParameters.xml";
 
     private final Document document;
@@ -47,7 +47,7 @@ public class GoldCubeParametersXML {
         }
     }
 
-    public GoldCubeParameters getBarcodeParameters() throws XPathExpressionException {
+    public GoldCubeParameters getGoldCubeParameters() throws XPathExpressionException {
         XPathExpression expr;
         VisionParameters.HSVParameters hsvParameters;
 
@@ -55,12 +55,12 @@ public class GoldCubeParametersXML {
         RobotLogCommon.d(TAG, "Parsing XML gold_cube_parameters");
 
         expr = xpath.compile("//gold_cube_parameters");
-        Node barcode_parameters_node = (Node) expr.evaluate(document, XPathConstants.NODE);
-        if (barcode_parameters_node == null)
+        Node gold_cube_parameters_node = (Node) expr.evaluate(document, XPathConstants.NODE);
+        if (gold_cube_parameters_node == null)
             throw new AutonomousRobotException(TAG, "Element '//gold_cube_parameters' not found");
 
         // Point to <hsv_parameters>
-        Node hsv_node = barcode_parameters_node.getFirstChild();
+        Node hsv_node = gold_cube_parameters_node.getFirstChild();
         Node hsv_parameters_node = getNextElement(hsv_node);
         if ((hsv_parameters_node == null) || !hsv_parameters_node.getNodeName().equals("hsv_parameters"))
             throw new AutonomousRobotException(TAG, "Element 'hsv_parameters' not found");

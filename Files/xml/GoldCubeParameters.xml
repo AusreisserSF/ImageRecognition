@@ -3,10 +3,10 @@
         <hue_name>gold</hue_name>
         <hue_low>5</hue_low>
         <hue_high>30</hue_high>
-        <saturation_target>12</saturation_target>
-        <saturation_low_threshold>10</saturation_low_threshold>
-        <value_target>160</value_target>
-        <value_low_threshold>120</value_low_threshold>
+        <saturation_target>100</saturation_target>
+        <saturation_low_threshold>150</saturation_low_threshold>
+        <value_target>60</value_target>
+        <value_low_threshold>85</value_low_threshold>
     </hsv_parameters>
     <depth_camera model="D455">
         <color_camera_fov>90.0</color_camera_fov>

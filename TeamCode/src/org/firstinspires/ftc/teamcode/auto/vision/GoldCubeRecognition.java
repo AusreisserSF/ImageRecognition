@@ -91,7 +91,11 @@ public class GoldCubeRecognition {
         RobotLogCommon.d(TAG, "Angle from camera to gold cube " + angleFromCameraToGoldCube);
 
         // Read the depth file that corresponds to the color image file.
-        String depthFilename = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir + ".depth";
+        //**TODO See TODO in the AS Project RealsenseAlignAdv about writing
+        // out the depth file as a block of bytes, reading it in here, and
+        // converting here to an array of short.
+        String filenameWithoutExt = pImageParameters.ocv_image.substring(0, pImageParameters.ocv_image.lastIndexOf('.'));
+        String depthFilename = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir + filenameWithoutExt + ".depth";
         int[] depth16UC1 = new int[pImageParameters.resolution_width * pImageParameters.resolution_height];
         try (InputStream output = new FileInputStream(depthFilename)) {
             try (DataInputStream depthInputStream =
@@ -101,24 +105,53 @@ public class GoldCubeRecognition {
             }
         }
 
-        //**TODO Use the pixel position of the centroid of the gold cube as an index
+        // Use the pixel position of the centroid of the gold cube as an index
         // into the array of depth values and get the distance from the camera to the
-        // centroid pixel.
-        // 0 .. 639
-        // 640 .. 1279
+        // centroid pixel. For example, for a 640 x 480 image --
+        // row 0 is 0 .. 639
+        // row 1 is 640 .. 1279
+        // ...
         int column = goldCubeCentroidX;
         int row = goldCubeCentroidY * pImageParameters.resolution_width;
         int centroidPixelDepth = depth16UC1[column + row];
         float scaledPixelDepth = centroidPixelDepth * pGoldCubeParameters.depthCameraScale;
 
-        RobotLogCommon.d(TAG, "Distance to pixel at x " + goldCubeCentroidX + ", y " + goldCubeCentroidY + " = " + scaledPixelDepth);
+        RobotLogCommon.d(TAG, "Distance from camera to pixel at x " + goldCubeCentroidX + ", y " + goldCubeCentroidY + " = " + scaledPixelDepth);
 
-        //**TODO Now we have the hypotenuse from the camera to the center of the gold
-        // cube in meters and we have the angle from the camera to the center of the
-        // gold cube. Solve for the other two sides in meters.
+        // We have the hypotenuse from the camera to the center of the gold
+        // cube in meters and we have the angle from the camera to the center
+        // of the gold cube. Solve for the other two sides in meters.
 
-        double angleFromRobotCenter = 0.0f;
-        double distanceFromRobotCenter = 0.0f;
+        // sin(angleFromCameraToGoldCube) = opposite / scaledPixelDepth
+        double sinACC = Math.sin(Math.toRadians(angleFromCameraToGoldCube));
+        // The "opposite" side if the triangle is from the centroid of the
+        // gold cube to the center of the image.
+        double opposite = sinACC * scaledPixelDepth;
+
+        // cos(angleFromCameraToGoldCube) = adjacent / scaledPixelDepth
+        double cosACC = Math.cos(Math.toRadians(angleFromCameraToGoldCube));
+        // The "adjacent" side if the triangle is from the center of the
+        // camera to the center of the image.
+        double adjacentFromCameraCenter = cosACC * scaledPixelDepth;
+
+        // Since the center of the robot is behind the camera, add this
+        // distance to the adjacent value.
+        //**TODO pGoldCubeParameters.cameraToRobotCenter
+        // 2.5" = 0.0635 meters
+        double adjacentFromRobotCenter = adjacentFromCameraCenter + 0.0635;
+
+        // We have a new triangle. We need to get the angle from the robot
+        // center to the center of the gold cube.
+        double ratioARC = opposite / adjacentFromRobotCenter;
+        double tanARC = Math.tan(ratioARC);
+        double angleFromRobotCenter = Math.toDegrees(tanARC);
+        RobotLogCommon.d(TAG, "Angle from robot center to gold cube " + angleFromRobotCenter);
+
+        // Get the distance from the center of the robot to the center of
+        // the gold cube. This is the hypotenuse of our new ttriangle.
+        double distanceFromRobotCenter = Math.sqrt(Math.pow(opposite, 2) + Math.pow(adjacentFromRobotCenter, 2));
+        RobotLogCommon.d(TAG, "Distance (meters) from robot center to pixel at x " + goldCubeCentroidX + ", y " + goldCubeCentroidY + " = " + distanceFromRobotCenter);
+
         return new GoldCubeReturn(RobotConstants.OpenCVResults.RECOGNITION_SUCCESSFUL, angleFromRobotCenter, distanceFromRobotCenter);
     }
 

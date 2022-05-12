@@ -97,8 +97,8 @@ public class RecognitionDispatcher extends Application {
                     throw new AutonomousRobotException(TAG, "TEST OpMode must contain a single action");
 
                 String recognitionAction = actions.get(0).getRobotXMLElementName();
-                if (!((recognitionAction.equals("ANALYZE_BARCODE") || recognitionAction.equals("APPROACH_SHIPPING_HUB_BY_VISION"))))
-                    throw new AutonomousRobotException(TAG, "Missing required action ANALYZE_BARCODE or APPROACH_SHIPPING_BY_WITH_VISION");
+                if (!recognitionAction.equals("GOLD_CUBE_DEPTH"))
+                    throw new AutonomousRobotException(TAG, "Missing required action GOLD_CUBE_DEPTH");
                 break;
             }
 
@@ -136,7 +136,31 @@ public class RecognitionDispatcher extends Application {
 
             // Summer 2022: test Intel Realsense depth camera(s).
             case "GOLD_CUBE_DEPTH": {
-                //**TODO
+                // Read the parameters for gold cube recognition from the xml file.
+                GoldCubeParametersXML goldCubeParametersXML = new GoldCubeParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
+                GoldCubeParameters goldCubeParameters = goldCubeParametersXML.getGoldCubeParameters();
+
+                // Get the <image_parameters> for the gold cube from the RobotAction (+suffix) XML file.
+                VisionParameters.ImageParameters goldCubeImageParameters =
+                        robotActionXMLGoldCube.getImageParametersFromXPath(actionElement, "image_parameters");
+
+                // Make sure that this tester is reading the image from a file.
+                if (!(goldCubeImageParameters.ocv_image.endsWith(".png") ||
+                        goldCubeImageParameters.ocv_image.endsWith(".jpg")))
+                    throw new AutonomousRobotException(TAG, "Invalid image file name");
+
+                ImageProvider fileImage = new FileImage(imagePath + goldCubeImageParameters.ocv_image);
+
+                // Perform image recognition and depth mapping.
+                GoldCubeRecognition recognition = new GoldCubeRecognition();
+                GoldCubeReturn goldCubeReturn = recognition.getAngleAndDistanceToGoldCube(fileImage, goldCubeImageParameters, goldCubeParameters);
+                String displayText = "Center of robot to center of gold cube" +
+                        '\n' + "Distance (meters) " + String.format("%.2f", goldCubeReturn.distanceFromRobotCenter) +
+                        ", angle " + String.format("%.2f", goldCubeReturn.angleFromRobotCenter);
+
+                displayResults(imagePath + goldCubeImageParameters.ocv_image,
+                        displayText,
+                        "Test Realsense D455");
                 break;
             }
 
