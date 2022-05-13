@@ -309,6 +309,10 @@ public class RobotActionXMLFreightFrenzy {
         return actions;
     }
 
+    //**TODO New class RobotActionData for common fields, then
+    // RobotActionDataFreightFrenzy extends RobotActionData.
+    // BUT - if you remove Vumarks and StartingPositionData
+    // only logLevel will be left.
     public static class RobotActionDataFreightFrenzy {
         public final Level logLevel;
         public final List<RobotConstantsFreightFrenzy.SupportedVumark> vumarksOfInterest;
@@ -329,6 +333,8 @@ public class RobotActionXMLFreightFrenzy {
         }
     }
 
+    //**TODO As things stand now, this class is repeated in all
+    // RobotActionXML... classes.
     public static class StartingPositionData {
 
         public final double startingX; // FTC field coordinates

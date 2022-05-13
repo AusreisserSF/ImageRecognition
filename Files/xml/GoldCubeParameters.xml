@@ -13,4 +13,5 @@
         <scale>.001</scale>
         <distance_filter>1.00</distance_filter>
     </depth_camera>
+    <camera_to_robot_center_meters>0.0635</camera_to_robot_center_meters> <!-- 2.5" = 0.0635 meters -->
 </gold_cube_parameters>

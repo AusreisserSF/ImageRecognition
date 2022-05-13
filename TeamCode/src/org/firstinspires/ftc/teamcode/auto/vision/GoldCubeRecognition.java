@@ -18,6 +18,8 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -91,19 +93,21 @@ public class GoldCubeRecognition {
         RobotLogCommon.d(TAG, "Angle from camera to gold cube " + angleFromCameraToGoldCube);
 
         // Read the depth file that corresponds to the color image file.
-        //**TODO See TODO in the AS Project RealsenseAlignAdv about writing
-        // out the depth file as a block of bytes, reading it in here, and
-        // converting here to an array of short.
+        // The file is a collection of bytes; read them into an array
+        // and then convert to an array of shorts.
         String filenameWithoutExt = pImageParameters.ocv_image.substring(0, pImageParameters.ocv_image.lastIndexOf('.'));
         String depthFilename = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir + filenameWithoutExt + ".depth";
-        int[] depth16UC1 = new int[pImageParameters.resolution_width * pImageParameters.resolution_height];
+        byte[] depth8UC1 = new byte[pImageParameters.resolution_width * pImageParameters.resolution_height];
         try (InputStream output = new FileInputStream(depthFilename)) {
             try (DataInputStream depthInputStream =
                          new DataInputStream(output)) {
-                for (int i = 0; i < depth16UC1.length; i++)
-                    depth16UC1[i] = depthInputStream.readUnsignedShort();
+                depthInputStream.read(depth8UC1);
             }
         }
+
+        // Convert an array of bytes to an array of shorts.
+        short[] depth16UC1 = new short[depth8UC1.length / 2]; // length is in bytes
+        ByteBuffer.wrap(depth8UC1).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(depth16UC1);
 
         // Use the pixel position of the centroid of the gold cube as an index
         // into the array of depth values and get the distance from the camera to the
@@ -113,7 +117,7 @@ public class GoldCubeRecognition {
         // ...
         int column = goldCubeCentroidX;
         int row = goldCubeCentroidY * pImageParameters.resolution_width;
-        int centroidPixelDepth = depth16UC1[column + row];
+        int centroidPixelDepth = depth16UC1[column + row] &0xFFFF; // use as unsigned short
         float scaledPixelDepth = centroidPixelDepth * pGoldCubeParameters.depthCameraScale;
 
         RobotLogCommon.d(TAG, "Distance from camera to pixel at x " + goldCubeCentroidX + ", y " + goldCubeCentroidY + " = " + scaledPixelDepth);
@@ -136,9 +140,7 @@ public class GoldCubeRecognition {
 
         // Since the center of the robot is behind the camera, add this
         // distance to the adjacent value.
-        //**TODO pGoldCubeParameters.cameraToRobotCenter
-        // 2.5" = 0.0635 meters
-        double adjacentFromRobotCenter = adjacentFromCameraCenter + 0.0635;
+        double adjacentFromRobotCenter = adjacentFromCameraCenter + pGoldCubeParameters.cameraToRobotCenterMeters;
 
         // We have a new triangle. We need to get the angle from the robot
         // center to the center of the gold cube.

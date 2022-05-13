@@ -112,7 +112,20 @@ public class GoldCubeParametersXML {
             throw new AutonomousRobotException(TAG, "Invalid number format in element 'depth_camera/distance_filter'");
         }
 
-        return new GoldCubeParameters(hsvParameters, colorCameraFOV, depthCameraScale, depthCameraDistanceFilter);
+        // Point to <camera_to_robot_center_meters>
+        Node camera_to_robot_node = distance_filter_node.getNextSibling();
+        camera_to_robot_node = getNextElement(camera_to_robot_node);
+        if ((camera_to_robot_node == null) || !camera_to_robot_node.getNodeName().equals("camera_to_robot_center_meters") || distance_filter_node.getTextContent().isEmpty())
+            throw new AutonomousRobotException(TAG, "Element 'depth_camera/camera_to_robot_center_meters' missing or empty");
+
+        float cameraToRobotCenter;
+        try {
+            cameraToRobotCenter = Float.parseFloat(camera_to_robot_node.getTextContent());
+        } catch (NumberFormatException nex) {
+            throw new AutonomousRobotException(TAG, "Invalid number format in element 'depth_camera/camera_to_robot_center_meters'");
+        }
+
+        return new GoldCubeParameters(hsvParameters, colorCameraFOV, depthCameraScale, depthCameraDistanceFilter, cameraToRobotCenter);
     }
 
     private Node getNextElement(Node pNode) {

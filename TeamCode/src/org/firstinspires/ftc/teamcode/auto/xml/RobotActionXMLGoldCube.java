@@ -73,7 +73,8 @@ public class RobotActionXMLGoldCube {
         xpath = xpathFactory.newXPath();
     }
 
-    //**TODO All of this is common also. Reevaluate starting position and vumarks.
+    //**TODO parsing of the <parameters> element is common.
+    // Reevaluate starting position and vumarks.
 
     // Find the requested opMode in the RobotActionGoldCube.xml file.
     // Package and return all data associated with the OpMode.
@@ -218,7 +219,6 @@ public class RobotActionXMLGoldCube {
                 actions);
     }
 
-    //**TODO static member in XMLUtils class -> ftcdevcommon.
     // Helper method to convert a nested <image_parameters> element into a class.
     public VisionParameters.ImageParameters
     getImageParametersFromXPath(RobotXMLElement pElement, String pPath) throws XPathExpressionException {
