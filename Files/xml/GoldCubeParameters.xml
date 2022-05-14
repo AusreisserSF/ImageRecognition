@@ -3,15 +3,15 @@
         <hue_name>gold</hue_name>
         <hue_low>5</hue_low>
         <hue_high>30</hue_high>
-        <saturation_target>100</saturation_target>
-        <saturation_low_threshold>150</saturation_low_threshold>
-        <value_target>60</value_target>
-        <value_low_threshold>85</value_low_threshold>
+        <saturation_target>0</saturation_target>
+        <saturation_low_threshold>100</saturation_low_threshold>
+        <value_target>128</value_target>
+        <value_low_threshold>50</value_low_threshold>
     </hsv_parameters>
     <depth_camera model="D455">
         <color_camera_fov>90.0</color_camera_fov>
         <scale>.001</scale>
         <distance_filter>1.00</distance_filter>
+        <camera_to_robot_center_meters>0.0635</camera_to_robot_center_meters> <!-- 2.5" = 0.0635 meters -->
     </depth_camera>
-    <camera_to_robot_center_meters>0.0635</camera_to_robot_center_meters> <!-- 2.5" = 0.0635 meters -->
 </gold_cube_parameters>

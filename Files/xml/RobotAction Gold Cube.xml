@@ -6,16 +6,16 @@
         <actions>
             <GOLD_CUBE_DEPTH>
                 <image_parameters>
-                    <ocv_image>RS_05091418_03909.png</ocv_image>
+                    <ocv_image>RS_05131545_25836.png</ocv_image>
                     <resolution>
                         <width>640</width>
                         <height>480</height>
                     </resolution>
                     <image_roi>
-                        <x>225</x>
-                        <y>190</y>
-                        <width>155</width>
-                        <height>105</height>
+                        <x>30</x>
+                        <y>185</y>
+                        <width>580</width>
+                        <height>100</height>
                     </image_roi>
                 </image_parameters>    
             </GOLD_CUBE_DEPTH>
