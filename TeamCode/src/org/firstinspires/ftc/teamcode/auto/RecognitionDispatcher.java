@@ -42,9 +42,10 @@ public class RecognitionDispatcher extends Application {
 
     private Stage stage;
     private Pane field;
-    private String imagePath;
     private RobotActionXMLFreightFrenzy robotActionXMLFreightFrenzy;
     private RobotActionXMLGoldCube robotActionXMLGoldCube;
+    private RobotActionXMLRealSense robotActionXMLRealSense;
+    private String imageFilename;
 
     // Load OpenCV.
     private static final boolean openCVInitialized;
@@ -68,7 +69,7 @@ public class RecognitionDispatcher extends Application {
     public void start(Stage pStage) throws Exception {
         stage = pStage;
         field = new Pane();
-        imagePath = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
+        String imagePath = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
 
         // Process the command line parameters common.
         Parameters parameters = getParameters();
@@ -99,6 +100,19 @@ public class RecognitionDispatcher extends Application {
                 String recognitionAction = actions.get(0).getRobotXMLElementName();
                 if (!recognitionAction.equals("GOLD_CUBE_DEPTH"))
                     throw new AutonomousRobotException(TAG, "Missing required action GOLD_CUBE_DEPTH");
+                break;
+            }
+
+            case "REALSENSE": {
+                robotActionXMLRealSense = new RobotActionXMLRealSense(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
+                RobotActionXMLRealSense.RobotActionDataRealSense actionData = robotActionXMLRealSense.getOpModeData("REALSENSE");
+                actions = actionData.actions;
+                if (actions.size() != 1)
+                    throw new AutonomousRobotException(TAG, "REALSENSE OpMode must contain a single action");
+
+                String recognitionAction = actions.get(0).getRobotXMLElementName();
+                if (!recognitionAction.equals("REALSENSE_DEPTH"))
+                    throw new AutonomousRobotException(TAG, "Missing required action REALSENSE_DEPTH");
                 break;
             }
 
@@ -133,6 +147,39 @@ public class RecognitionDispatcher extends Application {
         String actionName = actionElement.getRobotXMLElementName().toUpperCase();
         RobotLogCommon.d(TAG, "Executing action " + actionName);
         switch (actionName) {
+
+            // Fall 2022: general case for Intel Realsense depth cameras.
+            //**TODO Should supercede GOLD_CUBE_DEPTH
+            case "REALSENSE_DEPTH": {
+                // Read the parameters for gold cube recognition from the xml file.
+                RealSenseParametersXML realsenseParametersXML = new RealSenseParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
+                RealSenseParameters realsenseParameters = realsenseParametersXML.getRealSenseParameters();
+
+                // Get the <image_parameters> for the object from the RobotAction (+suffix) XML file.
+                VisionParameters.ImageParameters realsenseImageParameters =
+                        robotActionXMLRealSense.getImageParametersFromXPath(actionElement, "image_parameters");
+
+                // Make sure that this tester is reading the image from a file.
+                if (!(realsenseImageParameters.ocv_image.endsWith(".png") ||
+                        realsenseImageParameters.ocv_image.endsWith(".jpg")))
+                    throw new AutonomousRobotException(TAG, "Invalid image file name");
+
+                imageFilename = realsenseImageParameters.ocv_image;
+                ImageProvider fileImage = new FileImage(imagePath + realsenseImageParameters.ocv_image);
+
+                // Perform image recognition and depth mapping.
+                RealSenseRecognition recognition = new RealSenseRecognition();
+                RealSenseReturn realsenseReturn = recognition.getRealSenseAngleAndDistance(fileImage, realsenseImageParameters, realsenseParameters);
+                String displayText = "Image: " + imageFilename +
+                        '\n' + "Center of robot to center of object:" +
+                        '\n' + "Distance (meters) " + String.format("%.2f", realsenseReturn.distanceFromRobotCenter) +
+                        ", angle " + String.format("%.2f", realsenseReturn.angleFromRobotCenter);
+
+                displayResults(imagePath + realsenseImageParameters.ocv_image,
+                        displayText,
+                        "Test Realsense distance camera");
+                break;
+            }
 
             // Summer 2022: test Intel Realsense depth camera(s).
             case "GOLD_CUBE_DEPTH": {

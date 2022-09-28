@@ -1,0 +1,24 @@
+<RobotAction>
+    <OpMode id="REALSENSE">
+           <parameters>
+            <log_level>v</log_level>
+        </parameters>
+        <actions>
+            <REALSENSE_DEPTH>
+                <image_parameters>
+                    <ocv_image>D405_09251929_43799.png</ocv_image>
+                    <resolution>
+                        <width>640</width>
+                        <height>480</height>
+                    </resolution>
+                    <image_roi>
+                        <x>215</x>
+                        <y>0</y>
+                        <width>225</width>
+                        <height>370</height>
+                    </image_roi>
+                </image_parameters>    
+            </REALSENSE_DEPTH>
+        </actions>
+    </OpMode>
+</RobotAction>
