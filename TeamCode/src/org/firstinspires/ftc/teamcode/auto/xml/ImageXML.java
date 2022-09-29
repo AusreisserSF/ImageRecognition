@@ -235,47 +235,47 @@ public class ImageXML {
         // <saturation_target>
         Node saturation_target_node = hue_high_node.getNextSibling();
         saturation_target_node = getNextElement(saturation_target_node);
-        if ((saturation_target_node == null) || !saturation_target_node.getNodeName().equals("saturation_target") || saturation_target_node.getTextContent().isEmpty())
-            throw new AutonomousRobotException(TAG, "Element 'saturation_target' missing or empty");
+        if ((saturation_target_node == null) || !saturation_target_node.getNodeName().equals("saturation_median_target") || saturation_target_node.getTextContent().isEmpty())
+            throw new AutonomousRobotException(TAG, "Element 'saturation_median_target' missing or empty");
         try {
             saturation_target = Integer.parseInt(saturation_target_node.getTextContent());
         } catch (NumberFormatException nex) {
-            throw new AutonomousRobotException(TAG, "Invalid number format in element 'saturation_target'");
+            throw new AutonomousRobotException(TAG, "Invalid number format in element 'saturation_median_target'");
         }
 
         // <saturation_low_threshold>
         Node saturation_low_threshold_node = saturation_target_node.getNextSibling();
         saturation_low_threshold_node = getNextElement(saturation_low_threshold_node);
-        if ((saturation_low_threshold_node == null) || !saturation_low_threshold_node.getNodeName().equals("saturation_low_threshold") || saturation_low_threshold_node.getTextContent().isEmpty())
-            throw new AutonomousRobotException(TAG, "Element 'saturation_low_threshold' missing or empty");
+        if ((saturation_low_threshold_node == null) || !saturation_low_threshold_node.getNodeName().equals("saturation_threshold_low") || saturation_low_threshold_node.getTextContent().isEmpty())
+            throw new AutonomousRobotException(TAG, "Element 'saturation_threshold_low' missing or empty");
         try {
             saturation_low_threshold = Integer.parseInt(saturation_low_threshold_node.getTextContent());
         } catch (NumberFormatException nex) {
-            throw new AutonomousRobotException(TAG, "Invalid number format in element 'saturation_low_threshold'");
+            throw new AutonomousRobotException(TAG, "Invalid number format in element 'saturation_threshold_low'");
         }
 
         // <value_target>
         Node value_target_node = saturation_low_threshold_node.getNextSibling();
         value_target_node = getNextElement(value_target_node);
-        if ((value_target_node == null) || !value_target_node.getNodeName().equals("value_target") || value_target_node.getTextContent().isEmpty())
-            throw new AutonomousRobotException(TAG, "Element 'value' missing or empty");
+        if ((value_target_node == null) || !value_target_node.getNodeName().equals("value_median_target") || value_target_node.getTextContent().isEmpty())
+            throw new AutonomousRobotException(TAG, "Element 'value_median_target' missing or empty");
 
         try {
             value_target = Integer.parseInt(value_target_node.getTextContent());
         } catch (NumberFormatException nex) {
-            throw new AutonomousRobotException(TAG, "Invalid number format in element 'value_target'");
+            throw new AutonomousRobotException(TAG, "Invalid number format in element 'value_median_target'");
         }
 
         // <value_low_threshold>
         Node value_low_threshold_node = value_target_node.getNextSibling();
         value_low_threshold_node = getNextElement(value_low_threshold_node);
-        if ((value_low_threshold_node == null) || !value_low_threshold_node.getNodeName().equals("value_low_threshold") || value_low_threshold_node.getTextContent().isEmpty())
-            throw new AutonomousRobotException(TAG, "Element 'value_low_threshold' missing or empty");
+        if ((value_low_threshold_node == null) || !value_low_threshold_node.getNodeName().equals("value_threshold_low") || value_low_threshold_node.getTextContent().isEmpty())
+            throw new AutonomousRobotException(TAG, "Element 'value_threshold_low' missing or empty");
 
         try {
             value_low_threshold = Integer.parseInt(value_low_threshold_node.getTextContent());
         } catch (NumberFormatException nex) {
-            throw new AutonomousRobotException(TAG, "Invalid number format in element 'value_low_threshold'");
+            throw new AutonomousRobotException(TAG, "Invalid number format in element 'value_threshold_low'");
         }
 
         return new VisionParameters.HSVParameters(hue_name, hue_low, hue_high,

@@ -1,7 +1,0 @@
-[2022-09-28 04:38:34.462] [INFO   ] RecognitionDispatcher Starting image recognition 
-[2022-09-28 04:38:34.533] [CONFIG ] RecognitionDispatcher Game REALSENSE 
-[2022-09-28 04:38:34.596] [CONFIG ] RobotActionXMLRealSense Extracting data from Files/xml/RobotAction RealSense.xml for OpMode REALSENSE 
-[2022-09-28 04:38:34.600] [FINE   ] RecognitionDispatcher Executing action REALSENSE_DEPTH 
-[2022-09-28 04:38:34.605] [FINE   ] RealSenseParametersXML Parsing XML realsense_parameters 
-[2022-09-28 04:38:34.619] [FINE   ] ImageXML Parsing XML hsv_parameters 
-[2022-09-28 04:38:34.620] [FINE   ] ImageXML Parsed XML hsv_parameters; hue name = gold 

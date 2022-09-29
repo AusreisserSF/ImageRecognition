@@ -1,0 +1,34 @@
+[2022-09-29 01:51:56.839] [INFO   ] RecognitionDispatcher Starting image recognition 
+[2022-09-29 01:51:56.906] [CONFIG ] RecognitionDispatcher Game REALSENSE 
+[2022-09-29 01:51:56.970] [CONFIG ] RobotActionXMLRealSense Extracting data from Files/xml/RobotAction RealSense.xml for OpMode REALSENSE 
+[2022-09-29 01:51:56.974] [FINE   ] RecognitionDispatcher Executing action REALSENSE_DEPTH 
+[2022-09-29 01:51:56.980] [FINE   ] RealSenseParametersXML Parsing XML realsense_parameters 
+[2022-09-29 01:51:56.983] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-09-29 01:51:56.983] [FINE   ] ImageXML Parsed XML hsv_parameters; hue name = gold 
+[2022-09-29 01:51:56.985] [FINE   ] ImageXML Parsing XML image_parameters 
+[2022-09-29 01:51:56.996] [FINE   ] RealSenseRecognition In RealSenseRecognition.getRealSenseAngleAndDistance 
+[2022-09-29 01:51:56.997] [FINE   ] ImageUtils File name Files/images/D405_09251929_43799.png 
+[2022-09-29 01:51:57.008] [FINE   ] ImageUtils Image width 640, height 480 
+[2022-09-29 01:51:57.011] [FINE   ] ImageUtils Writing original image Files/images/D405_09251929_43799_09290151_57008_IMG.png 
+[2022-09-29 01:51:57.022] [FINE   ] ImageUtils Image width 640, height 480 
+[2022-09-29 01:51:57.028] [FINE   ] ImageUtils Image ROI x 215, y 0, width 225, height 370 
+[2022-09-29 01:51:57.029] [FINE   ] ImageUtils Writing image ROI Files/images/D405_09251929_43799_09290151_57008_ROI.png 
+[2022-09-29 01:51:57.044] [FINE   ] ImageUtils Target hue levels: low 5, high 30 
+[2022-09-29 01:51:57.076] [FINE   ] ImageUtils HSV saturation channel median 0 
+[2022-09-29 01:51:57.076] [FINE   ] ImageUtils HSV value channel median 128 
+[2022-09-29 01:51:57.077] [FINE   ] ImageUtils Adjust HSV saturation by 0 
+[2022-09-29 01:51:57.077] [FINE   ] ImageUtils Adjust HSV value by 0 
+[2022-09-29 01:51:57.078] [FINE   ] ImageUtils Adjusted image levels: saturation low 0, value low 128 
+[2022-09-29 01:51:57.083] [FINE   ] ImageUtils Writing Files/images/D405_09251929_43799_09290151_57008_ADJ.png 
+[2022-09-29 01:51:57.087] [FINE   ] ImageUtils Actual inRange HSV levels: hue low 5, hue high 30 
+[2022-09-29 01:51:57.090] [FINE   ] ImageUtils Actual inRange HSV levels: saturation low 50, value low 180 
+[2022-09-29 01:51:57.090] [FINE   ] ImageUtils Writing Files/images/D405_09251929_43799_09290151_57008_ADJ_THR.png 
+[2022-09-29 01:51:57.091] [FINE   ] RealSenseRecognition drawContours: number of contours 1 
+[2022-09-29 01:51:57.093] [FINE   ] RealSenseRecognition Writing Files/images/D405_09251929_43799_09290151_57008_CON.png 
+[2022-09-29 01:51:57.105] [FINE   ] RealSenseRecognition Width of largest contour 28 
+[2022-09-29 01:51:57.106] [FINE   ] RealSenseRecognition Writing Files/images/D405_09251929_43799_09290151_57008_BRECT.png 
+[2022-09-29 01:51:57.128] [FINE   ] RealSenseRecognition Angle from camera to object -1.6117419744175154 
+[2022-09-29 01:51:57.130] [FINE   ] RealSenseRecognition Distance from camera to pixel at x 330, y 139 = 0.4525 
+[2022-09-29 01:51:57.130] [FINE   ] RealSenseRecognition Angle from robot center to object -1.4139887751551214 
+[2022-09-29 01:51:57.131] [FINE   ] RealSenseRecognition Distance (meters) from robot center to pixel at x 330, y 139 = 0.515977956477324 
+[2022-09-29 01:51:57.416] [INFO   ] Closing the log with 0 entries on the queue 
