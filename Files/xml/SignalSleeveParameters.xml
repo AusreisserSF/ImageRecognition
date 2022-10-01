@@ -1,0 +1,11 @@
+﻿<signal_sleeve_parameters>
+  <gray_parameters>
+    <target>150</target>
+    <!-- 75 for gray, 200 for reflective_tape -->
+    <low_threshold>75</low_threshold>
+  </gray_parameters>
+<criteria>
+  <min_white_pixels_location_2>1000</min_white_pixels_location_2>
+  <min_white_pixels_location_3>3000</min_white_pixels_location_3>
+</criteria>
+</signal_sleeve_parameters>

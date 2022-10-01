@@ -45,6 +45,7 @@ public class RecognitionDispatcher extends Application {
     private RobotActionXMLFreightFrenzy robotActionXMLFreightFrenzy;
     private RobotActionXMLGoldCube robotActionXMLGoldCube;
     private RobotActionXMLRealSense robotActionXMLRealSense;
+    private RobotActionXMLStandard robotActionXMLSignalSleeve;
     private String imageFilename;
 
     // Load OpenCV.
@@ -75,6 +76,7 @@ public class RecognitionDispatcher extends Application {
         Parameters parameters = getParameters();
         Map<String, String> namedParameters = parameters.getNamed();
 
+        //**TODO "game" is not right
         String gameParameter = namedParameters.get("game");
         if (gameParameter == null)
             throw new AutonomousRobotException(TAG, "Required parameter --game is missing");
@@ -100,6 +102,19 @@ public class RecognitionDispatcher extends Application {
                 String recognitionAction = actions.get(0).getRobotXMLElementName();
                 if (!recognitionAction.equals("GOLD_CUBE_DEPTH"))
                     throw new AutonomousRobotException(TAG, "Missing required action GOLD_CUBE_DEPTH");
+                break;
+            }
+
+            case "SIGNAL_SLEEVE": {
+                robotActionXMLSignalSleeve = new RobotActionXMLStandard(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
+                RobotActionXMLStandard.RobotActionDataStandard actionData = robotActionXMLSignalSleeve.getOpModeData("TEST");
+                actions = actionData.actions;
+                if (actions.size() != 1)
+                    throw new AutonomousRobotException(TAG, "SIGNAL_SLEEVE OpMode must contain a single action");
+
+                String recognitionAction = actions.get(0).getRobotXMLElementName();
+                if (!recognitionAction.equals("ANALYZE_SIGNAL_SLEEVE"))
+                    throw new AutonomousRobotException(TAG, "Missing required action ANALYZE_SIGNAL_SLEEVE");
                 break;
             }
 
@@ -148,10 +163,43 @@ public class RecognitionDispatcher extends Application {
         RobotLogCommon.d(TAG, "Executing action " + actionName);
         switch (actionName) {
 
+            case "ANALYZE_SIGNAL_SLEEVE": {
+                // Read the parameters for signal sleeve recognition from the xml file.
+                SignalSleeveParametersXML signalSleeveParametersXML = new SignalSleeveParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
+                SignalSleeveParameters signalSleeveParameters = signalSleeveParametersXML.getSignalSleeveParameters();
+
+                // Get the <image_parameters> for the signal sleeve from the RobotAction (+suffix) XML file.
+                VisionParameters.ImageParameters signalSleeveImageParameters =
+                        robotActionXMLRealSense.getImageParametersFromXPath(actionElement, "image_parameters");
+
+                // Make sure that this tester is reading the image from a file.
+                if (!(signalSleeveImageParameters.ocv_image.endsWith(".png") ||
+                        signalSleeveImageParameters.ocv_image.endsWith(".jpg")))
+                    throw new AutonomousRobotException(TAG, "Invalid image file name");
+
+                imageFilename = signalSleeveImageParameters.ocv_image;
+                ImageProvider fileImage = new FileImage(imagePath + signalSleeveImageParameters.ocv_image);
+
+                //**TODO MORE ...
+                // Perform image recognition and depth mapping.
+                //**SignalSleeveRecognition recognition = new SignalSleeveRecognition();
+                //**SignalSleeveReturn signalSleeveReturn = recognition.getRealSenseAngleAndDistance(fileImage, realsenseImageParameters, realsenseParameters);
+                /*
+                String displayText = "Image: " + imageFilename +
+                        '\n' + "Signal sleeve location:" +
+                        '\n' + "Distance (meters) " + String.format("%.2d", signalSleeveReturn.distanceFromRobotCenter);
+
+                displayResults(imagePath + signalSleeveImageParameters.ocv_image,
+                        displayText,
+                        "Test signal sleeve recognition");
+                 */
+                break;
+            }
+
             // Fall 2022: general case for Intel Realsense depth cameras.
             //**TODO Should supercede GOLD_CUBE_DEPTH
             case "REALSENSE_DEPTH": {
-                // Read the parameters for gold cube recognition from the xml file.
+                // Read the parameters for object recognition from the xml file.
                 RealSenseParametersXML realsenseParametersXML = new RealSenseParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
                 RealSenseParameters realsenseParameters = realsenseParametersXML.getRealSenseParameters();
 
