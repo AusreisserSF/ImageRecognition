@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.auto.vision.*;
 import org.firstinspires.ftc.teamcode.auto.xml.*;
 import org.firstinspires.ftc.teamcode.common.RobotConstants;
 import org.firstinspires.ftc.teamcode.common.RobotConstantsFreightFrenzy;
+import org.firstinspires.ftc.teamcode.common.RobotConstantsPowerPlay;
 import org.opencv.core.Core;
 import org.opencv.core.Rect;
 
@@ -180,19 +181,25 @@ public class RecognitionDispatcher extends Application {
                 imageFilename = signalSleeveImageParameters.ocv_image;
                 ImageProvider fileImage = new FileImage(imagePath + signalSleeveImageParameters.ocv_image);
 
-                //**TODO MORE ...
+                // Get the recognition path from the XML file.
+                String recognitionPathString = actionXPath.getRequiredString("signal_sleeve_recognition/recognition_path");
+                RobotConstantsPowerPlay.RecognitionPath recognitionPath;
+                try {
+                    recognitionPath = RobotConstantsPowerPlay.RecognitionPath.valueOf(recognitionPathString.toUpperCase());
+                } catch (IllegalArgumentException iex) {
+                    throw new AutonomousRobotException(TAG, "Invalid recognition path");
+                }
+
                 // Perform image recognition and depth mapping.
-                //**SignalSleeveRecognition recognition = new SignalSleeveRecognition();
-                //**SignalSleeveReturn signalSleeveReturn = recognition.getRealSenseAngleAndDistance(fileImage, realsenseImageParameters, realsenseParameters);
-                /*
+                SignalSleeveRecognition recognition = new SignalSleeveRecognition();
+                SignalSleeveReturn signalSleeveReturn = recognition.recognizeSignalSleeve(fileImage, signalSleeveImageParameters, signalSleeveParameters, recognitionPath);
                 String displayText = "Image: " + imageFilename +
                         '\n' + "Signal sleeve location:" +
-                        '\n' + "Distance (meters) " + String.format("%.2d", signalSleeveReturn.distanceFromRobotCenter);
+                        '\n' + "Distance (meters) " + String.format("%.2d", signalSleeveReturn.signalSleeveLocation);
 
                 displayResults(imagePath + signalSleeveImageParameters.ocv_image,
                         displayText,
                         "Test signal sleeve recognition");
-                 */
                 break;
             }
 
