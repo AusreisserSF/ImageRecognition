@@ -84,6 +84,13 @@ public class RecognitionDispatcher extends Application {
 
         RobotLogCommon.c(TAG, "Game " + gameParameter);
 
+        RobotConstants.Alliance alliance = RobotConstants.Alliance.NONE;
+        String allianceParameter = namedParameters.get("alliance"); // optional
+        if (allianceParameter != null)
+            alliance = RobotConstants.Alliance.valueOf(allianceParameter);
+
+        RobotLogCommon.c(TAG, "Alliance " + alliance);
+
         // Get the name of the file that contains the robot's actions,
         // e.g. RobotAction.xml.
         String actionXMLFilenameParameter = namedParameters.get("xml");
@@ -108,7 +115,7 @@ public class RecognitionDispatcher extends Application {
 
             case "SIGNAL_SLEEVE": {
                 robotActionXMLSignalSleeve = new RobotActionXMLStandard(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
-                RobotActionXMLStandard.RobotActionDataStandard actionData = robotActionXMLSignalSleeve.getOpModeData("TEST");
+                RobotActionXMLStandard.RobotActionDataStandard actionData = robotActionXMLSignalSleeve.getOpModeData("SIGNAL_SLEEVE");
                 actions = actionData.actions;
                 if (actions.size() != 1)
                     throw new AutonomousRobotException(TAG, "SIGNAL_SLEEVE OpMode must contain a single action");
@@ -171,7 +178,7 @@ public class RecognitionDispatcher extends Application {
 
                 // Get the <image_parameters> for the signal sleeve from the RobotAction (+suffix) XML file.
                 VisionParameters.ImageParameters signalSleeveImageParameters =
-                        robotActionXMLRealSense.getImageParametersFromXPath(actionElement, "image_parameters");
+                        robotActionXMLSignalSleeve.getImageParametersFromXPath(actionElement, "image_parameters");
 
                 // Make sure that this tester is reading the image from a file.
                 if (!(signalSleeveImageParameters.ocv_image.endsWith(".png") ||
@@ -190,12 +197,13 @@ public class RecognitionDispatcher extends Application {
                     throw new AutonomousRobotException(TAG, "Invalid recognition path");
                 }
 
+                RobotLogCommon.d(TAG, "Recognition path " + recognitionPath);
+
                 // Perform image recognition and depth mapping.
                 SignalSleeveRecognition recognition = new SignalSleeveRecognition();
-                SignalSleeveReturn signalSleeveReturn = recognition.recognizeSignalSleeve(fileImage, signalSleeveImageParameters, signalSleeveParameters, recognitionPath);
+                SignalSleeveReturn signalSleeveReturn = recognition.recognizeSignalSleeve(fileImage, signalSleeveImageParameters, signalSleeveParameters, alliance);
                 String displayText = "Image: " + imageFilename +
-                        '\n' + "Signal sleeve location:" +
-                        '\n' + "Distance (meters) " + String.format("%.2d", signalSleeveReturn.signalSleeveLocation);
+                        '\n' + "Signal sleeve location: " + signalSleeveReturn.signalSleeveLocation;
 
                 displayResults(imagePath + signalSleeveImageParameters.ocv_image,
                         displayText,
@@ -363,11 +371,6 @@ public class RecognitionDispatcher extends Application {
 
             //## 3/15/2022 See notes in getAngleAndDistanceToShippingHub.
             case "APPROACH_SHIPPING_HUB_BY_VISION": {
-                // This action needs a command line switch of --alliance=["BLUE" | "RED"]
-                String allianceString = namedParameters.get("alliance");
-                RobotConstants.Alliance alliance = RobotConstants.Alliance.valueOf(allianceString);
-                RobotLogCommon.c(TAG, "Alliance " + alliance);
-
                 // Read the parameters for the Shipping Hub from the xml file.
                 ShippingHubParametersXML shippingHubParametersXML = new ShippingHubParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
                 ShippingHubParameters shippingHubParameters = shippingHubParametersXML.getShippingHubParameters();

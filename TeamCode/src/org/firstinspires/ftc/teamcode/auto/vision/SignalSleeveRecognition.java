@@ -9,11 +9,14 @@ import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.common.RobotConstants;
 import org.firstinspires.ftc.teamcode.common.RobotConstantsPowerPlay;
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class SignalSleeveRecognition {
@@ -36,7 +39,7 @@ public class SignalSleeveRecognition {
     public SignalSleeveReturn recognizeSignalSleeve(ImageProvider pImageProvider,
                                                     VisionParameters.ImageParameters pImageParameters,
                                                     SignalSleeveParameters pSignalSleeveParameters,
-                                                    RobotConstantsPowerPlay.RecognitionPath pRecognitionPath) throws InterruptedException {
+                                                    RobotConstants.Alliance pAlliance) throws InterruptedException {
 
         RobotLogCommon.d(TAG, "In SignalSleeveRecognition.recognizeSignalSleeve");
 
@@ -46,6 +49,7 @@ public class SignalSleeveRecognition {
             return new SignalSleeveReturn(RobotConstants.OpenCVResults.OCV_ERROR); // don't crash
 
         // The image may be RGB (from a camera) or BGR (OpenCV imread from a file).
+        // OpenCV wants BGR; the possible conversion is taken care of in imageUtils.preProcessImage.
         Mat imgOriginal = signalSleeveImage.first.clone();
 
         String fileDate = TimeStamp.getLocalDateTimeStamp(signalSleeveImage.second);
@@ -56,14 +60,32 @@ public class SignalSleeveRecognition {
         int minWhitePixelsLocation2 = pSignalSleeveParameters.minWhitePixelsLocation2;
         int minWhitePixelsLocation3 = pSignalSleeveParameters.minWhitePixelsLocation3;
 
-        RobotLogCommon.d(TAG, "Recognition path " + pRecognitionPath);
+        // Remove distractions before we convert to grayscale: depending on the
+        // current alliance set the red or blue channel pixels to black.
+        ArrayList<Mat> channels = new ArrayList<>(3);
+        Core.split(imageROI, channels);
+
+        // Initialize a new Mat to black (all zeros) to take the place of the
+        // red or blue channel.
+        Mat blackChannel = Mat.zeros(imageROI.rows(), imageROI.cols(), CvType.CV_8U);
+        if (pAlliance == RobotConstants.Alliance.RED) {
+            // Remove the red channel and substitute the black channel.
+            channels.remove(2); // B = 0, G = 1, R = 2
+            channels.add(blackChannel);
+            Core.merge(channels, imageROI); // Recreate the BGR image.
+        } else if (pAlliance == RobotConstants.Alliance.BLUE) {
+            // Remove the blue channel and substitute the black channel.
+            channels.remove(0); // B = 0, G = 1, R = 2
+            channels.add(0, blackChannel);
+            Core.merge(channels, imageROI); // Recreate the BGR image.
+        }
 
         // We're on the grayscale path.
         Mat grayROI = new Mat();
         Imgproc.cvtColor(imageROI, grayROI, Imgproc.COLOR_BGR2GRAY);
 
-        //Imgcodecs.imwrite(outputFilenamePreamble + "_REF_GRAY.png", grayROI);
-        //RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_GRAY.png");
+        Imgcodecs.imwrite(outputFilenamePreamble + "_REF_GRAY.png", grayROI);
+        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_GRAY.png");
 
         Mat adjustedGray = imageUtils.adjustGrayscaleBrightness(grayROI, pSignalSleeveParameters.grayParameters.target);
         //Imgcodecs.imwrite(outputFilenamePreamble + "_REF_ADJ.png", adjustedGray);

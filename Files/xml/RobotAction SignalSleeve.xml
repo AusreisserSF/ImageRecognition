@@ -6,18 +6,21 @@
         <actions>
             <ANALYZE_SIGNAL_SLEEVE>
                 <image_parameters>
-                    <ocv_image>D405_09251929_43799.png</ocv_image>
+                    <ocv_image>D405_09271612_14641 red black white.png</ocv_image>
                     <resolution>
                         <width>640</width>
                         <height>480</height>
                     </resolution>
                     <image_roi>
-                        <x>215</x>
-                        <y>0</y>
-                        <width>225</width>
-                        <height>370</height>
+                        <x>235</x>
+                        <y>235</y>
+                        <width>235</width>
+                        <height>235</height>
                     </image_roi>
-                </image_parameters>    
+                </image_parameters>
+                <signal_sleeve_recognition>
+                    <recognition_path>gray</recognition_path>
+                </signal_sleeve_recognition>
             </ANALYZE_SIGNAL_SLEEVE>
         </actions>
     </OpMode>

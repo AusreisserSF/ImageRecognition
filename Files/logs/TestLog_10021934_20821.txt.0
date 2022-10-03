@@ -1,0 +1,26 @@
+[2022-10-02 19:34:20.857] [INFO   ] RecognitionDispatcher Starting image recognition 
+[2022-10-02 19:34:20.931] [CONFIG ] RecognitionDispatcher Game SIGNAL_SLEEVE 
+[2022-10-02 19:34:20.932] [CONFIG ] RecognitionDispatcher Alliance RED 
+[2022-10-02 19:34:20.995] [CONFIG ] RobotActionXMLStandard Extracting data from Files/xml/RobotAction SignalSleeve.xml for OpMode SIGNAL_SLEEVE 
+[2022-10-02 19:34:20.998] [FINE   ] RecognitionDispatcher Executing action ANALYZE_SIGNAL_SLEEVE 
+[2022-10-02 19:34:21.004] [FINE   ] SignalSleeveParametersXML Parsing XML signal_sleeve_parameters 
+[2022-10-02 19:34:21.006] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2022-10-02 19:34:21.008] [FINE   ] ImageXML Parsing XML image_parameters 
+[2022-10-02 19:34:21.015] [FINE   ] RecognitionDispatcher Recognition path GRAY 
+[2022-10-02 19:34:21.017] [FINE   ] SignalSleeveRecognition In SignalSleeveRecognition.recognizeSignalSleeve 
+[2022-10-02 19:34:21.017] [FINE   ] ImageUtils File name Files/images/D405_09271612_14641 red black.png 
+[2022-10-02 19:34:21.027] [FINE   ] ImageUtils Image width 640, height 480 
+[2022-10-02 19:34:21.030] [FINE   ] ImageUtils Writing original image Files/images/D405_09271612_14641 red black_10021934_21027_IMG.png 
+[2022-10-02 19:34:21.037] [FINE   ] ImageUtils Image width 640, height 480 
+[2022-10-02 19:34:21.043] [FINE   ] ImageUtils Image ROI x 235, y 235, width 235, height 235 
+[2022-10-02 19:34:21.043] [FINE   ] ImageUtils Writing image ROI Files/images/D405_09271612_14641 red black_10021934_21027_ROI.png 
+[2022-10-02 19:34:21.060] [FINE   ] SignalSleeveRecognition Writing Files/images/D405_09271612_14641 red black_10021934_21027_GRAY.png 
+[2022-10-02 19:34:21.075] [FINE   ] ImageUtils Original image: grayscale median 90 
+[2022-10-02 19:34:21.076] [FINE   ] ImageUtils Grayscale median target 150 
+[2022-10-02 19:34:21.076] [FINE   ] ImageUtils Grayscale adjustment 60 
+[2022-10-02 19:34:21.077] [FINE   ] SignalSleeveRecognition Threshold value: low 200 
+[2022-10-02 19:34:21.078] [FINE   ] SignalSleeveRecognition Writing Files/images/D405_09271612_14641 red black_10021934_21027_REF_ADJ_THR.png 
+[2022-10-02 19:34:21.079] [FINE   ] SignalSleeveRecognition Number of non-zero pixels 16 
+[2022-10-02 19:34:21.079] [FINE   ] SignalSleeveRecognition Minimum non-zero-pixel count for location 3 4000 
+[2022-10-02 19:34:21.079] [FINE   ] SignalSleeveRecognition Minimum non-zero-pixel count for location 2 1500 
+[2022-10-02 19:34:21.362] [INFO   ] Closing the log with 0 entries on the queue 
