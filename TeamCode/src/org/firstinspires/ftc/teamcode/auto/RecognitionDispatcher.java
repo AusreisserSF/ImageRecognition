@@ -181,12 +181,12 @@ public class RecognitionDispatcher extends Application {
                         robotActionXMLSignalSleeve.getImageParametersFromXPath(actionElement, "image_parameters");
 
                 // Make sure that this tester is reading the image from a file.
-                if (!(signalSleeveImageParameters.ocv_image.endsWith(".png") ||
-                        signalSleeveImageParameters.ocv_image.endsWith(".jpg")))
+                if (!(signalSleeveImageParameters.image_source.endsWith(".png") ||
+                        signalSleeveImageParameters.image_source.endsWith(".jpg")))
                     throw new AutonomousRobotException(TAG, "Invalid image file name");
 
-                imageFilename = signalSleeveImageParameters.ocv_image;
-                ImageProvider fileImage = new FileImage(imagePath + signalSleeveImageParameters.ocv_image);
+                imageFilename = signalSleeveImageParameters.image_source;
+                ImageProvider fileImage = new FileImage(imagePath + signalSleeveImageParameters.image_source);
 
                 // Get the recognition path from the XML file.
                 String recognitionPathString = actionXPath.getRequiredString("signal_sleeve_recognition/recognition_path");
@@ -201,11 +201,11 @@ public class RecognitionDispatcher extends Application {
 
                 // Perform image recognition and depth mapping.
                 SignalSleeveRecognition recognition = new SignalSleeveRecognition();
-                SignalSleeveReturn signalSleeveReturn = recognition.recognizeSignalSleeve(fileImage, signalSleeveImageParameters, signalSleeveParameters, alliance);
+                SignalSleeveReturn signalSleeveReturn = recognition.recognizeSignalSleeve(fileImage, signalSleeveImageParameters, signalSleeveParameters, alliance, recognitionPath);
                 String displayText = "Image: " + imageFilename +
                         '\n' + "Signal sleeve location: " + signalSleeveReturn.signalSleeveLocation;
 
-                displayResults(imagePath + signalSleeveImageParameters.ocv_image,
+                displayResults(imagePath + signalSleeveImageParameters.image_source,
                         displayText,
                         "Test signal sleeve recognition");
                 break;
@@ -223,12 +223,12 @@ public class RecognitionDispatcher extends Application {
                         robotActionXMLRealSense.getImageParametersFromXPath(actionElement, "image_parameters");
 
                 // Make sure that this tester is reading the image from a file.
-                if (!(realsenseImageParameters.ocv_image.endsWith(".png") ||
-                        realsenseImageParameters.ocv_image.endsWith(".jpg")))
+                if (!(realsenseImageParameters.image_source.endsWith(".png") ||
+                        realsenseImageParameters.image_source.endsWith(".jpg")))
                     throw new AutonomousRobotException(TAG, "Invalid image file name");
 
-                imageFilename = realsenseImageParameters.ocv_image;
-                ImageProvider fileImage = new FileImage(imagePath + realsenseImageParameters.ocv_image);
+                imageFilename = realsenseImageParameters.image_source;
+                ImageProvider fileImage = new FileImage(imagePath + realsenseImageParameters.image_source);
 
                 // Perform image recognition and depth mapping.
                 RealSenseRecognition recognition = new RealSenseRecognition();
@@ -238,7 +238,7 @@ public class RecognitionDispatcher extends Application {
                         '\n' + "Distance (meters) " + String.format("%.2f", realsenseReturn.distanceFromRobotCenter) +
                         ", angle " + String.format("%.2f", realsenseReturn.angleFromRobotCenter);
 
-                displayResults(imagePath + realsenseImageParameters.ocv_image,
+                displayResults(imagePath + realsenseImageParameters.image_source,
                         displayText,
                         "Test Realsense distance camera");
                 break;
@@ -255,11 +255,11 @@ public class RecognitionDispatcher extends Application {
                         robotActionXMLGoldCube.getImageParametersFromXPath(actionElement, "image_parameters");
 
                 // Make sure that this tester is reading the image from a file.
-                if (!(goldCubeImageParameters.ocv_image.endsWith(".png") ||
-                        goldCubeImageParameters.ocv_image.endsWith(".jpg")))
+                if (!(goldCubeImageParameters.image_source.endsWith(".png") ||
+                        goldCubeImageParameters.image_source.endsWith(".jpg")))
                     throw new AutonomousRobotException(TAG, "Invalid image file name");
 
-                ImageProvider fileImage = new FileImage(imagePath + goldCubeImageParameters.ocv_image);
+                ImageProvider fileImage = new FileImage(imagePath + goldCubeImageParameters.image_source);
 
                 // Perform image recognition and depth mapping.
                 GoldCubeRecognition recognition = new GoldCubeRecognition();
@@ -268,7 +268,7 @@ public class RecognitionDispatcher extends Application {
                         '\n' + "Distance (meters) " + String.format("%.2f", goldCubeReturn.distanceFromRobotCenter) +
                         ", angle " + String.format("%.2f", goldCubeReturn.angleFromRobotCenter);
 
-                displayResults(imagePath + goldCubeImageParameters.ocv_image,
+                displayResults(imagePath + goldCubeImageParameters.image_source,
                         displayText,
                         "Test Realsense D455");
                 break;
@@ -286,11 +286,11 @@ public class RecognitionDispatcher extends Application {
                         robotActionXMLFreightFrenzy.getImageParametersFromXPath(actionElement, "image_parameters");
 
                 // Make sure that this tester is reading the image from a file.
-                if (!(barcodeImageParameters.ocv_image.endsWith(".png") ||
-                        barcodeImageParameters.ocv_image.endsWith(".jpg")))
+                if (!(barcodeImageParameters.image_source.endsWith(".png") ||
+                        barcodeImageParameters.image_source.endsWith(".jpg")))
                     throw new AutonomousRobotException(TAG, "Invalid image file name");
 
-                ImageProvider fileImage = new FileImage(imagePath + barcodeImageParameters.ocv_image);
+                ImageProvider fileImage = new FileImage(imagePath + barcodeImageParameters.image_source);
 
                 // Get the recognition path from the XML file.
                 String recognitionPathString = actionXPath.getRequiredString("barcode_recognition/recognition_path");
@@ -357,7 +357,7 @@ public class RecognitionDispatcher extends Application {
 
                 RobotLogCommon.d(TAG, "Found Team Scoring Element at position " + barcodeReturn.barcodeElementWindow);
                 RobotLogCommon.d(TAG, "Shipping Hub Level " + shippingHubLevel);
-                displayResults(imagePath + barcodeImageParameters.ocv_image,
+                displayResults(imagePath + barcodeImageParameters.image_source,
                         shippingHubLevel.toString(),
                         "FTC 2021 - 2022 Freight Frenzy");
                 break;
@@ -381,11 +381,11 @@ public class RecognitionDispatcher extends Application {
                         robotActionXMLFreightFrenzy.getImageParametersFromXPath(actionElement, "image_parameters");
 
                 // Make sure that this tester is reading the image from a file.
-                if (!(shippingHubImageParameters.ocv_image.endsWith(".png") ||
-                        shippingHubImageParameters.ocv_image.endsWith(".jpg")))
+                if (!(shippingHubImageParameters.image_source.endsWith(".png") ||
+                        shippingHubImageParameters.image_source.endsWith(".jpg")))
                     throw new AutonomousRobotException(TAG, "Invalid image file name");
 
-                ImageProvider fileImage = new FileImage(imagePath + shippingHubImageParameters.ocv_image);
+                ImageProvider fileImage = new FileImage(imagePath + shippingHubImageParameters.image_source);
 
                 // Depending on the OpMode get the BLUE or RED HSV parameters.
                 VisionParameters.HSVParameters shHSVParameters;
@@ -416,7 +416,7 @@ public class RecognitionDispatcher extends Application {
                 String displayText = "Distance from camera to Shipping Hub " + String.format("%.2f", shReturn.distanceToShippingHub) +
                         '\n' + "Angle from robot center to Shipping Hub " + String.format("%.2f", shReturn.angleToShippingHub);
 
-                displayResults(imagePath + shippingHubImageParameters.ocv_image,
+                displayResults(imagePath + shippingHubImageParameters.image_source,
                         displayText,
                         "FTC 2021 - 2022 Freight Frenzy");
 
@@ -432,13 +432,13 @@ public class RecognitionDispatcher extends Application {
                 RingRecognition ringRecognition = new RingRecognition();
 
                 // Call the OpenCV subsystem.
-                ImageProvider fileImage = new FileImage(imagePath + ringParameters.imageParameters.ocv_image);
+                ImageProvider fileImage = new FileImage(imagePath + ringParameters.imageParameters.image_source);
                 RingReturn ringReturn = ringRecognition.findGoldRings(fileImage, ringParameters);
                 if (ringReturn.fatalComputerVisionError)
                     throw new AutonomousRobotException(TAG, "Error in computer vision subsystem");
 
                 RobotLogCommon.d(TAG, "Found Target Zone " + ringReturn.targetZone);
-                displayResults(imagePath + ringParameters.imageParameters.ocv_image,
+                displayResults(imagePath + ringParameters.imageParameters.image_source,
                         "Rings indicate " + ringReturn.targetZone,
                         "FTC 2020 - 2021 Ultimate Goal");
                 break;

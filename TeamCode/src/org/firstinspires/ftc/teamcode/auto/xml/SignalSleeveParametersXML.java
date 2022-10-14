@@ -52,6 +52,7 @@ public class SignalSleeveParametersXML {
     public SignalSleeveParameters getSignalSleeveParameters() throws XPathExpressionException {
         XPathExpression expr;
         VisionParameters.GrayParameters grayParameters;
+        VisionParameters.HSVParameters hsvParameters;
 
         // Point to the first node.
         RobotLogCommon.d(TAG, "Parsing XML signal_sleeve_parameters");
@@ -69,8 +70,16 @@ public class SignalSleeveParametersXML {
 
         grayParameters = ImageXML.parseGrayParameters(gray_parameters_node);
 
+        // Point to <hsv_parameters>
+        Node hsv_node = gray_parameters_node.getNextSibling();
+        Node hsv_parameters_node = getNextElement(hsv_node);
+        if ((hsv_parameters_node == null) || !hsv_parameters_node.getNodeName().equals("hsv_parameters"))
+            throw new AutonomousRobotException(TAG, "Element 'hsv_parameters' not found");
+
+        hsvParameters = ImageXML.parseHSVParameters(hsv_parameters_node);
+
         // Point to <criteria>
-        Node criteria_node = gray_parameters_node.getNextSibling();
+        Node criteria_node = hsv_parameters_node.getNextSibling();
         criteria_node = getNextElement(criteria_node);
         if ((criteria_node == null) || !criteria_node.getNodeName().equals("criteria"))
             throw new AutonomousRobotException(TAG, "Element 'criteria' not found");
@@ -103,7 +112,7 @@ public class SignalSleeveParametersXML {
             throw new AutonomousRobotException(TAG, "Invalid number format in element 'criteria/min_white_pixels_location_3'");
         }
 
-        return new SignalSleeveParameters(grayParameters, minWhitePixelsLocation2, minWhitePixelsLocation3);
+        return new SignalSleeveParameters(grayParameters, hsvParameters, minWhitePixelsLocation2, minWhitePixelsLocation3);
     }
 
     private Node getNextElement(Node pNode) {

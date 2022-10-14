@@ -13,13 +13,13 @@ public class VisionParameters {
 
     // From the image_parameters element of any XML file.
     public static class ImageParameters {
-        public final String ocv_image;
+        public final String image_source;
         public final int resolution_width;
         public final int resolution_height;
         public final Rect image_roi;
 
-        public ImageParameters(String pOCVImage, int pWidth, int pHeight, Rect pImageROI) {
-            ocv_image = pOCVImage;
+        public ImageParameters(String pImageSource, int pWidth, int pHeight, Rect pImageROI) {
+            image_source = pImageSource;
             resolution_width = pWidth;
             resolution_height = pHeight;
             image_roi = pImageROI;

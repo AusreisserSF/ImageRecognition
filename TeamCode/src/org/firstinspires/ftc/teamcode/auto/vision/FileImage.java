@@ -19,6 +19,8 @@ public class FileImage implements ImageProvider {
     // LocalDateTime requires minSdkVersion 26  public Pair<Mat, LocalDateTime> getImage() throws InterruptedException;
     public Pair<Mat, LocalDateTime> getImage() {
         Mat bgrMat = imageUtils.loadImage(pathToImageFile);    // LocalDateTime requires minSdkVersion 26  public Pair<Mat, LocalDateTime> getImage() throws InterruptedException;
+        if (bgrMat == null) // no such file
+            return null; // let the caller decide what to do
         return Pair.create(bgrMat, LocalDateTime.now());
     }
 

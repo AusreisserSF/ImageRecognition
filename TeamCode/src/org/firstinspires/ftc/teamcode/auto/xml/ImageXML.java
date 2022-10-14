@@ -14,9 +14,9 @@ public class ImageXML {
     // Parse the XML elements that describe the image to be analyzed.
     /*
     <image_parameters>
-      <!-- The ocv_image element contains a file name (ending in .png or .jpg)
+      <!-- The image_source element contains a file name (ending in .png or .jpg)
            or a real-time source such as "vuforia". -->
-      <ocv_image></ocv_image>
+      <image></image_source>
       <resolution>
 	    <width></width>
 	    <height></height>
@@ -31,7 +31,7 @@ public class ImageXML {
     */
     // Parse the children of the <image_parameters> element in the XML file.
     public static VisionParameters.ImageParameters parseImageParameters(Node pImageParametersNode) {
-        String ocv_image;
+        String image_source;
         int resolution_width;
         int resolution_height;
         Rect image_roi;
@@ -39,11 +39,11 @@ public class ImageXML {
         RobotLogCommon.d(TAG, "Parsing XML image_parameters");
 
         Node image_node = pImageParametersNode.getFirstChild();
-        image_node = getNextElement(image_node);
-        if ((image_node == null) || !image_node.getNodeName().equals("ocv_image") || image_node.getTextContent().isEmpty())
-            throw new AutonomousRobotException(TAG, "Element 'ocv_image' not found");
+        Node image_source_node = getNextElement(image_node);
+        if ((image_source_node == null) || !image_source_node.getNodeName().equals("image_source") || image_source_node.getTextContent().isEmpty())
+            throw new AutonomousRobotException(TAG, "Element 'image_source' not found");
 
-        ocv_image = image_node.getTextContent();
+        image_source = image_source_node.getTextContent();
 
 	    /*
 	    <resolution>
@@ -87,7 +87,7 @@ public class ImageXML {
 
         image_roi = parseROI(image_roi_node);
 
-        return new VisionParameters.ImageParameters(ocv_image, resolution_width, resolution_height, image_roi);
+        return new VisionParameters.ImageParameters(image_source, resolution_width, resolution_height, image_roi);
     }
 
     // Parse any element that contains the 4 ROI children.

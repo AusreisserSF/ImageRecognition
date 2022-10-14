@@ -18,22 +18,11 @@ public class RobotConstantsPowerPlay {
     }
 
     public enum RecognitionPath {
-        GRAY, HSV, REFLECTIVE_TAPE
-    }
-
-    // Relative position of a barcode element within the ROI.
-    public enum BarcodeElementWindow {
-        LEFT, RIGHT, WINDOW_NPOS
-    }
-
-    //** 9/25/2022 replace with SignalSleeveLocation
-    public enum ShippingHubLevels {
-        SHIPPING_HUB_LEVEL_1, SHIPPING_HUB_LEVEL_2, SHIPPING_HUB_LEVEL_3,
-        SHIPPING_HUB_LEVEL_NPOS
+        REFLECTIVE_TAPE, HSV,
     }
 
     public enum SignalSleeveLocation {
-        ONE, TWO, THREE, SIGNAL_SLEEVE_LOCATION_NPOS
+        LOCATION_1, LOCATION_2, LOCATION_3, SIGNAL_SLEEVE_LOCATION_NPOS
     }
 
     // Vumark identifiers

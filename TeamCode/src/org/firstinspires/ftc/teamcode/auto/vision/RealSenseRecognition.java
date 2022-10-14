@@ -52,7 +52,7 @@ public class RealSenseRecognition {
         Mat imgOriginal = realSenseImage.first.clone();
 
         String fileDate = TimeStamp.getLocalDateTimeStamp(realSenseImage.second);
-        String outputFilenamePreamble = imageUtils.createOutputFilePreamble(pImageParameters.ocv_image, workingDirectory, RobotConstants.imageFilePrefix, fileDate);
+        String outputFilenamePreamble = imageUtils.createOutputFilePreamble(pImageParameters.image_source, workingDirectory, RobotConstants.imageFilePrefix, fileDate);
         Mat imageROI = imageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
 
         List<MatOfPoint> contours = imageUtils.applyInRangeAndFindContours(imageROI, outputFilenamePreamble, pRealSenseParameters.hsvParameters);
@@ -92,7 +92,7 @@ public class RealSenseRecognition {
         // Read the depth file that corresponds to the color image file.
         // The file is a collection of bytes; read them into an array
         // and then convert to an array of shorts.
-        String filenameWithoutExt = pImageParameters.ocv_image.substring(0, pImageParameters.ocv_image.lastIndexOf('.'));
+        String filenameWithoutExt = pImageParameters.image_source.substring(0, pImageParameters.image_source.lastIndexOf('.'));
         String depthFilename = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir + filenameWithoutExt + ".depth";
         byte[] depth8UC1 = new byte[pImageParameters.resolution_width * pImageParameters.resolution_height];
         try (InputStream output = new FileInputStream(depthFilename)) {

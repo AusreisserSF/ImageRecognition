@@ -21,8 +21,10 @@ public class ImageUtils {
     public Mat loadImage(String pInputFilename) {
         RobotLogCommon.d(TAG, "File name " + pInputFilename);
         Mat imageOut = Imgcodecs.imread(pInputFilename, IMREAD_COLOR);
-        if (imageOut.empty())
-            throw new AutonomousRobotException(TAG, "Could not find or open the image " + pInputFilename);
+        if (imageOut.empty()) {
+            RobotLogCommon.d(TAG, "Could not find or open the image");
+            return null;
+        }
 
         RobotLogCommon.d(TAG, "Image width " + imageOut.cols() + ", height " + imageOut.rows());
         return imageOut;
