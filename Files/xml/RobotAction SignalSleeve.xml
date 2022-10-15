@@ -6,7 +6,7 @@
         <actions>
             <ANALYZE_SIGNAL_SLEEVE>
                 <image_parameters>
-                    <image_source>Image_10141622_51599_Green_3.png</image_source>
+                    <image_source>Image_10141627_22076_Reflect_2.png</image_source>
                     <resolution>
                         <width>848</width>
                         <height>480</height>
@@ -19,7 +19,7 @@
                     </image_roi>
                 </image_parameters>
                 <signal_sleeve_recognition>
-                    <recognition_path>hsv</recognition_path>
+                    <recognition_path>reflective_tape</recognition_path>
                 </signal_sleeve_recognition>
             </ANALYZE_SIGNAL_SLEEVE>
         </actions>

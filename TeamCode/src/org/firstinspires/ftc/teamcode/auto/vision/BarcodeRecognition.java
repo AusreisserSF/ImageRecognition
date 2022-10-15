@@ -115,11 +115,11 @@ public class BarcodeRecognition {
         Imgcodecs.imwrite(outputFilenamePreamble + "_GRAY.png", grayROI);
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_GRAY.png");
 
-        Mat adjustedGray = imageUtils.adjustGrayscaleBrightness(grayROI, pGrayParameters.target);
+        Mat adjustedGray = imageUtils.adjustGrayscaleBrightness(grayROI, pGrayParameters.median_target);
         Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ.png", adjustedGray);
         RobotLogCommon.d(TAG, "Writing adjusted grayscale image " + outputFilenamePreamble + "_ADJ.png");
 
-        int grayThresholdLow = pGrayParameters.low_threshold;
+        int grayThresholdLow = pGrayParameters.threshold_low;
         RobotLogCommon.d(TAG, "Inverse threshold values: low " + grayThresholdLow + ", max 255 (white)");
 
         // Threshold the image with inversion, i.e. set pixels *under* the threshold
@@ -157,11 +157,11 @@ public class BarcodeRecognition {
         Imgcodecs.imwrite(outputFilenamePreamble + "_REF_GRAY.png", grayROI);
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_GRAY.png");
 
-        Mat adjustedGray = imageUtils.adjustGrayscaleBrightness(grayROI, pGrayParameters.target);
+        Mat adjustedGray = imageUtils.adjustGrayscaleBrightness(grayROI, pGrayParameters.median_target);
         Imgcodecs.imwrite(outputFilenamePreamble + "_REF_ADJ.png", adjustedGray);
         RobotLogCommon.d(TAG, "Writing adjusted grayscale image " + outputFilenamePreamble + "_REF_ADJ.png");
 
-        int grayThresholdLow = pGrayParameters.low_threshold;
+        int grayThresholdLow = pGrayParameters.threshold_low;
         RobotLogCommon.d(TAG, "Threshold value: low " + grayThresholdLow);
 
         // Threshold the image: set pixels over the threshold value to white.

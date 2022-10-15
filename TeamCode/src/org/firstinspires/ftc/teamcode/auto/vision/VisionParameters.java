@@ -28,12 +28,12 @@ public class VisionParameters {
 
     // From the gray_parameters element of any XML file.
     public static class GrayParameters {
-        public final int target; // normalization target
-        public final int low_threshold; // for binary thresholding
+        public final int median_target; // normalization target
+        public final int threshold_low; // for binary thresholding
 
         public GrayParameters(int pTarget, int pLowThreshold) {
-            target = pTarget;
-            low_threshold = pLowThreshold;
+            median_target = pTarget;
+            threshold_low = pLowThreshold;
         }
     }
 

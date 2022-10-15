@@ -28,8 +28,6 @@ public class SignalSleeveRecognition {
     private String outputFilenamePreamble;
     private Mat imageROI;
     private RobotConstants.Alliance alliance;
-    private int minWhitePixelsLocation2;
-    private int minWhitePixelsLocation3;
 
     public SignalSleeveRecognition() {
         workingDirectory = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
@@ -39,7 +37,7 @@ public class SignalSleeveRecognition {
     // Returns the result of image analysis.
     // The targets are:
     // Location 1: all black
-    // Location 2: half-white, half blakc
+    // Location 2: half-white, half black
     // Location 3: all white
     public SignalSleeveReturn recognizeSignalSleeve(ImageProvider pImageProvider,
                                                     VisionParameters.ImageParameters pImageParameters,
@@ -64,19 +62,15 @@ public class SignalSleeveRecognition {
         outputFilenamePreamble = imageUtils.createOutputFilePreamble(pImageParameters.image_source, workingDirectory, RobotConstants.imageFilePrefix, fileDate);
         imageROI = imageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
 
-        // Set the minimum pixel counts for recognition.
-        minWhitePixelsLocation2 = pSignalSleeveParameters.minWhitePixelsLocation2;
-        minWhitePixelsLocation3 = pSignalSleeveParameters.minWhitePixelsLocation3;
-
         RobotLogCommon.d(TAG, "Recognition path " + pRecognitionPath);
         SignalSleeveReturn retVal;
         switch (pRecognitionPath) {
             case REFLECTIVE_TAPE: {
-                retVal = reflectiveTapeRecognitionPath(pSignalSleeveParameters.grayParameters);
+                retVal = reflectiveTapeRecognitionPath(pSignalSleeveParameters.reflectiveTapeParameters);
                 break;
             }
-            case HSV: {
-                retVal = hsvRecognitionPath(pSignalSleeveParameters.hsvParameters);
+            case COLOR_SLEEVE: {
+                retVal = colorSleeveRecognitionPath(pSignalSleeveParameters.colorSleeveParameters);
                 break;
             }
             default:
@@ -86,7 +80,7 @@ public class SignalSleeveRecognition {
         return retVal;
     }
 
-    private SignalSleeveReturn reflectiveTapeRecognitionPath(VisionParameters.GrayParameters pGrayParameters) {
+    private SignalSleeveReturn reflectiveTapeRecognitionPath(SignalSleeveParameters.ReflectiveTapeParameters pReflectiveTapeParameters) {
         // Remove distractions before we convert to grayscale: depending on the
         // current alliance set the red or blue channel pixels to black.
         ArrayList<Mat> channels = new ArrayList<>(3);
@@ -111,14 +105,14 @@ public class SignalSleeveRecognition {
         Mat grayROI = new Mat();
         Imgproc.cvtColor(imageROI, grayROI, Imgproc.COLOR_BGR2GRAY);
 
-        Imgcodecs.imwrite(outputFilenamePreamble + "_GRAY.png", grayROI);
-        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_GRAY.png");
+        //Imgcodecs.imwrite(outputFilenamePreamble + "_GRAY.png", grayROI);
+        //RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_GRAY.png");
 
-        Mat adjustedGray = imageUtils.adjustGrayscaleBrightness(grayROI, pGrayParameters.target);
+        Mat adjustedGray = imageUtils.adjustGrayscaleBrightness(grayROI, pReflectiveTapeParameters.grayParameters.median_target);
         Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ.png", adjustedGray);
         RobotLogCommon.d(TAG, "Writing adjusted grayscale image " + outputFilenamePreamble + "_REF_ADJ.png");
 
-        int grayThresholdLow = pGrayParameters.low_threshold;
+        int grayThresholdLow = pReflectiveTapeParameters.grayParameters.threshold_low;
         RobotLogCommon.d(TAG, "Threshold value: low " + grayThresholdLow);
 
         // Threshold the image: set pixels over the threshold value to white.
@@ -128,21 +122,28 @@ public class SignalSleeveRecognition {
                 255,   // white
                 Imgproc.THRESH_BINARY); // thresholding type
 
-        return getLocation(thresholded);
+        Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ_THR.png", thresholded);
+        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ADJ_THR.png");
+
+        return getLocation(thresholded,
+                pReflectiveTapeParameters.minWhitePixelsLocation2,
+                pReflectiveTapeParameters.minWhitePixelsLocation3);
     }
 
-    private SignalSleeveReturn hsvRecognitionPath(VisionParameters.HSVParameters pHSVParameters) {
-        Mat thresholded = imageUtils.applyInRange(imageROI, outputFilenamePreamble, pHSVParameters);
+    private SignalSleeveReturn colorSleeveRecognitionPath(SignalSleeveParameters.ColorSleeveParameters pColorSleeveParameters) {
+        Mat thresholded = imageUtils.applyInRange(imageROI, outputFilenamePreamble, pColorSleeveParameters.hsvParameters);
 
         // Clean up the thresholded image via morphological opening.
         Mat morphed = new Mat();
         Imgproc.erode(thresholded, morphed, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5)));
         Imgproc.dilate(morphed, morphed, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5)));
 
-        return getLocation(thresholded);
+        return getLocation(morphed,
+                pColorSleeveParameters.minWhitePixelsLocation2,
+                pColorSleeveParameters.minWhitePixelsLocation3);
     }
 
-    private SignalSleeveReturn getLocation(Mat pThresholded) {
+    private SignalSleeveReturn getLocation(Mat pThresholded, int pMinWhitePixelsLocation2, int pMinWhitePixelsLocation3) {
         // Our target,unless it's location 1, which is black, will now appear
         // white in the thresholded image.
         int nonZeroPixelCount = Core.countNonZero(pThresholded);
@@ -150,15 +151,15 @@ public class SignalSleeveRecognition {
 
         // Check the minimum non-zero pixel count for the sleeve with the greatest
         // number of white pixels, location 3.
-        RobotLogCommon.d(TAG, "Minimum non-zero-pixel count for location 3 " + minWhitePixelsLocation3);
-        if (nonZeroPixelCount > minWhitePixelsLocation3) {
+        RobotLogCommon.d(TAG, "Minimum non-zero-pixel count for location 3 " + pMinWhitePixelsLocation3);
+        if (nonZeroPixelCount > pMinWhitePixelsLocation3) {
             RobotLogCommon.d(TAG, "The signal sleeve indicates location 3.");
             return new SignalSleeveReturn(RobotConstants.OpenCVResults.RECOGNITION_SUCCESSFUL, RobotConstantsPowerPlay.SignalSleeveLocation.LOCATION_3);
         }
 
         // Try location 2.
-        RobotLogCommon.d(TAG, "Minimum non-zero-pixel count for location 2 " + minWhitePixelsLocation2);
-        if (nonZeroPixelCount > minWhitePixelsLocation2) {
+        RobotLogCommon.d(TAG, "Minimum non-zero-pixel count for location 2 " + pMinWhitePixelsLocation2);
+        if (nonZeroPixelCount > pMinWhitePixelsLocation2) {
             RobotLogCommon.d(TAG, "The signal sleeve indicates location 2.");
             return new SignalSleeveReturn(RobotConstants.OpenCVResults.RECOGNITION_SUCCESSFUL, RobotConstantsPowerPlay.SignalSleeveLocation.LOCATION_2);
         }

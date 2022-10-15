@@ -1,0 +1,6 @@
+[2022-10-15 10:59:43.873] [INFO   ] RecognitionDispatcher Starting image recognition 
+[2022-10-15 10:59:43.945] [CONFIG ] RecognitionDispatcher Game SIGNAL_SLEEVE 
+[2022-10-15 10:59:43.946] [CONFIG ] RecognitionDispatcher Alliance RED 
+[2022-10-15 10:59:44.010] [CONFIG ] RobotActionXMLStandard Extracting data from Files/xml/RobotAction SignalSleeve.xml for OpMode SIGNAL_SLEEVE 
+[2022-10-15 10:59:44.014] [FINE   ] RecognitionDispatcher Executing action ANALYZE_SIGNAL_SLEEVE 
+[2022-10-15 10:59:44.020] [FINE   ] SignalSleeveParametersXML Parsing XML signal_sleeve_parameters 
