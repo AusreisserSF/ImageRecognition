@@ -45,7 +45,7 @@ public class SignalSleeveRecognition {
                                                     VisionParameters.ImageParameters pImageParameters,
                                                     SignalSleeveParameters pSignalSleeveParameters,
                                                     RobotConstants.Alliance pAlliance,
-    RobotConstantsPowerPlay.RecognitionPath pRecognitionPath) throws InterruptedException {
+                                                    RobotConstantsPowerPlay.RecognitionPath pRecognitionPath) throws InterruptedException {
 
         RobotLogCommon.d(TAG, "In SignalSleeveRecognition.recognizeSignalSleeve");
 
@@ -86,7 +86,7 @@ public class SignalSleeveRecognition {
         return retVal;
     }
 
-        private SignalSleeveReturn reflectiveTapeRecognitionPath(VisionParameters.GrayParameters pGrayParameters) {
+    private SignalSleeveReturn reflectiveTapeRecognitionPath(VisionParameters.GrayParameters pGrayParameters) {
         // Remove distractions before we convert to grayscale: depending on the
         // current alliance set the red or blue channel pixels to black.
         ArrayList<Mat> channels = new ArrayList<>(3);
@@ -111,11 +111,11 @@ public class SignalSleeveRecognition {
         Mat grayROI = new Mat();
         Imgproc.cvtColor(imageROI, grayROI, Imgproc.COLOR_BGR2GRAY);
 
-        Imgcodecs.imwrite(outputFilenamePreamble + "_REF_GRAY.png", grayROI);
+        Imgcodecs.imwrite(outputFilenamePreamble + "_GRAY.png", grayROI);
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_GRAY.png");
 
         Mat adjustedGray = imageUtils.adjustGrayscaleBrightness(grayROI, pGrayParameters.target);
-        Imgcodecs.imwrite(outputFilenamePreamble + "_REF_ADJ.png", adjustedGray);
+        Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ.png", adjustedGray);
         RobotLogCommon.d(TAG, "Writing adjusted grayscale image " + outputFilenamePreamble + "_REF_ADJ.png");
 
         int grayThresholdLow = pGrayParameters.low_threshold;
@@ -129,7 +129,7 @@ public class SignalSleeveRecognition {
                 Imgproc.THRESH_BINARY); // thresholding type
 
         return getLocation(thresholded);
-   }
+    }
 
     private SignalSleeveReturn hsvRecognitionPath(VisionParameters.HSVParameters pHSVParameters) {
         Mat thresholded = imageUtils.applyInRange(imageROI, outputFilenamePreamble, pHSVParameters);
@@ -142,12 +142,9 @@ public class SignalSleeveRecognition {
         return getLocation(thresholded);
     }
 
-        private SignalSleeveReturn getLocation(Mat pThresholded) {
+    private SignalSleeveReturn getLocation(Mat pThresholded) {
         // Our target,unless it's location 1, which is black, will now appear
         // white in the thresholded image.
-        Imgcodecs.imwrite(outputFilenamePreamble + "_REF_ADJ_THR.png", pThresholded);
-        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_REF_ADJ_THR.png");
-
         int nonZeroPixelCount = Core.countNonZero(pThresholded);
         RobotLogCommon.d(TAG, "Number of non-zero pixels " + nonZeroPixelCount);
 

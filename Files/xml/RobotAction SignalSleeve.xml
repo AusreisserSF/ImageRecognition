@@ -6,20 +6,20 @@
         <actions>
             <ANALYZE_SIGNAL_SLEEVE>
                 <image_parameters>
-                    <ocv_image>D405_09271612_14641 red black white.png</ocv_image>
+                    <image_source>Image_10141622_51599_Green_3.png</image_source>
                     <resolution>
-                        <width>640</width>
+                        <width>848</width>
                         <height>480</height>
                     </resolution>
                     <image_roi>
-                        <x>235</x>
-                        <y>235</y>
-                        <width>235</width>
-                        <height>235</height>
+                        <x>345</x>
+                        <y>180</y>
+                        <width>160</width>
+                        <height>170</height>
                     </image_roi>
                 </image_parameters>
                 <signal_sleeve_recognition>
-                    <recognition_path>gray</recognition_path>
+                    <recognition_path>hsv</recognition_path>
                 </signal_sleeve_recognition>
             </ANALYZE_SIGNAL_SLEEVE>
         </actions>

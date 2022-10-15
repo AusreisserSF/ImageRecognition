@@ -3,8 +3,17 @@
     <target>150</target>
     <low_threshold>200</low_threshold>
   </gray_parameters>
+  <hsv_parameters>
+    <hue_name>chroma green</hue_name>
+    <hue_low>50</hue_low>
+    <hue_high>75</hue_high>
+    <saturation_median_target>10</saturation_median_target>
+    <saturation_threshold_low>40</saturation_threshold_low>
+    <value_median_target>160</value_median_target>
+    <value_threshold_low>115</value_threshold_low>
+  </hsv_parameters>
 <criteria>
-  <min_white_pixels_location_2>1500</min_white_pixels_location_2>
-  <min_white_pixels_location_3>4000</min_white_pixels_location_3>
+  <min_white_pixels_location_2>1000</min_white_pixels_location_2>
+  <min_white_pixels_location_3>2500</min_white_pixels_location_3>
 </criteria>
 </signal_sleeve_parameters>

@@ -51,7 +51,7 @@ public class ImageXML {
 		  <height></height>
 	    </resolution>
 	    */
-        Node resolution_node = image_node.getNextSibling();
+        Node resolution_node = image_source_node.getNextSibling();
         resolution_node = getNextElement(resolution_node);
         if ((resolution_node == null) || !resolution_node.getNodeName().equals("resolution"))
             throw new AutonomousRobotException(TAG, "Element 'resolution' not found");
