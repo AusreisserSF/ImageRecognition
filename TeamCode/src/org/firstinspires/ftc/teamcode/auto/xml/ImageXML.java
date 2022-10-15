@@ -7,16 +7,17 @@ import org.firstinspires.ftc.teamcode.auto.vision.VisionParameters;
 import org.opencv.core.Rect;
 import org.w3c.dom.Node;
 
+//**TODO Move to ftcdevcommon; put all XML related classes in an xmlutils package
 public class ImageXML {
 
-    public static final String TAG = "ImageXML";
+    public static final String TAG = ImageXML.class.getSimpleName();
 
     // Parse the XML elements that describe the image to be analyzed.
     /*
     <image_parameters>
       <!-- The image_source element contains a file name (ending in .png or .jpg)
            or a real-time source such as "vuforia". -->
-      <image></image_source>
+      <image_source></image_source>
       <resolution>
 	    <width></width>
 	    <height></height>

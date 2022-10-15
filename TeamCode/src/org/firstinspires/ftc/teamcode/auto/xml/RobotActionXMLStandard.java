@@ -27,7 +27,7 @@ import java.util.logging.Level;
 //**TODO Should supercede RobotActionXMLGoldCube
 //**TODO For parsing RobotAction.xml in the standard format, i.e.
 // without any insertions (see the RobotActionXMLFreightFrenzy).
-//**TODO make others iinherit from this class.
+//**TODO make others inherit from this class.
 public class RobotActionXMLStandard {
 
     public static final String TAG = RobotActionXMLStandard.class.getSimpleName();
@@ -77,7 +77,8 @@ public class RobotActionXMLStandard {
         xpath = xpathFactory.newXPath();
     }
 
-    //**TODO parsing of the <parameters> element is common.
+    //**TODO parsing of the <parameters> element is common. Put into ftcdevcommon
+    // in a new package: xmlutils.
     // Reevaluate starting position and vumarks.
 
     // Find the requested opMode in the RobotActionGoldCube.xml file.

@@ -1,28 +1,28 @@
 ﻿<signal_sleeve_parameters>
     <reflective_tape>
-  <gray_parameters>
-    <median_target>150</median_target>
-    <threshold_low>200</threshold_low>
-  </gray_parameters>
-  <criteria>
-    <min_white_pixels_location_2>2000</min_white_pixels_location_2>
-    <min_white_pixels_location_3>4500</min_white_pixels_location_3>
-    <!-- Loc 2 Number of non-zero pixels 3639  -->
-  </criteria>
-</reflective_tape>
-<color_sleeve>
-  <hsv_parameters>
-    <hue_name>chroma green</hue_name>
-    <hue_low>50</hue_low>
-    <hue_high>75</hue_high>
-    <saturation_median_target>10</saturation_median_target>
-    <saturation_threshold_low>40</saturation_threshold_low>
-    <value_median_target>160</value_median_target>
-    <value_threshold_low>115</value_threshold_low>
-  </hsv_parameters>
-  <criteria>
-    <min_white_pixels_location_2>1000</min_white_pixels_location_2>
-    <min_white_pixels_location_3>2500</min_white_pixels_location_3>
-  </criteria>
-</color_sleeve>
+        <gray_parameters>
+            <median_target>150</median_target>
+            <threshold_low>200</threshold_low>
+        </gray_parameters>
+        <criteria>
+            <min_white_pixels_location_2>2000</min_white_pixels_location_2>
+            <min_white_pixels_location_3>4500</min_white_pixels_location_3>
+            <!-- Loc 2 Number of non-zero pixels 3639  -->
+        </criteria>
+    </reflective_tape>
+    <color_sleeve>
+        <hsv_parameters>
+            <hue_name>chroma green</hue_name>
+            <hue_low>50</hue_low>
+            <hue_high>75</hue_high>
+            <saturation_median_target>10</saturation_median_target>
+            <saturation_threshold_low>40</saturation_threshold_low>
+            <value_median_target>160</value_median_target>
+            <value_threshold_low>115</value_threshold_low>
+        </hsv_parameters>
+        <criteria>
+            <min_white_pixels_location_2>1000</min_white_pixels_location_2>
+            <min_white_pixels_location_3>2500</min_white_pixels_location_3>
+        </criteria>
+    </color_sleeve>
 </signal_sleeve_parameters>
