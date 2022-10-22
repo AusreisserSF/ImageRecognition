@@ -3,25 +3,26 @@ package org.firstinspires.ftc.teamcode.auto.vision;
 // Input parameters for signal sleeve recognition.
 // Reflective tape -> grayscale
 // Color sleeve -> HSV
+// Split green -> grayscale
 public class SignalSleeveParameters {
 
-    public final ReflectiveTapeParameters reflectiveTapeParameters;
+    public final GrayscaleParameters grayscaleParameters;
     public final ColorSleeveParameters colorSleeveParameters;
 
-    public SignalSleeveParameters(ReflectiveTapeParameters pReflectiveTapeParameters,
+    public SignalSleeveParameters(GrayscaleParameters pGrayscaleParameters,
                                   ColorSleeveParameters pColorSleeveParameters) {
-        reflectiveTapeParameters = pReflectiveTapeParameters;
+        grayscaleParameters = pGrayscaleParameters;
         colorSleeveParameters = pColorSleeveParameters;
     }
 
-    public static class ReflectiveTapeParameters {
+    public static class GrayscaleParameters {
         public final VisionParameters.GrayParameters grayParameters;
         public final int minWhitePixelsLocation2;
         public final int minWhitePixelsLocation3;
 
-        public ReflectiveTapeParameters(VisionParameters.GrayParameters pGrayParameters,
-                                        int pMinWhitePixelsLocation2,
-                                        int pMinWhitePixelsLocation3) {
+        public GrayscaleParameters(VisionParameters.GrayParameters pGrayParameters,
+                                   int pMinWhitePixelsLocation2,
+                                   int pMinWhitePixelsLocation3) {
             grayParameters = pGrayParameters;
             minWhitePixelsLocation2 = pMinWhitePixelsLocation2;
             minWhitePixelsLocation3 = pMinWhitePixelsLocation3;

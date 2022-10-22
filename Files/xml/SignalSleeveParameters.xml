@@ -21,8 +21,8 @@
             <value_threshold_low>115</value_threshold_low>
         </hsv_parameters>
         <criteria>
-            <min_white_pixels_location_2>1000</min_white_pixels_location_2>
-            <min_white_pixels_location_3>2500</min_white_pixels_location_3>
+            <min_white_pixels_location_2>500</min_white_pixels_location_2>
+            <min_white_pixels_location_3>1300</min_white_pixels_location_3>
         </criteria>
     </color_sleeve>
 </signal_sleeve_parameters>

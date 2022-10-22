@@ -9,10 +9,7 @@ import org.firstinspires.ftc.ftcdevcommon.intellij.TimeStamp;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.common.RobotConstants;
 import org.firstinspires.ftc.teamcode.common.RobotConstantsPowerPlay;
-import org.opencv.core.Core;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-import org.opencv.core.Size;
+import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -66,11 +63,15 @@ public class SignalSleeveRecognition {
         SignalSleeveReturn retVal;
         switch (pRecognitionPath) {
             case REFLECTIVE_TAPE: {
-                retVal = reflectiveTapeRecognitionPath(pSignalSleeveParameters.reflectiveTapeParameters);
+                retVal = reflectiveTapeRecognitionPath(pSignalSleeveParameters.grayscaleParameters);
                 break;
             }
             case COLOR_SLEEVE: {
                 retVal = colorSleeveRecognitionPath(pSignalSleeveParameters.colorSleeveParameters);
+                break;
+            }
+            case SPLIT_GREEN: {
+                retVal = splitGreenRecognitionPath(pSignalSleeveParameters.grayscaleParameters);
                 break;
             }
             default:
@@ -80,26 +81,24 @@ public class SignalSleeveRecognition {
         return retVal;
     }
 
-    private SignalSleeveReturn reflectiveTapeRecognitionPath(SignalSleeveParameters.ReflectiveTapeParameters pReflectiveTapeParameters) {
+    private SignalSleeveReturn reflectiveTapeRecognitionPath(SignalSleeveParameters.GrayscaleParameters pReflectiveTapeParameters) {
         // Remove distractions before we convert to grayscale: depending on the
         // current alliance set the red or blue channel pixels to black.
         ArrayList<Mat> channels = new ArrayList<>(3);
         Core.split(imageROI, channels);
 
         // Initialize a new Mat to black (all zeros) to take the place of the
-        // red or blue channel.
-        Mat blackChannel = Mat.zeros(imageROI.rows(), imageROI.cols(), CvType.CV_8U);
+        // red or blue channel. B = 0, G = 1, R = 2.
+        Mat blackChannel = Mat.zeros(imageROI.rows(), imageROI.cols(), CvType.CV_8UC1);
         if (alliance == RobotConstants.Alliance.RED) {
-            // Remove the red channel and substitute the black channel.
-            channels.remove(2); // B = 0, G = 1, R = 2
-            channels.add(blackChannel);
-            Core.merge(channels, imageROI); // Recreate the BGR image.
+            // Replace the red channel with the black channel.
+            channels.set(2, blackChannel);
         } else if (alliance == RobotConstants.Alliance.BLUE) {
-            // Remove the blue channel and substitute the black channel.
-            channels.remove(0); // B = 0, G = 1, R = 2
-            channels.add(0, blackChannel);
-            Core.merge(channels, imageROI); // Recreate the BGR image.
+            // Replace the blue channel with the black channel.
+            channels.set(0, blackChannel);
         }
+
+        Core.merge(channels, imageROI); // Recreate the BGR image.
 
         // We're on the grayscale path.
         Mat grayROI = new Mat();
@@ -141,6 +140,67 @@ public class SignalSleeveRecognition {
         return getLocation(morphed,
                 pColorSleeveParameters.minWhitePixelsLocation2,
                 pColorSleeveParameters.minWhitePixelsLocation3);
+    }
+
+    //## 10/22/2022 Failed experiment. The chroma green tape is not distinct enough
+    // from the gray tiles. However, the technique of splitting the channels should
+    // prove useful in recognition of the red and blue cone stacks.
+    private SignalSleeveReturn splitGreenRecognitionPath(SignalSleeveParameters.GrayscaleParameters pSplitGreenParameters) {
+        // Remove distractions before we convert to grayscale: set the red and blue
+        // channels to black and the green channel to white.
+        ArrayList<Mat> channels = new ArrayList<>(3);
+
+        Core.split(imageROI, channels);
+
+        // Write out the green channel only as grayscale.
+        Imgcodecs.imwrite(outputFilenamePreamble + "_GREEN_GRAY.png", channels.get(1));
+
+        // B = 0, G = 1, R = 2.
+        Mat blackChannel = Mat.zeros(channels.get(0).size(), CvType.CV_8UC1);
+        Mat whiteChannel = Mat.ones(channels.get(0).size(), CvType.CV_8UC1);
+        // Replace the blue channel with the black channel.
+        //channels.set(0, blackChannel);
+        // Replace the green channel with the white channel.
+        //channels.set(1, whiteChannel);
+        // Replace the red channel with the black channel.
+        channels.set(2, blackChannel);
+
+        // Put the BGR image back together.
+        Core.merge(channels, imageROI);
+
+        // Here's how to create an image with only the green channel.
+        //Mat green = new Mat(480, 640, CvType.CV_8UC3, new Scalar(0,255,0));
+
+        Imgcodecs.imwrite(outputFilenamePreamble + "_GREEN.png", imageROI);
+        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_GREEN.png");
+
+        // We're on the grayscale path.
+        Mat grayROI = new Mat();
+        Imgproc.cvtColor(imageROI, grayROI, Imgproc.COLOR_BGR2GRAY);
+
+        Imgcodecs.imwrite(outputFilenamePreamble + "_GRAY.png", grayROI);
+        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_GRAY.png");
+
+        Mat adjustedGray = imageUtils.adjustGrayscaleBrightness(grayROI, pSplitGreenParameters.grayParameters.median_target);
+        Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ.png", adjustedGray);
+        RobotLogCommon.d(TAG, "Writing adjusted grayscale image " + outputFilenamePreamble + "_ADJ.png");
+
+        int grayThresholdLow = pSplitGreenParameters.grayParameters.threshold_low;
+        RobotLogCommon.d(TAG, "Threshold value: low " + grayThresholdLow);
+
+        // Threshold the image: set pixels over the threshold value to white.
+        Mat thresholded = new Mat(); // output binary image
+        Imgproc.threshold(adjustedGray, thresholded,
+                grayThresholdLow,    // threshold value
+                255,   // white
+                Imgproc.THRESH_BINARY); // thresholding type
+
+        Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ_THR.png", thresholded);
+        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ADJ_THR.png");
+
+        return getLocation(thresholded,
+                pSplitGreenParameters.minWhitePixelsLocation2,
+                pSplitGreenParameters.minWhitePixelsLocation3);
     }
 
     private SignalSleeveReturn getLocation(Mat pThresholded, int pMinWhitePixelsLocation2, int pMinWhitePixelsLocation3) {

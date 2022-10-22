@@ -102,7 +102,7 @@ public class SignalSleeveParametersXML {
 
         LocationCriteria hsvLocationCriteria = new LocationCriteria(criteria_node_hsv);
 
-        return new SignalSleeveParameters(new SignalSleeveParameters.ReflectiveTapeParameters(grayParameters, grayLocationCriteria.minWhitePixelsLocation2, grayLocationCriteria.minWhitePixelsLocation3),
+        return new SignalSleeveParameters(new SignalSleeveParameters.GrayscaleParameters(grayParameters, grayLocationCriteria.minWhitePixelsLocation2, grayLocationCriteria.minWhitePixelsLocation3),
                 new SignalSleeveParameters.ColorSleeveParameters(hsvParameters, hsvLocationCriteria.minWhitePixelsLocation2, hsvLocationCriteria.minWhitePixelsLocation3));
     }
 

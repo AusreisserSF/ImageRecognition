@@ -18,7 +18,7 @@ public class RobotConstantsPowerPlay {
     }
 
     public enum RecognitionPath {
-        REFLECTIVE_TAPE, COLOR_SLEEVE,
+        REFLECTIVE_TAPE, COLOR_SLEEVE, SPLIT_GREEN
     }
 
     public enum SignalSleeveLocation {
