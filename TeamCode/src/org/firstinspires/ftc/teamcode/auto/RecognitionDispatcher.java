@@ -47,6 +47,7 @@ public class RecognitionDispatcher extends Application {
     private RobotActionXMLGoldCube robotActionXMLGoldCube;
     private RobotActionXMLRealSense robotActionXMLRealSense;
     private RobotActionXMLStandard robotActionXMLSignalSleeve;
+    private RobotActionXMLStandard robotActionXMLConeStack;
     private String imageFilename;
 
     // Load OpenCV.
@@ -126,6 +127,19 @@ public class RecognitionDispatcher extends Application {
                 break;
             }
 
+            case "CONE_STACK": {
+                robotActionXMLConeStack = new RobotActionXMLStandard(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
+                RobotActionXMLStandard.RobotActionDataStandard actionData = robotActionXMLSignalSleeve.getOpModeData("CONE_STACK");
+                actions = actionData.actions;
+                if (actions.size() != 1)
+                    throw new AutonomousRobotException(TAG, "CONE_STACK OpMode must contain a single action");
+
+                String recognitionAction = actions.get(0).getRobotXMLElementName();
+                if (!recognitionAction.equals("ANALYZE_CONE_STACK"))
+                    throw new AutonomousRobotException(TAG, "Missing required action ANALYZE_CONE_STACK");
+                break;
+            }
+
             case "REALSENSE": {
                 robotActionXMLRealSense = new RobotActionXMLRealSense(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
                 RobotActionXMLRealSense.RobotActionDataRealSense actionData = robotActionXMLRealSense.getOpModeData("REALSENSE");
@@ -170,7 +184,6 @@ public class RecognitionDispatcher extends Application {
         String actionName = actionElement.getRobotXMLElementName().toUpperCase();
         RobotLogCommon.d(TAG, "Executing action " + actionName);
         switch (actionName) {
-
             case "ANALYZE_SIGNAL_SLEEVE": {
                 // Read the parameters for signal sleeve recognition from the xml file.
                 SignalSleeveParametersXML signalSleeveParametersXML = new SignalSleeveParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
@@ -190,24 +203,66 @@ public class RecognitionDispatcher extends Application {
 
                 // Get the recognition path from the XML file.
                 String recognitionPathString = actionXPath.getRequiredString("signal_sleeve_recognition/recognition_path");
-                RobotConstantsPowerPlay.RecognitionPath recognitionPath;
+                RobotConstantsPowerPlay.SignalSleeveRecognitionPath signalSleeveRecognitionPath;
                 try {
-                    recognitionPath = RobotConstantsPowerPlay.RecognitionPath.valueOf(recognitionPathString.toUpperCase());
+                    signalSleeveRecognitionPath = RobotConstantsPowerPlay.SignalSleeveRecognitionPath.valueOf(recognitionPathString.toUpperCase());
                 } catch (IllegalArgumentException iex) {
                     throw new AutonomousRobotException(TAG, "Invalid recognition path");
                 }
 
-                RobotLogCommon.d(TAG, "Recognition path " + recognitionPath);
+                RobotLogCommon.d(TAG, "Recognition path " + signalSleeveRecognitionPath);
 
                 // Perform image recognition and depth mapping.
                 SignalSleeveRecognition recognition = new SignalSleeveRecognition();
-                SignalSleeveReturn signalSleeveReturn = recognition.recognizeSignalSleeve(fileImage, signalSleeveImageParameters, signalSleeveParameters, alliance, recognitionPath);
+                SignalSleeveReturn signalSleeveReturn = recognition.recognizeSignalSleeve(fileImage, signalSleeveImageParameters, signalSleeveParameters, alliance, signalSleeveRecognitionPath);
                 String displayText = "Image: " + imageFilename +
                         '\n' + "Signal sleeve location: " + signalSleeveReturn.signalSleeveLocation;
 
                 displayResults(imagePath + signalSleeveImageParameters.image_source,
                         displayText,
                         "Test signal sleeve recognition");
+                break;
+            }
+
+            case "ANALYZE_CONE_STACK": {
+                // Read the parameters for cone stack recognition from the xml file.
+                ConeStackParametersXML coneStackParametersXML = new ConeStackParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
+                ConeStackParameters coneStackParameters = coneStackParametersXML.getConeStackParameters();
+
+                // Get the <image_parameters> for the signal sleeve from the RobotAction (+suffix) XML file.
+                VisionParameters.ImageParameters coneStackImageParameters =
+                        robotActionXMLConeStack.getImageParametersFromXPath(actionElement, "image_parameters");
+
+                // Make sure that this tester is reading the image from a file.
+                if (!(coneStackImageParameters.image_source.endsWith(".png") ||
+                        coneStackImageParameters.image_source.endsWith(".jpg")))
+                    throw new AutonomousRobotException(TAG, "Invalid image file name");
+
+                imageFilename = coneStackImageParameters.image_source;
+                ImageProvider fileImage = new FileImage(imagePath + coneStackImageParameters.image_source);
+
+                // Get the recognition path from the XML file.
+                String recognitionPathString = actionXPath.getRequiredString("cone_stack_recognition/recognition_path");
+                RobotConstantsPowerPlay.ConeStackRecognitionPath coneStackRecognitionPath;
+                try {
+                    coneStackRecognitionPath = RobotConstantsPowerPlay.ConeStackRecognitionPath.valueOf(recognitionPathString.toUpperCase());
+                } catch (IllegalArgumentException iex) {
+                    throw new AutonomousRobotException(TAG, "Invalid recognition path");
+                }
+
+                RobotLogCommon.d(TAG, "Recognition path " + coneStackRecognitionPath);
+
+                // Perform image recognition and depth mapping.
+                ConeStackRecognition recognition = new ConeStackRecognition();
+                /*ConeStackReturn coneStackReturn = */ recognition.recognizeConeStack(fileImage, coneStackImageParameters, coneStackParameters, alliance, coneStackRecognitionPath);
+                /*
+                String displayText = "Image: " + imageFilename +
+                        '\n' + "Signal sleeve location: " + signalSleeveReturn.signalSleeveLocation;
+
+                displayResults(imagePath + coneStackImageParameters.image_source,
+                        displayText,
+                        "Test cone stack recognition");
+                 */
                 break;
             }
 

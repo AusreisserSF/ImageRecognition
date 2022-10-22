@@ -17,12 +17,16 @@ public class RobotConstantsPowerPlay {
         TELEOP_TAKE_PICTURE
     }
 
-    public enum RecognitionPath {
+    public enum SignalSleeveRecognitionPath {
         REFLECTIVE_TAPE, COLOR_SLEEVE, SPLIT_GREEN
     }
 
     public enum SignalSleeveLocation {
         LOCATION_1, LOCATION_2, LOCATION_3, SIGNAL_SLEEVE_LOCATION_NPOS
+    }
+
+    public enum ConeStackRecognitionPath {
+        COLOR, GRAYSCALE
     }
 
     // Vumark identifiers

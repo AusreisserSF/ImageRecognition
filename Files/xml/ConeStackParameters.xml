@@ -1,0 +1,19 @@
+﻿<cone_stack_parameters>
+    <grayscale>
+        <gray_parameters>
+            <median_target>150</median_target>
+            <threshold_low>200</threshold_low>
+        </gray_parameters>
+    </grayscale>
+    <color>
+        <hsv_parameters>
+            <hue_name>chroma green</hue_name>
+            <hue_low>50</hue_low>
+            <hue_high>75</hue_high>
+            <saturation_median_target>10</saturation_median_target>
+            <saturation_threshold_low>40</saturation_threshold_low>
+            <value_median_target>160</value_median_target>
+            <value_threshold_low>115</value_threshold_low>
+        </hsv_parameters>
+    </color>
+</cone_stack_parameters>

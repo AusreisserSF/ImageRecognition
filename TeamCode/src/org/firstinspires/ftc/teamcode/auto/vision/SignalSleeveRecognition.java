@@ -40,7 +40,7 @@ public class SignalSleeveRecognition {
                                                     VisionParameters.ImageParameters pImageParameters,
                                                     SignalSleeveParameters pSignalSleeveParameters,
                                                     RobotConstants.Alliance pAlliance,
-                                                    RobotConstantsPowerPlay.RecognitionPath pRecognitionPath) throws InterruptedException {
+                                                    RobotConstantsPowerPlay.SignalSleeveRecognitionPath pSignalSleeveRecognitionPath) throws InterruptedException {
 
         RobotLogCommon.d(TAG, "In SignalSleeveRecognition.recognizeSignalSleeve");
 
@@ -59,9 +59,9 @@ public class SignalSleeveRecognition {
         outputFilenamePreamble = imageUtils.createOutputFilePreamble(pImageParameters.image_source, workingDirectory, RobotConstants.imageFilePrefix, fileDate);
         imageROI = imageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
 
-        RobotLogCommon.d(TAG, "Recognition path " + pRecognitionPath);
+        RobotLogCommon.d(TAG, "Recognition path " + pSignalSleeveRecognitionPath);
         SignalSleeveReturn retVal;
-        switch (pRecognitionPath) {
+        switch (pSignalSleeveRecognitionPath) {
             case REFLECTIVE_TAPE: {
                 retVal = reflectiveTapeRecognitionPath(pSignalSleeveParameters.grayscaleParameters);
                 break;
@@ -75,7 +75,7 @@ public class SignalSleeveRecognition {
                 break;
             }
             default:
-                throw new AutonomousRobotException(TAG, "Unsupported recognition path " + pRecognitionPath);
+                throw new AutonomousRobotException(TAG, "Unsupported recognition path " + pSignalSleeveRecognitionPath);
         }
 
         return retVal;
