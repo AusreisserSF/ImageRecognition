@@ -323,6 +323,36 @@ public class ImageUtils {
 
         return thresholded;
     }
+    public Mat performThresholdOnGray(Mat pGrayInputROI, String pOutputFilenamePreamble,
+                                int pGrayscaleTarget, int pLowThreshold) {
+
+        Mat adjustedGray = adjustGrayscaleBrightness(pGrayInputROI, pGrayscaleTarget);
+        Imgcodecs.imwrite(pOutputFilenamePreamble + "_ADJ.png", adjustedGray);
+        RobotLogCommon.d(TAG, "Writing adjusted grayscale image " + pOutputFilenamePreamble + "_ADJ.png");
+
+        Mat morphed = new Mat();
+        Imgproc.erode(adjustedGray, morphed, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5)));
+        Imgproc.dilate(morphed, morphed, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5)));
+
+        // Remove noise by Gaussian blurring.
+        Mat blurred = new Mat();
+        Imgproc.GaussianBlur(morphed, blurred, new Size(5, 5), 0);
+
+        RobotLogCommon.d(TAG, "Threshold values: low " + pLowThreshold + ", high 255");
+
+        // Threshold the image: set pixels over the threshold value to white.
+        Mat thresholded = new Mat(); // output binary image
+        Imgproc.threshold(blurred, thresholded,
+                pLowThreshold,    // threshold value
+                255,   // white
+                Imgproc.THRESH_BINARY); // thresholding type
+
+        Imgcodecs.imwrite(pOutputFilenamePreamble + "_ADJ_THR.png", thresholded);
+        RobotLogCommon.d(TAG, "Writing " + pOutputFilenamePreamble + "_ADJ_THR.png");
+
+        return thresholded;
+    }
+
 
     // Get the median of any single-channel Mat.
     public int getSingleChannelMedian(Mat pSingleChannelMat) {

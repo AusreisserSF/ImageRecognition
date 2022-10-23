@@ -74,7 +74,6 @@ public class ConeStackParametersXML {
             throw new AutonomousRobotException(TAG, "Element 'gray_parameters' not found");
 
         grayParameters = ImageXML.parseGrayParameters(gray_parameters_node);
-
         return new ConeStackParameters(grayParameters);
     }
 

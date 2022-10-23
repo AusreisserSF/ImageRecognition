@@ -48,7 +48,6 @@ public class RecognitionDispatcher extends Application {
     private RobotActionXMLRealSense robotActionXMLRealSense;
     private RobotActionXMLStandard robotActionXMLSignalSleeve;
     private RobotActionXMLStandard robotActionXMLConeStack;
-    private String imageFilename;
 
     // Load OpenCV.
     private static final boolean openCVInitialized;
@@ -78,12 +77,11 @@ public class RecognitionDispatcher extends Application {
         Parameters parameters = getParameters();
         Map<String, String> namedParameters = parameters.getNamed();
 
-        //**TODO "game" is not right
-        String gameParameter = namedParameters.get("game");
-        if (gameParameter == null)
-            throw new AutonomousRobotException(TAG, "Required parameter --game is missing");
+        String opmodeParameter = namedParameters.get("opmode");
+        if (opmodeParameter == null)
+            throw new AutonomousRobotException(TAG, "Required parameter --opmode is missing");
 
-        RobotLogCommon.c(TAG, "Game " + gameParameter);
+        RobotLogCommon.c(TAG, "OpMode " + opmodeParameter);
 
         RobotConstants.Alliance alliance = RobotConstants.Alliance.NONE;
         String allianceParameter = namedParameters.get("alliance"); // optional
@@ -98,10 +96,11 @@ public class RecognitionDispatcher extends Application {
         if (actionXMLFilenameParameter == null)
             throw new AutonomousRobotException(TAG, "Required parameter --xml is missing");
 
-        // Use RobotAction.xml but for the single OpMode TEST with a single action only.
+        // Use variations of RobotAction.xml (see the command line) with a single OpMode
+        // that has a single action.
         List<RobotXMLElement> actions;
-        switch (gameParameter) {
-            case "TEST": {
+        switch (opmodeParameter) {
+            case "TEST" -> {
                 robotActionXMLGoldCube = new RobotActionXMLGoldCube(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
                 RobotActionXMLGoldCube.RobotActionDataGoldCube actionData = robotActionXMLGoldCube.getOpModeData("TEST");
                 actions = actionData.actions;
@@ -111,10 +110,8 @@ public class RecognitionDispatcher extends Application {
                 String recognitionAction = actions.get(0).getRobotXMLElementName();
                 if (!recognitionAction.equals("GOLD_CUBE_DEPTH"))
                     throw new AutonomousRobotException(TAG, "Missing required action GOLD_CUBE_DEPTH");
-                break;
             }
-
-            case "SIGNAL_SLEEVE": {
+            case "SIGNAL_SLEEVE" -> {
                 robotActionXMLSignalSleeve = new RobotActionXMLStandard(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
                 RobotActionXMLStandard.RobotActionDataStandard actionData = robotActionXMLSignalSleeve.getOpModeData("SIGNAL_SLEEVE");
                 actions = actionData.actions;
@@ -124,12 +121,10 @@ public class RecognitionDispatcher extends Application {
                 String recognitionAction = actions.get(0).getRobotXMLElementName();
                 if (!recognitionAction.equals("ANALYZE_SIGNAL_SLEEVE"))
                     throw new AutonomousRobotException(TAG, "Missing required action ANALYZE_SIGNAL_SLEEVE");
-                break;
             }
-
-            case "CONE_STACK": {
+            case "CONE_STACK" -> {
                 robotActionXMLConeStack = new RobotActionXMLStandard(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
-                RobotActionXMLStandard.RobotActionDataStandard actionData = robotActionXMLSignalSleeve.getOpModeData("CONE_STACK");
+                RobotActionXMLStandard.RobotActionDataStandard actionData = robotActionXMLConeStack.getOpModeData("CONE_STACK");
                 actions = actionData.actions;
                 if (actions.size() != 1)
                     throw new AutonomousRobotException(TAG, "CONE_STACK OpMode must contain a single action");
@@ -137,10 +132,8 @@ public class RecognitionDispatcher extends Application {
                 String recognitionAction = actions.get(0).getRobotXMLElementName();
                 if (!recognitionAction.equals("ANALYZE_CONE_STACK"))
                     throw new AutonomousRobotException(TAG, "Missing required action ANALYZE_CONE_STACK");
-                break;
             }
-
-            case "REALSENSE": {
+            case "REALSENSE" -> {
                 robotActionXMLRealSense = new RobotActionXMLRealSense(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
                 RobotActionXMLRealSense.RobotActionDataRealSense actionData = robotActionXMLRealSense.getOpModeData("REALSENSE");
                 actions = actionData.actions;
@@ -150,21 +143,19 @@ public class RecognitionDispatcher extends Application {
                 String recognitionAction = actions.get(0).getRobotXMLElementName();
                 if (!recognitionAction.equals("REALSENSE_DEPTH"))
                     throw new AutonomousRobotException(TAG, "Missing required action REALSENSE_DEPTH");
-                break;
             }
-
-            case "Freight Frenzy": {
-               robotActionXMLFreightFrenzy = new RobotActionXMLFreightFrenzy(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
-               RobotActionXMLFreightFrenzy.RobotActionDataFreightFrenzy actionData = robotActionXMLFreightFrenzy.getOpModeData("TEST");
-               actions = actionData.actions;
-               if (actions.size() != 1)
+            case "Freight Frenzy" -> {
+                robotActionXMLFreightFrenzy = new RobotActionXMLFreightFrenzy(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
+                RobotActionXMLFreightFrenzy.RobotActionDataFreightFrenzy actionData = robotActionXMLFreightFrenzy.getOpModeData("TEST");
+                actions = actionData.actions;
+                if (actions.size() != 1)
                     throw new AutonomousRobotException(TAG, "TEST OpMode must contain a single action");
 
-               String recognitionAction = actions.get(0).getRobotXMLElementName();
-               if (!((recognitionAction.equals("ANALYZE_BARCODE") || recognitionAction.equals("APPROACH_SHIPPING_HUB_BY_VISION"))))
+                String recognitionAction = actions.get(0).getRobotXMLElementName();
+                if (!((recognitionAction.equals("ANALYZE_BARCODE") || recognitionAction.equals("APPROACH_SHIPPING_HUB_BY_VISION"))))
                     throw new AutonomousRobotException(TAG, "Missing required action ANALYZE_BARCODE or APPROACH_SHIPPING_BY_WITH_VISION");
-               break;
             }
+
 
             /*
             case "Ultimate Goal": {
@@ -173,8 +164,7 @@ public class RecognitionDispatcher extends Application {
                 break;
             }
              */
-            default:
-                throw new AutonomousRobotException(TAG, "Unrecognized game " + gameParameter);
+            default -> throw new AutonomousRobotException(TAG, "Unrecognized game " + opmodeParameter);
         }
 
         // Set up XPath access to the current action.
@@ -183,8 +173,9 @@ public class RecognitionDispatcher extends Application {
 
         String actionName = actionElement.getRobotXMLElementName().toUpperCase();
         RobotLogCommon.d(TAG, "Executing action " + actionName);
+        String imageFilename;
         switch (actionName) {
-            case "ANALYZE_SIGNAL_SLEEVE": {
+            case "ANALYZE_SIGNAL_SLEEVE" -> {
                 // Read the parameters for signal sleeve recognition from the xml file.
                 SignalSleeveParametersXML signalSleeveParametersXML = new SignalSleeveParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
                 SignalSleeveParameters signalSleeveParameters = signalSleeveParametersXML.getSignalSleeveParameters();
@@ -221,10 +212,8 @@ public class RecognitionDispatcher extends Application {
                 displayResults(imagePath + signalSleeveImageParameters.image_source,
                         displayText,
                         "Test signal sleeve recognition");
-                break;
             }
-
-            case "ANALYZE_CONE_STACK": {
+            case "ANALYZE_CONE_STACK" -> {
                 // Read the parameters for cone stack recognition from the xml file.
                 ConeStackParametersXML coneStackParametersXML = new ConeStackParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
                 ConeStackParameters coneStackParameters = coneStackParametersXML.getConeStackParameters();
@@ -238,7 +227,6 @@ public class RecognitionDispatcher extends Application {
                         coneStackImageParameters.image_source.endsWith(".jpg")))
                     throw new AutonomousRobotException(TAG, "Invalid image file name");
 
-                imageFilename = coneStackImageParameters.image_source;
                 ImageProvider fileImage = new FileImage(imagePath + coneStackImageParameters.image_source);
 
                 // Get the recognition path from the XML file.
@@ -254,7 +242,8 @@ public class RecognitionDispatcher extends Application {
 
                 // Perform image recognition and depth mapping.
                 ConeStackRecognition recognition = new ConeStackRecognition();
-                /*ConeStackReturn coneStackReturn = */ recognition.recognizeConeStack(fileImage, coneStackImageParameters, coneStackParameters, alliance, coneStackRecognitionPath);
+                /*ConeStackReturn coneStackReturn = */
+                recognition.recognizeConeStack(fileImage, coneStackImageParameters, coneStackParameters, alliance, coneStackRecognitionPath);
                 /*
                 String displayText = "Image: " + imageFilename +
                         '\n' + "Signal sleeve location: " + signalSleeveReturn.signalSleeveLocation;
@@ -263,12 +252,12 @@ public class RecognitionDispatcher extends Application {
                         displayText,
                         "Test cone stack recognition");
                  */
-                break;
             }
 
+
             // Fall 2022: general case for Intel Realsense depth cameras.
-            //**TODO Should supercede GOLD_CUBE_DEPTH
-            case "REALSENSE_DEPTH": {
+            //**TODO Should supersede GOLD_CUBE_DEPTH
+            case "REALSENSE_DEPTH" -> {
                 // Read the parameters for object recognition from the xml file.
                 RealSenseParametersXML realsenseParametersXML = new RealSenseParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
                 RealSenseParameters realsenseParameters = realsenseParametersXML.getRealSenseParameters();
@@ -296,11 +285,11 @@ public class RecognitionDispatcher extends Application {
                 displayResults(imagePath + realsenseImageParameters.image_source,
                         displayText,
                         "Test Realsense distance camera");
-                break;
             }
 
+
             // Summer 2022: test Intel Realsense depth camera(s).
-            case "GOLD_CUBE_DEPTH": {
+            case "GOLD_CUBE_DEPTH" -> {
                 // Read the parameters for gold cube recognition from the xml file.
                 GoldCubeParametersXML goldCubeParametersXML = new GoldCubeParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
                 GoldCubeParameters goldCubeParameters = goldCubeParametersXML.getGoldCubeParameters();
@@ -326,11 +315,10 @@ public class RecognitionDispatcher extends Application {
                 displayResults(imagePath + goldCubeImageParameters.image_source,
                         displayText,
                         "Test Realsense D455");
-                break;
             }
 
-             // Freight Frenzy 2021-2022
-            case "ANALYZE_BARCODE": {
+            // Freight Frenzy 2021-2022
+            case "ANALYZE_BARCODE" -> {
                 // Read the parameters for barcode recognition from the xml file.
                 BarcodeParametersXML barcodeParametersXML = new BarcodeParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
                 BarcodeParameters barcodeParameters = barcodeParametersXML.getBarcodeParameters();
@@ -394,20 +382,10 @@ public class RecognitionDispatcher extends Application {
                 // Set the shipping hub level based on the barcode recognition.
                 RobotConstantsFreightFrenzy.ShippingHubLevels shippingHubLevel;
                 switch (barcodeReturn.barcodeElementWindow) {
-                    case LEFT: {
-                        shippingHubLevel = left_shipping_hub_level;
-                        break;
-                    }
-                    case RIGHT: {
-                        shippingHubLevel = right_shipping_hub_level;
-                        break;
-                    }
-                    case WINDOW_NPOS: {
-                        shippingHubLevel = npos_shipping_hub_level;
-                        break;
-                    }
-                    default:
-                        throw new AutonomousRobotException(TAG, "Unrecognized enum value " + barcodeReturn.barcodeElementWindow);
+                    case LEFT -> shippingHubLevel = left_shipping_hub_level;
+                    case RIGHT -> shippingHubLevel = right_shipping_hub_level;
+                    case WINDOW_NPOS -> shippingHubLevel = npos_shipping_hub_level;
+                    default -> throw new AutonomousRobotException(TAG, "Unrecognized enum value " + barcodeReturn.barcodeElementWindow);
                 }
 
                 RobotLogCommon.d(TAG, "Found Team Scoring Element at position " + barcodeReturn.barcodeElementWindow);
@@ -415,8 +393,8 @@ public class RecognitionDispatcher extends Application {
                 displayResults(imagePath + barcodeImageParameters.image_source,
                         shippingHubLevel.toString(),
                         "FTC 2021 - 2022 Freight Frenzy");
-                break;
             }
+
 
             // Use Dennis's method, which requires that we calculate the distance
             // using the same picture that we used for the angle, even if the Shipping
@@ -425,7 +403,7 @@ public class RecognitionDispatcher extends Application {
             // getDistanceToShippingHub into getAngleAndDistanceToShippingHub.
 
             //## 3/15/2022 See notes in getAngleAndDistanceToShippingHub.
-            case "APPROACH_SHIPPING_HUB_BY_VISION": {
+            case "APPROACH_SHIPPING_HUB_BY_VISION" -> {
                 // Read the parameters for the Shipping Hub from the xml file.
                 ShippingHubParametersXML shippingHubParametersXML = new ShippingHubParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
                 ShippingHubParameters shippingHubParameters = shippingHubParametersXML.getShippingHubParameters();
@@ -474,13 +452,11 @@ public class RecognitionDispatcher extends Application {
                 displayResults(imagePath + shippingHubImageParameters.image_source,
                         displayText,
                         "FTC 2021 - 2022 Freight Frenzy");
-
-                break;
             }
 
             // Ultimate Goal 2020-2021
             //## 2/27/2022 NOT reachable; keep for reference/technique
-            case "RECOGNIZE_RINGS": {
+            case "RECOGNIZE_RINGS" -> {
                 // Read the parameters for ring recognition from the xml file.
                 RingParametersXML ringParametersXML = new RingParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
                 RingParameters ringParameters = ringParametersXML.getRingParameters();
@@ -496,10 +472,8 @@ public class RecognitionDispatcher extends Application {
                 displayResults(imagePath + ringParameters.imageParameters.image_source,
                         "Rings indicate " + ringReturn.targetZone,
                         "FTC 2020 - 2021 Ultimate Goal");
-                break;
             }
-            default:
-                throw new AutonomousRobotException(TAG, "Unrecognized image recognition action");
+            default -> throw new AutonomousRobotException(TAG, "Unrecognized image recognition action");
         }
 
         RobotLogCommon.closeLog();

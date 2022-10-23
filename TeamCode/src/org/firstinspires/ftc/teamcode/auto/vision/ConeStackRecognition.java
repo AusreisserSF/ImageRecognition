@@ -10,6 +10,7 @@ import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.common.RobotConstants;
 import org.firstinspires.ftc.teamcode.common.RobotConstantsPowerPlay;
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -88,24 +89,25 @@ public class ConeStackRecognition {
         Imgcodecs.imwrite(outputFilenamePreamble + "_RED.png", channels.get(2));
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_RED.png");
 
-        Mat adjustedGray = imageUtils.adjustGrayscaleBrightness(channels.get(2), pConeStackParameters.redGrayscaleParameters.median_target);
-        Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ.png", adjustedGray);
-        RobotLogCommon.d(TAG, "Writing adjusted grayscale image " + outputFilenamePreamble + "_ADJ.png");
+        // B = 0, G = 1, R = 2.
+        Mat blackChannel = Mat.zeros(channels.get(0).size(), CvType.CV_8UC1);
+        Mat whiteChannel = Mat.ones(channels.get(0).size(), CvType.CV_8UC1);
+        // Replace the blue channel with the black channel.
+        //channels.set(0, blackChannel);
+        // Replace the red channel with the white channel.
+        //channels.set(2, whiteChannel);
+        // Replace the red channel with the black channel.
+        //channels.set(2, blackChannel);
 
-        //**TODO Two paths to try: gray -> blur -> Canny -> contours and
+        // Put the BGR image back together.
+        //Core.merge(channels, imageROI);
+
+        //**TODO Two paths to try:
+        // gray -> blur -> Canny -> contours
         // gray -> blur -> threshold -> contours
+        int grayMedianTarget = pConeStackParameters.redGrayscaleParameters.median_target;
         int grayThresholdLow = pConeStackParameters.redGrayscaleParameters.threshold_low;
         RobotLogCommon.d(TAG, "Threshold value: low " + grayThresholdLow);
 
-        // Threshold the image: set pixels over the threshold value to white.
-        Mat thresholded = new Mat(); // output binary image
-        Imgproc.threshold(adjustedGray, thresholded,
-                grayThresholdLow,    // threshold value
-                255,   // white
-                Imgproc.THRESH_BINARY); // thresholding type
-
-        Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ_THR.png", thresholded);
-        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ADJ_THR.png");
-    }
-
+        imageUtils.performThresholdOnGray(channels.get(2), outputFilenamePreamble, grayMedianTarget, grayThresholdLow);    }
 }

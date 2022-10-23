@@ -1,0 +1,27 @@
+<RobotAction>
+    <OpMode id="CONE_STACK">
+           <parameters>
+            <log_level>v</log_level>
+        </parameters>
+        <actions>
+            <ANALYZE_CONE_STACK>
+                <image_parameters>
+                    <image_source>D405_10171533_17940_Green_2_IMG.png</image_source>
+                    <resolution>
+                        <width>640</width>
+                        <height>480</height>
+                    </resolution>
+                    <image_roi>
+                        <x>260</x>
+                        <y>215</y>
+                        <width>155</width>
+                        <height>145</height>
+                    </image_roi>
+                </image_parameters>
+                <cone_stack_recognition>
+                    <recognition_path>grayscale</recognition_path>
+                </cone_stack_recognition>
+            </ANALYZE_CONE_STACK>
+        </actions>
+    </OpMode>
+</RobotAction>

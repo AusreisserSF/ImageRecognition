@@ -188,6 +188,8 @@ public class SignalSleeveRecognition {
         int grayThresholdLow = pSplitGreenParameters.grayParameters.threshold_low;
         RobotLogCommon.d(TAG, "Threshold value: low " + grayThresholdLow);
 
+        //**TODO Use ImageUtils.performThreshold()
+
         // Threshold the image: set pixels over the threshold value to white.
         Mat thresholded = new Mat(); // output binary image
         Imgproc.threshold(adjustedGray, thresholded,
