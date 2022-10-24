@@ -340,19 +340,19 @@ public class ImageUtils {
 
         RobotLogCommon.d(TAG, "Threshold values: low " + pLowThreshold + ", high 255");
 
-        // Threshold the image: set pixels over the threshold value to white.
+        // A negative threshold value indicates an inverse threshold.
+        int thresholdType = pLowThreshold >= 0  ? Imgproc.THRESH_BINARY : Imgproc.THRESH_BINARY_INV;
         Mat thresholded = new Mat(); // output binary image
         Imgproc.threshold(blurred, thresholded,
-                pLowThreshold,    // threshold value
+                Math.abs(pLowThreshold),
                 255,   // white
-                Imgproc.THRESH_BINARY); // thresholding type
+                thresholdType);
 
         Imgcodecs.imwrite(pOutputFilenamePreamble + "_ADJ_THR.png", thresholded);
         RobotLogCommon.d(TAG, "Writing " + pOutputFilenamePreamble + "_ADJ_THR.png");
 
         return thresholded;
     }
-
 
     // Get the median of any single-channel Mat.
     public int getSingleChannelMedian(Mat pSingleChannelMat) {

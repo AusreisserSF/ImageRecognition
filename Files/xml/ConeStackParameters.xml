@@ -1,8 +1,14 @@
 ﻿<cone_stack_parameters>
-    <grayscale>
+    <RED>
         <gray_parameters>
             <median_target>100</median_target>
             <threshold_low>160</threshold_low>
         </gray_parameters>
-    </grayscale>
+    </RED>
+    <BLUE>
+        <gray_parameters>
+            <median_target>100</median_target>
+            <threshold_low>-50</threshold_low>
+        </gray_parameters>
+    </BLUE>
 </cone_stack_parameters>

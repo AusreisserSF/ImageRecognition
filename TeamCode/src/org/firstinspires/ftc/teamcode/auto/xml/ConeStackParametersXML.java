@@ -4,6 +4,7 @@ import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
 import org.firstinspires.ftc.teamcode.auto.vision.ConeStackParameters;
 import org.firstinspires.ftc.teamcode.auto.vision.VisionParameters;
+import org.firstinspires.ftc.teamcode.common.RobotConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
@@ -50,8 +51,6 @@ public class ConeStackParametersXML {
 
     public ConeStackParameters getConeStackParameters() throws XPathExpressionException {
         XPathExpression expr;
-        VisionParameters.GrayParameters grayParameters;
-        VisionParameters.HSVParameters hsvParameters;
 
         // Point to the first node.
         RobotLogCommon.d(TAG, "Parsing XML cone_stack_parameters");
@@ -61,20 +60,41 @@ public class ConeStackParametersXML {
         if (cone_stack_parameters_node == null)
             throw new AutonomousRobotException(TAG, "Element '//cone_stack_parameters' not found");
 
-        // Point to <grayscale>
-        Node grayscale_node = cone_stack_parameters_node.getFirstChild();
-        grayscale_node = getNextElement(grayscale_node);
-        if ((grayscale_node == null) || !grayscale_node.getNodeName().equals("grayscale"))
-            throw new AutonomousRobotException(TAG, "Element 'grayscale' not found");
+        // Point to <RED>
+        Node red_node = cone_stack_parameters_node.getFirstChild();
+        red_node = getNextElement(red_node);
+        if (red_node == null)
+            throw new AutonomousRobotException(TAG, "Element 'RED' not found");
+        RobotConstants.Alliance shouldBeRed = RobotConstants.Alliance.valueOf(red_node.getNodeName());
+        if (shouldBeRed != RobotConstants.Alliance.RED)
+            throw new AutonomousRobotException(TAG, "Expected element 'RED");
 
         // Point to <gray_parameters>
-        Node gray_node = grayscale_node.getFirstChild();
+        Node gray_node = red_node.getFirstChild();
         Node gray_parameters_node = getNextElement(gray_node);
         if ((gray_parameters_node == null) || !gray_parameters_node.getNodeName().equals("gray_parameters"))
             throw new AutonomousRobotException(TAG, "Element 'gray_parameters' not found");
 
-        grayParameters = ImageXML.parseGrayParameters(gray_parameters_node);
-        return new ConeStackParameters(grayParameters);
+        VisionParameters.GrayParameters grayParametersRed = ImageXML.parseGrayParameters(gray_parameters_node);
+
+        // Point to <BLUE>
+        Node blue_node = red_node.getNextSibling();
+        blue_node = getNextElement(blue_node);
+        if (blue_node == null)
+            throw new AutonomousRobotException(TAG, "Element 'BLUE' not found");
+        RobotConstants.Alliance shouldBeBlue = RobotConstants.Alliance.valueOf(blue_node.getNodeName());
+        if (shouldBeBlue != RobotConstants.Alliance.BLUE)
+            throw new AutonomousRobotException(TAG, "Expected element 'BLUE");
+
+        // Point to <gray_parameters>
+        gray_node = blue_node.getFirstChild();
+        gray_parameters_node = getNextElement(gray_node);
+        if ((gray_parameters_node == null) || !gray_parameters_node.getNodeName().equals("gray_parameters"))
+            throw new AutonomousRobotException(TAG, "Element 'gray_parameters' not found");
+
+        VisionParameters.GrayParameters grayParametersBlue = ImageXML.parseGrayParameters(gray_parameters_node);
+
+        return new ConeStackParameters(grayParametersRed, grayParametersBlue);
     }
 
     //**TODO THIS belongs in ftcdevcommon for IntelliJ and Android -> XMLUtils

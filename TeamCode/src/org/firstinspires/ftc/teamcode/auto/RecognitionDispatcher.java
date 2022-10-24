@@ -156,7 +156,6 @@ public class RecognitionDispatcher extends Application {
                     throw new AutonomousRobotException(TAG, "Missing required action ANALYZE_BARCODE or APPROACH_SHIPPING_BY_WITH_VISION");
             }
 
-
             /*
             case "Ultimate Goal": {
                 if (!recognitionAction.equals("RECOGNIZE_RINGS"))
@@ -190,7 +189,7 @@ public class RecognitionDispatcher extends Application {
                     throw new AutonomousRobotException(TAG, "Invalid image file name");
 
                 imageFilename = signalSleeveImageParameters.image_source;
-                ImageProvider fileImage = new FileImage(imagePath + signalSleeveImageParameters.image_source);
+                ImageProvider fileImage = new FileImage(imagePath + imageFilename);
 
                 // Get the recognition path from the XML file.
                 String recognitionPathString = actionXPath.getRequiredString("signal_sleeve_recognition/recognition_path");
@@ -227,7 +226,8 @@ public class RecognitionDispatcher extends Application {
                         coneStackImageParameters.image_source.endsWith(".jpg")))
                     throw new AutonomousRobotException(TAG, "Invalid image file name");
 
-                ImageProvider fileImage = new FileImage(imagePath + coneStackImageParameters.image_source);
+                imageFilename = coneStackImageParameters.image_source;
+                ImageProvider fileImage = new FileImage(imagePath + imageFilename);
 
                 // Get the recognition path from the XML file.
                 String recognitionPathString = actionXPath.getRequiredString("cone_stack_recognition/recognition_path");
@@ -244,16 +244,14 @@ public class RecognitionDispatcher extends Application {
                 ConeStackRecognition recognition = new ConeStackRecognition();
                 /*ConeStackReturn coneStackReturn = */
                 recognition.recognizeConeStack(fileImage, coneStackImageParameters, coneStackParameters, alliance, coneStackRecognitionPath);
-                /*
+
                 String displayText = "Image: " + imageFilename +
-                        '\n' + "Signal sleeve location: " + signalSleeveReturn.signalSleeveLocation;
+                        '\n' + "Signal sleeve location: " /* + signalSleeveReturn.signalSleeveLocation*/;
 
                 displayResults(imagePath + coneStackImageParameters.image_source,
                         displayText,
                         "Test cone stack recognition");
-                 */
             }
-
 
             // Fall 2022: general case for Intel Realsense depth cameras.
             //**TODO Should supersede GOLD_CUBE_DEPTH
