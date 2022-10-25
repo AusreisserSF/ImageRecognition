@@ -96,11 +96,11 @@ public class SignalSleeveRecognition {
        }
         else if (alliance == RobotConstants.Alliance.BLUE) {
             grayscaleParameters = pReflectiveTapeParameters.blueGrayscaleParameters;
-            channelIndex = 0; // blue
+            channelIndex = 2; // use the red channel - better contrast!
 
             // Write out the blue channel as grayscale.
-            Imgcodecs.imwrite(outputFilenamePreamble + "_BLUE_CHANNEL.png", channels.get(0));
-            RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_BLUE_CHANNEL.png");
+            //Imgcodecs.imwrite(outputFilenamePreamble + "_BLUE_CHANNEL.png", channels.get(0));
+            //RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_BLUE_CHANNEL.png");
         }
         else
             return new SignalSleeveReturn(RobotConstants.OpenCVResults.OCV_ERROR);

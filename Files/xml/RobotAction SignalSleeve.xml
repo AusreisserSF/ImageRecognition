@@ -6,16 +6,24 @@
         <actions>
             <ANALYZE_SIGNAL_SLEEVE>
                 <image_parameters>
-                    <image_source>**Reflective tape on red or blue cone.png</image_source>
+                    <image_source>Image_10141627_22076_Reflect_2.png</image_source>
                     <resolution>
-                        <width>640</width>
+                        <width>848</width>
                         <height>480</height>
                     </resolution>
                     <image_roi>
-                        <x>260</x>
-                        <y>215</y>
-                        <width>155</width>
-                        <height>145</height>
+                        <!-- Brio 325 -->
+                        <!-- D405 260 -->
+                        <x>325</x>
+                        <!-- Brio 170 -->
+                        <!-- D405 215 -->
+                        <y>170</y>
+                        <!-- Brio 180 -->
+                        <!-- D405 155 -->
+                        <width>180</width>
+                        <!-- Brio 200 -->
+                        <!-- D405 145 -->
+                        <height>200</height>
                     </image_roi>
                 </image_parameters>
                 <signal_sleeve_recognition>
