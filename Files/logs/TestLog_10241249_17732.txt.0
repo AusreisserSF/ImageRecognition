@@ -1,0 +1,31 @@
+[2022-10-24 12:49:17.767] [INFO   ] RecognitionDispatcher Starting image recognition 
+[2022-10-24 12:49:17.839] [CONFIG ] RecognitionDispatcher OpMode SIGNAL_SLEEVE 
+[2022-10-24 12:49:17.841] [CONFIG ] RecognitionDispatcher Alliance RED 
+[2022-10-24 12:49:17.908] [CONFIG ] RobotActionXMLStandard Extracting data from Files/xml/RobotAction SignalSleeve.xml for OpMode SIGNAL_SLEEVE 
+[2022-10-24 12:49:17.912] [FINE   ] RecognitionDispatcher Executing action ANALYZE_SIGNAL_SLEEVE 
+[2022-10-24 12:49:17.917] [FINE   ] SignalSleeveParametersXML Parsing XML signal_sleeve_parameters 
+[2022-10-24 12:49:17.918] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2022-10-24 12:49:17.919] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-10-24 12:49:17.920] [FINE   ] ImageXML Parsed XML hsv_parameters; hue name = chroma green 
+[2022-10-24 12:49:17.923] [FINE   ] ImageXML Parsing XML image_parameters 
+[2022-10-24 12:49:17.933] [FINE   ] RecognitionDispatcher Recognition path REFLECTIVE_TAPE 
+[2022-10-24 12:49:17.935] [FINE   ] SignalSleeveRecognition In SignalSleeveRecognition.recognizeSignalSleeve 
+[2022-10-24 12:49:17.936] [FINE   ] ImageUtils File name Files/images/D405_10171533_17940_Green_2_IMG.png 
+[2022-10-24 12:49:17.953] [FINE   ] ImageUtils Image width 640, height 480 
+[2022-10-24 12:49:17.955] [FINE   ] ImageUtils Writing original image Files/images/D405_10171533_17940_Green_2_IMG_10241249_17952_IMG.png 
+[2022-10-24 12:49:17.978] [FINE   ] ImageUtils Image width 640, height 480 
+[2022-10-24 12:49:17.985] [FINE   ] ImageUtils Image ROI x 260, y 215, width 155, height 145 
+[2022-10-24 12:49:17.986] [FINE   ] ImageUtils Writing image ROI Files/images/D405_10171533_17940_Green_2_IMG_10241249_17952_ROI.png 
+[2022-10-24 12:49:17.989] [FINE   ] SignalSleeveRecognition Recognition path REFLECTIVE_TAPE 
+[2022-10-24 12:49:17.995] [FINE   ] SignalSleeveRecognition Writing Files/images/D405_10171533_17940_Green_2_IMG_10241249_17952_RED_CHANNEL.png 
+[2022-10-24 12:49:18.005] [FINE   ] ImageUtils Original image: grayscale median 96 
+[2022-10-24 12:49:18.006] [FINE   ] ImageUtils Grayscale median target 150 
+[2022-10-24 12:49:18.007] [FINE   ] ImageUtils Grayscale adjustment 54 
+[2022-10-24 12:49:18.008] [FINE   ] ImageUtils Writing adjusted grayscale image Files/images/D405_10171533_17940_Green_2_IMG_10241249_17952_ADJ.png 
+[2022-10-24 12:49:18.020] [FINE   ] ImageUtils Threshold values: low 220, high 255 
+[2022-10-24 12:49:18.022] [FINE   ] ImageUtils Writing Files/images/D405_10171533_17940_Green_2_IMG_10241249_17952_ADJ_THR.png 
+[2022-10-24 12:49:18.022] [FINE   ] SignalSleeveRecognition Number of non-zero pixels 2292 
+[2022-10-24 12:49:18.023] [FINE   ] SignalSleeveRecognition Minimum non-zero-pixel count for location 3 4500 
+[2022-10-24 12:49:18.023] [FINE   ] SignalSleeveRecognition Minimum non-zero-pixel count for location 2 2000 
+[2022-10-24 12:49:18.023] [FINE   ] SignalSleeveRecognition The signal sleeve indicates location 2. 
+[2022-10-24 12:49:18.292] [INFO   ] Closing the log with 0 entries on the queue 

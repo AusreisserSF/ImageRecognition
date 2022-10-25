@@ -31,6 +31,8 @@ public class ImageUtils {
     }
 
     // Define a region of interest.
+    //**TODO Matybe what I want is a submat not an ROI. See --
+    // https://stackoverflow.com/questions/37849313/java-opencv-detecting-roi-creating-submat-and-copy-to-original-mat
     public Mat getImageROI(Mat pSrcImage, Rect pROIDefinition) {
 
         if ((pROIDefinition.height == 0) && (pROIDefinition.width == 0)) {

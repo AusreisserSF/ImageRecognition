@@ -38,7 +38,7 @@ public class SignalSleeveRecognition {
     // Location 3: all white
     public SignalSleeveReturn recognizeSignalSleeve(ImageProvider pImageProvider,
                                                     VisionParameters.ImageParameters pImageParameters,
-                                                    SignalSleeveParameters pSignalSleeveParameters,
+                                                    SignalSleeveParameters2 pSignalSleeveParameters,
                                                     RobotConstants.Alliance pAlliance,
                                                     RobotConstantsPowerPlay.SignalSleeveRecognitionPath pSignalSleeveRecognitionPath) throws InterruptedException {
 
@@ -62,74 +62,57 @@ public class SignalSleeveRecognition {
         RobotLogCommon.d(TAG, "Recognition path " + pSignalSleeveRecognitionPath);
         SignalSleeveReturn retVal;
         switch (pSignalSleeveRecognitionPath) {
-            case REFLECTIVE_TAPE: {
-                retVal = reflectiveTapeRecognitionPath(pSignalSleeveParameters.grayscaleParameters);
-                break;
-            }
-            case COLOR_SLEEVE: {
-                retVal = colorSleeveRecognitionPath(pSignalSleeveParameters.colorSleeveParameters);
-                break;
-            }
-            case SPLIT_GREEN: {
-                retVal = splitGreenRecognitionPath(pSignalSleeveParameters.grayscaleParameters);
-                break;
-            }
-            default:
-                throw new AutonomousRobotException(TAG, "Unsupported recognition path " + pSignalSleeveRecognitionPath);
+            case REFLECTIVE_TAPE -> retVal = reflectiveTapeRecognitionPath(pSignalSleeveParameters);
+            case COLOR_SLEEVE -> retVal = colorSleeveRecognitionPath(pSignalSleeveParameters.colorSleeveParameters);
+            default -> throw new AutonomousRobotException(TAG, "Unsupported recognition path " + pSignalSleeveRecognitionPath);
         }
 
         return retVal;
     }
 
-    private SignalSleeveReturn reflectiveTapeRecognitionPath(SignalSleeveParameters.GrayscaleParameters pReflectiveTapeParameters) {
-        // Remove distractions before we convert to grayscale: depending on the
-        // current alliance set the red or blue channel pixels to black.
+    private SignalSleeveReturn reflectiveTapeRecognitionPath(SignalSleeveParameters2 pReflectiveTapeParameters) {
         ArrayList<Mat> channels = new ArrayList<>(3);
         Core.split(imageROI, channels);
 
-        // Initialize a new Mat to black (all zeros) to take the place of the
-        // red or blue channel. B = 0, G = 1, R = 2.
-        Mat blackChannel = Mat.zeros(imageROI.rows(), imageROI.cols(), CvType.CV_8UC1);
+        // For both the red cone and the blue cone use the red channel.
+        // Then we'll threshold them differently because the color red
+        // will be almost white in the grayscale image while the color
+        // blue will be almost black.
+        // Write out the red channel as grayscale.
+        Imgcodecs.imwrite(outputFilenamePreamble + "_RED_CHANNEL.png", channels.get(2));
+        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_RED_CHANNEL.png");
+
+        SignalSleeveParameters2.GrayscaleParameters grayscaleParameters;
+        int channelIndex;
+        Mat thresholded;
+
         if (alliance == RobotConstants.Alliance.RED) {
-            // Replace the red channel with the black channel.
-            channels.set(2, blackChannel);
-        } else if (alliance == RobotConstants.Alliance.BLUE) {
-            // Replace the blue channel with the black channel.
-            channels.set(0, blackChannel);
+            grayscaleParameters = pReflectiveTapeParameters.redGrayscaleParameters;
+            channelIndex = 2; // red
+
+            // Write out the red channel as grayscale.
+            Imgcodecs.imwrite(outputFilenamePreamble + "_RED_CHANNEL.png", channels.get(2));
+            RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_RED_CHANNEL.png");
+       }
+        else if (alliance == RobotConstants.Alliance.BLUE) {
+            grayscaleParameters = pReflectiveTapeParameters.blueGrayscaleParameters;
+            channelIndex = 0; // blue
+
+            // Write out the blue channel as grayscale.
+            Imgcodecs.imwrite(outputFilenamePreamble + "_BLUE_CHANNEL.png", channels.get(0));
+            RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_BLUE_CHANNEL.png");
         }
+        else
+            return new SignalSleeveReturn(RobotConstants.OpenCVResults.OCV_ERROR);
 
-        Core.merge(channels, imageROI); // Recreate the BGR image.
-
-        // We're on the grayscale path.
-        Mat grayROI = new Mat();
-        Imgproc.cvtColor(imageROI, grayROI, Imgproc.COLOR_BGR2GRAY);
-
-        //Imgcodecs.imwrite(outputFilenamePreamble + "_GRAY.png", grayROI);
-        //RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_GRAY.png");
-
-        Mat adjustedGray = imageUtils.adjustGrayscaleBrightness(grayROI, pReflectiveTapeParameters.grayParameters.median_target);
-        Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ.png", adjustedGray);
-        RobotLogCommon.d(TAG, "Writing adjusted grayscale image " + outputFilenamePreamble + "_REF_ADJ.png");
-
-        int grayThresholdLow = pReflectiveTapeParameters.grayParameters.threshold_low;
-        RobotLogCommon.d(TAG, "Threshold value: low " + grayThresholdLow);
-
-        // Threshold the image: set pixels over the threshold value to white.
-        Mat thresholded = new Mat(); // output binary image
-        Imgproc.threshold(adjustedGray, thresholded,
-                grayThresholdLow,    // threshold value
-                255,   // white
-                Imgproc.THRESH_BINARY); // thresholding type
-
-        Imgcodecs.imwrite(outputFilenamePreamble + "_ADJ_THR.png", thresholded);
-        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ADJ_THR.png");
+        thresholded = imageUtils.performThresholdOnGray(channels.get(channelIndex), outputFilenamePreamble, grayscaleParameters.grayParameters.median_target, grayscaleParameters.grayParameters.threshold_low);
 
         return getLocation(thresholded,
-                pReflectiveTapeParameters.minWhitePixelsLocation2,
-                pReflectiveTapeParameters.minWhitePixelsLocation3);
+                grayscaleParameters.minWhitePixelsLocation2,
+                grayscaleParameters.minWhitePixelsLocation3);
     }
 
-    private SignalSleeveReturn colorSleeveRecognitionPath(SignalSleeveParameters.ColorSleeveParameters pColorSleeveParameters) {
+    private SignalSleeveReturn colorSleeveRecognitionPath(SignalSleeveParameters2.ColorSleeveParameters pColorSleeveParameters) {
         Mat thresholded = imageUtils.applyInRange(imageROI, outputFilenamePreamble, pColorSleeveParameters.hsvParameters);
 
         // Clean up the thresholded image via morphological opening.
@@ -145,6 +128,7 @@ public class SignalSleeveRecognition {
     //## 10/22/2022 Failed experiment. The chroma green tape is not distinct enough
     // from the gray tiles. However, the technique of splitting the channels should
     // prove useful in recognition of the red and blue cone stacks.
+    /*
     private SignalSleeveReturn splitGreenRecognitionPath(SignalSleeveParameters.GrayscaleParameters pSplitGreenParameters) {
         // Remove distractions before we convert to grayscale: set the red and blue
         // channels to black and the green channel to white.
@@ -204,6 +188,7 @@ public class SignalSleeveRecognition {
                 pSplitGreenParameters.minWhitePixelsLocation2,
                 pSplitGreenParameters.minWhitePixelsLocation3);
     }
+     */
 
     private SignalSleeveReturn getLocation(Mat pThresholded, int pMinWhitePixelsLocation2, int pMinWhitePixelsLocation3) {
         // Our target,unless it's location 1, which is black, will now appear

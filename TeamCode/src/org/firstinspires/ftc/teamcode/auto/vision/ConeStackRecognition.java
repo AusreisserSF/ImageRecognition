@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.auto.vision;
 
 //!! IntelliJ only
 
-import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.Pair;
 import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
 import org.firstinspires.ftc.ftcdevcommon.intellij.TimeStamp;
@@ -61,10 +60,10 @@ public class ConeStackRecognition {
         imageROI = imageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
 
         RobotLogCommon.d(TAG, "Recognition path " + pConeStackRecognitionPath);
-        grayRecognitionPath(pConeStackParameters);
+        grayRecognitionPath(pImageParameters, pConeStackParameters);
     }
 
-    private ConeStackReturn grayRecognitionPath(ConeStackParameters pConeStackParameters) {
+    private ConeStackReturn grayRecognitionPath(VisionParameters.ImageParameters pImageParameters, ConeStackParameters pConeStackParameters) {
         // Remove distractions before we convert to grayscale: depending on the
         // current alliance set the red or blue channel pixels to black.
         ArrayList<Mat> channels = new ArrayList<>(3);
@@ -106,17 +105,28 @@ public class ConeStackRecognition {
         Imgcodecs.imwrite(outputFilenamePreamble + "_CON.png", contoursDrawn);
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_CON.png");
 
-        // The largest contour should be the gold cube.
+        // The largest contour should be the cone.
         Optional<MatOfPoint> largestContour = imageUtils.getLargestContour(contours);
         if (largestContour.isEmpty())
             return new ConeStackReturn(RobotConstants.OpenCVResults.RECOGNITION_UNSUCCESSFUL); // don't crash
 
+        // Get the centroid of the largest contour.
+        Point centroid = imageUtils.getContourCentroid(largestContour.get());
+        RobotLogCommon.d(TAG, "Center of largest contour (cone): x " +
+                centroid.x + ", y " + centroid.y);
+
+        //**TODO Staying within the bounds of the contour, define a rectangle;
+        // inside this rectangle we'll look for an in-range depth value.
+
+        // Get the bounding box for the largest contour. Start at the center
+        // of the bounding box and create a square or rectangle as the
+        // window onto the contour. For each pixel in the rectangle first
+        // test if it is both inside the contour (using pointPolygonTest())
+        // and has a valid depth value. If so, get the depth and angle to
+        // this pixel.
+
         // Get its bounding rectangle.
         Rect largestBoundingRect = Imgproc.boundingRect(largestContour.get());
-
-        // Because the shaft is the same color as the level 2 platter the bounding
-        // rectangle will be too high. But we only care about its width.
-        RobotLogCommon.d(TAG, "Width of largest contour " + largestBoundingRect.width);
 
         // Draw a rectangle around the largest contour.
         Mat drawnRectangle = imageROI.clone();
@@ -124,6 +134,29 @@ public class ConeStackRecognition {
         Imgcodecs.imwrite(outputFilenamePreamble + "_BRECT.png", drawnRectangle);
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_BRECT.png");
 
+        // Calculate the angle from the camera to the center of the bounding rectangle.
+        // The centroid of the bounding rectangle is relative to the entire image, not
+        // just the ROI.
+        int coneStackCentroidX = pImageParameters.image_roi.x + largestBoundingRect.x + (largestBoundingRect.width / 2);
+        int coneStackCentroidY = pImageParameters.image_roi.y + largestBoundingRect.y + (largestBoundingRect.height / 2);
+
+
+/*
+// https://stackoverflow.com/questions/15721550/looping-through-opencv-mat-in-java-bindings
+        List<MatOfPoint> contours = new ArrayList<>();
+        Mat hierarchy = new Mat();
+        Imgproc.findContours(src, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+        Mat rawDist = new Mat(src.size(), CvType.CV_32F);
+        float[] rawDistData = new float[(int) (rawDist.total() * rawDist.channels())];
+        for (int i = 0; i < src.rows(); i++) {
+            for (int j = 0; j < src.cols(); j++) {
+                rawDistData[i * src.cols() + j] = (float) Imgproc
+                        .pointPolygonTest(new MatOfPoint2f(contours.get(0).toArray()), new Point(j, i), true);
+            }
+        }
+        rawDist.put(0, 0, rawDistData);
+
+ */
         //**TODO create a kernel around the centroid, find a white pixel,
         // determine angle and distance from the depth file.
 

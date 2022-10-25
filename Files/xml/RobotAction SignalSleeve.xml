@@ -6,7 +6,7 @@
         <actions>
             <ANALYZE_SIGNAL_SLEEVE>
                 <image_parameters>
-                    <image_source>D405_10171533_17940_Green_2_IMG.png</image_source>
+                    <image_source>**Reflective tape on red or blue cone.png</image_source>
                     <resolution>
                         <width>640</width>
                         <height>480</height>
@@ -19,7 +19,7 @@
                     </image_roi>
                 </image_parameters>
                 <signal_sleeve_recognition>
-                    <recognition_path>split_green</recognition_path>
+                    <recognition_path>reflective_tape</recognition_path>
                 </signal_sleeve_recognition>
             </ANALYZE_SIGNAL_SLEEVE>
         </actions>
