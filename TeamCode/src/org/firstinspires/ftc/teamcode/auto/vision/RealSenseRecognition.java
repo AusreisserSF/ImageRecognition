@@ -98,7 +98,7 @@ public class RealSenseRecognition {
         try (InputStream output = new FileInputStream(depthFilename)) {
             try (DataInputStream depthInputStream =
                          new DataInputStream(output)) {
-                depthInputStream.read(depth8UC1);
+                depthInputStream.read(depth8UC1)
             }
         }
 
@@ -140,7 +140,7 @@ public class RealSenseRecognition {
         double adjacentFromRobotCenter = adjacentFromCameraCenter + pRealSenseParameters.cameraToRobotCenterMeters;
 
         // We have a new triangle. We need to get the angle from the robot
-        // center to the center of the objecte.
+        // center to the center of the object.
         double ratioARC = opposite / adjacentFromRobotCenter;
         double tanARC = Math.tan(ratioARC);
         double angleFromRobotCenter = Math.toDegrees(tanARC);

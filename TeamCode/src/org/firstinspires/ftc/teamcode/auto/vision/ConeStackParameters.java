@@ -23,7 +23,7 @@ public class ConeStackParameters {
         public final float minDepth;
         public final float maxDepth;
 
-        DepthParameters(int pDepthWindowOffsetX, int pDepthWindowOffsetY,
+        public DepthParameters(int pDepthWindowOffsetX, int pDepthWindowOffsetY,
                         int pDepthWindowWidth, int pDepthWindowHeight,
                         float pMinDepth, float pMaxDepth) {
             depthWindowOffsets = new Rect(pDepthWindowOffsetX, pDepthWindowOffsetY,

@@ -12,9 +12,7 @@ import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
-import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -127,22 +125,25 @@ public class ConeStackRecognition {
         Imgcodecs.imwrite(outputFilenamePreamble + "_BRECT.png", drawnRectangle);
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_BRECT.png");
 
+        // We'll need the depth data from the D405 below.
+        short[] depthArray = RealSenseUtils.getDepthArrayFromFile(pImageParameters);
+
         // We want to define a search rectangle whose x dimension
         // at its center is the same as that of the bounding box.
         int pixelSearchBoxCenter = largestBoundingRect.width / 2;
 
-        //**TODO test for reasonable dimensions; supply values in XML?
+        //**TODO test for reasonable dimensions
 
         // Subtract a reasonable value to get the left edge of
         // the search box.
-        int pixelSearchX = (largestBoundingRect.x + pixelSearchBoxCenter) - 20;
-        int pixelSearchWidth = 40;
+        int pixelSearchX = (largestBoundingRect.x + pixelSearchBoxCenter) - pConeStackParameters.depthParameters.depthWindowOffsets.x;
+        int pixelSearchWidth = pConeStackParameters.depthParameters.depthWindowOffsets.width;
 
         // Place the y-origin of the pixel search box at a
         // reasonable distance from the bottom of the bounding
         // box.
-        int pixelSearchY = largestBoundingRect.height - 120;
-        int pixelSearchHeight = 80;
+        int pixelSearchY = largestBoundingRect.height - pConeStackParameters.depthParameters.depthWindowOffsets.y;
+        int pixelSearchHeight = pConeStackParameters.depthParameters.depthWindowOffsets.height;
 
         // The following is from the OpenCV documentation; we want the
         // option where measureDist=false.
@@ -169,6 +170,8 @@ public class ConeStackRecognition {
                         .pointPolygonTest(largestContourPoint2f, new Point(j, i), false);
                 if (testReturn == 0.0 || testReturn == 1.0) {
                     //**TODO apply depth filters here ...
+                    //!! The depth array reflects the entire image; the pixel
+                    // coordinates are relative to the ROI. ADJUST
                     foundPixel = true;
                     foundPixelX = j;
                     foundPixelY = i;
@@ -184,36 +187,6 @@ public class ConeStackRecognition {
             RobotLogCommon.d(TAG, "Found a pixel on or inside the cone contour at x " +
                     foundPixelX + ", y " + foundPixelY);
         else RobotLogCommon.d(TAG, "Did not find a pixel on or inside the cone contour");
-
-        // Read the depth file that corresponds to the color image file.
-        // The file is a collection of bytes; read them into an array
-        // and then convert to an array of shorts.
-        String filenameWithoutExt = pImageParameters.image_source.substring(0, pImageParameters.image_source.lastIndexOf('.'));
-        String depthFilename = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir + filenameWithoutExt + ".depth";
-        byte[] depth8UC1 = new byte[pImageParameters.resolution_width * pImageParameters.resolution_height];
-        try (InputStream output = new FileInputStream(depthFilename)) {
-            try (DataInputStream depthInputStream =
-                         new DataInputStream(output)) {
-                depthInputStream.read(depth8UC1);
-            }
-        }
-
-        // Convert an array of bytes to an array of shorts.
-        short[] depth16UC1 = new short[depth8UC1.length / 2]; // length is in bytes
-        ByteBuffer.wrap(depth8UC1).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(depth16UC1);
-
-        // Use the pixel position of the centroid of the object as an index
-        // into the array of depth values and get the distance from the camera
-        // to the centroid pixel. For example, for a 640 x 480 image --
-        // row 0 is 0 .. 639
-        // row 1 is 640 .. 1279
-        // ...
-        int column = foundPixelX;
-        int row = foundPixelY * pImageParameters.resolution_width;
-        int centroidPixelDepth = depth16UC1[column + row] &0xFFFF; // use as unsigned short
-        float scaledPixelDepth = centroidPixelDepth * RobotConstants.D405_DEPTH_SCALE;
-
-        RobotLogCommon.d(TAG, "Distance from camera to pixel at x " + foundPixelX + ", y " + foundPixelY + " = " + scaledPixelDepth);
 
         //**TODO Calculate the angle from the camera to the pixel inside the largest
         // contour that has a depth value that is in-range.
