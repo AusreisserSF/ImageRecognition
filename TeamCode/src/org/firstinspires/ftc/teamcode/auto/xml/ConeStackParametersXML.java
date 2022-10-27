@@ -70,8 +70,8 @@ public class ConeStackParametersXML {
             throw new AutonomousRobotException(TAG, "Expected element 'RED");
 
         // Point to <gray_parameters>
-        Node gray_node = red_node.getFirstChild();
-        Node gray_parameters_node = getNextElement(gray_node);
+        Node gray_parameters_node = red_node.getFirstChild();
+        gray_parameters_node = getNextElement(gray_parameters_node);
         if ((gray_parameters_node == null) || !gray_parameters_node.getNodeName().equals("gray_parameters"))
             throw new AutonomousRobotException(TAG, "Element 'gray_parameters' not found");
 
@@ -87,14 +87,52 @@ public class ConeStackParametersXML {
             throw new AutonomousRobotException(TAG, "Expected element 'BLUE");
 
         // Point to <gray_parameters>
-        gray_node = blue_node.getFirstChild();
-        gray_parameters_node = getNextElement(gray_node);
+        gray_parameters_node = blue_node.getFirstChild();
+        gray_parameters_node = getNextElement(gray_parameters_node);
         if ((gray_parameters_node == null) || !gray_parameters_node.getNodeName().equals("gray_parameters"))
             throw new AutonomousRobotException(TAG, "Element 'gray_parameters' not found");
 
         VisionParameters.GrayParameters grayParametersBlue = ImageXML.parseGrayParameters(gray_parameters_node);
 
-        return new ConeStackParameters(grayParametersRed, grayParametersBlue);
+        //**TODO 10/27/2022 STOPPED HERE
+
+        // Parse <depth_parameters>
+        Node depth_parameters_node = blue_node.getNextSibling();
+        depth_parameters_node = getNextElement(depth_parameters_node);
+        if (depth_parameters_node == null)
+            throw new AutonomousRobotException(TAG, "Element 'depth_parameters' not found");
+
+        Node window_offset_x_node = depth_parameters_node.getFirstChild();
+        if ((window_offset_x_node == null) || !window_offset_x_node.getNodeName().equals("depth_window_offset_x"))
+            throw new AutonomousRobotException(TAG, "Element 'depth_window_offset_x' not found");
+
+        // Parse as int
+        String windowOffsetXText = window_offset_x_node.getTextContent();
+        int window_offset_x = Integer.parseInt(windowOffsetXText);
+
+        /*
+               try {
+            calibrationDistance = Double.parseDouble(calibration_distance_node.getTextContent());
+        } catch (NumberFormatException nex) {
+            throw new AutonomousRobotException(TAG, "Invalid number format in element 'distance_parameters/calibration_distance'");
+        }
+         */
+
+     /*
+            <depth_parameters>
+        <depth_window_offset_x>20</depth_window_offset_x>
+        <depth_window_offset_y>120</depth_window_offset_y>
+        <depth_window_width>40</depth_window_width>
+        <depth_window_height>80</depth_window_height>
+        <depth_filter min="0.5" max="1.00"/>
+    </depth_parameters>
+
+    DepthParameters(int pDepthWindowOffsetX, int pDepthWindowOffsetY,
+                        int pDepthWindowWidth, int pDepthWindowHeight,
+                        float pMinDepth, float pMaxDepth)
+      */
+
+        return new ConeStackParameters(grayParametersRed, grayParametersBlue, depthParameters);
     }
 
     //**TODO THIS belongs in ftcdevcommon for IntelliJ and Android -> XMLUtils

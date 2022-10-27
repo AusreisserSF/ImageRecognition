@@ -202,9 +202,6 @@ public class RecognitionDispatcher extends Application {
 
                 RobotLogCommon.d(TAG, "Recognition path " + signalSleeveRecognitionPath);
 
-                //**TODO If the element  <d405_depth_filter min="0.5" max="1.00"/> is present
-                // parse it and send the values to an override of recognition.recognizeSignalSleeve.
-
                 // Perform image recognition and depth mapping.
                 SignalSleeveRecognition recognition = new SignalSleeveRecognition();
                 SignalSleeveReturn signalSleeveReturn = recognition.recognizeSignalSleeve(fileImage, signalSleeveImageParameters, signalSleeveParameters, alliance, signalSleeveRecognitionPath);
