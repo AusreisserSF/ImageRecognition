@@ -168,6 +168,7 @@ public class ConeStackRecognition {
                 testReturn = (float) Imgproc
                         .pointPolygonTest(largestContourPoint2f, new Point(j, i), false);
                 if (testReturn == 0.0 || testReturn == 1.0) {
+                    //**TODO apply depth filters here ...
                     foundPixel = true;
                     foundPixelX = j;
                     foundPixelY = i;
@@ -210,7 +211,7 @@ public class ConeStackRecognition {
         int column = foundPixelX;
         int row = foundPixelY * pImageParameters.resolution_width;
         int centroidPixelDepth = depth16UC1[column + row] &0xFFFF; // use as unsigned short
-        float scaledPixelDepth = centroidPixelDepth * 0.0001f; //**TODO for now hardcode pRealSenseParameters.depthCameraScale;
+        float scaledPixelDepth = centroidPixelDepth * RobotConstants.D405_DEPTH_SCALE;
 
         RobotLogCommon.d(TAG, "Distance from camera to pixel at x " + foundPixelX + ", y " + foundPixelY + " = " + scaledPixelDepth);
 
