@@ -83,12 +83,10 @@ public class SignalSleeveRecognition {
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_RED_CHANNEL.png");
 
         SignalSleeveParameters2.GrayscaleParameters grayscaleParameters;
-        int channelIndex;
         Mat thresholded;
 
         if (alliance == RobotConstants.Alliance.RED) {
             grayscaleParameters = pReflectiveTapeParameters.redGrayscaleParameters;
-            channelIndex = 2; // red
 
             // Write out the red channel as grayscale.
             Imgcodecs.imwrite(outputFilenamePreamble + "_RED_CHANNEL.png", channels.get(2));
@@ -96,16 +94,12 @@ public class SignalSleeveRecognition {
        }
         else if (alliance == RobotConstants.Alliance.BLUE) {
             grayscaleParameters = pReflectiveTapeParameters.blueGrayscaleParameters;
-            channelIndex = 2; // use the red channel - better contrast!
-
-            // Write out the blue channel as grayscale.
-            //Imgcodecs.imwrite(outputFilenamePreamble + "_BLUE_CHANNEL.png", channels.get(0));
-            //RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_BLUE_CHANNEL.png");
-        }
+       }
         else
             return new SignalSleeveReturn(RobotConstants.OpenCVResults.OCV_ERROR);
 
-        thresholded = imageUtils.performThresholdOnGray(channels.get(channelIndex), outputFilenamePreamble, grayscaleParameters.grayParameters.median_target, grayscaleParameters.grayParameters.threshold_low);
+        // Always use the red channel - better contrast!
+        thresholded = imageUtils.performThresholdOnGray(channels.get(2), outputFilenamePreamble, grayscaleParameters.grayParameters.median_target, grayscaleParameters.grayParameters.threshold_low);
 
         return getLocation(thresholded,
                 grayscaleParameters.minWhitePixelsLocation2,
