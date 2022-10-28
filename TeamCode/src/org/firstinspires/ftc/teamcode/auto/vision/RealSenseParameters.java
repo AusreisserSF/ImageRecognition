@@ -6,7 +6,6 @@ public class RealSenseParameters {
     public final VisionParameters.HSVParameters hsvParameters;
     public final float depthCameraFOV; //**TODO RobotConstants
     public final float depthCameraScale; //**TODO RobotConstants
-    //**TODO Need distanceFilterMin and distanceFilterMax -> RobotAction.xml
     public final float depthCameraDistanceFilter;
     public final float cameraToRobotCenterMeters; //**TODO RobotConstants
 

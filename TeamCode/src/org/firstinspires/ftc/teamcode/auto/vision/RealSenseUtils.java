@@ -42,6 +42,7 @@ public class RealSenseUtils {
         // We need to adjust those values to reflect the position of the
         // target pixel in the entire image.
         int targetPixelX = pImageParameters.image_roi.x + pTargetPixelX;
+        int targetPixelY = pImageParameters.image_roi.x + pTargetPixelY;
 
         // Calculate the angle from the camera to the target pixel.
         double angleFromCameraToPixel = ImageUtils.computeAngleToObjectCenter(pImageParameters.resolution_width, targetPixelX, RobotConstants.D405_FOV);
@@ -77,7 +78,7 @@ public class RealSenseUtils {
         // Get the distance from the center of the robot to the center of
         // the object. This is the hypotenuse of our new triangle.
         double distanceFromRobotCenter = Math.sqrt(Math.pow(opposite, 2) + Math.pow(adjacentFromRobotCenter, 2));
-        RobotLogCommon.d(TAG, "Distance (meters) from robot center to pixel at x " + pTargetPixelX + ", y " + pTargetPixelY + " = " + distanceFromRobotCenter);
+        RobotLogCommon.d(TAG, "Distance (meters) from robot center to pixel in full image at x " + targetPixelX + ", y " + targetPixelY + " = " + distanceFromRobotCenter);
 
         return Pair.create(angleFromRobotCenter, distanceFromRobotCenter);
     }

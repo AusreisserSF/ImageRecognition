@@ -242,11 +242,13 @@ public class RecognitionDispatcher extends Application {
 
                 // Perform image recognition and depth mapping.
                 ConeStackRecognition recognition = new ConeStackRecognition();
-                /*ConeStackReturn coneStackReturn = */
+                ConeStackReturn coneStackReturn =
                 recognition.recognizeConeStack(fileImage, coneStackImageParameters, coneStackParameters, alliance, coneStackRecognitionPath);
 
                 String displayText = "Image: " + imageFilename +
-                        '\n' + "Signal sleeve location: " /* + signalSleeveReturn.signalSleeveLocation*/;
+                        '\n' + "Center of robot to pixel in cone:" +
+                        '\n' + "Distance (meters) " + String.format("%.2f", coneStackReturn.distanceFromRobotCenter) +
+                        ", angle " + String.format("%.2f", coneStackReturn.angleFromRobotCenter);
 
                 displayResults(imagePath + coneStackImageParameters.image_source,
                         displayText,
@@ -254,7 +256,7 @@ public class RecognitionDispatcher extends Application {
             }
 
             // Fall 2022: general case for Intel Realsense depth cameras.
-            //**TODO Should supersede GOLD_CUBE_DEPTH
+            //**TODO See to do in ConeStackRecognition.
             case "REALSENSE_DEPTH" -> {
                 // Read the parameters for object recognition from the xml file.
                 RealSenseParametersXML realsenseParametersXML = new RealSenseParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
