@@ -96,6 +96,10 @@ public class ConeStackRecognition {
 
         Mat thresholded = imageUtils.performThresholdOnGray(channels.get(2), outputFilenamePreamble, grayMedianTarget, grayThresholdLow);
 
+        //**TODO Now you have a thresholded black and white image; the rest
+        // of this is common between the grayscale path (here) and the color
+        // path (gold cube and gold junction).
+
         // Identify the contours
         List<MatOfPoint> contours = new ArrayList<>();
         Imgproc.findContours(thresholded, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
