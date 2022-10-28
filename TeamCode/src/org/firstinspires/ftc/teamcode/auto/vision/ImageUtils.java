@@ -396,7 +396,7 @@ public class ImageUtils {
     // image, not just the ROI, and the parameter pObjectCentroidX is the x
     // offset from the left-hand edge of the emtire image to the center of the
     // object of interest.
-    public double computeAngleToObjectCenter(int pImageWidth, int pObjectCentroidX, double pCameraFieldOfView) {
+    public static double computeAngleToObjectCenter(int pImageWidth, int pObjectCentroidX, double pCameraFieldOfView) {
 
         // This solution follows https://stackoverflow.com/questions/32524787/how-to-compute-horizontal-angle-of-a-pixel-from-a-computer-vision-camera
         // in the answer from Leandro Caniglia:

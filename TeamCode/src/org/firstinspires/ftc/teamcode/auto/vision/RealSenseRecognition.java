@@ -98,7 +98,7 @@ public class RealSenseRecognition {
         try (InputStream output = new FileInputStream(depthFilename)) {
             try (DataInputStream depthInputStream =
                          new DataInputStream(output)) {
-                depthInputStream.read(depth8UC1)
+                depthInputStream.read(depth8UC1);
             }
         }
 

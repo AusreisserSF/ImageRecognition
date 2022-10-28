@@ -65,7 +65,7 @@ public class ConeStackRecognition {
     }
 
     private ConeStackReturn grayRecognitionPath(VisionParameters.ImageParameters pImageParameters, ConeStackParameters pConeStackParameters)
-    throws IOException {
+            throws IOException {
         // Remove distractions before we convert to grayscale: depending on the
         // current alliance set the red or blue channel pixels to black.
         ArrayList<Mat> channels = new ArrayList<>(3);
@@ -164,6 +164,7 @@ public class ConeStackRecognition {
         float testReturn;
         boolean foundPixel = false;
         int foundPixelX = 0, foundPixelY = 0;
+        double scaledPixelDepth = 0;
         for (int i = pixelSearchY; i < pixelSearchY + pixelSearchHeight; i++) {
             for (int j = pixelSearchX; j < pixelSearchX + pixelSearchWidth; j++) {
                 testReturn = (float) Imgproc
@@ -188,11 +189,11 @@ public class ConeStackRecognition {
                     foundPixelX + ", y " + foundPixelY);
         else RobotLogCommon.d(TAG, "Did not find a pixel on or inside the cone contour");
 
-        //**TODO Calculate the angle from the camera to the pixel inside the largest
-        // contour that has a depth value that is in-range.
-        // See RealSenseRecognition
+        Pair<Double, Double> angleAndDistanceToPixel = RealSenseUtils.getAngleAndDistanceToPixel(pImageParameters,
+                foundPixelX, foundPixelY, scaledPixelDepth);
 
-        return new ConeStackReturn(RobotConstants.OpenCVResults.RECOGNITION_SUCCESSFUL, 0, 0);
+
+        return new ConeStackReturn(RobotConstants.OpenCVResults.RECOGNITION_SUCCESSFUL, angleAndDistanceToPixel.first, angleAndDistanceToPixel.second);
     }
 
     // The parameters pContours is the output of a call to findContours.
