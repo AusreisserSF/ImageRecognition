@@ -38,7 +38,7 @@ public class SignalSleeveRecognition {
     // Location 3: all white
     public SignalSleeveReturn recognizeSignalSleeve(ImageProvider pImageProvider,
                                                     VisionParameters.ImageParameters pImageParameters,
-                                                    SignalSleeveParameters2 pSignalSleeveParameters,
+                                                    SignalSleeveParameters pSignalSleeveParameters,
                                                     RobotConstants.Alliance pAlliance,
                                                     RobotConstantsPowerPlay.SignalSleeveRecognitionPath pSignalSleeveRecognitionPath) throws InterruptedException {
 
@@ -70,7 +70,7 @@ public class SignalSleeveRecognition {
         return retVal;
     }
 
-    private SignalSleeveReturn reflectiveTapeRecognitionPath(SignalSleeveParameters2 pReflectiveTapeParameters) {
+    private SignalSleeveReturn reflectiveTapeRecognitionPath(SignalSleeveParameters pReflectiveTapeParameters) {
         ArrayList<Mat> channels = new ArrayList<>(3);
         Core.split(imageROI, channels);
 
@@ -82,7 +82,7 @@ public class SignalSleeveRecognition {
         Imgcodecs.imwrite(outputFilenamePreamble + "_RED_CHANNEL.png", channels.get(2));
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_RED_CHANNEL.png");
 
-        SignalSleeveParameters2.GrayscaleParameters grayscaleParameters;
+        SignalSleeveParameters.GrayscaleParameters grayscaleParameters;
         Mat thresholded;
 
         if (alliance == RobotConstants.Alliance.RED) {
@@ -106,7 +106,7 @@ public class SignalSleeveRecognition {
                 grayscaleParameters.minWhitePixelsLocation3);
     }
 
-    private SignalSleeveReturn colorSleeveRecognitionPath(SignalSleeveParameters2.ColorSleeveParameters pColorSleeveParameters) {
+    private SignalSleeveReturn colorSleeveRecognitionPath(SignalSleeveParameters.ColorSleeveParameters pColorSleeveParameters) {
         Mat thresholded = imageUtils.applyInRange(imageROI, outputFilenamePreamble, pColorSleeveParameters.hsvParameters);
 
         // Clean up the thresholded image via morphological opening.

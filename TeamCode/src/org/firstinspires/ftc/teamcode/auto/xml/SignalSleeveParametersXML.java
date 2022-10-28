@@ -4,6 +4,7 @@ import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
 import org.firstinspires.ftc.teamcode.auto.vision.SignalSleeveParameters;
 import org.firstinspires.ftc.teamcode.auto.vision.VisionParameters;
+import org.firstinspires.ftc.teamcode.common.RobotConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
@@ -16,8 +17,8 @@ import java.io.File;
 import java.io.IOException;
 
 // Class whose job it is to read an XML file that contains all of the
-// information needed for our OpenCV methods to recognize our custom
-// Signal Sleeve during Autonomous.
+// information needed for our OpenCV methods to recognize a signal
+// sleeve during Autonomous.
 public class SignalSleeveParametersXML {
     public static final String TAG = SignalSleeveParametersXML.class.getSimpleName();
     private static final String SIGNAL_SLEEVE_FILE_NAME = "SignalSleeveParameters.xml";
@@ -50,8 +51,6 @@ public class SignalSleeveParametersXML {
 
     public SignalSleeveParameters getSignalSleeveParameters() throws XPathExpressionException {
         XPathExpression expr;
-        VisionParameters.GrayParameters grayParameters;
-        VisionParameters.HSVParameters hsvParameters;
 
         // Point to the first node.
         RobotLogCommon.d(TAG, "Parsing XML signal_sleeve_parameters");
@@ -67,13 +66,22 @@ public class SignalSleeveParametersXML {
         if ((reflective_tape_node == null) || !reflective_tape_node.getNodeName().equals("reflective_tape"))
             throw new AutonomousRobotException(TAG, "Element 'reflective_tape' not found");
 
+        // Point to <RED>
+        Node red_node = reflective_tape_node.getFirstChild();
+        red_node = getNextElement(red_node);
+        if (red_node == null)
+            throw new AutonomousRobotException(TAG, "Element 'RED' not found");
+        RobotConstants.Alliance shouldBeRed = RobotConstants.Alliance.valueOf(red_node.getNodeName());
+        if (shouldBeRed != RobotConstants.Alliance.RED)
+            throw new AutonomousRobotException(TAG, "Expected element 'RED");
+
         // Point to <gray_parameters>
-        Node gray_node = reflective_tape_node.getFirstChild();
+        Node gray_node = red_node.getFirstChild();
         Node gray_parameters_node = getNextElement(gray_node);
         if ((gray_parameters_node == null) || !gray_parameters_node.getNodeName().equals("gray_parameters"))
             throw new AutonomousRobotException(TAG, "Element 'gray_parameters' not found");
 
-        grayParameters = ImageXML.parseGrayParameters(gray_parameters_node);
+        VisionParameters.GrayParameters grayParametersRed = ImageXML.parseGrayParameters(gray_parameters_node);
 
         // Point to <criteria>
         Node criteria_node_gray = gray_parameters_node.getNextSibling();
@@ -81,9 +89,40 @@ public class SignalSleeveParametersXML {
         if ((criteria_node_gray == null) || !criteria_node_gray.getNodeName().equals("criteria"))
             throw new AutonomousRobotException(TAG, "Element 'criteria' not found");
 
-        LocationCriteria grayLocationCriteria = new LocationCriteria(criteria_node_gray);
+        SignalSleeveParametersXML.LocationCriteria redLocationCriteria = new SignalSleeveParametersXML.LocationCriteria(criteria_node_gray);
+        SignalSleeveParameters.GrayscaleParameters redGrayscaleParameters =
+                new SignalSleeveParameters.GrayscaleParameters(grayParametersRed, redLocationCriteria.minWhitePixelsLocation2,
+                        redLocationCriteria.minWhitePixelsLocation3);
 
-        // Now move on to the <color_sleeve> element.
+        // Point to <BLUE>
+        Node blue_node = red_node.getNextSibling();
+        blue_node = getNextElement(blue_node);
+        if (blue_node == null)
+            throw new AutonomousRobotException(TAG, "Element 'BLUE' not found");
+        RobotConstants.Alliance shouldBeBlue = RobotConstants.Alliance.valueOf(blue_node.getNodeName());
+        if (shouldBeBlue != RobotConstants.Alliance.BLUE)
+            throw new AutonomousRobotException(TAG, "Expected element 'BLUE");
+
+        // Point to <gray_parameters>
+        gray_node = blue_node.getFirstChild();
+        gray_parameters_node = getNextElement(gray_node);
+        if ((gray_parameters_node == null) || !gray_parameters_node.getNodeName().equals("gray_parameters"))
+            throw new AutonomousRobotException(TAG, "Element 'gray_parameters' not found");
+
+        VisionParameters.GrayParameters grayParametersBlue = ImageXML.parseGrayParameters(gray_parameters_node);
+
+        // Point to <criteria>
+        criteria_node_gray = gray_parameters_node.getNextSibling();
+        criteria_node_gray = getNextElement(criteria_node_gray);
+        if ((criteria_node_gray == null) || !criteria_node_gray.getNodeName().equals("criteria"))
+            throw new AutonomousRobotException(TAG, "Element 'criteria' not found");
+
+        SignalSleeveParametersXML.LocationCriteria blueLocationCriteria = new SignalSleeveParametersXML.LocationCriteria(criteria_node_gray);
+        SignalSleeveParameters.GrayscaleParameters blueGrayscaleParameters =
+                new SignalSleeveParameters.GrayscaleParameters(grayParametersBlue, blueLocationCriteria.minWhitePixelsLocation2,
+                        blueLocationCriteria.minWhitePixelsLocation3);
+
+        // Now parse the <color_sleeve> parameters.
         Node color_sleeve_node = reflective_tape_node.getNextSibling();
         color_sleeve_node = getNextElement(color_sleeve_node);
 
@@ -93,17 +132,20 @@ public class SignalSleeveParametersXML {
         if ((hsv_parameters_node == null) || !hsv_parameters_node.getNodeName().equals("hsv_parameters"))
             throw new AutonomousRobotException(TAG, "Element 'hsv_parameters' not found");
 
-        hsvParameters = ImageXML.parseHSVParameters(hsv_parameters_node);
+        VisionParameters.HSVParameters hsvParameters = ImageXML.parseHSVParameters(hsv_parameters_node);
 
         Node criteria_node_hsv = hsv_parameters_node.getNextSibling();
         criteria_node_hsv = getNextElement(criteria_node_hsv);
         if ((criteria_node_hsv == null) || !criteria_node_hsv.getNodeName().equals("criteria"))
             throw new AutonomousRobotException(TAG, "Element 'criteria' not found");
 
-        LocationCriteria hsvLocationCriteria = new LocationCriteria(criteria_node_hsv);
+        SignalSleeveParametersXML.LocationCriteria hsvLocationCriteria = new SignalSleeveParametersXML.LocationCriteria(criteria_node_hsv);
+        SignalSleeveParameters.ColorSleeveParameters colorSleeveParameters =
+                new SignalSleeveParameters.ColorSleeveParameters(hsvParameters,
+                        hsvLocationCriteria.minWhitePixelsLocation2,
+                        hsvLocationCriteria.minWhitePixelsLocation3);
 
-        return new SignalSleeveParameters(new SignalSleeveParameters.GrayscaleParameters(grayParameters, grayLocationCriteria.minWhitePixelsLocation2, grayLocationCriteria.minWhitePixelsLocation3),
-                new SignalSleeveParameters.ColorSleeveParameters(hsvParameters, hsvLocationCriteria.minWhitePixelsLocation2, hsvLocationCriteria.minWhitePixelsLocation3));
+        return new SignalSleeveParameters(redGrayscaleParameters, blueGrayscaleParameters, colorSleeveParameters);
     }
 
     //**TODO THIS belongs in ftcdevcommon for IntelliJ and Android -> XMLUtils
@@ -163,5 +205,6 @@ public class SignalSleeveParametersXML {
             return null;
         }
     }
+
 }
 

@@ -6,12 +6,15 @@ package org.firstinspires.ftc.teamcode.auto.vision;
 // Split green -> grayscale
 public class SignalSleeveParameters {
 
-    public final GrayscaleParameters grayscaleParameters;
+    public final GrayscaleParameters redGrayscaleParameters;
+    public final GrayscaleParameters blueGrayscaleParameters;
     public final ColorSleeveParameters colorSleeveParameters;
 
-    public SignalSleeveParameters(GrayscaleParameters pGrayscaleParameters,
+    public SignalSleeveParameters(GrayscaleParameters pRedGrayscaleParameters,
+                                  GrayscaleParameters pBlueGrayscaleParameters,
                                   ColorSleeveParameters pColorSleeveParameters) {
-        grayscaleParameters = pGrayscaleParameters;
+        redGrayscaleParameters = pRedGrayscaleParameters;
+        blueGrayscaleParameters = pBlueGrayscaleParameters;
         colorSleeveParameters = pColorSleeveParameters;
     }
 

@@ -1,5 +1,6 @@
 ﻿<signal_sleeve_parameters>
     <reflective_tape>
+        <RED>
         <gray_parameters>
             <median_target>150</median_target>
             <threshold_low>220</threshold_low>
@@ -9,6 +10,18 @@
             <min_white_pixels_location_3>4500</min_white_pixels_location_3>
             <!-- Loc 2 Number of non-zero pixels 3639  -->
         </criteria>
+    </RED>
+    <BLUE>
+        <gray_parameters>
+            <median_target>150</median_target>
+            <threshold_low>220</threshold_low>
+        </gray_parameters>
+        <criteria>
+            <min_white_pixels_location_2>2000</min_white_pixels_location_2>
+            <min_white_pixels_location_3>4500</min_white_pixels_location_3>
+            <!-- Loc 2 Number of non-zero pixels 3639  -->
+        </criteria>
+    </BLUE>
     </reflective_tape>
     <color_sleeve>
         <hsv_parameters>

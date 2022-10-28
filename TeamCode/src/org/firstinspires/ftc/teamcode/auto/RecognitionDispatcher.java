@@ -176,8 +176,8 @@ public class RecognitionDispatcher extends Application {
         switch (actionName) {
             case "ANALYZE_SIGNAL_SLEEVE" -> {
                 // Read the parameters for signal sleeve recognition from the xml file.
-                SignalSleeveParametersXML2 signalSleeveParametersXML = new SignalSleeveParametersXML2(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
-                SignalSleeveParameters2 signalSleeveParameters = signalSleeveParametersXML.getSignalSleeveParameters();
+                SignalSleeveParametersXML signalSleeveParametersXML = new SignalSleeveParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
+                SignalSleeveParameters signalSleeveParameters = signalSleeveParametersXML.getSignalSleeveParameters();
 
                 // Get the <image_parameters> for the signal sleeve from the RobotAction (+suffix) XML file.
                 VisionParameters.ImageParameters signalSleeveImageParameters =
