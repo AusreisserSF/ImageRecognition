@@ -21,6 +21,8 @@ import java.util.Optional;
 //**TODO The bulk of ConeStackRecognition can be applied to color object
 // recognition - gold cube and junction. Extract common code into
 // RealSenseUtils.
+//**TODO 10/28/2022 JunctionRecognition is exactly the same as ConeStackRecogntion
+// on the grayscale path
 public class ConeStackRecognition {
 
     private static final String TAG = ConeStackRecognition.class.getSimpleName();
@@ -98,7 +100,8 @@ public class ConeStackRecognition {
 
         //**TODO Now you have a thresholded black and white image; the rest
         // of this is common between the grayscale path (here) and the color
-        // path (gold cube and gold junction).
+        // path (gold cube and gold junction). BUT - it looks like it will be
+        // better to use the red channel for the junction also.
 
         // Identify the contours
         List<MatOfPoint> contours = new ArrayList<>();
