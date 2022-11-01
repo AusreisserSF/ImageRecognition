@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.auto.vision;
 
 //!! IntelliJ only
 
+import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.Pair;
 import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
 import org.firstinspires.ftc.ftcdevcommon.intellij.TimeStamp;
@@ -32,6 +33,7 @@ public class ConeStackRecognition {
     private String outputFilenamePreamble;
     private Mat imageROI;
     private RobotConstants.Alliance alliance;
+    private short[] depthArray;
 
     public ConeStackRecognition() {
         workingDirectory = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
@@ -64,6 +66,13 @@ public class ConeStackRecognition {
         String fileDate = TimeStamp.getLocalDateTimeStamp(coneStackImage.second);
         outputFilenamePreamble = imageUtils.createOutputFilePreamble(pImageParameters.image_source, workingDirectory, RobotConstants.imageFilePrefix, fileDate);
         imageROI = imageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
+
+        //**TODO subject the ROI to depth filtering *before* channel splitting or thresholding.
+        // Will require modifications to PowerPlay/RealSenseUtils --
+        // Mat removeBackground(VideoFrame pVideoFrame, DepthFrame pDepthFrame,
+        //                                        double pDepthScale, double pMinDistance, double pMaxDistance)
+
+        depthArray = RealSenseUtils.getDepthArrayFromFile(pImageParameters);
 
         RobotLogCommon.d(TAG, "Recognition path " + pConeStackRecognitionPath);
         return grayRecognitionPath(pImageParameters, pConeStackParameters);
@@ -137,25 +146,26 @@ public class ConeStackRecognition {
         Imgcodecs.imwrite(outputFilenamePreamble + "_BRECT.png", drawnRectangle);
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_BRECT.png");
 
-        // We'll need the depth data from the D405 below.
-        short[] depthArray = RealSenseUtils.getDepthArrayFromFile(pImageParameters);
-
         // We want to define a search rectangle whose x dimension
         // at its center is the same as that of the bounding box.
         int pixelSearchBoxCenter = largestBoundingRect.width / 2;
 
-        // Subtract a reasonable value to get the left edge of
-        // the search box.
-        int pixelSearchX = (largestBoundingRect.x + pixelSearchBoxCenter) - pConeStackParameters.depthParameters.depthWindowOffsets.x;
-        int pixelSearchWidth = pConeStackParameters.depthParameters.depthWindowOffsets.width;
+        // Subtract a percentage to get the left edge of the search box.
+        int percentageOfWidth = largestBoundingRect.width * (pConeStackParameters.depthParameters.depthWindowOffsetX / 100);
+        int pixelSearchX = (largestBoundingRect.x + pixelSearchBoxCenter) - percentageOfWidth;
+        int pixelSearchWidth = largestBoundingRect.width * (pConeStackParameters.depthParameters.depthWindowWidth / 100);
 
-        // Place the y-origin of the pixel search box at a
-        // reasonable distance from the bottom of the bounding
-        // box.
-        int pixelSearchY = largestBoundingRect.height - pConeStackParameters.depthParameters.depthWindowOffsets.y;
-        int pixelSearchHeight = pConeStackParameters.depthParameters.depthWindowOffsets.height;
+        // Place the y-origin of the pixel search box at a reasonable distance
+        // from the bottom of the bounding box.
+        int percentageOfHeight = largestBoundingRect.height * (pConeStackParameters.depthParameters.depthWindowOffsetY / 100);
+        int pixelSearchY = largestBoundingRect.height - percentageOfHeight;
+        int pixelSearchHeight = largestBoundingRect.height * (pConeStackParameters.depthParameters.depthWindowHeight / 100);
         RobotLogCommon.d(TAG, "Pixel search box x " + pixelSearchX +
                 ", y " + pixelSearchY + ", width " + pixelSearchWidth + ", height " + pixelSearchHeight);
+
+        // Sanity check.
+        if (pixelSearchWidth == 0 || pixelSearchHeight == 0)
+            throw new AutonomousRobotException(TAG, "Pixel search area width or height is 0");
 
         // Make sure the pixel search box is within the boundaries of the
         // bounding box of the largest contour.

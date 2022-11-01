@@ -74,9 +74,17 @@ public class ConeStackParametersXML {
         Node gray_parameters_node = red_node.getFirstChild();
         gray_parameters_node = getNextElement(gray_parameters_node);
         if ((gray_parameters_node == null) || !gray_parameters_node.getNodeName().equals("gray_parameters"))
-            throw new AutonomousRobotException(TAG, "Element 'gray_parameters' not found");
+            throw new AutonomousRobotException(TAG, "Element 'gray_parameters' for red not found");
 
         VisionParameters.GrayParameters grayParametersRed = ImageXML.parseGrayParameters(gray_parameters_node);
+
+        // Point to <hsv_parameters> for red.
+        Node red_hsv_node = gray_parameters_node.getNextSibling();
+        red_hsv_node = getNextElement(red_hsv_node);
+        if ((red_hsv_node == null) || !red_hsv_node.getNodeName().equals("hsv_parameters"))
+            throw new AutonomousRobotException(TAG, "Element 'hsv_parameters' for blue not found");
+
+        VisionParameters.HSVParameters hsvParametersRed = ImageXML.parseHSVParameters(red_hsv_node);
 
         // Point to <BLUE>
         Node blue_node = red_node.getNextSibling();
@@ -91,9 +99,17 @@ public class ConeStackParametersXML {
         gray_parameters_node = blue_node.getFirstChild();
         gray_parameters_node = getNextElement(gray_parameters_node);
         if ((gray_parameters_node == null) || !gray_parameters_node.getNodeName().equals("gray_parameters"))
-            throw new AutonomousRobotException(TAG, "Element 'gray_parameters' not found");
+            throw new AutonomousRobotException(TAG, "Element 'gray_parameters' for blue not found");
 
         VisionParameters.GrayParameters grayParametersBlue = ImageXML.parseGrayParameters(gray_parameters_node);
+
+        // Point to <hsv_parameters> for blue.
+        Node blue_hsv_node = gray_parameters_node.getNextSibling();
+        blue_hsv_node = getNextElement(blue_hsv_node);
+        if ((blue_hsv_node == null) || !blue_hsv_node.getNodeName().equals("hsv_parameters"))
+            throw new AutonomousRobotException(TAG, "Element 'hsv_parameters' for blue not found");
+
+        VisionParameters.HSVParameters hsvParametersBlue = ImageXML.parseHSVParameters(blue_hsv_node);
 
         // Parse <depth_parameters>
         Node depth_parameters_node = blue_node.getNextSibling();
@@ -103,58 +119,44 @@ public class ConeStackParametersXML {
 
         Node window_offset_x_node = depth_parameters_node.getFirstChild();
         window_offset_x_node = getNextElement(window_offset_x_node);
-        if (window_offset_x_node == null || !window_offset_x_node.getNodeName().equals("depth_window_offset_x") ||
+        if (window_offset_x_node == null || !window_offset_x_node.getNodeName().equals("depth_window_offset_percent_x") ||
                 window_offset_x_node.getTextContent().isEmpty())
-            throw new AutonomousRobotException(TAG, "Element 'depth_window_offset_x' not found or empty");
+            throw new AutonomousRobotException(TAG, "Element 'depth_window_offset_percent_x' not found or empty");
 
         String windowOffsetXText = window_offset_x_node.getTextContent();
         int window_offset_x;
         try {
             window_offset_x = Integer.parseInt(windowOffsetXText);
         } catch (NumberFormatException nex) {
-            throw new AutonomousRobotException(TAG, "Invalid number format in element 'depth_parameters/depth_window_offset_x'");
+            throw new AutonomousRobotException(TAG, "Invalid number format in element 'depth_window_offset_percent_x'");
         }
 
         Node window_offset_y_node = window_offset_x_node.getNextSibling();
         window_offset_y_node = getNextElement(window_offset_y_node);
-        if (window_offset_y_node == null || !window_offset_y_node.getNodeName().equals("depth_window_offset_y") ||
+        if (window_offset_y_node == null || !window_offset_y_node.getNodeName().equals("depth_window_offset_percent_y") ||
                 window_offset_y_node.getTextContent().isEmpty())
-            throw new AutonomousRobotException(TAG, "Element 'depth_window_offset_y' not found or empty");
+            throw new AutonomousRobotException(TAG, "Element 'depth_window_offset_percent_y' not found or empty");
 
         String windowOffsetYText = window_offset_y_node.getTextContent();
         int window_offset_y;
         try {
             window_offset_y = Integer.parseInt(windowOffsetYText);
         } catch (NumberFormatException nex) {
-            throw new AutonomousRobotException(TAG, "Invalid number format in element 'depth_parameters/depth_window_offset_y'");
+            throw new AutonomousRobotException(TAG, "Invalid number format in element 'depth_window_offset_percent_y'");
         }
 
-        Node depth_window_width_node = window_offset_y_node.getNextSibling();
-        depth_window_width_node = getNextElement(depth_window_width_node);
-        if (depth_window_width_node == null || !depth_window_width_node.getNodeName().equals("depth_window_width") ||
-                depth_window_width_node.getTextContent().isEmpty())
-        throw new AutonomousRobotException(TAG, "Element 'depth_window_width' not found or empty");
-
-        String windowWidthText = depth_window_width_node.getTextContent();
-        int window_width;
-        try {
-            window_width = Integer.parseInt(windowWidthText);
-        } catch (NumberFormatException nex) {
-            throw new AutonomousRobotException(TAG, "Invalid number format in element 'depth_parameters/depth_window_width'");
-        }
-
-        Node depth_window_height_node = depth_window_width_node.getNextSibling();
+        Node depth_window_height_node = window_offset_y_node.getNextSibling();
         depth_window_height_node = getNextElement(depth_window_height_node);
-        if (depth_window_height_node == null || !depth_window_height_node.getNodeName().equals("depth_window_height") ||
+        if (depth_window_height_node == null || !depth_window_height_node.getNodeName().equals("depth_window_percent_height") ||
                 depth_window_height_node.getTextContent().isEmpty())
-            throw new AutonomousRobotException(TAG, "Element 'depth_window_height' not found");
+            throw new AutonomousRobotException(TAG, "Element 'depth_window_percent_height' not found");
 
         String windowHeightText = depth_window_height_node.getTextContent();
         int window_height;
         try {
             window_height = Integer.parseInt(windowHeightText);
         } catch (NumberFormatException nex) {
-            throw new AutonomousRobotException(TAG, "Invalid number format in element 'depth_parameters/depth_window_height'");
+            throw new AutonomousRobotException(TAG, "Invalid number format in element 'depth_window_percent_height'");
         }
 
         // <depth_filter min="0.5" max="1.00"/>
@@ -187,10 +189,12 @@ public class ConeStackParametersXML {
         }
 
         ConeStackParameters.DepthParameters depthParameters = new ConeStackParameters.DepthParameters(window_offset_x, window_offset_y,
-                window_width, window_height,
+                window_height,
                 min_distance, max_distance);
 
-        return new ConeStackParameters(grayParametersRed, grayParametersBlue, depthParameters);
+        return new ConeStackParameters(grayParametersRed, hsvParametersRed,
+                grayParametersBlue, hsvParametersBlue,
+                depthParameters);
     }
 
     //**TODO THIS belongs in ftcdevcommon for IntelliJ and Android -> XMLUtils

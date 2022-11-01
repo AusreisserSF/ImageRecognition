@@ -4,6 +4,7 @@ import org.firstinspires.ftc.ftcdevcommon.Pair;
 import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.common.RobotConstants;
+import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
 import java.io.*;
@@ -33,6 +34,58 @@ public class RealSenseUtils {
         ByteBuffer.wrap(depth8UC1).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(depth16UC1);
         return depth16UC1;
     }
+
+    // Adapted from the RealSense example RealsenseAlignAdv.
+    // Apply background removal, converting to gray those pixels in the image
+    // ROI that are less than the minimum distance parameter or greater than
+    // the maximum distance parameter.
+    // Note: the depth frame has the same dimensions as the full image.
+    //**TODO STOPPED HERE 11/1/2022
+  /*   private static Mat removeBackground(Mat pImageROI, VisionParameters.ImageParameters pImageParameters,
+                                        short[] pDepth16UC1,
+                                        double pMinDistance, double pMaxDistance) {
+
+        int roiOriginX = pImageParameters.image_roi.x;
+        int roiOriginY = pImageParameters.image_roi.y;
+
+        //** Iterate through the depth data but only those locations
+        // that correspond to the image ROI.
+
+
+        int width = pVideoFrame.getWidth();
+        int height = pVideoFrame.getHeight();
+        int depthPixelIndex;
+        double pixelDistance;
+        for (int y = (pImageParameters.image_roi.y * pImageParameters.resolution_width) - 1;
+             y < height; y++) // depth pixel rows
+        {
+            depthPixelIndex = y * width; // the start of each row
+            for (int x = 0; x < width; x++, depthPixelIndex++) // depth pixel columns
+            {
+                // Get the depth value of the current pixel.
+                pixelDistance = RobotConstants.D405_DEPTH_SCALE * depth16UC1[depthPixelIndex];
+
+                // Check if the depth value is invalid (<=0) or greater than the threshold.
+                if (pixelDistance <= pMinDistance || pixelDistance > pMaxDistance) {
+                    // Calculate the offset in the color frame's buffer to the current pixel
+                    int offset = depthPixelIndex * 3; // i.e. 8UC3
+
+                    // Set pixel to "background" color (gray 808080)
+                    color_buff[offset] = (byte) 0x80; // r
+                    color_buff[offset + 1] = (byte) 0x80; // g
+                    color_buff[offset + 2] = (byte) 0x80; // b
+                }
+            }
+        }
+
+        // The modified color_buff is local; package it as an OpenCV Mat
+        // and return it for further processing.
+        Mat colorFrameMat = new Mat(pVideoFrame.getHeight(), pVideoFrame.getWidth(), CV_8UC3);
+        colorFrameMat.put(0, 0, color_buff);
+        return colorFrameMat;
+    }
+
+   */
 
     // Returns the angle and distance from the center of the robot to
     // the target pixel.
