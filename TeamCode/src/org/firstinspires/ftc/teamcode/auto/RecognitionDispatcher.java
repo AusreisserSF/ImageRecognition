@@ -242,13 +242,13 @@ public class RecognitionDispatcher extends Application {
 
                 // Perform image recognition and depth mapping.
                 ConeStackRecognition recognition = new ConeStackRecognition();
-                ConeStackReturn coneStackReturn =
+                DepthReturn depthReturn =
                 recognition.recognizeConeStack(fileImage, coneStackImageParameters, coneStackParameters, alliance, coneStackRecognitionPath);
 
                 String displayText = "Image: " + imageFilename +
                         '\n' + "Center of robot to pixel in cone:" +
-                        '\n' + "Distance (meters) " + String.format("%.2f", coneStackReturn.distanceFromRobotCenter) +
-                        ", angle " + String.format("%.2f", coneStackReturn.angleFromRobotCenter);
+                        '\n' + "Distance (meters) " + String.format("%.2f", depthReturn.distanceFromRobotCenter) +
+                        ", angle " + String.format("%.2f", depthReturn.angleFromRobotCenter);
 
                 displayResults(imagePath + coneStackImageParameters.image_source,
                         displayText,

@@ -22,8 +22,6 @@ import java.util.Optional;
 //**TODO The bulk of ConeStackRecognition can be applied to color object
 // recognition - gold cube and junction. Extract common code into
 // RealSenseUtils.
-//**TODO 10/28/2022 JunctionRecognition is exactly the same as ConeStackRecogntion
-// on the grayscale path
 public class ConeStackRecognition {
 
     private static final String TAG = ConeStackRecognition.class.getSimpleName();
@@ -44,11 +42,11 @@ public class ConeStackRecognition {
     // The targets are:
     // A stack of 1 to 5 red cones
     // A stack of 1 to 5 blue cones
-    public ConeStackReturn recognizeConeStack(ImageProvider pImageProvider,
-                                   VisionParameters.ImageParameters pImageParameters,
-                                   ConeStackParameters pConeStackParameters,
-                                   RobotConstants.Alliance pAlliance,
-                                   RobotConstantsPowerPlay.ConeStackRecognitionPath pConeStackRecognitionPath) throws InterruptedException, IOException {
+    public DepthReturn recognizeConeStack(ImageProvider pImageProvider,
+                                          VisionParameters.ImageParameters pImageParameters,
+                                          ConeStackParameters pConeStackParameters,
+                                          RobotConstants.Alliance pAlliance,
+                                          RobotConstantsPowerPlay.ConeStackRecognitionPath pConeStackRecognitionPath) throws InterruptedException, IOException {
 
         RobotLogCommon.d(TAG, "In ConeStackRecognition.recognizeConeStack");
 
@@ -57,28 +55,29 @@ public class ConeStackRecognition {
         // LocalDateTime requires Android minSdkVersion 26  public Pair<Mat, LocalDateTime> getImage() throws InterruptedException;
         Pair<Mat, LocalDateTime> coneStackImage = pImageProvider.getImage();
         if (coneStackImage == null)
-            return new ConeStackReturn(RobotConstants.OpenCVResults.OCV_ERROR); // don't crash
+            return new DepthReturn(RobotConstants.RecognitionResults.RECOGNITION_INTERNAL_ERROR); // don't crash
 
         // The image may be RGB (from a camera) or BGR (OpenCV imread from a file).
         // OpenCV wants BGR; the possible conversion is taken care of in imageUtils.preProcessImage.
         Mat imgOriginal = coneStackImage.first.clone();
-
         String fileDate = TimeStamp.getLocalDateTimeStamp(coneStackImage.second);
         outputFilenamePreamble = imageUtils.createOutputFilePreamble(pImageParameters.image_source, workingDirectory, RobotConstants.imageFilePrefix, fileDate);
-        imageROI = imageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
+        Mat imageROIOriginal = imageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
 
-        //**TODO subject the ROI to depth filtering *before* channel splitting or thresholding.
-        // Will require modifications to PowerPlay/RealSenseUtils --
-        // Mat removeBackground(VideoFrame pVideoFrame, DepthFrame pDepthFrame,
-        //                                        double pDepthScale, double pMinDistance, double pMaxDistance)
-
+        // Subject the ROI to depth filtering on all paths.
         depthArray = RealSenseUtils.getDepthArrayFromFile(pImageParameters);
+        imageROI = RealSenseUtils.removeBackground(imageROIOriginal, pImageParameters, depthArray,
+                pConeStackParameters.depthParameters.minDepth,
+                pConeStackParameters.depthParameters.maxDepth);
+
+        Imgcodecs.imwrite(outputFilenamePreamble + "_ROI_RANGE.png", imageROI);
+        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ROI_RANGE.png");
 
         RobotLogCommon.d(TAG, "Recognition path " + pConeStackRecognitionPath);
         return grayRecognitionPath(pImageParameters, pConeStackParameters);
     }
 
-    private ConeStackReturn grayRecognitionPath(VisionParameters.ImageParameters pImageParameters, ConeStackParameters pConeStackParameters)
+    private DepthReturn grayRecognitionPath(VisionParameters.ImageParameters pImageParameters, ConeStackParameters pConeStackParameters)
             throws IOException {
         // Remove distractions before we convert to grayscale: depending on the
         // current alliance set the red or blue channel pixels to black.
@@ -107,158 +106,8 @@ public class ConeStackRecognition {
 
         Mat thresholded = imageUtils.performThresholdOnGray(channels.get(2), outputFilenamePreamble, grayMedianTarget, grayThresholdLow);
 
-        //**TODO Now you have a thresholded black and white image; the rest
-        // of this is common between the grayscale path (here) and the color
-        // path (gold cube and gold junction). BUT - it looks like it will be
-        // better to use the red channel for the junction also.
-
-        // Identify the contours
-        List<MatOfPoint> contours = new ArrayList<>();
-        Imgproc.findContours(thresholded, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-        if (contours.size() == 0) {
-            RobotLogCommon.d(TAG, "No contours found");
-            return new ConeStackReturn(RobotConstants.OpenCVResults.RECOGNITION_UNSUCCESSFUL); // don't crash
-        }
-
-        Mat contoursDrawn = imageROI.clone();
-        drawShapeContours(contours, contoursDrawn);
-        Imgcodecs.imwrite(outputFilenamePreamble + "_CON.png", contoursDrawn);
-        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_CON.png");
-
-        // The largest contour should be the cone.
-        Optional<MatOfPoint> largestContour = imageUtils.getLargestContour(contours);
-        if (largestContour.isEmpty())
-            return new ConeStackReturn(RobotConstants.OpenCVResults.RECOGNITION_UNSUCCESSFUL); // don't crash
-
-        // Get the centroid of the largest contour.
-        Point centroid = imageUtils.getContourCentroid(largestContour.get());
-        RobotLogCommon.d(TAG, "Center of largest contour (cone): x " +
-                centroid.x + ", y " + centroid.y);
-
-        // Define a bounding rectangle for the largest contour.
-        Rect largestBoundingRect = Imgproc.boundingRect(largestContour.get());
-        RobotLogCommon.d(TAG, "Largest bounding rectangle x " + largestBoundingRect.x +
-                ", y " + largestBoundingRect.y + ", width " + largestBoundingRect.width + ", height " + largestBoundingRect.height);
-
-        // Draw a rectangle around the largest contour.
-        Mat drawnRectangle = imageROI.clone();
-        drawOneRectangle(largestBoundingRect, drawnRectangle);
-        Imgcodecs.imwrite(outputFilenamePreamble + "_BRECT.png", drawnRectangle);
-        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_BRECT.png");
-
-        // We want to define a search rectangle whose x dimension
-        // at its center is the same as that of the bounding box.
-        int pixelSearchBoxCenter = largestBoundingRect.width / 2;
-
-        // Subtract a percentage to get the left edge of the search box.
-        int percentageOfWidth = largestBoundingRect.width * (pConeStackParameters.depthParameters.depthWindowOffsetX / 100);
-        int pixelSearchX = (largestBoundingRect.x + pixelSearchBoxCenter) - percentageOfWidth;
-        int pixelSearchWidth = largestBoundingRect.width * (pConeStackParameters.depthParameters.depthWindowWidth / 100);
-
-        // Place the y-origin of the pixel search box at a reasonable distance
-        // from the bottom of the bounding box.
-        int percentageOfHeight = largestBoundingRect.height * (pConeStackParameters.depthParameters.depthWindowOffsetY / 100);
-        int pixelSearchY = largestBoundingRect.height - percentageOfHeight;
-        int pixelSearchHeight = largestBoundingRect.height * (pConeStackParameters.depthParameters.depthWindowHeight / 100);
-        RobotLogCommon.d(TAG, "Pixel search box x " + pixelSearchX +
-                ", y " + pixelSearchY + ", width " + pixelSearchWidth + ", height " + pixelSearchHeight);
-
-        // Sanity check.
-        if (pixelSearchWidth == 0 || pixelSearchHeight == 0)
-            throw new AutonomousRobotException(TAG, "Pixel search area width or height is 0");
-
-        // Make sure the pixel search box is within the boundaries of the
-        // bounding box of the largest contour.
-        Point pixelSearchPoint = new Point(pixelSearchY, pixelSearchX);
-        if (!largestBoundingRect.contains(pixelSearchPoint) ) {
-            RobotLogCommon.d(TAG, "Pixel search box out of range");
-            return new ConeStackReturn(RobotConstants.OpenCVResults.RECOGNITION_UNSUCCESSFUL);
-        }
-
-        // The following is from the OpenCV documentation; we want the
-        // option where measureDist=false.
-        /*
-         The function determines whether the point is inside a contour,
-         outside, or lies on an edge (or coincides with a vertex). It
-         returns positive (inside), negative (outside), or zero (on an
-         edge) value, correspondingly. When measureDist=false, the
-         return value is +1, -1, and 0, respectively. Otherwise, the
-         return value is a signed distance between the point and the
-         nearest contour edge.
-        */
-        // A MatOfPoint2f is required by pointPolygonTest but since
-        // we're only looking at the largest contour we don't need
-        // to loop through all contours and can do the conversion
-        // once.
-        MatOfPoint2f largestContourPoint2f = new MatOfPoint2f(largestContour.get().toArray());
-        float testReturn;
-        boolean foundPixel = false;
-        int foundPixelX = 0, foundPixelY = 0;
-        int targetPixelX, targetPixelY, targetPixelRow;
-        float scaledPixelDepth = 0;
-        for (int i = pixelSearchY; i < pixelSearchY + pixelSearchHeight; i++) { // row
-            for (int j = pixelSearchX; j < pixelSearchX + pixelSearchWidth; j++) { // column
-                testReturn = (float) Imgproc
-                        .pointPolygonTest(largestContourPoint2f, new Point(j, i), false);
-                if (testReturn == 0.0 || testReturn == 1.0) {
-                    // The depth array has values for every pixel in the full
-                    // image, not just the ROI. So to test a pixel for depth
-                    // we need to get its position in the full image.
-                    targetPixelX = pImageParameters.image_roi.x + j;
-                    targetPixelY = pImageParameters.image_roi.x + i;
-
-                    // Use the pixel position of the centroid of the object as an index
-                    // into the array of depth values and get the distance from the camera
-                    // to the centroid pixel. For example, for a 640 x 480 image --
-                    // row 0 is 0 .. 639
-                    // row 1 is 640 .. 1279
-                    // ...
-                    targetPixelRow = targetPixelY * pImageParameters.resolution_width;
-                    int centroidPixelDepth = depthArray[targetPixelX + targetPixelRow] &0xFFFF; // use as unsigned short
-                    scaledPixelDepth = centroidPixelDepth * RobotConstants.D405_DEPTH_SCALE;
-
-                    RobotLogCommon.d(TAG, "Distance from camera to pixel at x " + targetPixelX + ", y " + targetPixelY + " = " + scaledPixelDepth);
-
-                    // Now see if the depth of the pixel is in range.
-                    if (scaledPixelDepth >= pConeStackParameters.depthParameters.minDepth &&
-                    scaledPixelDepth <= pConeStackParameters.depthParameters.maxDepth) {
-                        foundPixel = true;
-                        foundPixelX = j;
-                        foundPixelY = i;
-                        break;
-                    }
-                }
-            }
-
-            if (foundPixel)
-                break;
-        }
-
-        if (foundPixel)
-            RobotLogCommon.d(TAG, "Found a pixel on or inside the cone contour at ROI x " +
-                    foundPixelX + ", y " + foundPixelY);
-        else {
-            RobotLogCommon.d(TAG, "Did not find a pixel on or inside the cone contour");
-            return new ConeStackReturn(RobotConstants.OpenCVResults.RECOGNITION_UNSUCCESSFUL);
-        }
-
-        Pair<Double, Double> angleAndDistanceToPixel = RealSenseUtils.getAngleAndDistanceToPixel(pImageParameters,
-                foundPixelX, foundPixelY, scaledPixelDepth);
-
-        return new ConeStackReturn(RobotConstants.OpenCVResults.RECOGNITION_SUCCESSFUL, angleAndDistanceToPixel.first, angleAndDistanceToPixel.second);
+        return RealSenseUtils.getAngleAndDepth(imageROI, thresholded, depthArray,
+                outputFilenamePreamble, pImageParameters, pConeStackParameters);
     }
 
-    // The parameters pContours is the output of a call to findContours.
-    private void drawShapeContours(List<MatOfPoint> pContours, Mat pImageOut) {
-        RobotLogCommon.d(TAG, "drawContours: number of contours " + pContours.size());
-        Scalar color = new Scalar(0, 255, 0); // BGR green - good against dark background
-
-        for (int i = 0; i < pContours.size(); i++) {
-            Imgproc.drawContours(pImageOut, pContours, i, color, 2);
-        }
-    }
-
-    private void drawOneRectangle(Rect pRect, Mat pImageOut) {
-        Imgproc.rectangle(pImageOut, pRect, new Scalar(0, 255, 0)); // GREEN
-    }
 }

@@ -20,8 +20,14 @@ public class RobotConstants {
         BLUE, RED, NONE
     }
 
+    //**TODO replace with RecognitionResults below
     public enum OpenCVResults {
         OCV_ERROR, RECOGNITION_SUCCESSFUL, RECOGNITION_UNSUCCESSFUL
     }
+
+    public enum RecognitionResults {
+        RECOGNITION_INTERNAL_ERROR, RECOGNITION_SUCCESSFUL, RECOGNITION_UNSUCCESSFUL
+    }
+
 
 }

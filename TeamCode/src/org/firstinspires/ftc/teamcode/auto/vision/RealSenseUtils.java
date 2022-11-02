@@ -1,15 +1,20 @@
 package org.firstinspires.ftc.teamcode.auto.vision;
 
+import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.Pair;
 import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.common.RobotConstants;
-import org.opencv.core.Mat;
-import org.opencv.core.Point;
+import org.opencv.core.*;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class RealSenseUtils {
 
@@ -40,57 +45,185 @@ public class RealSenseUtils {
     // ROI that are less than the minimum distance parameter or greater than
     // the maximum distance parameter.
     // Note: the depth frame has the same dimensions as the full image.
-    //**TODO STOPPED HERE 11/1/2022
-  /*   private static Mat removeBackground(Mat pImageROI, VisionParameters.ImageParameters pImageParameters,
-                                        short[] pDepth16UC1,
-                                        double pMinDistance, double pMaxDistance) {
+    public static Mat removeBackground(Mat pImageROI, VisionParameters.ImageParameters pImageParameters,
+                                       short[] pDepth16UC1,
+                                       double pMinDistance, double pMaxDistance) {
 
+        Mat depthAdjustedROI = pImageROI.clone();
         int roiOriginX = pImageParameters.image_roi.x;
+        int roiEndX = roiOriginX + pImageParameters.image_roi.width;
         int roiOriginY = pImageParameters.image_roi.y;
-
-        //** Iterate through the depth data but only those locations
-        // that correspond to the image ROI.
-
-
-        int width = pVideoFrame.getWidth();
-        int height = pVideoFrame.getHeight();
-        int depthPixelIndex;
+        int roiEndY = roiOriginY + pImageParameters.image_roi.height;
+        int depthPixelRowIndex = 0;
         double pixelDistance;
-        for (int y = (pImageParameters.image_roi.y * pImageParameters.resolution_width) - 1;
-             y < height; y++) // depth pixel rows
-        {
-            depthPixelIndex = y * width; // the start of each row
-            for (int x = 0; x < width; x++, depthPixelIndex++) // depth pixel columns
-            {
-                // Get the depth value of the current pixel.
-                pixelDistance = RobotConstants.D405_DEPTH_SCALE * depth16UC1[depthPixelIndex];
+        final byte[] grayBackground = new byte[]{0x60, 0x60, 0x60}; // i.e. 8UC3; dark gray
 
-                // Check if the depth value is invalid (<=0) or greater than the threshold.
+        // Iterate through the depth data but only those locations
+        // that correspond to the image ROI.
+        for (int i = 0; i < roiEndY; i++) {
+            depthPixelRowIndex = i * pImageParameters.resolution_width; // the start of each row
+            for (int j = roiOriginX; j < roiEndX; j++) {
+                pixelDistance = RobotConstants.D405_DEPTH_SCALE * pDepth16UC1[depthPixelRowIndex + j];
+                // Check if the depth value is less or greater than the threshold.
                 if (pixelDistance <= pMinDistance || pixelDistance > pMaxDistance) {
-                    // Calculate the offset in the color frame's buffer to the current pixel
-                    int offset = depthPixelIndex * 3; // i.e. 8UC3
-
-                    // Set pixel to "background" color (gray 808080)
-                    color_buff[offset] = (byte) 0x80; // r
-                    color_buff[offset + 1] = (byte) 0x80; // g
-                    color_buff[offset + 2] = (byte) 0x80; // b
+                    // Replace the BGR bytes in the copy of the input image with gary.
+                    depthAdjustedROI.put(i, j, grayBackground);
                 }
             }
         }
 
-        // The modified color_buff is local; package it as an OpenCV Mat
-        // and return it for further processing.
-        Mat colorFrameMat = new Mat(pVideoFrame.getHeight(), pVideoFrame.getWidth(), CV_8UC3);
-        colorFrameMat.put(0, 0, color_buff);
-        return colorFrameMat;
+        return depthAdjustedROI;
     }
 
-   */
+    ;
+
+    //**TODO Extract DepthParameters from ConeStackParameters - they will
+    // be used for the junction also.
+    public static DepthReturn getAngleAndDepth(Mat pImageROI, Mat pThresholded, short[] pDepthArray,
+                                               String pOutputFilenamePreamble,
+                                               VisionParameters.ImageParameters pImageParameters,
+                                               ConeStackParameters pConeStackParameters) {
+
+        // Identify the contours
+        List<MatOfPoint> contours = new ArrayList<>();
+        Imgproc.findContours(pThresholded, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+        if (contours.size() == 0) {
+            RobotLogCommon.d(TAG, "No contours found");
+            return new DepthReturn(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL); // don't crash
+        }
+
+        Mat contoursDrawn = pImageROI.clone();
+        drawShapeContours(contours, contoursDrawn);
+        Imgcodecs.imwrite(pOutputFilenamePreamble + "_CON.png", contoursDrawn);
+        RobotLogCommon.d(TAG, "Writing " + pOutputFilenamePreamble + "_CON.png");
+
+        // The largest contour should be the cone.
+        Optional<MatOfPoint> largestContour = ImageUtils.getLargestContour(contours);
+        if (largestContour.isEmpty())
+            return new DepthReturn(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL); // don't crash
+
+        // Get the centroid of the largest contour.
+        Point centroid = ImageUtils.getContourCentroid(largestContour.get());
+        RobotLogCommon.d(TAG, "Center of largest contour (cone): x " +
+                centroid.x + ", y " + centroid.y);
+
+        // Define a bounding rectangle for the largest contour.
+        Rect largestBoundingRect = Imgproc.boundingRect(largestContour.get());
+        RobotLogCommon.d(TAG, "Largest bounding rectangle x " + largestBoundingRect.x +
+                ", y " + largestBoundingRect.y + ", width " + largestBoundingRect.width + ", height " + largestBoundingRect.height);
+
+        // Draw a rectangle around the largest contour.
+        Mat drawnRectangle = pImageROI.clone();
+        drawOneRectangle(largestBoundingRect, drawnRectangle);
+        Imgcodecs.imwrite(pOutputFilenamePreamble + "_BRECT.png", drawnRectangle);
+        RobotLogCommon.d(TAG, "Writing " + pOutputFilenamePreamble + "_BRECT.png");
+
+        // We want to define a search rectangle whose x dimension
+        // at its center is the same as that of the bounding box.
+        int pixelSearchBoxCenter = largestBoundingRect.width / 2;
+
+        // Subtract a percentage to get the left edge of the search box.
+        int percentageOfWidth = largestBoundingRect.width * (pConeStackParameters.depthParameters.depthWindowOffsetX / 100);
+        int pixelSearchX = (largestBoundingRect.x + pixelSearchBoxCenter) - percentageOfWidth;
+        int pixelSearchWidth = largestBoundingRect.width * (pConeStackParameters.depthParameters.depthWindowWidth / 100);
+
+        // Place the y-origin of the pixel search box at a reasonable distance
+        // from the bottom of the bounding box.
+        int percentageOfHeight = largestBoundingRect.height * (pConeStackParameters.depthParameters.depthWindowOffsetY / 100);
+        int pixelSearchY = largestBoundingRect.height - percentageOfHeight;
+        int pixelSearchHeight = largestBoundingRect.height * (pConeStackParameters.depthParameters.depthWindowHeight / 100);
+        RobotLogCommon.d(TAG, "Pixel search box x " + pixelSearchX +
+                ", y " + pixelSearchY + ", width " + pixelSearchWidth + ", height " + pixelSearchHeight);
+
+        // Sanity check.
+        if (pixelSearchWidth == 0 || pixelSearchHeight == 0)
+            throw new AutonomousRobotException(TAG, "Pixel search area width or height is 0");
+
+        // Make sure the pixel search box is within the boundaries of the
+        // bounding box of the largest contour.
+        Point pixelSearchPoint = new Point(pixelSearchY, pixelSearchX);
+        if (!largestBoundingRect.contains(pixelSearchPoint)) {
+            RobotLogCommon.d(TAG, "Pixel search box out of range");
+            return new DepthReturn(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL);
+        }
+
+        // The following is from the OpenCV documentation; we want the
+        // option where measureDist=false.
+        /*
+         The function determines whether the point is inside a contour,
+         outside, or lies on an edge (or coincides with a vertex). It
+         returns positive (inside), negative (outside), or zero (on an
+         edge) value, correspondingly. When measureDist=false, the
+         return value is +1, -1, and 0, respectively. Otherwise, the
+         return value is a signed distance between the point and the
+         nearest contour edge.
+        */
+        // A MatOfPoint2f is required by pointPolygonTest but since
+        // we're only looking at the largest contour we don't need
+        // to loop through all contours and can do the conversion
+        // once.
+        MatOfPoint2f largestContourPoint2f = new MatOfPoint2f(largestContour.get().toArray());
+        float testReturn;
+        boolean foundPixel = false;
+        int foundPixelX = 0, foundPixelY = 0;
+        int targetPixelX, targetPixelY, targetPixelRow;
+        float scaledPixelDepth = 0;
+        for (int i = pixelSearchY; i < pixelSearchY + pixelSearchHeight; i++) { // row
+            for (int j = pixelSearchX; j < pixelSearchX + pixelSearchWidth; j++) { // column
+                testReturn = (float) Imgproc
+                        .pointPolygonTest(largestContourPoint2f, new Point(j, i), false);
+                if (testReturn == 0.0 || testReturn == 1.0) {
+                    // The depth array has values for every pixel in the full
+                    // image, not just the ROI. So to test a pixel for depth
+                    // we need to get its position in the full image.
+                    targetPixelX = pImageParameters.image_roi.x + j;
+                    targetPixelY = pImageParameters.image_roi.x + i;
+
+                    // Use the pixel position of the centroid of the object as an index
+                    // into the array of depth values and get the distance from the camera
+                    // to the centroid pixel. For example, for a 640 x 480 image --
+                    // row 0 is 0 .. 639
+                    // row 1 is 640 .. 1279
+                    // ...
+                    targetPixelRow = targetPixelY * pImageParameters.resolution_width;
+                    int centroidPixelDepth = pDepthArray[targetPixelRow + targetPixelX] & 0xFFFF; // use as unsigned short
+                    scaledPixelDepth = centroidPixelDepth * RobotConstants.D405_DEPTH_SCALE;
+
+                    RobotLogCommon.d(TAG, "Distance from camera to pixel at x " + targetPixelX + ", y " + targetPixelY + " = " + scaledPixelDepth);
+
+                    // Now see if the depth of the pixel is in range.
+                    if (scaledPixelDepth >= pConeStackParameters.depthParameters.minDepth &&
+                            scaledPixelDepth <= pConeStackParameters.depthParameters.maxDepth) {
+                        foundPixel = true;
+                        foundPixelX = j;
+                        foundPixelY = i;
+                        break;
+                    }
+                }
+            }
+
+            if (foundPixel)
+                break;
+        }
+
+        if (foundPixel)
+            RobotLogCommon.d(TAG, "Found a pixel on or inside the cone contour at ROI x " +
+                    foundPixelX + ", y " + foundPixelY);
+        else {
+            RobotLogCommon.d(TAG, "Did not find a pixel on or inside the cone contour");
+            return new DepthReturn(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL);
+        }
+
+        Pair<Double, Double> angleAndDistanceToPixel = RealSenseUtils.getAngleAndDistanceToPixel(pImageParameters,
+                foundPixelX, foundPixelY, scaledPixelDepth);
+
+        return new DepthReturn(RobotConstants.RecognitionResults.RECOGNITION_SUCCESSFUL, angleAndDistanceToPixel.first, angleAndDistanceToPixel.second);
+    }
 
     // Returns the angle and distance from the center of the robot to
     // the target pixel.
     public static Pair<Double, Double> getAngleAndDistanceToPixel(VisionParameters.ImageParameters pImageParameters,
-                                                       int pTargetPixelX, int pTargetPixelY, double pScaledPixelDepth) {
+                                                                  int pTargetPixelX, int pTargetPixelY, double pScaledPixelDepth) {
         // The coordinates of the target pixel are relative to the ROI.
         // We need to adjust those values to reflect the position of the
         // target pixel in the entire image.
@@ -134,5 +267,19 @@ public class RealSenseUtils {
         RobotLogCommon.d(TAG, "Distance (meters) from robot center to pixel in full image at x " + targetPixelX + ", y " + targetPixelY + " = " + distanceFromRobotCenter);
 
         return Pair.create(angleFromRobotCenter, distanceFromRobotCenter);
+    }
+
+    // The parameters pContours is the output of a call to findContours.
+    private static void drawShapeContours(List<MatOfPoint> pContours, Mat pImageOut) {
+        RobotLogCommon.d(TAG, "drawContours: number of contours " + pContours.size());
+        Scalar color = new Scalar(0, 255, 0); // BGR green - good against dark background
+
+        for (int i = 0; i < pContours.size(); i++) {
+            Imgproc.drawContours(pImageOut, pContours, i, color, 2);
+        }
+    }
+
+    private static void drawOneRectangle(Rect pRect, Mat pImageOut) {
+        Imgproc.rectangle(pImageOut, pRect, new Scalar(0, 255, 0)); // GREEN
     }
 }

@@ -380,11 +380,11 @@ public class ImageUtils {
 
     // From https://stackoverflow.com/questions/40669684/opencv-sorting-contours-by-area-in-java
     // See lambda in https://stackoverflow.com/questions/24378646/finding-max-with-lambda-expression-in-java
-    public Optional<MatOfPoint> getLargestContour(List<MatOfPoint> pContours) {
+    public static Optional<MatOfPoint> getLargestContour(List<MatOfPoint> pContours) {
         return pContours.stream().max(Comparator.comparing(Imgproc::contourArea));
     }
 
-    public Point getContourCentroid(MatOfPoint pOneContour) {
+    public static Point getContourCentroid(MatOfPoint pOneContour) {
         Moments moments = Imgproc.moments(pOneContour);
         return new Point(moments.get_m10() / moments.get_m00(),
                 moments.get_m01() / moments.get_m00());
