@@ -74,11 +74,19 @@ public class ConeStackRecognition {
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ROI_RANGE.png");
 
         RobotLogCommon.d(TAG, "Recognition path " + pConeStackRecognitionPath);
-        return grayRecognitionPath(pImageParameters, pConeStackParameters);
+        switch (pConeStackRecognitionPath) {
+            case GRAYSCALE -> {
+                return grayRecognitionPath(pImageParameters, pConeStackParameters);
+            }
+            case COLOR -> {
+                return colorRecognitionPath(pImageParameters, pConeStackParameters);
+            }
+            default ->
+                    throw new AutonomousRobotException(TAG, "Unrecognized recogntion path");
+        }
     }
 
-    private DepthReturn grayRecognitionPath(VisionParameters.ImageParameters pImageParameters, ConeStackParameters pConeStackParameters)
-            throws IOException {
+    private DepthReturn grayRecognitionPath(VisionParameters.ImageParameters pImageParameters, ConeStackParameters pConeStackParameters) {
         // Remove distractions before we convert to grayscale: depending on the
         // current alliance set the red or blue channel pixels to black.
         ArrayList<Mat> channels = new ArrayList<>(3);
@@ -110,4 +118,10 @@ public class ConeStackRecognition {
                 outputFilenamePreamble, pImageParameters, pConeStackParameters);
     }
 
-}
+    private DepthReturn colorRecognitionPath(VisionParameters.ImageParameters pImageParameters, ConeStackParameters pConeStackParameters) {
+
+        //**TODO for now ...
+        return new DepthReturn(RobotConstants.RecognitionResults.RECOGNITION_INTERNAL_ERROR); // don't crash
+    }
+
+    }
