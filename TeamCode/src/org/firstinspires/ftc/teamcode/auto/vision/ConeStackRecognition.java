@@ -21,7 +21,10 @@ import java.util.Optional;
 
 //**TODO The bulk of ConeStackRecognition can be applied to color object
 // recognition - gold cube and junction. Extract common code into
-// RealSenseUtils.
+// RealSenseUtils. But be careful - this class takes ConeStackParameters,
+// which includes parameters for red grayscale, red hsv and blue grayscale,
+// blue hsv. May be better to generalize to either a single gray path and
+// a single color path.
 public class ConeStackRecognition {
 
     private static final String TAG = ConeStackRecognition.class.getSimpleName();
@@ -81,8 +84,7 @@ public class ConeStackRecognition {
             case COLOR -> {
                 return colorRecognitionPath(pImageParameters, pConeStackParameters);
             }
-            default ->
-                    throw new AutonomousRobotException(TAG, "Unrecognized recogntion path");
+            default -> throw new AutonomousRobotException(TAG, "Unrecognized recogntion path");
         }
     }
 
@@ -118,10 +120,24 @@ public class ConeStackRecognition {
                 outputFilenamePreamble, pImageParameters, pConeStackParameters);
     }
 
+    //**TODO or use ImageUtils List<MatOfPoint> applyInRangeAndFindContours
+    // and make an overload for RealSenseUtils.getAngleAndDepth
     private DepthReturn colorRecognitionPath(VisionParameters.ImageParameters pImageParameters, ConeStackParameters pConeStackParameters) {
 
-        //**TODO for now ...
-        return new DepthReturn(RobotConstants.RecognitionResults.RECOGNITION_INTERNAL_ERROR); // don't crash
+        Mat thresholded;
+        if (alliance == RobotConstants.Alliance.RED)
+            thresholded = imageUtils.applyInRange(imageROI, outputFilenamePreamble, pConeStackParameters.redHSVParameters);
+        else if (alliance == RobotConstants.Alliance.BLUE)
+            thresholded = imageUtils.applyInRange(imageROI, outputFilenamePreamble, pConeStackParameters.blueHSVParameters);
+        else
+            return new DepthReturn(RobotConstants.RecognitionResults.RECOGNITION_INTERNAL_ERROR); // don't crash
+
+        // Clean up the thresholded image via morphological opening.
+        Mat morphed = new Mat();
+        Imgproc.erode(thresholded, morphed, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5)));
+        Imgproc.dilate(morphed, morphed, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5)));
+        return RealSenseUtils.getAngleAndDepth(imageROI, thresholded, depthArray,
+                outputFilenamePreamble, pImageParameters, pConeStackParameters);
     }
 
-    }
+}
