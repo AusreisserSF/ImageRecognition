@@ -54,7 +54,7 @@ public class RealSenseUtils {
         int roiEndX = roiOriginX + pImageParameters.image_roi.width;
         int roiOriginY = pImageParameters.image_roi.y;
         int roiEndY = roiOriginY + pImageParameters.image_roi.height;
-        int depthPixelRowIndex = 0;
+        int depthPixelRowIndex;
         double pixelDistance;
         final byte[] grayBackground = new byte[]{0x60, 0x60, 0x60}; // i.e. 8UC3; dark gray
 
@@ -75,21 +75,20 @@ public class RealSenseUtils {
         return depthAdjustedROI;
     }
 
-    ;
-
-    //**TODO Extract DepthParameters from ConeStackParameters - they will
-    // be used for the junction also.
-    public static DepthReturn getAngleAndDepth(Mat pImageROI, Mat pThresholded, short[] pDepthArray,
-                                               String pOutputFilenamePreamble,
-                                               VisionParameters.ImageParameters pImageParameters,
-                                               ConeStackParameters pConeStackParameters) {
-
-        // Identify the contours
+    // pImageROI is a depth-sanitized version of the original ROI, that is,
+    // all pixels that are out of the identified depth range have been converted
+    // to gray.
+    // pThresholded is the thresholded output of pImageROI.
+    public static RealSenseReturn2 getAngleAndDistance(Mat pImageROI, Mat pThresholded, short[] pDepthArray,
+                                                       String pOutputFilenamePreamble,
+                                                       VisionParameters.ImageParameters pImageParameters,
+                                                       DepthParameters pDepthParameters) {
+        // Identify the contours.
         List<MatOfPoint> contours = new ArrayList<>();
         Imgproc.findContours(pThresholded, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
         if (contours.size() == 0) {
             RobotLogCommon.d(TAG, "No contours found");
-            return new DepthReturn(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL); // don't crash
+            return new RealSenseReturn2(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL); // don't crash
         }
 
         Mat contoursDrawn = pImageROI.clone();
@@ -100,7 +99,7 @@ public class RealSenseUtils {
         // The largest contour should be the cone.
         Optional<MatOfPoint> largestContour = ImageUtils.getLargestContour(contours);
         if (largestContour.isEmpty())
-            return new DepthReturn(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL); // don't crash
+            return new RealSenseReturn2(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL); // don't crash
 
         // Get the centroid of the largest contour.
         Point centroid = ImageUtils.getContourCentroid(largestContour.get());
@@ -123,15 +122,15 @@ public class RealSenseUtils {
         int pixelSearchBoxCenter = largestBoundingRect.width / 2;
 
         // Subtract a percentage to get the left edge of the search box.
-        int percentageOfWidth = largestBoundingRect.width * (pConeStackParameters.depthParameters.depthWindowOffsetX / 100);
+        int percentageOfWidth = largestBoundingRect.width * (pDepthParameters.depthWindowOffsetX / 100);
         int pixelSearchX = (largestBoundingRect.x + pixelSearchBoxCenter) - percentageOfWidth;
-        int pixelSearchWidth = largestBoundingRect.width * (pConeStackParameters.depthParameters.depthWindowWidth / 100);
+        int pixelSearchWidth = largestBoundingRect.width * (pDepthParameters.depthWindowWidth / 100);
 
         // Place the y-origin of the pixel search box at a reasonable distance
         // from the bottom of the bounding box.
-        int percentageOfHeight = largestBoundingRect.height * (pConeStackParameters.depthParameters.depthWindowOffsetY / 100);
+        int percentageOfHeight = largestBoundingRect.height * (pDepthParameters.depthWindowOffsetY / 100);
         int pixelSearchY = largestBoundingRect.height - percentageOfHeight;
-        int pixelSearchHeight = largestBoundingRect.height * (pConeStackParameters.depthParameters.depthWindowHeight / 100);
+        int pixelSearchHeight = largestBoundingRect.height * (pDepthParameters.depthWindowHeight / 100);
         RobotLogCommon.d(TAG, "Pixel search box x " + pixelSearchX +
                 ", y " + pixelSearchY + ", width " + pixelSearchWidth + ", height " + pixelSearchHeight);
 
@@ -141,10 +140,10 @@ public class RealSenseUtils {
 
         // Make sure the pixel search box is within the boundaries of the
         // bounding box of the largest contour.
-        Point pixelSearchPoint = new Point(pixelSearchY, pixelSearchX);
+        Point pixelSearchPoint = new Point(pixelSearchX, pixelSearchY);
         if (!largestBoundingRect.contains(pixelSearchPoint)) {
             RobotLogCommon.d(TAG, "Pixel search box out of range");
-            return new DepthReturn(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL);
+            return new RealSenseReturn2(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL);
         }
 
         // The following is from the OpenCV documentation; we want the
@@ -192,8 +191,8 @@ public class RealSenseUtils {
                     RobotLogCommon.d(TAG, "Distance from camera to pixel at x " + targetPixelX + ", y " + targetPixelY + " = " + scaledPixelDepth);
 
                     // Now see if the depth of the pixel is in range.
-                    if (scaledPixelDepth >= pConeStackParameters.depthParameters.minDepth &&
-                            scaledPixelDepth <= pConeStackParameters.depthParameters.maxDepth) {
+                    if (scaledPixelDepth >= pDepthParameters.minDepth &&
+                            scaledPixelDepth <= pDepthParameters.maxDepth) {
                         foundPixel = true;
                         foundPixelX = j;
                         foundPixelY = i;
@@ -211,19 +210,19 @@ public class RealSenseUtils {
                     foundPixelX + ", y " + foundPixelY);
         else {
             RobotLogCommon.d(TAG, "Did not find a pixel on or inside the cone contour");
-            return new DepthReturn(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL);
+            return new RealSenseReturn2(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL);
         }
 
         Pair<Double, Double> angleAndDistanceToPixel = RealSenseUtils.getAngleAndDistanceToPixel(pImageParameters,
                 foundPixelX, foundPixelY, scaledPixelDepth);
 
-        return new DepthReturn(RobotConstants.RecognitionResults.RECOGNITION_SUCCESSFUL, angleAndDistanceToPixel.first, angleAndDistanceToPixel.second);
+        return new RealSenseReturn2(RobotConstants.RecognitionResults.RECOGNITION_SUCCESSFUL, angleAndDistanceToPixel.first, angleAndDistanceToPixel.second);
     }
 
     // Returns the angle and distance from the center of the robot to
     // the target pixel.
-    public static Pair<Double, Double> getAngleAndDistanceToPixel(VisionParameters.ImageParameters pImageParameters,
-                                                                  int pTargetPixelX, int pTargetPixelY, double pScaledPixelDepth) {
+    private static Pair<Double, Double> getAngleAndDistanceToPixel(VisionParameters.ImageParameters pImageParameters,
+                                                                   int pTargetPixelX, int pTargetPixelY, double pScaledPixelDepth) {
         // The coordinates of the target pixel are relative to the ROI.
         // We need to adjust those values to reflect the position of the
         // target pixel in the entire image.
@@ -238,7 +237,7 @@ public class RealSenseUtils {
         // in meters and we have the angle from the camera to the center
         // of the object. Solve for the other two sides in meters.
 
-        // sin(angleFromCameraToObjectr) = opposite / scaledPixelDepth
+        // sin(angleFromCameraToObject) = opposite / scaledPixelDepth
         double sinACC = Math.sin(Math.toRadians(angleFromCameraToPixel));
         // The "opposite" side if the triangle is from the centroid of the
         // object to the center of the image.

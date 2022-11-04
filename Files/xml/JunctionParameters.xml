@@ -1,5 +1,4 @@
-﻿<cone_stack_parameters>
-    <RED>
+﻿<junction_parameters>
         <gray_parameters>
             <median_target>100</median_target>
             <threshold_low>160</threshold_low>
@@ -13,27 +12,10 @@
             <value_target>125</value_target>
             <value_low_threshold>135</value_low_threshold>            
         </hsv_parameters>
-    </RED>
-    <BLUE>
-        <gray_parameters>
-            <median_target>100</median_target>
-            <threshold_low>-50</threshold_low>
-        </gray_parameters>
-        <hsv_parameters>
-            <hue_name>blue</hue_name>
-            <hue_low>70</hue_low>
-            <hue_high>120</hue_high>
-            <saturation_target>100</saturation_target>
-            <saturation_low_threshold>100</saturation_low_threshold>
-            <value_target>200</value_target>
-            <value_low_threshold>150</value_low_threshold>           
-        </hsv_parameters>
-        </BLUE>
     <depth_parameters>
-        <!-- 11/4/2022 search area x310, y 165, w25, h60
         <!-- define the pixel search area -->
         <!-- percentages are in relation to the bounding box of the largest contour,
-             which we assume to be the cone. -->
+             which we assume to be the junction. -->
         <!-- from the x-coordinate of the center of the bounding box subtract this
              number. Double the result to get the width of the pixel search area. -->
         <depth_window_offset_percent_x>20</depth_window_offset_percent_x>
@@ -44,4 +26,4 @@
         <depth_window_percent_height>80</depth_window_percent_height>
         <depth_filter min="0.5" max="1.00"/>
     </depth_parameters>
-</cone_stack_parameters>
+</junction_parameters>

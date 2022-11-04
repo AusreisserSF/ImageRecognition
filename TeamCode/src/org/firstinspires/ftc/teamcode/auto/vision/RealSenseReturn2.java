@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.auto.vision;
 import org.firstinspires.ftc.teamcode.common.RobotConstants;
 
 // Holds the results of image recognition.
-public class DepthReturn {
+public class RealSenseReturn2 {
 
     public static final double RECOGNITION_ANGLE_NPOS = -360.0;
     public static final double RECOGNITION_DISTANCE_NPOS = -1.0;
@@ -15,14 +15,14 @@ public class DepthReturn {
     // Parameter pAngle = the angle from the center of the robot to the
     // center of the gold cube. Parameter pDistance = the distance in
     // meters from the center of the robot to the center of the gold cube.
-    public DepthReturn(RobotConstants.RecognitionResults pRecognitionResults, double pAngle, double pDistance) {
+    public RealSenseReturn2(RobotConstants.RecognitionResults pRecognitionResults, double pAngle, double pDistance) {
         recognitionResults = pRecognitionResults;
         angleFromRobotCenter = pAngle;
         distanceFromRobotCenter = pDistance;
     }
 
     // Constructor for OpenCV errors such as "no such file".
-    public DepthReturn(RobotConstants.RecognitionResults pRecognitionResults) {
+    public RealSenseReturn2(RobotConstants.RecognitionResults pRecognitionResults) {
         recognitionResults = pRecognitionResults;
         angleFromRobotCenter = RECOGNITION_ANGLE_NPOS;
         distanceFromRobotCenter = RECOGNITION_DISTANCE_NPOS;

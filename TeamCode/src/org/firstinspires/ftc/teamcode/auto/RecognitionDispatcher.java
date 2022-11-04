@@ -212,7 +212,7 @@ public class RecognitionDispatcher extends Application {
                         displayText,
                         "Test signal sleeve recognition");
             }
-            case "ANALYZE_CONE_STACK" -> {
+            case "CONE_STACK_DEPTH" -> {
                 // Read the parameters for cone stack recognition from the xml file.
                 ConeStackParametersXML coneStackParametersXML = new ConeStackParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
                 ConeStackParameters coneStackParameters = coneStackParametersXML.getConeStackParameters();
@@ -241,24 +241,25 @@ public class RecognitionDispatcher extends Application {
                 RobotLogCommon.d(TAG, "Recognition path " + coneStackRecognitionPath);
 
                 // Perform image recognition and depth mapping.
-                ConeStackRecognition recognition = new ConeStackRecognition();
-                DepthReturn depthReturn =
-                recognition.recognizeConeStack(fileImage, coneStackImageParameters, coneStackParameters, alliance, coneStackRecognitionPath);
+                ConeStackRecognition coneStackRecognition = new ConeStackRecognition(alliance);
+                RealSenseReturn2 realSenseReturn2 =
+                        coneStackRecognition.recognizeConeStack(fileImage, coneStackImageParameters, coneStackParameters, coneStackRecognitionPath);
 
                 String displayText = "Image: " + imageFilename +
                         '\n' + "Center of robot to pixel in cone:" +
-                        '\n' + "Distance (meters) " + String.format("%.2f", depthReturn.distanceFromRobotCenter) +
-                        ", angle " + String.format("%.2f", depthReturn.angleFromRobotCenter);
+                        '\n' + "Distance (meters) " + String.format("%.2f", realSenseReturn2.distanceFromRobotCenter) +
+                        ", angle " + String.format("%.2f", realSenseReturn2.angleFromRobotCenter);
 
                 displayResults(imagePath + coneStackImageParameters.image_source,
                         displayText,
                         "Test cone stack recognition");
             }
 
-            // Fall 2022: general case for Intel Realsense depth cameras.
-            //**TODO See to do in ConeStackRecognition.
-            case "REALSENSE_DEPTH" -> {
-                // Read the parameters for object recognition from the xml file.
+            //**TODO For the junction use the general depth path.
+            //** There are no general RealSenseParameters .. the depth window
+            // will be different for each object.
+            case "JUNCTION_DEPTH" -> {
+                // Read the parameters for junction recognition from the xml file.
                 RealSenseParametersXML realsenseParametersXML = new RealSenseParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
                 RealSenseParameters realsenseParameters = realsenseParametersXML.getRealSenseParameters();
 
@@ -289,6 +290,7 @@ public class RecognitionDispatcher extends Application {
 
 
             // Summer 2022: test Intel Realsense depth camera(s).
+            //**TODO Use general depth path
             case "GOLD_CUBE_DEPTH" -> {
                 // Read the parameters for gold cube recognition from the xml file.
                 GoldCubeParametersXML goldCubeParametersXML = new GoldCubeParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);

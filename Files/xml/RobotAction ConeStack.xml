@@ -4,24 +4,24 @@
             <log_level>v</log_level>
         </parameters>
         <actions>
-            <ANALYZE_CONE_STACK>
+            <CONE_STACK_DEPTH>
                 <image_parameters>
-                    <image_source>D405_09271612_24423 blue.png</image_source>
+                    <image_source>D405_11021624_07451_IMG blue cone stack.png</image_source>
                     <resolution>
                         <width>640</width>
                         <height>480</height>
                     </resolution>
                     <image_roi>
-                        <x>265</x>
-                        <y>240</y>
-                        <width>205</width>
-                        <height>233</height>
+                        <x>260</x>
+                        <y>30</y>
+                        <width>135</width>
+                        <height>230</height>
                     </image_roi>
                 </image_parameters>
                 <cone_stack_recognition>
-                    <recognition_path>grayscale</recognition_path>
+                    <recognition_path>color</recognition_path>
                 </cone_stack_recognition>
-            </ANALYZE_CONE_STACK>
+            </CONE_STACK_DEPTH>
         </actions>
     </OpMode>
 </RobotAction>

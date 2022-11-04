@@ -33,7 +33,7 @@ public class ImageUtils {
     // Define a region of interest.
     //**TODO Matybe what I want is a submat not an ROI. See --
     // https://stackoverflow.com/questions/37849313/java-opencv-detecting-roi-creating-submat-and-copy-to-original-mat
-    public Mat getImageROI(Mat pSrcImage, Rect pROIDefinition) {
+    public static Mat getImageROI(Mat pSrcImage, Rect pROIDefinition) {
 
         if ((pROIDefinition.height == 0) && (pROIDefinition.width == 0)) {
             RobotLogCommon.d(TAG, "At least one ROI dimension was 0");
@@ -45,7 +45,7 @@ public class ImageUtils {
         return roi;
     }
 
-    public String createOutputFilePreamble(String pOCVImage, String pWorkingDirectory, String pPrefix, String pFileDate) {
+    public static String createOutputFilePreamble(String pOCVImage, String pWorkingDirectory, String pPrefix, String pFileDate) {
         // When testing with a file append the original file name without the
         // extension, an underscore, and the file date.
         if (pOCVImage.endsWith(".png") || pOCVImage.endsWith(".jpg")) {
@@ -57,7 +57,7 @@ public class ImageUtils {
         return pWorkingDirectory + pPrefix + pFileDate;
     }
 
-    public Mat preProcessImage(ImageProvider pImageProvider, Mat pOriginalImage,
+    public static Mat preProcessImage(ImageProvider pImageProvider, Mat pOriginalImage,
                                String pPreamble, VisionParameters.ImageParameters pImageParameters) {
 
         // If you don't convert RGB to BGR here then the _IMG.png file will be written
@@ -91,7 +91,7 @@ public class ImageUtils {
     }
 
     // Adjust the brightness of a grayscale image.
-    public Mat adjustGrayscaleBrightness(Mat pGray, int pTarget) {
+    public static Mat adjustGrayscaleBrightness(Mat pGray, int pTarget) {
         int medianGray = getSingleChannelMedian(pGray);
         RobotLogCommon.d(TAG, "Original image: grayscale median " + medianGray);
         RobotLogCommon.d(TAG, "Grayscale median target " + pTarget);
@@ -106,7 +106,7 @@ public class ImageUtils {
     }
 
     // Adjust image saturation and value levels in the image to match the targets.
-    public Mat adjustSaturationAndValue(Mat pHSVImage, int pSatLowTarget, int pValLowTarget) {
+    public static Mat adjustSaturationAndValue(Mat pHSVImage, int pSatLowTarget, int pValLowTarget) {
         // Split the image into its constituent HSV channels
         ArrayList<Mat> channels = new ArrayList<>();
         Core.split(pHSVImage, channels);
@@ -136,7 +136,7 @@ public class ImageUtils {
     }
 
     // See https://docs.opencv.org/3.4/d8/dbc/tutorial_histogram_calculation.html
-    public int getDominantHSVHue(Mat pHSVImageIn, Mat pMask) {
+    public static int getDominantHSVHue(Mat pHSVImageIn, Mat pMask) {
 
         List<Mat> channelsHSV = new ArrayList<>();
         Core.split(pHSVImageIn, channelsHSV);
@@ -177,7 +177,7 @@ public class ImageUtils {
     // the hue range in the HSVParameters.
     // In the OpenCV tutorial, no blurring is applied before inRange (unlike grayscale thresholding).
     // https://docs.opencv.org/3.4/da/d97/tutorial_threshold_inRange.html
-    public Mat applyInRange(Mat pInputROI, String pOutputFilenamePreamble,
+    public static Mat applyInRange(Mat pInputROI, String pOutputFilenamePreamble,
                             VisionParameters.HSVParameters pHSVParameters) {
 
         // We're on the HSV path.
@@ -245,7 +245,7 @@ public class ImageUtils {
     //!! findContours works without blurring and morphological opening.
     //!! But there are fewer artifacts in the contour recognition if only
     //!! morphological opening is included.
-    public List<MatOfPoint> applyInRangeAndFindContours(Mat pInputROI,
+    public static List<MatOfPoint> applyInRangeAndFindContours(Mat pInputROI,
                                                         String pOutputFilenamePreamble, VisionParameters.HSVParameters pHSVParameters) {
 
         Mat thresholded = applyInRange(pInputROI, pOutputFilenamePreamble, pHSVParameters);
@@ -261,7 +261,7 @@ public class ImageUtils {
 
     // The target low hue may be greater than the target high hue. For example,
     // target low 170, target high 10.
-    public boolean hueInRange(int pHue, int pTargetLow, int pTargetHigh) {
+    public static boolean hueInRange(int pHue, int pTargetLow, int pTargetHigh) {
 
         // Sanity check for hue.
         if (!((pTargetLow >= 0 && pTargetLow <= 180) && (pTargetHigh >= 0 && pTargetHigh <= 180) &&
@@ -289,7 +289,7 @@ public class ImageUtils {
     // https://docs.opencv.org/3.4/db/d8e/tutorial_threshold.html
     // But this one does with convincing results:
     // https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html
-    public Mat performThreshold(Mat pBGRInputROI, String pOutputFilenamePreamble,
+    public static Mat performThreshold(Mat pBGRInputROI, String pOutputFilenamePreamble,
                                 int pGrayscaleTarget, int pLowThreshold) {
 
         // We're on the grayscale path.
@@ -325,7 +325,8 @@ public class ImageUtils {
 
         return thresholded;
     }
-    public Mat performThresholdOnGray(Mat pGrayInputROI, String pOutputFilenamePreamble,
+
+    public static Mat performThresholdOnGray(Mat pGrayInputROI, String pOutputFilenamePreamble,
                                 int pGrayscaleTarget, int pLowThreshold) {
 
         Mat adjustedGray = adjustGrayscaleBrightness(pGrayInputROI, pGrayscaleTarget);
@@ -357,7 +358,7 @@ public class ImageUtils {
     }
 
     // Get the median of any single-channel Mat.
-    public int getSingleChannelMedian(Mat pSingleChannelMat) {
+    public static int getSingleChannelMedian(Mat pSingleChannelMat) {
 
         if ((pSingleChannelMat.dims() != 2) || (!pSingleChannelMat.isContinuous()))
             throw new AutonomousRobotException(TAG, "Expected a single-channel Mat");
@@ -417,7 +418,7 @@ public class ImageUtils {
     }
 
     // Get the median of a color channel.
-    private int getColorChannelMedian(Mat pChannel, Mat pMask) {
+    private static int getColorChannelMedian(Mat pChannel, Mat pMask) {
         // If we're dealing with a non-masked image then we just take the median
         // of all the pixels.
         if (pMask.total() == 0) {
