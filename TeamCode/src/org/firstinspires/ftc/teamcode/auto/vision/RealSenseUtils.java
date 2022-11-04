@@ -26,7 +26,7 @@ public class RealSenseUtils {
     public static short[] getDepthArrayFromFile(VisionParameters.ImageParameters pImageParameters) throws IOException {
         String filenameWithoutExt = pImageParameters.image_source.substring(0, pImageParameters.image_source.lastIndexOf('.'));
         String depthFilename = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir + filenameWithoutExt + ".depth";
-        byte[] depth8UC1 = new byte[pImageParameters.resolution_width * pImageParameters.resolution_height];
+        byte[] depth8UC1 = new byte[pImageParameters.resolution_width * pImageParameters.resolution_height * 2]; // 16 bits per depth location
         try (InputStream output = new FileInputStream(depthFilename)) {
             try (DataInputStream depthInputStream =
                          new DataInputStream(output)) {
@@ -48,7 +48,6 @@ public class RealSenseUtils {
     public static Mat removeBackground(Mat pImageROI, VisionParameters.ImageParameters pImageParameters,
                                        short[] pDepth16UC1,
                                        double pMinDistance, double pMaxDistance) {
-
         Mat depthAdjustedROI = pImageROI.clone();
         int roiOriginX = pImageParameters.image_roi.x;
         int roiEndX = roiOriginX + pImageParameters.image_roi.width;
@@ -60,7 +59,7 @@ public class RealSenseUtils {
 
         // Iterate through the depth data but only those locations
         // that correspond to the image ROI.
-        for (int i = 0; i < roiEndY; i++) {
+        for (int i = roiOriginY; i < roiEndY; i++) {
             depthPixelRowIndex = i * pImageParameters.resolution_width; // the start of each row
             for (int j = roiOriginX; j < roiEndX; j++) {
                 pixelDistance = RobotConstants.D405_DEPTH_SCALE * pDepth16UC1[depthPixelRowIndex + j];
@@ -122,21 +121,27 @@ public class RealSenseUtils {
         int pixelSearchBoxCenter = largestBoundingRect.width / 2;
 
         // Subtract a percentage to get the left edge of the search box.
-        int percentageOfWidth = largestBoundingRect.width * (pDepthParameters.depthWindowOffsetX / 100);
-        int pixelSearchX = (largestBoundingRect.x + pixelSearchBoxCenter) - percentageOfWidth;
-        int pixelSearchWidth = largestBoundingRect.width * (pDepthParameters.depthWindowWidth / 100);
+        double percentageOfWidth = largestBoundingRect.width * (pDepthParameters.depthWindowOffsetX / 100.0);
+        int pixelSearchX = (int) ((largestBoundingRect.x + pixelSearchBoxCenter) - percentageOfWidth);
+        double pixelSearchWidth = largestBoundingRect.width * (pDepthParameters.depthWindowWidth / 100.0);
 
         // Place the y-origin of the pixel search box at a reasonable distance
         // from the bottom of the bounding box.
-        int percentageOfHeight = largestBoundingRect.height * (pDepthParameters.depthWindowOffsetY / 100);
-        int pixelSearchY = largestBoundingRect.height - percentageOfHeight;
-        int pixelSearchHeight = largestBoundingRect.height * (pDepthParameters.depthWindowHeight / 100);
+        double percentageOfHeight = largestBoundingRect.height * (pDepthParameters.depthWindowOffsetY / 100.0);
+        int pixelSearchY = (int) (largestBoundingRect.height - percentageOfHeight);
+        double pixelSearchHeight = largestBoundingRect.height * (pDepthParameters.depthWindowHeight / 100.0);
         RobotLogCommon.d(TAG, "Pixel search box x " + pixelSearchX +
                 ", y " + pixelSearchY + ", width " + pixelSearchWidth + ", height " + pixelSearchHeight);
 
         // Sanity check.
         if (pixelSearchWidth == 0 || pixelSearchHeight == 0)
             throw new AutonomousRobotException(TAG, "Pixel search area width or height is 0");
+
+        // Write out the pixel search area.
+        Rect pixelSearchRect = new Rect(pixelSearchX, pixelSearchY, (int) pixelSearchWidth,(int)  pixelSearchHeight);
+        drawOneRectangle(pixelSearchRect, drawnRectangle);
+                Imgcodecs.imwrite(pOutputFilenamePreamble + "_PRECT.png", drawnRectangle);
+                RobotLogCommon.d(TAG, "Writing " + pOutputFilenamePreamble + "_PRECT.png");
 
         // Make sure the pixel search box is within the boundaries of the
         // bounding box of the largest contour.

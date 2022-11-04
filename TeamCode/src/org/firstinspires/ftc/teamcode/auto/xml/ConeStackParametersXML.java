@@ -82,7 +82,7 @@ public class ConeStackParametersXML {
         Node red_hsv_node = gray_parameters_node.getNextSibling();
         red_hsv_node = getNextElement(red_hsv_node);
         if ((red_hsv_node == null) || !red_hsv_node.getNodeName().equals("hsv_parameters"))
-            throw new AutonomousRobotException(TAG, "Element 'hsv_parameters' for blue not found");
+            throw new AutonomousRobotException(TAG, "Element 'hsv_parameters' for red not found");
 
         VisionParameters.HSVParameters hsvParametersRed = ImageXML.parseHSVParameters(red_hsv_node);
 

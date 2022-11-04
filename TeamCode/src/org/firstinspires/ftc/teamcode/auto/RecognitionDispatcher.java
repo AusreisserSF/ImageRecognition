@@ -130,8 +130,8 @@ public class RecognitionDispatcher extends Application {
                     throw new AutonomousRobotException(TAG, "CONE_STACK OpMode must contain a single action");
 
                 String recognitionAction = actions.get(0).getRobotXMLElementName();
-                if (!recognitionAction.equals("ANALYZE_CONE_STACK"))
-                    throw new AutonomousRobotException(TAG, "Missing required action ANALYZE_CONE_STACK");
+                if (!recognitionAction.equals("CONE_STACK_DEPTH"))
+                    throw new AutonomousRobotException(TAG, "Missing required action CONE_STACK_DEPTH");
             }
             case "REALSENSE" -> {
                 robotActionXMLRealSense = new RobotActionXMLRealSense(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
