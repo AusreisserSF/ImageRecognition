@@ -247,8 +247,8 @@ public class RecognitionDispatcher extends Application {
 
                 String displayText = "Image: " + imageFilename +
                         '\n' + "Center of robot to pixel in cone:" +
-                        '\n' + "Distance (meters) " + String.format("%.2f", realSenseReturn2.distanceFromRobotCenter) +
-                        ", angle " + String.format("%.2f", realSenseReturn2.angleFromRobotCenter);
+                        '\n' + "    Distance (meters) " + String.format("%.2f", realSenseReturn2.distanceFromRobotCenter) +
+                        '\n' + "    Angle " + String.format("%.2f", realSenseReturn2.angleFromRobotCenter);
 
                 displayResults(imagePath + coneStackImageParameters.image_source,
                         displayText,
