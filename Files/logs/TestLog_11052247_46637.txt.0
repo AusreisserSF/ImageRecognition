@@ -1,0 +1,48 @@
+[2022-11-05 22:47:46.679] [INFO   ] RecognitionDispatcher Starting image recognition 
+[2022-11-05 22:47:46.751] [CONFIG ] RecognitionDispatcher OpMode CONE_STACK 
+[2022-11-05 22:47:46.751] [CONFIG ] RecognitionDispatcher Alliance BLUE 
+[2022-11-05 22:47:46.815] [CONFIG ] RobotActionXMLStandard Extracting data from Files/xml/RobotAction ConeStack.xml for OpMode CONE_STACK 
+[2022-11-05 22:47:46.819] [FINE   ] RecognitionDispatcher Executing action CONE_STACK_DEPTH 
+[2022-11-05 22:47:46.825] [FINE   ] ConeStackParametersXML Parsing XML cone_stack_parameters 
+[2022-11-05 22:47:46.828] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2022-11-05 22:47:46.829] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-11-05 22:47:46.829] [FINE   ] ImageXML Parsed XML hsv_parameters; hue name = red 
+[2022-11-05 22:47:46.830] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2022-11-05 22:47:46.831] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-11-05 22:47:46.831] [FINE   ] ImageXML Parsed XML hsv_parameters; hue name = blue 
+[2022-11-05 22:47:46.833] [FINE   ] ImageXML Parsing XML image_parameters 
+[2022-11-05 22:47:46.841] [FINE   ] RecognitionDispatcher Recognition path COLOR 
+[2022-11-05 22:47:46.843] [FINE   ] ConeStackRecognition In ConeStackRecognition.recognizeConeStack 
+[2022-11-05 22:47:46.844] [FINE   ] ImageUtils File name Files/images/D405_11021624_22254_IMG close blue stack.png 
+[2022-11-05 22:47:46.861] [FINE   ] ImageUtils Image width 640, height 480 
+[2022-11-05 22:47:46.864] [FINE   ] ImageUtils Writing original image Files/images/D405_11021624_22254_IMG close blue stack_11052247_46861_IMG.png 
+[2022-11-05 22:47:46.888] [FINE   ] ImageUtils Image width 640, height 480 
+[2022-11-05 22:47:46.896] [FINE   ] ImageUtils Image ROI x 260, y 30, width 135, height 230 
+[2022-11-05 22:47:46.897] [FINE   ] ImageUtils Writing image ROI Files/images/D405_11021624_22254_IMG close blue stack_11052247_46861_ROI.png 
+[2022-11-05 22:47:46.918] [FINE   ] RealSenseUtils Pixels in depth range 24995 
+[2022-11-05 22:47:46.918] [FINE   ] RealSenseUtils Pixels out of depth range 6055 
+[2022-11-05 22:47:46.924] [FINE   ] ConeStackRecognition Writing Files/images/D405_11021624_22254_IMG close blue stack_11052247_46861_ROI_RANGE.png 
+[2022-11-05 22:47:46.924] [FINE   ] ConeStackRecognition Recognition path COLOR 
+[2022-11-05 22:47:46.932] [FINE   ] ImageUtils Target hue levels: low 70, high 120 
+[2022-11-05 22:47:46.953] [FINE   ] ImageUtils HSV saturation channel median 233 
+[2022-11-05 22:47:46.954] [FINE   ] ImageUtils HSV value channel median 132 
+[2022-11-05 22:47:46.954] [FINE   ] ImageUtils Adjust HSV saturation by -133 
+[2022-11-05 22:47:46.955] [FINE   ] ImageUtils Adjust HSV value by 68 
+[2022-11-05 22:47:46.955] [FINE   ] ImageUtils Adjusted image levels: saturation low 100, value low 200 
+[2022-11-05 22:47:46.959] [FINE   ] ImageUtils Writing Files/images/D405_11021624_22254_IMG close blue stack_11052247_46861_ADJ.png 
+[2022-11-05 22:47:46.960] [FINE   ] ImageUtils Actual inRange HSV levels: hue low 70, hue high 120 
+[2022-11-05 22:47:46.961] [FINE   ] ImageUtils Actual inRange HSV levels: saturation low 100, value low 150 
+[2022-11-05 22:47:46.963] [FINE   ] ImageUtils Writing Files/images/D405_11021624_22254_IMG close blue stack_11052247_46861_ADJ_THR.png 
+[2022-11-05 22:47:46.969] [FINE   ] RealSenseUtils drawContours: number of contours 77 
+[2022-11-05 22:47:46.986] [FINE   ] RealSenseUtils Writing Files/images/D405_11021624_22254_IMG close blue stack_11052247_46861_CON.png 
+[2022-11-05 22:47:46.994] [FINE   ] RealSenseUtils Center of largest contour (cone): x 72.28559092800666, y 133.82561381606322 
+[2022-11-05 22:47:46.994] [FINE   ] RealSenseUtils Largest bounding rectangle x 3, y 0, width 132, height 230 
+[2022-11-05 22:47:46.998] [FINE   ] RealSenseUtils Writing Files/images/D405_11021624_22254_IMG close blue stack_11052247_46861_BRECT.png 
+[2022-11-05 22:47:47.005] [FINE   ] RealSenseUtils Pixel search box x 42, y 115, width 52.800000000000004, height 57.5 
+[2022-11-05 22:47:47.009] [FINE   ] RealSenseUtils Writing Files/images/D405_11021624_22254_IMG close blue stack_11052247_46861_PRECT.png 
+[2022-11-05 22:47:47.014] [FINE   ] RealSenseUtils Found pixel in range at x 42, y 115, depth 0.2942 
+[2022-11-05 22:47:47.014] [FINE   ] RealSenseUtils Found a pixel on or inside the cone contour at ROI x 42, y 115 
+[2022-11-05 22:47:47.016] [FINE   ] RealSenseUtils Angle from camera to target pixel 2.899423527856925 
+[2022-11-05 22:47:47.017] [FINE   ] RealSenseUtils Angle from robot center to target pixel 2.3875842690778626 
+[2022-11-05 22:47:47.017] [FINE   ] RealSenseUtils Distance (meters) from robot center to pixel in full image at x 302, y 145 = 0.3576331389824745 
+[2022-11-05 22:47:47.263] [INFO   ] Closing the log with 0 entries on the queue 

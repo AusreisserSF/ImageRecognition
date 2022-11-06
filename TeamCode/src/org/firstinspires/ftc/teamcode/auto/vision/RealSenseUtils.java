@@ -48,16 +48,24 @@ public class RealSenseUtils {
     public static Mat removeBackground(Mat pImageROI, VisionParameters.ImageParameters pImageParameters,
                                        short[] pDepth16UC1,
                                        double pMinDistance, double pMaxDistance) {
-        Mat depthAdjustedROI = pImageROI.clone();
+
+        // Follow the RealsenseAlignAdv example; we need to convert the image ROI
+        // to an array of bytes as shown here ---
+        // https://stackoverflow.com/questions/27065062/opencv-mat-object-serialization-in-java
+        byte[] imageROIBytes = new byte[(int) (pImageROI.total() * pImageROI.elemSize())];
+        pImageROI.get(0,0,imageROIBytes);
+        int imageROIBytesIndex = 0;
+
         int roiOriginX = pImageParameters.image_roi.x;
         int roiEndX = roiOriginX + pImageParameters.image_roi.width;
         int roiOriginY = pImageParameters.image_roi.y;
         int roiEndY = roiOriginY + pImageParameters.image_roi.height;
         int depthPixelRowIndex;
         double pixelDistance;
-        final byte[] grayBackground = new byte[]{0x60, 0x60, 0x60}; // i.e. 8UC3; dark gray
+        int pixelsGrayedOut = 0;
+        int pixelsInRange = 0;
 
-        // Iterate through the depth data but only those locations
+        // Iterate through the depth data but only check those locations
         // that correspond to the image ROI.
         for (int i = roiOriginY; i < roiEndY; i++) {
             depthPixelRowIndex = i * pImageParameters.resolution_width; // the start of each row
@@ -65,12 +73,26 @@ public class RealSenseUtils {
                 pixelDistance = RobotConstants.D405_DEPTH_SCALE * pDepth16UC1[depthPixelRowIndex + j];
                 // Check if the depth value is less or greater than the threshold.
                 if (pixelDistance <= pMinDistance || pixelDistance > pMaxDistance) {
-                    // Replace the BGR bytes in the copy of the input image with gary.
-                    depthAdjustedROI.put(i, j, grayBackground);
+                    // Replace the BGR bytes in the copy of the input image with gray.
+                    imageROIBytes[imageROIBytesIndex] = (byte) 0x60; // b
+                    imageROIBytes[imageROIBytesIndex + 1] = (byte) 0x60; // g
+                    imageROIBytes[imageROIBytesIndex + 2] = (byte) 0x60; // r
+                    pixelsGrayedOut++;
                 }
+                else
+                    pixelsInRange++;
+                imageROIBytesIndex += 3;
             }
         }
 
+        RobotLogCommon.d(TAG, "Pixels in depth range " + pixelsInRange);
+        RobotLogCommon.d(TAG, "Pixels out of depth range " + pixelsGrayedOut);
+
+        // We need to put the image ROI in the form of array of bytes back into
+        // an OpenCV Mat.
+        // Again from https://stackoverflow.com/questions/27065062/opencv-mat-object-serialization-in-java
+        Mat depthAdjustedROI = new Mat(pImageParameters.image_roi.height, pImageParameters.image_roi.width, CvType.CV_8UC3);
+        depthAdjustedROI.put(0,0, imageROIBytes);
         return depthAdjustedROI;
     }
 
@@ -193,7 +215,7 @@ public class RealSenseUtils {
                     int centroidPixelDepth = pDepthArray[targetPixelRow + targetPixelX] & 0xFFFF; // use as unsigned short
                     scaledPixelDepth = centroidPixelDepth * RobotConstants.D405_DEPTH_SCALE;
 
-                    RobotLogCommon.d(TAG, "Distance from camera to pixel at x " + targetPixelX + ", y " + targetPixelY + " = " + scaledPixelDepth);
+                    // RobotLogCommon.d(TAG, "Distance from camera to pixel at x " + targetPixelX + ", y " + targetPixelY + " = " + scaledPixelDepth);
 
                     // Now see if the depth of the pixel is in range.
                     if (scaledPixelDepth >= pDepthParameters.minDepth &&
@@ -201,6 +223,7 @@ public class RealSenseUtils {
                         foundPixel = true;
                         foundPixelX = j;
                         foundPixelY = i;
+                        RobotLogCommon.d(TAG, "Found pixel in range at x " + foundPixelX + ", y " + foundPixelY + ", depth " + scaledPixelDepth);
                         break;
                     }
                 }
@@ -232,7 +255,7 @@ public class RealSenseUtils {
         // We need to adjust those values to reflect the position of the
         // target pixel in the entire image.
         int targetPixelX = pImageParameters.image_roi.x + pTargetPixelX;
-        int targetPixelY = pImageParameters.image_roi.x + pTargetPixelY;
+        int targetPixelY = pImageParameters.image_roi.y + pTargetPixelY;
 
         // Calculate the angle from the camera to the target pixel.
         double angleFromCameraToPixel = ImageUtils.computeAngleToObjectCenter(pImageParameters.resolution_width, targetPixelX, RobotConstants.D405_FOV);
