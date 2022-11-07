@@ -63,7 +63,7 @@ public class SignalSleeveRecognition {
         SignalSleeveReturn retVal;
         switch (pSignalSleeveRecognitionPath) {
             case RED_CHANNEL_GRAYSCALE -> retVal = redChannelGrayscale(pSignalSleeveParameters);
-            case COLOR_SLEEVE -> retVal = colorSleeve(pSignalSleeveParameters.colorSleeveParameters);
+            case COLOR -> retVal = colorSleeve(pSignalSleeveParameters.colorSleeveParameters);
             default -> throw new AutonomousRobotException(TAG, "Unsupported recognition path " + pSignalSleeveRecognitionPath);
         }
 

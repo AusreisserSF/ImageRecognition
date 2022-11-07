@@ -23,7 +23,7 @@ public class RobotConstantsPowerPlay {
     }
 
     public enum SignalSleeveRecognitionPath {
-        RED_CHANNEL_GRAYSCALE, COLOR_SLEEVE, SPLIT_GREEN
+        RED_CHANNEL_GRAYSCALE, COLOR, SPLIT_GREEN
     }
 
     public enum SignalSleeveLocation {
@@ -32,6 +32,10 @@ public class RobotConstantsPowerPlay {
 
     public enum ConeStackRecognitionPath {
         COLOR, GRAYSCALE
+    }
+
+    public enum JunctionRecognitionPath {
+        RED_CHANNEL_GRAYSCALE, COLOR
     }
 
     // Vumark identifiers

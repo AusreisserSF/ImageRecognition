@@ -48,6 +48,7 @@ public class RecognitionDispatcher extends Application {
     private RobotActionXMLRealSense robotActionXMLRealSense;
     private RobotActionXMLStandard robotActionXMLSignalSleeve;
     private RobotActionXMLStandard robotActionXMLConeStack;
+    private RobotActionXMLStandard robotActionXMLJunction;
 
     private RobotConstantsPowerPlay.D405Orientation d405Orientation;
 
@@ -113,7 +114,10 @@ public class RecognitionDispatcher extends Application {
                 if (!recognitionAction.equals("GOLD_CUBE_DEPTH"))
                     throw new AutonomousRobotException(TAG, "Missing required action GOLD_CUBE_DEPTH");
             }
+
             case "SIGNAL_SLEEVE" -> {
+                //**TODO test for --orientation="BACK" on the command line?
+
                 robotActionXMLSignalSleeve = new RobotActionXMLStandard(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
                 RobotActionXMLStandard.RobotActionDataStandard actionData = robotActionXMLSignalSleeve.getOpModeData("SIGNAL_SLEEVE");
                 actions = actionData.actions;
@@ -124,7 +128,11 @@ public class RecognitionDispatcher extends Application {
                 if (!recognitionAction.equals("ANALYZE_SIGNAL_SLEEVE"))
                     throw new AutonomousRobotException(TAG, "Missing required action ANALYZE_SIGNAL_SLEEVE");
             }
+
             case "CONE_STACK" -> {
+                //**TODO WHY are you doing this?? the signal sleeve is always the
+                // back camera and the cone stack and junction are always the front
+                // camera. This method *does* simulate the production RobotAction.xml.
 
                 // The camera orientation has to come from the command line because
                 // the <image_source> element in RobotAction.xml contains the file
@@ -134,13 +142,10 @@ public class RecognitionDispatcher extends Application {
                 if (cameraOrientation == null)
                     throw new AutonomousRobotException(TAG, "Required parameter --orientation is missing");
 
-                switch (cameraOrientation) {
-                    case "D405_FRONT" ->
-                        d405Orientation = RobotConstantsPowerPlay.D405Orientation.FRONT;
-                    case "D405_BACK" ->
-                        d405Orientation = RobotConstantsPowerPlay.D405Orientation.BACK;
-                    default -> throw new AutonomousRobotException(TAG, "Invalid camer orientation");
-                }
+                d405Orientation =
+                        RobotConstantsPowerPlay.D405Orientation.valueOf(cameraOrientation.toUpperCase());
+                if (d405Orientation != RobotConstantsPowerPlay.D405Orientation.FRONT)
+                    throw new AutonomousRobotException(TAG, "Invalid camera orientation");
 
                 robotActionXMLConeStack = new RobotActionXMLStandard(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
                 RobotActionXMLStandard.RobotActionDataStandard actionData = robotActionXMLConeStack.getOpModeData("CONE_STACK");
@@ -152,6 +157,33 @@ public class RecognitionDispatcher extends Application {
                 if (!recognitionAction.equals("CONE_STACK_DEPTH"))
                     throw new AutonomousRobotException(TAG, "Missing required action CONE_STACK_DEPTH");
             }
+
+            case "JUNCTION" -> {
+                // The camera orientation has to come from the command line because
+                // the <image_source> element in RobotAction.xml contains the file
+                // name. In production this field would contain the enum
+                // CameraImageSource.
+                String cameraOrientation = namedParameters.get("orientation");
+                if (cameraOrientation == null)
+                    throw new AutonomousRobotException(TAG, "Required parameter --orientation is missing");
+
+                d405Orientation =
+                        RobotConstantsPowerPlay.D405Orientation.valueOf(cameraOrientation.toUpperCase());
+                if (d405Orientation != RobotConstantsPowerPlay.D405Orientation.FRONT)
+                    throw new AutonomousRobotException(TAG, "Invalid camera orientation");
+
+                robotActionXMLJunction = new RobotActionXMLStandard(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
+                RobotActionXMLStandard.RobotActionDataStandard actionData = robotActionXMLJunction.getOpModeData("CONE_STACK");
+                actions = actionData.actions;
+                if (actions.size() != 1)
+                    throw new AutonomousRobotException(TAG, "JUNCTION OpMode must contain a single action");
+
+                String recognitionAction = actions.get(0).getRobotXMLElementName();
+                if (!recognitionAction.equals("JUNCTION_DEPTH"))
+                    throw new AutonomousRobotException(TAG, "Missing required action JUNCTION_DEPTH");
+            }
+
+            //**TODO obsolete? or other paths such as gold cube.
             case "REALSENSE" -> {
                 robotActionXMLRealSense = new RobotActionXMLRealSense(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
                 RobotActionXMLRealSense.RobotActionDataRealSense actionData = robotActionXMLRealSense.getOpModeData("REALSENSE");
@@ -163,6 +195,7 @@ public class RecognitionDispatcher extends Application {
                 if (!recognitionAction.equals("REALSENSE_DEPTH"))
                     throw new AutonomousRobotException(TAG, "Missing required action REALSENSE_DEPTH");
             }
+
             case "Freight Frenzy" -> {
                 robotActionXMLFreightFrenzy = new RobotActionXMLFreightFrenzy(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
                 RobotActionXMLFreightFrenzy.RobotActionDataFreightFrenzy actionData = robotActionXMLFreightFrenzy.getOpModeData("TEST");
@@ -212,12 +245,8 @@ public class RecognitionDispatcher extends Application {
 
                 // Get the recognition path from the XML file.
                 String recognitionPathString = actionXPath.getRequiredString("signal_sleeve_recognition/recognition_path");
-                RobotConstantsPowerPlay.SignalSleeveRecognitionPath signalSleeveRecognitionPath;
-                try {
-                    signalSleeveRecognitionPath = RobotConstantsPowerPlay.SignalSleeveRecognitionPath.valueOf(recognitionPathString.toUpperCase());
-                } catch (IllegalArgumentException iex) {
-                    throw new AutonomousRobotException(TAG, "Invalid recognition path");
-                }
+                RobotConstantsPowerPlay.SignalSleeveRecognitionPath signalSleeveRecognitionPath =
+                        RobotConstantsPowerPlay.SignalSleeveRecognitionPath.valueOf(recognitionPathString.toUpperCase());
 
                 RobotLogCommon.d(TAG, "Recognition path " + signalSleeveRecognitionPath);
 
@@ -256,12 +285,8 @@ public class RecognitionDispatcher extends Application {
 
                 // Get the recognition path from the XML file.
                 String recognitionPathString = actionXPath.getRequiredString("cone_stack_recognition/recognition_path");
-                RobotConstantsPowerPlay.ConeStackRecognitionPath coneStackRecognitionPath;
-                try {
-                    coneStackRecognitionPath = RobotConstantsPowerPlay.ConeStackRecognitionPath.valueOf(recognitionPathString.toUpperCase());
-                } catch (IllegalArgumentException iex) {
-                    throw new AutonomousRobotException(TAG, "Invalid recognition path");
-                }
+                RobotConstantsPowerPlay.ConeStackRecognitionPath coneStackRecognitionPath =
+                        RobotConstantsPowerPlay.ConeStackRecognitionPath.valueOf(recognitionPathString.toUpperCase());
 
                 RobotLogCommon.d(TAG, "Recognition path " + coneStackRecognitionPath);
 
@@ -303,11 +328,30 @@ public class RecognitionDispatcher extends Application {
                 ImageProvider fileImage = new FileImage(imagePath + junctionImageParameters.image_source);
 
                 // Perform image recognition and depth mapping.
-                //**TODO follow cone stack (above)
+                // Get the recognition path from the XML file.
+                String recognitionPathString = actionXPath.getRequiredString("junction_recognition/recognition_path");
+                RobotConstantsPowerPlay.JunctionRecognitionPath junctionRecognitionPath =
+                        RobotConstantsPowerPlay.JunctionRecognitionPath.valueOf(recognitionPathString.toUpperCase());
+
+                RobotLogCommon.d(TAG, "Recognition path " + junctionRecognitionPath);
+
+                // Perform image recognition and depth mapping.
+                JunctionRecognition junctionRecognition = new JunctionRecognition(alliance);
+                RealSenseReturn realSenseReturn =
+                        junctionRecognition.recognizeJunction(fileImage, d405Configuration, d405Orientation, junctionImageParameters, junctionParameters, junctionRecognitionPath);
+
+                String displayText = "Image: " + imageFilename +
+                        '\n' + "Center of robot to pixel in junction:" +
+                        '\n' + "  Distance (meters) " + String.format("%.2f", realSenseReturn.distanceFromRobotCenter) +
+                        '\n' + "  Angle " + String.format("%.2f", realSenseReturn.angleFromRobotCenter);
+
+                displayResults(imagePath + junctionImageParameters.image_source,
+                        displayText,
+                        "Test junction recognition");
             }
 
             // Summer 2022: test Intel Realsense depth camera(s).
-            //**TODO Use general depth path
+            //**TODO Use general depth path, hsv branch only
             case "GOLD_CUBE_DEPTH" -> {
                 // Read the parameters for gold cube recognition from the xml file.
                 GoldCubeParametersXML goldCubeParametersXML = new GoldCubeParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);

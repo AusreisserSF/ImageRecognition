@@ -5,7 +5,7 @@
     </characteristics>
     <!-- distances are in inches; convert to meters internally. -->
     <camera_1>
-      <orientation>back</orientation>
+      <orientation>front</orientation>
       <serial_number>123622270958</serial_number>
       <distance_to_camera_center>8.0</distance_to_camera_center>
       <offset_from_camera_center>0.0</offset_from_camera_center>
