@@ -49,6 +49,8 @@ public class RecognitionDispatcher extends Application {
     private RobotActionXMLStandard robotActionXMLSignalSleeve;
     private RobotActionXMLStandard robotActionXMLConeStack;
 
+    private RobotConstantsPowerPlay.D405Orientation d405Orientation;
+
     // Load OpenCV.
     private static final boolean openCVInitialized;
 
@@ -123,6 +125,23 @@ public class RecognitionDispatcher extends Application {
                     throw new AutonomousRobotException(TAG, "Missing required action ANALYZE_SIGNAL_SLEEVE");
             }
             case "CONE_STACK" -> {
+
+                // The camera orientation has to come from the command line because
+                // the <image_source> element in RobotAction.xml contains the file
+                // name. In production this field would contain the enum
+                // CameraImageSource.
+                String cameraOrientation = namedParameters.get("orientation");
+                if (cameraOrientation == null)
+                    throw new AutonomousRobotException(TAG, "Required parameter --orientation is missing");
+
+                switch (cameraOrientation) {
+                    case "D405_FRONT" ->
+                        d405Orientation = RobotConstantsPowerPlay.D405Orientation.FRONT;
+                    case "D405_BACK" ->
+                        d405Orientation = RobotConstantsPowerPlay.D405Orientation.BACK;
+                    default -> throw new AutonomousRobotException(TAG, "Invalid camer orientation");
+                }
+
                 robotActionXMLConeStack = new RobotActionXMLStandard(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
                 RobotActionXMLStandard.RobotActionDataStandard actionData = robotActionXMLConeStack.getOpModeData("CONE_STACK");
                 actions = actionData.actions;
@@ -212,10 +231,16 @@ public class RecognitionDispatcher extends Application {
                         displayText,
                         "Test signal sleeve recognition");
             }
+
             case "CONE_STACK_DEPTH" -> {
+                String xmlDir = WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir;
+
                 // Read the parameters for cone stack recognition from the xml file.
-                ConeStackParametersXML coneStackParametersXML = new ConeStackParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
+                ConeStackParametersXML coneStackParametersXML = new ConeStackParametersXML(xmlDir);
                 ConeStackParameters coneStackParameters = coneStackParametersXML.getConeStackParameters();
+
+                D405ConfigurationXML d405ConfigurationXML = new D405ConfigurationXML(xmlDir);
+                D405Configuration d405Configuration = d405ConfigurationXML.getD405Configuration();
 
                 // Get the <image_parameters> for the signal sleeve from the RobotAction (+suffix) XML file.
                 VisionParameters.ImageParameters coneStackImageParameters =
@@ -243,7 +268,7 @@ public class RecognitionDispatcher extends Application {
                 // Perform image recognition and depth mapping.
                 ConeStackRecognition coneStackRecognition = new ConeStackRecognition(alliance);
                 RealSenseReturn realSenseReturn =
-                        coneStackRecognition.recognizeConeStack(fileImage, coneStackImageParameters, coneStackParameters, coneStackRecognitionPath);
+                        coneStackRecognition.recognizeConeStack(fileImage, d405Configuration, d405Orientation, coneStackImageParameters, coneStackParameters, coneStackRecognitionPath);
 
                 String displayText = "Image: " + imageFilename +
                         '\n' + "Center of robot to pixel in cone:" +
@@ -256,9 +281,14 @@ public class RecognitionDispatcher extends Application {
             }
 
             case "JUNCTION_DEPTH" -> {
+                String xmlDir = WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir;
+
                 // Read the parameters for junction recognition from the xml file.
-                JunctionParametersXML junctionParametersXML = new JunctionParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
+                JunctionParametersXML junctionParametersXML = new JunctionParametersXML(xmlDir);
                 JunctionParameters junctionParameters = junctionParametersXML.getJunctionParameters();
+
+                D405ConfigurationXML d405ConfigurationXML = new D405ConfigurationXML(xmlDir);
+                D405Configuration d405Configuration = d405ConfigurationXML.getD405Configuration();
 
                 // Get the <image_parameters> for the object from the RobotAction (+suffix) XML file.
                 VisionParameters.ImageParameters junctionImageParameters =
@@ -275,7 +305,6 @@ public class RecognitionDispatcher extends Application {
                 // Perform image recognition and depth mapping.
                 //**TODO follow cone stack (above)
             }
-
 
             // Summer 2022: test Intel Realsense depth camera(s).
             //**TODO Use general depth path

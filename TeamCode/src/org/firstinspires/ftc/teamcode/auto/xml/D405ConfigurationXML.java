@@ -2,9 +2,8 @@ package org.firstinspires.ftc.teamcode.auto.xml;
 
 import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
-import org.firstinspires.ftc.teamcode.auto.vision.ConeStackParameters;
 import org.firstinspires.ftc.teamcode.auto.vision.D405Configuration;
-import org.firstinspires.ftc.teamcode.auto.vision.DepthParameters;
+import org.firstinspires.ftc.teamcode.common.RobotConstantsPowerPlay;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -16,6 +15,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.EnumMap;
 
 // Parse the XML elements that describe the configuration of the RealSense
 // D405 depth camera.
@@ -61,15 +61,24 @@ public class D405ConfigurationXML {
         if (d405_node == null)
             throw new AutonomousRobotException(TAG, "Element '//DEPTH_CAMERA_D405' not found");
 
-        //**TODO if <DEPTH_CAMERA_D405 configured="yes"> = "no"
-        // return null;
+        // If <DEPTH_CAMERA_D405 configured="no"> then go no further.
+        NamedNodeMap d405_node_attributes = d405_node.getAttributes();
+        Node configured_node = d405_node_attributes.getNamedItem("configured");
+        if (configured_node == null || configured_node.getTextContent().isEmpty())
+            throw new AutonomousRobotException(TAG, "Attribute 'configured' not found or empty");
 
-        // Parse the children of the <DEPTH_CAMERA_D405> element in the XML file.
+        String configuredText = configured_node.getTextContent();
+        if (configuredText.equals("no"))
+            return null;
+
+        if (!configuredText.equals("yes"))
+            throw new AutonomousRobotException(TAG, "Invalid attribute 'configured");
+
+        // Parse the children of the <DEPTH_CAMERA_D405> element.
         Node characteristics_node = d405_node.getFirstChild();
         characteristics_node = getNextElement(characteristics_node);
-        if (characteristics_node == null || !characteristics_node.getNodeName().equals("characteristics") ||
-                characteristics_node.getTextContent().isEmpty())
-            throw new AutonomousRobotException(TAG, "Element 'characteristics' not found or empty");
+        if (characteristics_node == null || !characteristics_node.getNodeName().equals("characteristics"))
+            throw new AutonomousRobotException(TAG, "Element 'characteristics' not found");
 
         // <field_of_view>
         Node fov_node = characteristics_node.getFirstChild();
@@ -79,9 +88,9 @@ public class D405ConfigurationXML {
             throw new AutonomousRobotException(TAG, "Element 'field_of_view' not found or empty");
 
         String fovText = fov_node.getTextContent();
-        double fov;
+        double field_of_view;
         try {
-            fov = Float.parseFloat(fovText);
+            field_of_view = Float.parseFloat(fovText);
         } catch (NumberFormatException nex) {
             throw new AutonomousRobotException(TAG, "Invalid number format in element 'field_of_view'");
         }
@@ -94,66 +103,92 @@ public class D405ConfigurationXML {
             throw new AutonomousRobotException(TAG, "Element 'depth_scale' not found or empty");
 
         String depthScaleText = depth_scale_node.getTextContent();
-        double depth_scale;
+        float depth_scale;
         try {
-            depth_scale = Double.parseDouble(depthScaleText);
+            depth_scale = Float.parseFloat(depthScaleText);
         } catch (NumberFormatException nex) {
             throw new AutonomousRobotException(TAG, "Invalid number format in element 'depth_scale'");
         }
 
         // Note: if there is only one D405 camera in the configuration
-        // it must be identified as <camera1>.
+        // it must be identified as <camera_1>.
         // <camera_1>
         Node camera1_node = characteristics_node.getNextSibling();
         camera1_node = getNextElement(camera1_node);
-        if (camera1_node == null || !camera1_node.getNodeName().equals("camera1") ||
-                camera1_node.getTextContent().isEmpty())
-            throw new AutonomousRobotException(TAG, "Element 'camera1' not found");
+        if (camera1_node == null || !camera1_node.getNodeName().equals("camera_1"))
+            throw new AutonomousRobotException(TAG, "Element 'camera_1' not found");
 
-        //**TODO STOPPED HERE 11/6/2022
-        //**TODO make a method - the parsing of camera1 and camera2 is the same.
-        // <camera2> is optional
+        D405Configuration.D405Camera camera1Data = parseCameraData(camera1_node);
 
-        String windowHeightText = depth_window_height_node.getTextContent();
-        int window_height;
-        try {
-            window_height = Integer.parseInt(windowHeightText);
-        } catch (NumberFormatException nex) {
-            throw new AutonomousRobotException(TAG, "Invalid number format in element 'depth_window_percent_height'");
+        // <camera_2> optional
+        D405Configuration.D405Camera camera2Data = null;
+        Node camera2_node = camera1_node.getNextSibling();
+        if (camera2_node != null) {
+            camera2_node = getNextElement(camera2_node);
+            if (camera2_node != null) {
+                camera2_node = getNextElement(camera2_node);
+                if (camera2_node == null || !camera2_node.getNodeName().equals("camera_2"))
+                    throw new AutonomousRobotException(TAG, "Element 'camera_2' not found");
+
+                camera2Data = parseCameraData(camera2_node);
+            }
         }
 
-        // <depth_filter min="0.5" max="1.00"/>
-        Node depth_filter_node = depth_window_height_node.getNextSibling();
-        depth_filter_node = getNextElement(depth_filter_node);
-        if ((depth_filter_node == null) || !depth_filter_node.getNodeName().equals("depth_filter"))
-            throw new AutonomousRobotException(TAG, "Element 'depth_filter' not found");
+        return new D405Configuration(field_of_view, depth_scale, camera1Data, camera2Data);
+    }
 
-        NamedNodeMap depth_filter_node_attributes = depth_filter_node.getAttributes();
-        Node min_distance_node = depth_filter_node_attributes.getNamedItem("min");
-        if (min_distance_node == null || min_distance_node.getTextContent().isEmpty())
-            throw new AutonomousRobotException(TAG, "Attribute 'min' in element depth_filter not found or empty");
+    private D405Configuration.D405Camera parseCameraData(Node pCameraNode) {
+        // <orientation>
+        Node orientation_node = pCameraNode.getFirstChild();
+        orientation_node = getNextElement(orientation_node);
+        if (orientation_node == null || !orientation_node.getNodeName().equals("orientation") ||
+                orientation_node.getTextContent().isEmpty())
+            throw new AutonomousRobotException(TAG, "Element 'orientation' not found");
 
-        float min_distance;
+        RobotConstantsPowerPlay.D405Orientation orientation =
+                RobotConstantsPowerPlay.D405Orientation.valueOf(orientation_node.getTextContent().toUpperCase());
+
+        // <serial_number>
+        Node serial_number_node = orientation_node.getNextSibling();
+        serial_number_node = getNextElement(serial_number_node);
+        if (serial_number_node == null || !serial_number_node.getNodeName().equals("serial_number") ||
+                serial_number_node.getTextContent().isEmpty())
+            throw new AutonomousRobotException(TAG, "Element 'serial_number' not found");
+
+        String serial_number = serial_number_node.getTextContent();
+
+        // <distance_to_camera_canter>
+        Node camera_center_node = serial_number_node.getNextSibling();
+        camera_center_node = getNextElement(camera_center_node);
+        if (camera_center_node == null || !camera_center_node.getNodeName().equals("distance_to_camera_center") ||
+                camera_center_node.getTextContent().isEmpty())
+            throw new AutonomousRobotException(TAG, "Element 'distance_to_camera_center' not found or empty");
+
+        String cameraCenterText = camera_center_node.getTextContent();
+        double distance_to_camera_center;
         try {
-            min_distance = Float.parseFloat(min_distance_node.getTextContent());
+            distance_to_camera_center = Double.parseDouble(cameraCenterText);
         } catch (NumberFormatException nex) {
-            throw new AutonomousRobotException(TAG, "Invalid number format in attribute 'min' in element depth_filter");
+            throw new AutonomousRobotException(TAG, "Invalid number format in element 'distance_to_camera_center'");
         }
 
-        Node max_distance_node = depth_filter_node_attributes.getNamedItem("max");
-        if (max_distance_node == null || max_distance_node.getTextContent().isEmpty())
-            throw new AutonomousRobotException(TAG, "Attribute 'max' in element depth_filter not found or empty");
+        // <offset_from_camera_center>
+        Node camera_offset_node = camera_center_node.getNextSibling();
+        camera_offset_node = getNextElement(camera_offset_node);
+        if (camera_offset_node == null || !camera_offset_node.getNodeName().equals("offset_from_camera_center") ||
+                camera_offset_node.getTextContent().isEmpty())
+            throw new AutonomousRobotException(TAG, "Element 'offset_from_camera_center' not found or empty");
 
-        float max_distance;
+        String cameraOffsetText = camera_offset_node.getTextContent();
+        double offset_from_camera_center;
         try {
-            max_distance = Float.parseFloat(max_distance_node.getTextContent());
+            offset_from_camera_center = Double.parseDouble(cameraOffsetText);
         } catch (NumberFormatException nex) {
-            throw new AutonomousRobotException(TAG, "Invalid number format in attribute 'max' in element depth_filter'");
+            throw new AutonomousRobotException(TAG, "Invalid number format in element 'offset_from_camera_center'");
         }
 
-        return new DepthParameters(window_offset_x, window_offset_y,
-                window_height,
-                min_distance, max_distance);
+        return new D405Configuration.D405Camera(orientation,
+                serial_number, distance_to_camera_center, offset_from_camera_center);
     }
 
     //**TODO THIS belongs in ftcdevcommon for IntelliJ and Android -> XMLUtils

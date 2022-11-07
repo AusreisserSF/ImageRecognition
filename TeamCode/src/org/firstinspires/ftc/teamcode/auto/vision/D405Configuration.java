@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.auto.vision;
 
 import org.firstinspires.ftc.teamcode.common.RobotConstantsPowerPlay;
 
+import java.util.EnumMap;
+
 /*
 <DEPTH_CAMERA_D405 configured="yes">
     <characteristics>
@@ -27,16 +29,17 @@ public class D405Configuration {
 
     public final double fieldOfView;
     public final float depthScale;
-    public final D405Camera camera1;
-    public final D405Camera camera2;
+    public final EnumMap<RobotConstantsPowerPlay.D405Orientation, D405Camera> cameraMap =
+            new EnumMap<>(RobotConstantsPowerPlay.D405Orientation.class);
 
     public D405Configuration(double pFieldOfView,
                              float pDepthScale,
                              D405Camera pCamera1, D405Camera pCamera2) {
         fieldOfView = pFieldOfView;
         depthScale = pDepthScale;
-        camera1 = pCamera1;
-        camera2 = pCamera2;
+        cameraMap.put(pCamera1.orientation, pCamera1);
+        if (pCamera2 != null)
+            cameraMap.put(pCamera2.orientation, pCamera2);
     }
 
     public static class D405Camera {
@@ -51,8 +54,11 @@ public class D405Configuration {
                           double pOffsetFromCameraCenter) {
             orientation = pOrientation;
             serialNumber = pSerialNumber;
-            distanceToCameraCanter = pDistanceToCameraCenter;
-            offsetFromCameraCenter = pOffsetFromCameraCenter;
+
+            // In the xml file these values are given in inches but
+            // the RealSense cameras work in meters.
+            distanceToCameraCanter = pDistanceToCameraCenter / 39.37;
+            offsetFromCameraCenter = pOffsetFromCameraCenter / 39.37;
         }
     }
 }

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.auto.vision;
 //!! IntelliJ only
 
 import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
+import org.firstinspires.ftc.teamcode.common.RobotConstantsPowerPlay;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
@@ -18,7 +19,10 @@ public class RealSenseRecognition {
     public RealSenseRecognition() {}
 
     // Analyzes a grayscale image using only the red channel.
-    public RealSenseReturn redChannelPath(Mat pImageROI, short[] pDepthArray,
+    public RealSenseReturn redChannelPath(Mat pImageROI,
+                                          D405Configuration pD405Configuration,
+                                          RobotConstantsPowerPlay.D405Orientation pOrientation,
+                                          short[] pDepthArray,
                                           String pOutputFilenamePreamble,
                                           VisionParameters.ImageParameters pImageParameters,
                                           VisionParameters.GrayParameters pGrayParameters,
@@ -39,12 +43,16 @@ public class RealSenseRecognition {
 
         Mat thresholded = ImageUtils.performThresholdOnGray(channels.get(2), pOutputFilenamePreamble, pGrayParameters.median_target, pGrayParameters.threshold_low);
 
-        return RealSenseUtils.getAngleAndDistance(pImageROI, thresholded, pDepthArray,
+        return RealSenseUtils.getAngleAndDistance(pImageROI, thresholded,
+                pD405Configuration, pOrientation, pDepthArray,
                 pOutputFilenamePreamble, pImageParameters, pDepthParameters);
     }
 
     // Analyzes a color image.
-    public RealSenseReturn colorPath(Mat pImageROI, short[] pDepthArray,
+    public RealSenseReturn colorPath(Mat pImageROI,
+                                     D405Configuration pD405Configuration,
+                                     RobotConstantsPowerPlay.D405Orientation pOrientation,
+                                     short[] pDepthArray,
                                      String pOutputFilenamePreamble,
                                      VisionParameters.ImageParameters pImageParameters,
                                      VisionParameters.HSVParameters pHSVParameters,
@@ -57,7 +65,8 @@ public class RealSenseRecognition {
         Imgproc.erode(thresholded, morphed, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5)));
         Imgproc.dilate(morphed, morphed, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5)));
 
-        return RealSenseUtils.getAngleAndDistance(pImageROI, thresholded, pDepthArray,
+        return RealSenseUtils.getAngleAndDistance(pImageROI, thresholded,
+                pD405Configuration, pOrientation, pDepthArray,
                 pOutputFilenamePreamble, pImageParameters, pDepthParameters);
     }
 }

@@ -40,6 +40,8 @@ public class ConeStackRecognition {
     // A stack of 1 to 5 red cones
     // A stack of 1 to 5 blue cones
     public RealSenseReturn recognizeConeStack(ImageProvider pImageProvider,
+                                              D405Configuration pD405Configuration,
+                                              RobotConstantsPowerPlay.D405Orientation pOrientation,
                                               VisionParameters.ImageParameters pImageParameters,
                                               ConeStackParameters pConeStackParameters,
                                               RobotConstantsPowerPlay.ConeStackRecognitionPath pConeStackRecognitionPath) throws InterruptedException, IOException {
@@ -60,7 +62,8 @@ public class ConeStackRecognition {
 
         // Subject the ROI to depth filtering on all paths.
         short[] depthArray = RealSenseUtils.getDepthArrayFromFile(pImageParameters);
-        Mat imageROI = RealSenseUtils.removeBackground(imageROIOriginal, pImageParameters, depthArray,
+        Mat imageROI = RealSenseUtils.removeBackground(imageROIOriginal, pImageParameters,
+                pD405Configuration, depthArray,
                 pConeStackParameters.depthParameters.minDepth,
                 pConeStackParameters.depthParameters.maxDepth);
 
@@ -79,7 +82,9 @@ public class ConeStackRecognition {
                 else
                     return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_INTERNAL_ERROR); // don't crash
 
-                return realSenseRecognition.redChannelPath(imageROI, depthArray, outputFilenamePreamble,
+                return realSenseRecognition.redChannelPath(imageROI,
+                        pD405Configuration, pOrientation,
+                        depthArray, outputFilenamePreamble,
                 pImageParameters, grayscaleParameters, pConeStackParameters.depthParameters);
             }
             case COLOR -> {
@@ -92,7 +97,9 @@ public class ConeStackRecognition {
                 else
                     return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_INTERNAL_ERROR); // don't crash
 
-                return realSenseRecognition.colorPath(imageROI, depthArray, outputFilenamePreamble,
+                return realSenseRecognition.colorPath(imageROI,
+                        pD405Configuration, pOrientation,
+                        depthArray, outputFilenamePreamble,
                 pImageParameters, hsvParameters, pConeStackParameters.depthParameters);
             }
             default -> throw new AutonomousRobotException(TAG, "Unrecognized recognition path");

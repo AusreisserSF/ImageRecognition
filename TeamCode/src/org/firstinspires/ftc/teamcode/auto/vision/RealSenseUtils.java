@@ -5,6 +5,7 @@ import org.firstinspires.ftc.ftcdevcommon.Pair;
 import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.common.RobotConstants;
+import org.firstinspires.ftc.teamcode.common.RobotConstantsPowerPlay;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -46,6 +47,7 @@ public class RealSenseUtils {
     // the maximum distance parameter.
     // Note: the depth frame has the same dimensions as the full image.
     public static Mat removeBackground(Mat pImageROI, VisionParameters.ImageParameters pImageParameters,
+                                       D405Configuration pD405Configuration,
                                        short[] pDepth16UC1,
                                        double pMinDistance, double pMaxDistance) {
 
@@ -70,7 +72,7 @@ public class RealSenseUtils {
         for (int i = roiOriginY; i < roiEndY; i++) {
             depthPixelRowIndex = i * pImageParameters.resolution_width; // the start of each row
             for (int j = roiOriginX; j < roiEndX; j++) {
-                pixelDistance = RobotConstants.D405_DEPTH_SCALE * pDepth16UC1[depthPixelRowIndex + j];
+                pixelDistance = pD405Configuration.depthScale * pDepth16UC1[depthPixelRowIndex + j];
                 // Check if the depth value is less or greater than the threshold.
                 if (pixelDistance <= pMinDistance || pixelDistance > pMaxDistance) {
                     // Replace the BGR bytes in the copy of the input image with gray.
@@ -100,7 +102,10 @@ public class RealSenseUtils {
     // all pixels that are out of the identified depth range have been converted
     // to gray.
     // pThresholded is the thresholded output of pImageROI.
-    public static RealSenseReturn getAngleAndDistance(Mat pImageROI, Mat pThresholded, short[] pDepthArray,
+    public static RealSenseReturn getAngleAndDistance(Mat pImageROI, Mat pThresholded,
+                                                      D405Configuration pD405Configuration,
+                                                      RobotConstantsPowerPlay.D405Orientation pOrientation,
+                                                      short[] pDepthArray,
                                                       String pOutputFilenamePreamble,
                                                       VisionParameters.ImageParameters pImageParameters,
                                                       DepthParameters pDepthParameters) {
@@ -213,7 +218,7 @@ public class RealSenseUtils {
                     // ...
                     targetPixelRow = targetPixelY * pImageParameters.resolution_width;
                     int centroidPixelDepth = pDepthArray[targetPixelRow + targetPixelX] & 0xFFFF; // use as unsigned short
-                    scaledPixelDepth = centroidPixelDepth * RobotConstants.D405_DEPTH_SCALE;
+                    scaledPixelDepth = centroidPixelDepth * pD405Configuration.depthScale;
 
                     // RobotLogCommon.d(TAG, "Distance from camera to pixel at x " + targetPixelX + ", y " + targetPixelY + " = " + scaledPixelDepth);
 
@@ -241,15 +246,18 @@ public class RealSenseUtils {
             return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL);
         }
 
-        Pair<Double, Double> angleAndDistanceToPixel = RealSenseUtils.getAngleAndDistanceToPixel(pImageParameters,
+        Pair<Double, Double> angleAndDistanceToPixel = RealSenseUtils.getAngleAndDistanceToPixel(pD405Configuration, pOrientation,
+                pImageParameters,
                 foundPixelX, foundPixelY, scaledPixelDepth);
-
         return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_SUCCESSFUL, angleAndDistanceToPixel.first, angleAndDistanceToPixel.second);
     }
 
     // Returns the angle and distance from the center of the robot to
     // the target pixel.
-    private static Pair<Double, Double> getAngleAndDistanceToPixel(VisionParameters.ImageParameters pImageParameters,
+    //**TODO Need to take into account the offset of the camera from the robot's center -
+    // and define the convention for the point-of-view and sign.
+    private static Pair<Double, Double> getAngleAndDistanceToPixel(D405Configuration pD405Configuration, RobotConstantsPowerPlay.D405Orientation pOrientation,
+                                                                   VisionParameters.ImageParameters pImageParameters,
                                                                    int pTargetPixelX, int pTargetPixelY, double pScaledPixelDepth) {
         // The coordinates of the target pixel are relative to the ROI.
         // We need to adjust those values to reflect the position of the
@@ -258,7 +266,7 @@ public class RealSenseUtils {
         int targetPixelY = pImageParameters.image_roi.y + pTargetPixelY;
 
         // Calculate the angle from the camera to the target pixel.
-        double angleFromCameraToPixel = ImageUtils.computeAngleToObjectCenter(pImageParameters.resolution_width, targetPixelX, RobotConstants.D405_FOV);
+        double angleFromCameraToPixel = ImageUtils.computeAngleToObjectCenter(pImageParameters.resolution_width, targetPixelX, pD405Configuration.fieldOfView);
         RobotLogCommon.d(TAG, "Angle from camera to target pixel " + angleFromCameraToPixel);
 
         // We have the hypotenuse from the camera to the center of the object
@@ -279,7 +287,8 @@ public class RealSenseUtils {
 
         // Since the center of the robot is behind the camera, add this
         // distance to the adjacent value.
-        double adjacentFromRobotCenter = adjacentFromCameraCenter + RobotConstants.D405_CAMERA_TO_ROBOT_CENTER_METERS;
+        D405Configuration.D405Camera cameraData = pD405Configuration.cameraMap.get(pOrientation);
+        double adjacentFromRobotCenter = adjacentFromCameraCenter + cameraData.distanceToCameraCanter;
 
         // We have a new triangle. We need to get the angle from the robot
         // center to the center of the object.

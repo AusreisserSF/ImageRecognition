@@ -62,15 +62,15 @@ public class SignalSleeveRecognition {
         RobotLogCommon.d(TAG, "Recognition path " + pSignalSleeveRecognitionPath);
         SignalSleeveReturn retVal;
         switch (pSignalSleeveRecognitionPath) {
-            case REFLECTIVE_TAPE -> retVal = reflectiveTapeRecognitionPath(pSignalSleeveParameters);
-            case COLOR_SLEEVE -> retVal = colorSleeveRecognitionPath(pSignalSleeveParameters.colorSleeveParameters);
+            case RED_CHANNEL_GRAYSCALE -> retVal = redChannelGrayscale(pSignalSleeveParameters);
+            case COLOR_SLEEVE -> retVal = colorSleeve(pSignalSleeveParameters.colorSleeveParameters);
             default -> throw new AutonomousRobotException(TAG, "Unsupported recognition path " + pSignalSleeveRecognitionPath);
         }
 
         return retVal;
     }
 
-    private SignalSleeveReturn reflectiveTapeRecognitionPath(SignalSleeveParameters pReflectiveTapeParameters) {
+    private SignalSleeveReturn redChannelGrayscale(SignalSleeveParameters pReflectiveTapeParameters) {
         ArrayList<Mat> channels = new ArrayList<>(3);
         Core.split(imageROI, channels);
 
@@ -106,7 +106,7 @@ public class SignalSleeveRecognition {
                 grayscaleParameters.minWhitePixelsLocation3);
     }
 
-    private SignalSleeveReturn colorSleeveRecognitionPath(SignalSleeveParameters.ColorSleeveParameters pColorSleeveParameters) {
+    private SignalSleeveReturn colorSleeve(SignalSleeveParameters.ColorSleeveParameters pColorSleeveParameters) {
         Mat thresholded = imageUtils.applyInRange(imageROI, outputFilenamePreamble, pColorSleeveParameters.hsvParameters);
 
         // Clean up the thresholded image via morphological opening.
