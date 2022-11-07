@@ -100,16 +100,16 @@ public class RealSenseUtils {
     // all pixels that are out of the identified depth range have been converted
     // to gray.
     // pThresholded is the thresholded output of pImageROI.
-    public static RealSenseReturn2 getAngleAndDistance(Mat pImageROI, Mat pThresholded, short[] pDepthArray,
-                                                       String pOutputFilenamePreamble,
-                                                       VisionParameters.ImageParameters pImageParameters,
-                                                       DepthParameters pDepthParameters) {
+    public static RealSenseReturn getAngleAndDistance(Mat pImageROI, Mat pThresholded, short[] pDepthArray,
+                                                      String pOutputFilenamePreamble,
+                                                      VisionParameters.ImageParameters pImageParameters,
+                                                      DepthParameters pDepthParameters) {
         // Identify the contours.
         List<MatOfPoint> contours = new ArrayList<>();
         Imgproc.findContours(pThresholded, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
         if (contours.size() == 0) {
             RobotLogCommon.d(TAG, "No contours found");
-            return new RealSenseReturn2(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL); // don't crash
+            return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL); // don't crash
         }
 
         Mat contoursDrawn = pImageROI.clone();
@@ -120,7 +120,7 @@ public class RealSenseUtils {
         // The largest contour should be the cone.
         Optional<MatOfPoint> largestContour = ImageUtils.getLargestContour(contours);
         if (largestContour.isEmpty())
-            return new RealSenseReturn2(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL); // don't crash
+            return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL); // don't crash
 
         // Get the centroid of the largest contour.
         Point centroid = ImageUtils.getContourCentroid(largestContour.get());
@@ -170,7 +170,7 @@ public class RealSenseUtils {
         Point pixelSearchPoint = new Point(pixelSearchX, pixelSearchY);
         if (!largestBoundingRect.contains(pixelSearchPoint)) {
             RobotLogCommon.d(TAG, "Pixel search box out of range");
-            return new RealSenseReturn2(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL);
+            return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL);
         }
 
         // The following is from the OpenCV documentation; we want the
@@ -203,7 +203,7 @@ public class RealSenseUtils {
                     // image, not just the ROI. So to test a pixel for depth
                     // we need to get its position in the full image.
                     targetPixelX = pImageParameters.image_roi.x + j;
-                    targetPixelY = pImageParameters.image_roi.x + i;
+                    targetPixelY = pImageParameters.image_roi.y + i;
 
                     // Use the pixel position of the centroid of the object as an index
                     // into the array of depth values and get the distance from the camera
@@ -238,13 +238,13 @@ public class RealSenseUtils {
                     foundPixelX + ", y " + foundPixelY);
         else {
             RobotLogCommon.d(TAG, "Did not find a pixel on or inside the cone contour");
-            return new RealSenseReturn2(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL);
+            return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL);
         }
 
         Pair<Double, Double> angleAndDistanceToPixel = RealSenseUtils.getAngleAndDistanceToPixel(pImageParameters,
                 foundPixelX, foundPixelY, scaledPixelDepth);
 
-        return new RealSenseReturn2(RobotConstants.RecognitionResults.RECOGNITION_SUCCESSFUL, angleAndDistanceToPixel.first, angleAndDistanceToPixel.second);
+        return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_SUCCESSFUL, angleAndDistanceToPixel.first, angleAndDistanceToPixel.second);
     }
 
     // Returns the angle and distance from the center of the robot to

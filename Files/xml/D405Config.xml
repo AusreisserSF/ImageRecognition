@@ -1,0 +1,18 @@
+<DEPTH_CAMERA_D405 configured="yes">
+    <characteristics>
+      <field_of_view>87.0</field_of_view>
+      <depth_scale>.0001</depth_scale>
+    </characteristics>
+    <camera_1>
+      <orientation>back</orientation>
+      <serial_number>123622270958</serial_number>
+      <distance_to_camera_canter>8.0</distance_to_camera_canter>
+      <offset_from_camera_center>0.0</offset_from_camera_center>
+    </camera_1>
+    <!-- camera_2>
+      <orientation>back</orientation>
+      <serial_number>123622270236</serial_number>
+      <distance_to_camera_canter></distance_to_camera_canter>
+      <offset_from_camera_center></offset_from_camera_center>
+    </camera_2 -->
+  </DEPTH_CAMERA_D405>

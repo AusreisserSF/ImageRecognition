@@ -242,50 +242,38 @@ public class RecognitionDispatcher extends Application {
 
                 // Perform image recognition and depth mapping.
                 ConeStackRecognition coneStackRecognition = new ConeStackRecognition(alliance);
-                RealSenseReturn2 realSenseReturn2 =
+                RealSenseReturn realSenseReturn =
                         coneStackRecognition.recognizeConeStack(fileImage, coneStackImageParameters, coneStackParameters, coneStackRecognitionPath);
 
                 String displayText = "Image: " + imageFilename +
                         '\n' + "Center of robot to pixel in cone:" +
-                        '\n' + "    Distance (meters) " + String.format("%.2f", realSenseReturn2.distanceFromRobotCenter) +
-                        '\n' + "    Angle " + String.format("%.2f", realSenseReturn2.angleFromRobotCenter);
+                        '\n' + "  Distance (meters) " + String.format("%.2f", realSenseReturn.distanceFromRobotCenter) +
+                        '\n' + "  Angle " + String.format("%.2f", realSenseReturn.angleFromRobotCenter);
 
                 displayResults(imagePath + coneStackImageParameters.image_source,
                         displayText,
                         "Test cone stack recognition");
             }
 
-            //**TODO For the junction use the general depth path.
-            //** There are no general RealSenseParameters .. the depth window
-            // will be different for each object.
             case "JUNCTION_DEPTH" -> {
                 // Read the parameters for junction recognition from the xml file.
-                RealSenseParametersXML realsenseParametersXML = new RealSenseParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
-                RealSenseParameters realsenseParameters = realsenseParametersXML.getRealSenseParameters();
+                JunctionParametersXML junctionParametersXML = new JunctionParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
+                JunctionParameters junctionParameters = junctionParametersXML.getJunctionParameters();
 
                 // Get the <image_parameters> for the object from the RobotAction (+suffix) XML file.
-                VisionParameters.ImageParameters realsenseImageParameters =
+                VisionParameters.ImageParameters junctionImageParameters =
                         robotActionXMLRealSense.getImageParametersFromXPath(actionElement, "image_parameters");
 
                 // Make sure that this tester is reading the image from a file.
-                if (!(realsenseImageParameters.image_source.endsWith(".png") ||
-                        realsenseImageParameters.image_source.endsWith(".jpg")))
+                if (!(junctionImageParameters.image_source.endsWith(".png") ||
+                        junctionImageParameters.image_source.endsWith(".jpg")))
                     throw new AutonomousRobotException(TAG, "Invalid image file name");
 
-                imageFilename = realsenseImageParameters.image_source;
-                ImageProvider fileImage = new FileImage(imagePath + realsenseImageParameters.image_source);
+                imageFilename = junctionImageParameters.image_source;
+                ImageProvider fileImage = new FileImage(imagePath + junctionImageParameters.image_source);
 
                 // Perform image recognition and depth mapping.
-                RealSenseRecognition recognition = new RealSenseRecognition();
-                RealSenseReturn realsenseReturn = recognition.getRealSenseAngleAndDistance(fileImage, realsenseImageParameters, realsenseParameters);
-                String displayText = "Image: " + imageFilename +
-                        '\n' + "Center of robot to center of object:" +
-                        '\n' + "Distance (meters) " + String.format("%.2f", realsenseReturn.distanceFromRobotCenter) +
-                        ", angle " + String.format("%.2f", realsenseReturn.angleFromRobotCenter);
-
-                displayResults(imagePath + realsenseImageParameters.image_source,
-                        displayText,
-                        "Test Realsense distance camera");
+                //**TODO follow cone stack (above)
             }
 
 

@@ -17,6 +17,11 @@ public class RobotConstantsPowerPlay {
         TELEOP_TAKE_PICTURE
     }
 
+
+    public enum D405Orientation {
+        FRONT, BACK
+    }
+
     public enum SignalSleeveRecognitionPath {
         REFLECTIVE_TAPE, COLOR_SLEEVE, SPLIT_GREEN
     }

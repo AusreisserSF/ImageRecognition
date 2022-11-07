@@ -27,29 +27,29 @@ public class ConeStackRecognition {
 
     private final String workingDirectory;
     private final RobotConstants.Alliance alliance;
-    private final RealSenseRecognition2 realSenseRecognition2;
+    private final RealSenseRecognition realSenseRecognition;
 
     public ConeStackRecognition(RobotConstants.Alliance pAlliance) {
         workingDirectory = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
         alliance = pAlliance;
-        realSenseRecognition2 = new RealSenseRecognition2();
+        realSenseRecognition = new RealSenseRecognition();
     }
 
     // Returns the result of image analysis.
     // The targets are:
     // A stack of 1 to 5 red cones
     // A stack of 1 to 5 blue cones
-    public RealSenseReturn2 recognizeConeStack(ImageProvider pImageProvider,
-                                               VisionParameters.ImageParameters pImageParameters,
-                                               ConeStackParameters pConeStackParameters,
-                                               RobotConstantsPowerPlay.ConeStackRecognitionPath pConeStackRecognitionPath) throws InterruptedException, IOException {
+    public RealSenseReturn recognizeConeStack(ImageProvider pImageProvider,
+                                              VisionParameters.ImageParameters pImageParameters,
+                                              ConeStackParameters pConeStackParameters,
+                                              RobotConstantsPowerPlay.ConeStackRecognitionPath pConeStackRecognitionPath) throws InterruptedException, IOException {
 
         RobotLogCommon.d(TAG, "In ConeStackRecognition.recognizeConeStack");
 
         // LocalDateTime requires Android minSdkVersion 26  public Pair<Mat, LocalDateTime> getImage() throws InterruptedException;
         Pair<Mat, LocalDateTime> coneStackImage = pImageProvider.getImage();
         if (coneStackImage == null)
-            return new RealSenseReturn2(RobotConstants.RecognitionResults.RECOGNITION_INTERNAL_ERROR); // don't crash
+            return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_INTERNAL_ERROR); // don't crash
 
         // The image may be RGB (from a camera) or BGR (OpenCV imread from a file).
         // OpenCV wants BGR; the possible conversion is taken care of in ImageUtils.preProcessImage.
@@ -77,9 +77,9 @@ public class ConeStackRecognition {
                 if (alliance == RobotConstants.Alliance.BLUE)
                     grayscaleParameters = pConeStackParameters.blueGrayscaleParameters;
                 else
-                    return new RealSenseReturn2(RobotConstants.RecognitionResults.RECOGNITION_INTERNAL_ERROR); // don't crash
+                    return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_INTERNAL_ERROR); // don't crash
 
-                return realSenseRecognition2.redChannelPath(imageROI, depthArray, outputFilenamePreamble,
+                return realSenseRecognition.redChannelPath(imageROI, depthArray, outputFilenamePreamble,
                 pImageParameters, grayscaleParameters, pConeStackParameters.depthParameters);
             }
             case COLOR -> {
@@ -90,9 +90,9 @@ public class ConeStackRecognition {
                 if (alliance == RobotConstants.Alliance.BLUE)
                     hsvParameters = pConeStackParameters.blueHSVParameters;
                 else
-                    return new RealSenseReturn2(RobotConstants.RecognitionResults.RECOGNITION_INTERNAL_ERROR); // don't crash
+                    return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_INTERNAL_ERROR); // don't crash
 
-                return realSenseRecognition2.colorPath(imageROI, depthArray, outputFilenamePreamble,
+                return realSenseRecognition.colorPath(imageROI, depthArray, outputFilenamePreamble,
                 pImageParameters, hsvParameters, pConeStackParameters.depthParameters);
             }
             default -> throw new AutonomousRobotException(TAG, "Unrecognized recognition path");
