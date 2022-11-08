@@ -173,7 +173,7 @@ public class RecognitionDispatcher extends Application {
                     throw new AutonomousRobotException(TAG, "Invalid camera orientation");
 
                 robotActionXMLJunction = new RobotActionXMLStandard(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
-                RobotActionXMLStandard.RobotActionDataStandard actionData = robotActionXMLJunction.getOpModeData("CONE_STACK");
+                RobotActionXMLStandard.RobotActionDataStandard actionData = robotActionXMLJunction.getOpModeData("JUNCTION");
                 actions = actionData.actions;
                 if (actions.size() != 1)
                     throw new AutonomousRobotException(TAG, "JUNCTION OpMode must contain a single action");
@@ -317,7 +317,7 @@ public class RecognitionDispatcher extends Application {
 
                 // Get the <image_parameters> for the object from the RobotAction (+suffix) XML file.
                 VisionParameters.ImageParameters junctionImageParameters =
-                        robotActionXMLRealSense.getImageParametersFromXPath(actionElement, "image_parameters");
+                        robotActionXMLJunction.getImageParametersFromXPath(actionElement, "image_parameters");
 
                 // Make sure that this tester is reading the image from a file.
                 if (!(junctionImageParameters.image_source.endsWith(".png") ||

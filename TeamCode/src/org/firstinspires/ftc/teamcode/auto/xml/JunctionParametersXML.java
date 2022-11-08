@@ -70,7 +70,7 @@ public class JunctionParametersXML {
         grayParameters = ImageXML.parseGrayParameters(gray_parameters_node);
 
         // Point to <hsv_parameters>
-        Node hsv_node = gray_node.getNextSibling();
+        Node hsv_node = gray_parameters_node.getNextSibling();
         Node hsv_parameters_node = getNextElement(hsv_node);
         if ((hsv_parameters_node == null) || !hsv_parameters_node.getNodeName().equals("hsv_parameters"))
             throw new AutonomousRobotException(TAG, "Element 'hsv_parameters' not found");
@@ -78,7 +78,7 @@ public class JunctionParametersXML {
         hsvParameters = ImageXML.parseHSVParameters(hsv_parameters_node);
 
         // Parse <depth_parameters>
-        Node depth_parameters_node = hsv_node.getNextSibling();
+        Node depth_parameters_node = hsv_parameters_node.getNextSibling();
         depth_parameters_node = getNextElement(depth_parameters_node);
         if (depth_parameters_node == null)
             throw new AutonomousRobotException(TAG, "Element 'depth_parameters' not found");

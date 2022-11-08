@@ -1,0 +1,27 @@
+<RobotAction>
+    <OpMode id="JUNCTION">
+           <parameters>
+            <log_level>v</log_level>
+        </parameters>
+        <actions>
+            <JUNCTION_DEPTH>
+                <image_parameters>
+                    <image_source>D405_09251929_43799 junction.png</image_source>
+                    <resolution>
+                        <width>640</width>
+                        <height>480</height>
+                    </resolution>
+                    <image_roi>
+                        <x>215</x>
+                        <y>0</y>
+                        <width>225</width>
+                        <height>370</height>
+                    </image_roi>
+                </image_parameters>
+                <junction_recognition>
+                    <recognition_path>red_channel_grayscale</recognition_path>
+                </junction_recognition>    
+            </JUNCTION_DEPTH>
+        </actions>
+    </OpMode>
+</RobotAction>
