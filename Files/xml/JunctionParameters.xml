@@ -7,10 +7,10 @@
             <hue_name>gold</hue_name>
             <hue_low>5</hue_low>
             <hue_high>30</hue_high>
-            <saturation_median_target>0</saturation_median_target>
-            <saturation_threshold_low>100</saturation_threshold_low>
+            <saturation_median_target>12</saturation_median_target>
+            <saturation_threshold_low>25</saturation_threshold_low>
             <value_median_target>128</value_median_target>
-            <value_threshold_low>50</value_threshold_low>
+            <value_threshold_low>220</value_threshold_low>
             </hsv_parameters>
     <depth_parameters>
         <!-- define the pixel search area -->

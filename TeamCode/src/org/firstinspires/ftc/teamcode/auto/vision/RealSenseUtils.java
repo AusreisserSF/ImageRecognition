@@ -129,7 +129,7 @@ public class RealSenseUtils {
 
         // Get the centroid of the largest contour.
         Point centroid = ImageUtils.getContourCentroid(largestContour.get());
-        RobotLogCommon.d(TAG, "Center of largest contour (cone): x " +
+        RobotLogCommon.d(TAG, "Center of largest contour: x " +
                 centroid.x + ", y " + centroid.y);
 
         // Define a bounding rectangle for the largest contour.
@@ -139,7 +139,7 @@ public class RealSenseUtils {
 
         // Draw a rectangle around the largest contour.
         Mat drawnRectangle = pImageROI.clone();
-        drawOneRectangle(largestBoundingRect, drawnRectangle);
+        drawOneRectangle(largestBoundingRect, drawnRectangle, 2);
         Imgcodecs.imwrite(pOutputFilenamePreamble + "_BRECT.png", drawnRectangle);
         RobotLogCommon.d(TAG, "Writing " + pOutputFilenamePreamble + "_BRECT.png");
 
@@ -166,7 +166,7 @@ public class RealSenseUtils {
 
         // Write out the pixel search area.
         Rect pixelSearchRect = new Rect(pixelSearchX, pixelSearchY, (int) pixelSearchWidth,(int)  pixelSearchHeight);
-        drawOneRectangle(pixelSearchRect, drawnRectangle);
+        drawOneRectangle(pixelSearchRect, drawnRectangle, -1);
                 Imgcodecs.imwrite(pOutputFilenamePreamble + "_PRECT.png", drawnRectangle);
                 RobotLogCommon.d(TAG, "Writing " + pOutputFilenamePreamble + "_PRECT.png");
 
@@ -315,7 +315,8 @@ public class RealSenseUtils {
         }
     }
 
-    private static void drawOneRectangle(Rect pRect, Mat pImageOut) {
-        Imgproc.rectangle(pImageOut, pRect, new Scalar(0, 255, 0)); // GREEN
+    // Thickness of < 0 means fill with color.
+    private static void drawOneRectangle(Rect pRect, Mat pImageOut, int pThickness) {
+        Imgproc.rectangle(pImageOut, pRect, new Scalar(0, 255, 0), pThickness); // GREEN
     }
 }

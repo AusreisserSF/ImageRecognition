@@ -19,7 +19,7 @@
                     </image_roi>
                 </image_parameters>
                 <junction_recognition>
-                    <recognition_path>red_channel_grayscale</recognition_path>
+                    <recognition_path>color</recognition_path>
                 </junction_recognition>    
             </JUNCTION_DEPTH>
         </actions>
