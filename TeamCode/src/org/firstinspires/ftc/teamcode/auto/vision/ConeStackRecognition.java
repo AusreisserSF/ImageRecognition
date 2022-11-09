@@ -15,12 +15,9 @@ import org.opencv.imgcodecs.Imgcodecs;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-//**TODO The bulk of ConeStackRecognition can be applied to color object
-// recognition - gold cube and junction. Extract common code into
-// RealSenseUtils. But be careful - this class takes ConeStackParameters,
-// which includes parameters for red grayscale, red hsv and blue grayscale,
-// blue hsv. May be better to generalize to either a single gray path and
-// a single color path.
+// This class uses ConeStackParameters, which include parameters for red
+// grayscale, red hsv and blue grayscale, blue hsv. Both grayscale paths
+// actually use the red channel of the image.
 public class ConeStackRecognition {
 
     private static final String TAG = ConeStackRecognition.class.getSimpleName();

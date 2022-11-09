@@ -21,14 +21,12 @@ public class SignalSleeveRecognition {
     private static final String TAG = SignalSleeveRecognition.class.getSimpleName();
 
     private final String workingDirectory;
-    private final ImageUtils imageUtils;
     private String outputFilenamePreamble;
     private Mat imageROI;
     private RobotConstants.Alliance alliance;
 
     public SignalSleeveRecognition() {
         workingDirectory = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
-        imageUtils = new ImageUtils();
     }
 
     // Returns the result of image analysis.
@@ -56,8 +54,8 @@ public class SignalSleeveRecognition {
         Mat imgOriginal = signalSleeveImage.first.clone();
 
         String fileDate = TimeStamp.getLocalDateTimeStamp(signalSleeveImage.second);
-        outputFilenamePreamble = imageUtils.createOutputFilePreamble(pImageParameters.image_source, workingDirectory, RobotConstants.imageFilePrefix, fileDate);
-        imageROI = imageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
+        outputFilenamePreamble = ImageUtils.createOutputFilePreamble(pImageParameters.image_source, workingDirectory, RobotConstants.imageFilePrefix, fileDate);
+        imageROI = ImageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
 
         RobotLogCommon.d(TAG, "Recognition path " + pSignalSleeveRecognitionPath);
         SignalSleeveReturn retVal;
@@ -99,7 +97,7 @@ public class SignalSleeveRecognition {
             return new SignalSleeveReturn(RobotConstants.OpenCVResults.OCV_ERROR);
 
         // Always use the red channel - better contrast!
-        thresholded = imageUtils.performThresholdOnGray(channels.get(2), outputFilenamePreamble, grayscaleParameters.grayParameters.median_target, grayscaleParameters.grayParameters.threshold_low);
+        thresholded = ImageUtils.performThresholdOnGray(channels.get(2), outputFilenamePreamble, grayscaleParameters.grayParameters.median_target, grayscaleParameters.grayParameters.threshold_low);
 
         return getLocation(thresholded,
                 grayscaleParameters.minWhitePixelsLocation2,
@@ -107,7 +105,7 @@ public class SignalSleeveRecognition {
     }
 
     private SignalSleeveReturn colorSleeve(SignalSleeveParameters.ColorSleeveParameters pColorSleeveParameters) {
-        Mat thresholded = imageUtils.applyInRange(imageROI, outputFilenamePreamble, pColorSleeveParameters.hsvParameters);
+        Mat thresholded = ImageUtils.applyInRange(imageROI, outputFilenamePreamble, pColorSleeveParameters.hsvParameters);
 
         // Clean up the thresholded image via morphological opening.
         Mat morphed = new Mat();

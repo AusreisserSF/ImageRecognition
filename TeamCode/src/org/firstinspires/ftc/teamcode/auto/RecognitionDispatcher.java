@@ -45,12 +45,9 @@ public class RecognitionDispatcher extends Application {
     private Pane field;
     private RobotActionXMLFreightFrenzy robotActionXMLFreightFrenzy;
     private RobotActionXMLGoldCube robotActionXMLGoldCube;
-    private RobotActionXMLRealSense robotActionXMLRealSense;
     private RobotActionXMLStandard robotActionXMLSignalSleeve;
     private RobotActionXMLStandard robotActionXMLConeStack;
     private RobotActionXMLStandard robotActionXMLJunction;
-
-    private RobotConstantsPowerPlay.D405Orientation d405Orientation;
 
     // Load OpenCV.
     private static final boolean openCVInitialized;
@@ -103,6 +100,8 @@ public class RecognitionDispatcher extends Application {
         // that has a single action.
         List<RobotXMLElement> actions;
         switch (opmodeParameter) {
+
+            //**TODO this is wrong - reimplement under GOLD_CUBE
             case "TEST" -> {
                 robotActionXMLGoldCube = new RobotActionXMLGoldCube(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
                 RobotActionXMLGoldCube.RobotActionDataGoldCube actionData = robotActionXMLGoldCube.getOpModeData("TEST");
@@ -116,8 +115,6 @@ public class RecognitionDispatcher extends Application {
             }
 
             case "SIGNAL_SLEEVE" -> {
-                //**TODO test for --orientation="BACK" on the command line?
-
                 robotActionXMLSignalSleeve = new RobotActionXMLStandard(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
                 RobotActionXMLStandard.RobotActionDataStandard actionData = robotActionXMLSignalSleeve.getOpModeData("SIGNAL_SLEEVE");
                 actions = actionData.actions;
@@ -130,23 +127,6 @@ public class RecognitionDispatcher extends Application {
             }
 
             case "CONE_STACK" -> {
-                //**TODO WHY are you doing this?? the signal sleeve is always the
-                // back camera and the cone stack and junction are always the front
-                // camera. This method *does* simulate the production RobotAction.xml.
-
-                // The camera orientation has to come from the command line because
-                // the <image_source> element in RobotAction.xml contains the file
-                // name. In production this field would contain the enum
-                // CameraImageSource.
-                String cameraOrientation = namedParameters.get("orientation");
-                if (cameraOrientation == null)
-                    throw new AutonomousRobotException(TAG, "Required parameter --orientation is missing");
-
-                d405Orientation =
-                        RobotConstantsPowerPlay.D405Orientation.valueOf(cameraOrientation.toUpperCase());
-                if (d405Orientation != RobotConstantsPowerPlay.D405Orientation.FRONT)
-                    throw new AutonomousRobotException(TAG, "Invalid camera orientation");
-
                 robotActionXMLConeStack = new RobotActionXMLStandard(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
                 RobotActionXMLStandard.RobotActionDataStandard actionData = robotActionXMLConeStack.getOpModeData("CONE_STACK");
                 actions = actionData.actions;
@@ -159,19 +139,6 @@ public class RecognitionDispatcher extends Application {
             }
 
             case "JUNCTION" -> {
-                // The camera orientation has to come from the command line because
-                // the <image_source> element in RobotAction.xml contains the file
-                // name. In production this field would contain the enum
-                // CameraImageSource.
-                String cameraOrientation = namedParameters.get("orientation");
-                if (cameraOrientation == null)
-                    throw new AutonomousRobotException(TAG, "Required parameter --orientation is missing");
-
-                d405Orientation =
-                        RobotConstantsPowerPlay.D405Orientation.valueOf(cameraOrientation.toUpperCase());
-                if (d405Orientation != RobotConstantsPowerPlay.D405Orientation.FRONT)
-                    throw new AutonomousRobotException(TAG, "Invalid camera orientation");
-
                 robotActionXMLJunction = new RobotActionXMLStandard(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
                 RobotActionXMLStandard.RobotActionDataStandard actionData = robotActionXMLJunction.getOpModeData("JUNCTION");
                 actions = actionData.actions;
@@ -183,17 +150,9 @@ public class RecognitionDispatcher extends Application {
                     throw new AutonomousRobotException(TAG, "Missing required action JUNCTION_DEPTH");
             }
 
-            //**TODO obsolete? or other paths such as gold cube.
-            case "REALSENSE" -> {
-                robotActionXMLRealSense = new RobotActionXMLRealSense(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
-                RobotActionXMLRealSense.RobotActionDataRealSense actionData = robotActionXMLRealSense.getOpModeData("REALSENSE");
-                actions = actionData.actions;
-                if (actions.size() != 1)
-                    throw new AutonomousRobotException(TAG, "REALSENSE OpMode must contain a single action");
-
-                String recognitionAction = actions.get(0).getRobotXMLElementName();
-                if (!recognitionAction.equals("REALSENSE_DEPTH"))
-                    throw new AutonomousRobotException(TAG, "Missing required action REALSENSE_DEPTH");
+            //**TODO gold cube should follow cone stack and junction.
+            case "GOLD_CUBE" -> {
+                    throw new AutonomousRobotException(TAG, "GOLD_CUBE OpMode needs reimplementation");
             }
 
             case "Freight Frenzy" -> {
@@ -293,7 +252,7 @@ public class RecognitionDispatcher extends Application {
                 // Perform image recognition and depth mapping.
                 ConeStackRecognition coneStackRecognition = new ConeStackRecognition(alliance);
                 RealSenseReturn realSenseReturn =
-                        coneStackRecognition.recognizeConeStack(fileImage, d405Configuration, d405Orientation, coneStackImageParameters, coneStackParameters, coneStackRecognitionPath);
+                        coneStackRecognition.recognizeConeStack(fileImage, d405Configuration, RobotConstantsPowerPlay.D405Orientation.FRONT, coneStackImageParameters, coneStackParameters, coneStackRecognitionPath);
 
                 String displayText = "Image: " + imageFilename +
                         '\n' + "Center of robot to pixel in cone:" +
@@ -338,7 +297,7 @@ public class RecognitionDispatcher extends Application {
                 // Perform image recognition and depth mapping.
                 JunctionRecognition junctionRecognition = new JunctionRecognition(alliance);
                 RealSenseReturn realSenseReturn =
-                        junctionRecognition.recognizeJunction(fileImage, d405Configuration, d405Orientation, junctionImageParameters, junctionParameters, junctionRecognitionPath);
+                        junctionRecognition.recognizeJunction(fileImage, d405Configuration, RobotConstantsPowerPlay.D405Orientation.FRONT, junctionImageParameters, junctionParameters, junctionRecognitionPath);
 
                 String displayText = "Image: " + imageFilename +
                         '\n' + "Center of robot to pixel in junction:" +
