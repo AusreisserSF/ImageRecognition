@@ -68,7 +68,7 @@ public class SignalSleeveRecognition {
         return retVal;
     }
 
-    private SignalSleeveReturn redChannelGrayscale(SignalSleeveParameters pReflectiveTapeParameters) {
+    private SignalSleeveReturn redChannelGrayscale(SignalSleeveParameters pSignalSleeveParameters) {
         ArrayList<Mat> channels = new ArrayList<>(3);
         Core.split(imageROI, channels);
 
@@ -84,14 +84,10 @@ public class SignalSleeveRecognition {
         Mat thresholded;
 
         if (alliance == RobotConstants.Alliance.RED) {
-            grayscaleParameters = pReflectiveTapeParameters.redGrayscaleParameters;
-
-            // Write out the red channel as grayscale.
-            Imgcodecs.imwrite(outputFilenamePreamble + "_RED_CHANNEL.png", channels.get(2));
-            RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_RED_CHANNEL.png");
-       }
+            grayscaleParameters = pSignalSleeveParameters.redGrayscaleParameters;
+      }
         else if (alliance == RobotConstants.Alliance.BLUE) {
-            grayscaleParameters = pReflectiveTapeParameters.blueGrayscaleParameters;
+            grayscaleParameters = pSignalSleeveParameters.blueGrayscaleParameters;
        }
         else
             return new SignalSleeveReturn(RobotConstants.OpenCVResults.OCV_ERROR);

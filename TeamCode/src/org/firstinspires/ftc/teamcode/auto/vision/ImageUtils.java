@@ -13,12 +13,13 @@ import java.util.*;
 
 import static org.opencv.imgcodecs.Imgcodecs.IMREAD_COLOR;
 
+
 public class ImageUtils {
 
     public static final String TAG = ImageUtils.class.getSimpleName();
 
     // Load an image.
-    public Mat loadImage(String pInputFilename) {
+    public static Mat loadImage(String pInputFilename) {
         RobotLogCommon.d(TAG, "File name " + pInputFilename);
         Mat imageOut = Imgcodecs.imread(pInputFilename, IMREAD_COLOR);
         if (imageOut.empty()) {
@@ -45,16 +46,16 @@ public class ImageUtils {
         return roi;
     }
 
-    public static String createOutputFilePreamble(String pOCVImage, String pWorkingDirectory, String pPrefix, String pFileDate) {
+    public static String createOutputFilePreamble(String pImageSource, String pWorkingDirectory, String pFileDate) {
         // When testing with a file append the original file name without the
         // extension, an underscore, and the file date.
-        if (pOCVImage.endsWith(".png") || pOCVImage.endsWith(".jpg")) {
-            String originalFN = pOCVImage.substring(0, pOCVImage.lastIndexOf('.'));
+        if (pImageSource.endsWith(".png") || pImageSource.endsWith(".jpg")) {
+            String originalFN = pImageSource.substring(0, pImageSource.lastIndexOf('.'));
             return pWorkingDirectory + originalFN + "_" + pFileDate;
         }
 
         // Camera image; use the file date only.
-        return pWorkingDirectory + pPrefix + pFileDate;
+        return pWorkingDirectory + pImageSource + "_" + pFileDate;
     }
 
     public static Mat preProcessImage(ImageProvider pImageProvider, Mat pOriginalImage,
