@@ -6,16 +6,16 @@
         <actions>
             <JUNCTION_DEPTH>
                 <image_parameters>
-                    <image_source>D405_09251929_43799 junction.png</image_source>
+                    <image_source>D405_11171728_03413_IMG junction.png</image_source>
                     <resolution>
                         <width>640</width>
                         <height>480</height>
                     </resolution>
                     <image_roi>
-                        <x>215</x>
-                        <y>0</y>
-                        <width>225</width>
-                        <height>370</height>
+                        <x>190</x>
+                        <y>185</y>
+                        <width>320</width>
+                        <height>205</height>
                     </image_roi>
                 </image_parameters>
                 <junction_recognition>

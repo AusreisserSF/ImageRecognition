@@ -1,0 +1,42 @@
+[2022-11-18 06:27:11.661] [INFO   ] RecognitionDispatcher Starting image recognition 
+[2022-11-18 06:27:11.738] [CONFIG ] RecognitionDispatcher OpMode JUNCTION 
+[2022-11-18 06:27:11.739] [CONFIG ] RecognitionDispatcher Alliance NONE 
+[2022-11-18 06:27:11.815] [CONFIG ] RobotActionXMLStandard Extracting data from Files/xml/Junction 11-17-2022/RobotAction Junction.xml for OpMode JUNCTION 
+[2022-11-18 06:27:11.820] [FINE   ] RecognitionDispatcher Executing action JUNCTION_DEPTH 
+[2022-11-18 06:27:11.827] [FINE   ] JunctionParametersXML Parsing XML junction_parameters 
+[2022-11-18 06:27:11.836] [FINE   ] ImageXML Parsing XML gray_parameters 
+[2022-11-18 06:27:11.837] [FINE   ] ImageXML Parsing XML hsv_parameters 
+[2022-11-18 06:27:11.837] [FINE   ] ImageXML Parsed XML hsv_parameters; hue name = gold 
+[2022-11-18 06:27:11.839] [FINE   ] D405ConfigurationXML Parsing XML cone_stack_parameters 
+[2022-11-18 06:27:11.843] [FINE   ] ImageXML Parsing XML image_parameters 
+[2022-11-18 06:27:11.852] [FINE   ] RecognitionDispatcher Recognition path COLOR 
+[2022-11-18 06:27:11.855] [FINE   ] JunctionRecognition In JunctionRecognition.recognizeJunction 
+[2022-11-18 06:27:11.855] [FINE   ] ImageUtils File name Files/images/Junction 11-17-2022/D405_11171728_03413_IMG junction.png 
+[2022-11-18 06:27:11.877] [FINE   ] ImageUtils Image width 640, height 480 
+[2022-11-18 06:27:11.881] [FINE   ] ImageUtils Writing original image Files/images/Junction 11-17-2022/D405_11171728_03413_IMG junction_11180627_11877_IMG.png 
+[2022-11-18 06:27:11.909] [FINE   ] ImageUtils Image width 640, height 480 
+[2022-11-18 06:27:11.915] [FINE   ] ImageUtils Image ROI x 190, y 185, width 320, height 205 
+[2022-11-18 06:27:11.915] [FINE   ] ImageUtils Writing image ROI Files/images/Junction 11-17-2022/D405_11171728_03413_IMG junction_11180627_11877_ROI.png 
+[2022-11-18 06:27:11.950] [FINE   ] RealSenseUtils Pixels in depth range 16791 
+[2022-11-18 06:27:11.952] [FINE   ] RealSenseUtils Pixels out of depth range 48809 
+[2022-11-18 06:27:11.954] [FINE   ] JunctionRecognition Writing Files/images/Junction 11-17-2022/D405_11171728_03413_IMG junction_11180627_11877_ROI_RANGE.png 
+[2022-11-18 06:27:11.954] [FINE   ] JunctionRecognition Recognition path COLOR 
+[2022-11-18 06:27:11.966] [FINE   ] ImageUtils Target hue levels: low 5, high 30 
+[2022-11-18 06:27:11.993] [FINE   ] ImageUtils HSV saturation channel median 0 
+[2022-11-18 06:27:11.995] [FINE   ] ImageUtils HSV value channel median 96 
+[2022-11-18 06:27:11.995] [FINE   ] ImageUtils Adjust HSV saturation by 12 
+[2022-11-18 06:27:11.996] [FINE   ] ImageUtils Adjust HSV value by 32 
+[2022-11-18 06:27:11.997] [FINE   ] ImageUtils Adjusted image levels: saturation low 12, value low 128 
+[2022-11-18 06:27:12.004] [FINE   ] ImageUtils Writing Files/images/Junction 11-17-2022/D405_11171728_03413_IMG junction_11180627_11877_ADJ.png 
+[2022-11-18 06:27:12.005] [FINE   ] ImageUtils Actual inRange HSV levels: hue low 5, hue high 30 
+[2022-11-18 06:27:12.005] [FINE   ] ImageUtils Actual inRange HSV levels: saturation low 25, value low 220 
+[2022-11-18 06:27:12.013] [FINE   ] ImageUtils Writing Files/images/Junction 11-17-2022/D405_11171728_03413_IMG junction_11180627_11877_ADJ_THR.png 
+[2022-11-18 06:27:12.015] [FINE   ] RealSenseUtils drawContours: number of contours 21 
+[2022-11-18 06:27:12.022] [FINE   ] RealSenseUtils Writing Files/images/Junction 11-17-2022/D405_11171728_03413_IMG junction_11180627_11877_CON.png 
+[2022-11-18 06:27:12.029] [FINE   ] RealSenseUtils Center of largest contour: x 37.729227761485824, y 72.36950146627566 
+[2022-11-18 06:27:12.030] [FINE   ] RealSenseUtils Largest bounding rectangle x 32, y 47, width 14, height 63 
+[2022-11-18 06:27:12.034] [FINE   ] RealSenseUtils Writing Files/images/Junction 11-17-2022/D405_11171728_03413_IMG junction_11180627_11877_BRECT.png 
+[2022-11-18 06:27:12.041] [FINE   ] RealSenseUtils Pixel search box x 36, y 31, width 5.6000000000000005, height 15.75 
+[2022-11-18 06:27:12.044] [FINE   ] RealSenseUtils Writing Files/images/Junction 11-17-2022/D405_11171728_03413_IMG junction_11180627_11877_PRECT.png 
+[2022-11-18 06:27:12.045] [FINE   ] RealSenseUtils Pixel search box out of range 
+[2022-11-18 06:27:12.360] [INFO   ] Closing the log with 0 entries on the queue 

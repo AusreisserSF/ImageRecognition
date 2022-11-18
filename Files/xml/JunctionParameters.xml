@@ -21,9 +21,9 @@
              <depth_window_offset_percent_x>20</depth_window_offset_percent_x>
              <!-- subtract this number from the y-coordinate of the bottom of the bounding
                   box. -->  
-             <depth_window_offset_percent_y>50</depth_window_offset_percent_y>
+             <depth_window_offset_percent_y>100</depth_window_offset_percent_y>
              <!-- this number should be <= than the depth_window_offset_percent_y -->
              <depth_window_percent_height>25</depth_window_percent_height>
-             <depth_filter min="0.2" max="1.00"/>
+             <depth_filter min="0.2" max="0.7"/>
     </depth_parameters>
 </junction_parameters>

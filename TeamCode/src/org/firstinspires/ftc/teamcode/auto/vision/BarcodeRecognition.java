@@ -51,7 +51,7 @@ public class BarcodeRecognition {
         Mat imgOriginal = barcodeImage.first.clone();
 
         String fileDate = TimeStamp.getLocalDateTimeStamp(barcodeImage.second);
-        outputFilenamePreamble = imageUtils.createOutputFilePreamble(pImageParameters.image_source, workingDirectory, RobotConstants.imageFilePrefix, fileDate);
+        outputFilenamePreamble = imageUtils.createOutputFilePreamble(pImageParameters.image_source, workingDirectory, fileDate);
         imageROI = imageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
 
         // Draw the barcode element windows (sub-ROIs) on the original image

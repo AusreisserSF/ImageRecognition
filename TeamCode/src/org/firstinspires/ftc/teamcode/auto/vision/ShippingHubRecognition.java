@@ -98,7 +98,7 @@ public class ShippingHubRecognition {
         Mat imgOriginal = shippingHubImage.first.clone();
 
         String fileDate = TimeStamp.getLocalDateTimeStamp(shippingHubImage.second);
-        String outputFilenamePreamble = imageUtils.createOutputFilePreamble(pImageParameters.image_source, workingDirectory, RobotConstants.imageFilePrefix, fileDate);
+        String outputFilenamePreamble = imageUtils.createOutputFilePreamble(pImageParameters.image_source, workingDirectory, fileDate);
         Mat imageROI = imageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
 
         List<MatOfPoint> contours = imageUtils.applyInRangeAndFindContours(imageROI, outputFilenamePreamble, pHSVParameters);

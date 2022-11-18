@@ -181,6 +181,7 @@ public class RecognitionDispatcher extends Application {
         RobotXMLElement actionElement = actions.get(0);
         XPathAccess actionXPath = new XPathAccess(actionElement);
 
+        //**TODO all OpModes - if return == NPOS display "unable to determine"
         String actionName = actionElement.getRobotXMLElementName().toUpperCase();
         RobotLogCommon.d(TAG, "Executing action " + actionName);
         String imageFilename;

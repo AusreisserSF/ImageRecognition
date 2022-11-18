@@ -54,7 +54,7 @@ public class ConeStackRecognition {
         // OpenCV wants BGR; the possible conversion is taken care of in ImageUtils.preProcessImage.
         Mat imgOriginal = coneStackImage.first.clone();
         String fileDate = TimeStamp.getLocalDateTimeStamp(coneStackImage.second);
-        String outputFilenamePreamble = ImageUtils.createOutputFilePreamble(pImageParameters.image_source, workingDirectory, RobotConstants.imageFilePrefix, fileDate);
+        String outputFilenamePreamble = ImageUtils.createOutputFilePreamble(pImageParameters.image_source, workingDirectory, fileDate);
         Mat imageROIOriginal = ImageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
 
         // Subject the ROI to depth filtering on all paths.

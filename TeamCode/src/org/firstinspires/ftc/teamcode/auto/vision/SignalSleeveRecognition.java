@@ -54,7 +54,7 @@ public class SignalSleeveRecognition {
         Mat imgOriginal = signalSleeveImage.first.clone();
 
         String fileDate = TimeStamp.getLocalDateTimeStamp(signalSleeveImage.second);
-        outputFilenamePreamble = ImageUtils.createOutputFilePreamble(pImageParameters.image_source, workingDirectory, RobotConstants.imageFilePrefix, fileDate);
+        outputFilenamePreamble = ImageUtils.createOutputFilePreamble(pImageParameters.image_source, workingDirectory, fileDate);
         imageROI = ImageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
 
         RobotLogCommon.d(TAG, "Recognition path " + pSignalSleeveRecognitionPath);

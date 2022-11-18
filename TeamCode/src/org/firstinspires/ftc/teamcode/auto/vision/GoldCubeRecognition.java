@@ -52,7 +52,7 @@ public class GoldCubeRecognition {
         Mat imgOriginal = goldCubeImage.first.clone();
 
         String fileDate = TimeStamp.getLocalDateTimeStamp(goldCubeImage.second);
-        String outputFilenamePreamble = imageUtils.createOutputFilePreamble(pImageParameters.image_source, workingDirectory, RobotConstants.imageFilePrefix, fileDate);
+        String outputFilenamePreamble = imageUtils.createOutputFilePreamble(pImageParameters.image_source, workingDirectory, fileDate);
         Mat imageROI = imageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
 
         List<MatOfPoint> contours = imageUtils.applyInRangeAndFindContours(imageROI, outputFilenamePreamble, pGoldCubeParameters.hsvParameters);
