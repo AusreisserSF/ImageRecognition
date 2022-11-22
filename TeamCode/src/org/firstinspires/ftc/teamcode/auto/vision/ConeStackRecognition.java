@@ -55,16 +55,16 @@ public class ConeStackRecognition {
         Mat imgOriginal = coneStackImage.first.clone();
         String fileDate = TimeStamp.getLocalDateTimeStamp(coneStackImage.second);
         String outputFilenamePreamble = ImageUtils.createOutputFilePreamble(pImageParameters.image_source, workingDirectory, fileDate);
-        Mat imageROIOriginal = ImageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
+        Mat imageROI = ImageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
 
         // Subject the ROI to depth filtering on all paths.
         short[] depthArray = RealSenseUtils.getDepthArrayFromFile(pImageParameters);
-        Mat imageROI = RealSenseUtils.removeBackground(imageROIOriginal, pImageParameters,
+        Mat depthImageROI = RealSenseUtils.removeBackground(imageROI, pImageParameters,
                 pD405Configuration, depthArray,
                 pConeStackParameters.depthParameters.minDepth,
                 pConeStackParameters.depthParameters.maxDepth);
 
-        Imgcodecs.imwrite(outputFilenamePreamble + "_ROI_RANGE.png", imageROI);
+        Imgcodecs.imwrite(outputFilenamePreamble + "_ROI_RANGE.png", depthImageROI);
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ROI_RANGE.png");
 
         RobotLogCommon.d(TAG, "Recognition path " + pConeStackRecognitionPath);

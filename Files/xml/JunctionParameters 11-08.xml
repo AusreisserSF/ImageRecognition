@@ -1,0 +1,29 @@
+﻿<junction_parameters>
+        <gray_parameters>
+            <median_target>100</median_target>
+            <threshold_low>160</threshold_low>
+        </gray_parameters>
+        <hsv_parameters>
+            <hue_name>gold</hue_name>
+            <hue_low>5</hue_low>
+            <hue_high>30</hue_high>
+            <saturation_median_target>12</saturation_median_target>
+            <saturation_threshold_low>25</saturation_threshold_low>
+            <value_median_target>128</value_median_target>
+            <value_threshold_low>220</value_threshold_low>
+            </hsv_parameters>
+    <depth_parameters>
+        <!-- define the pixel search area -->
+        <!-- percentages are in relation to the bounding box of the largest contour,
+             which we assume to be the cone. -->
+        <!-- from the x-coordinate of the center of the bounding box subtract this
+             number. Double the result to get the width of the pixel search area. -->
+             <depth_window_offset_percent_x>20</depth_window_offset_percent_x>
+             <!-- subtract this number from the y-coordinate of the bottom of the bounding
+                  box. -->  
+             <depth_window_offset_percent_y>50</depth_window_offset_percent_y>
+             <!-- this number should be <= than the depth_window_offset_percent_y -->
+             <depth_window_percent_height>25</depth_window_percent_height>
+             <depth_filter min="0.2" max="1.00"/>
+    </depth_parameters>
+</junction_parameters>

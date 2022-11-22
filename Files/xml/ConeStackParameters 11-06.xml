@@ -6,12 +6,12 @@
         </gray_parameters>
         <hsv_parameters>
             <hue_name>red</hue_name>
-            <hue_low>160</hue_low>
-            <hue_high>25</hue_high>
-            <saturation_median_target>150</saturation_median_target>
-            <saturation_threshold_low>150</saturation_threshold_low>
-            <value_median_target>150</value_median_target>
-            <value_threshold_low>130</value_threshold_low>          
+            <hue_low>0</hue_low>
+            <hue_high>10</hue_high>
+            <saturation_median_target>100</saturation_median_target>
+            <saturation_threshold_low>195</saturation_threshold_low>
+            <value_median_target>125</value_median_target>
+            <value_threshold_low>135</value_threshold_low>            
         </hsv_parameters>
     </RED>
     <BLUE>
@@ -42,6 +42,6 @@
         <depth_window_offset_percent_y>50</depth_window_offset_percent_y>
         <!-- this number should be <= than the depth_window_offset_percent_y -->
         <depth_window_percent_height>25</depth_window_percent_height>
-        <depth_filter min="0.07" max="1.00"/>
+        <depth_filter min="0.2" max="1.00"/>
     </depth_parameters>
 </cone_stack_parameters>

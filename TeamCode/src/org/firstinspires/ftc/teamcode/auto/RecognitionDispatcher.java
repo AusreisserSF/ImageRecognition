@@ -255,10 +255,12 @@ public class RecognitionDispatcher extends Application {
                 RealSenseReturn realSenseReturn =
                         coneStackRecognition.recognizeConeStack(fileImage, d405Configuration, RobotConstantsPowerPlay.D405Orientation.FRONT, coneStackImageParameters, coneStackParameters, coneStackRecognitionPath);
 
+                String distanceString = realSenseReturn.distanceFromRobotCenter == RealSenseReturn.RECOGNITION_DISTANCE_NPOS ? "unable to determine" : String.format("%.2f", realSenseReturn.distanceFromRobotCenter);
+                String angleString = realSenseReturn.angleFromRobotCenter == RealSenseReturn.RECOGNITION_ANGLE_NPOS ? "unable to determine" : String.format("%.2f", realSenseReturn.angleFromRobotCenter);
                 String displayText = "Image: " + imageFilename +
-                        '\n' + "Center of robot to pixel in cone:" +
-                        '\n' + "  Distance (meters) " + String.format("%.2f", realSenseReturn.distanceFromRobotCenter) +
-                        '\n' + "  Angle " + String.format("%.2f", realSenseReturn.angleFromRobotCenter);
+                        '\n' + "Center of robot to pixel on cone:" +
+                        '\n' + "  Distance (meters) " + distanceString +
+                        '\n' + "  Angle " + angleString;
 
                 displayResults(imagePath + coneStackImageParameters.image_source,
                         displayText,
@@ -300,10 +302,12 @@ public class RecognitionDispatcher extends Application {
                 RealSenseReturn realSenseReturn =
                         junctionRecognition.recognizeJunction(fileImage, d405Configuration, RobotConstantsPowerPlay.D405Orientation.FRONT, junctionImageParameters, junctionParameters, junctionRecognitionPath);
 
+                String distanceString = realSenseReturn.distanceFromRobotCenter == RealSenseReturn.RECOGNITION_DISTANCE_NPOS ? "unable to determine" : String.format("%.2f", realSenseReturn.distanceFromRobotCenter);
+                String angleString = realSenseReturn.angleFromRobotCenter == RealSenseReturn.RECOGNITION_ANGLE_NPOS ? "unable to determine" : String.format("%.2f", realSenseReturn.angleFromRobotCenter);
                 String displayText = "Image: " + imageFilename +
-                        '\n' + "Center of robot to pixel in junction:" +
-                        '\n' + "  Distance (meters) " + String.format("%.2f", realSenseReturn.distanceFromRobotCenter) +
-                        '\n' + "  Angle " + String.format("%.2f", realSenseReturn.angleFromRobotCenter);
+                        '\n' + "Center of robot to pixel on junction:" +
+                        '\n' + "  Distance (meters) " + distanceString +
+                        '\n' + "  Angle " + angleString;
 
                 displayResults(imagePath + junctionImageParameters.image_source,
                         displayText,
