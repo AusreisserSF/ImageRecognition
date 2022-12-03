@@ -15,11 +15,13 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class RealSenseUtils {
 
     private static final String TAG = RealSenseUtils.class.getSimpleName();
+    private static final double INCHES_PER_METER = 39.37;
 
     // Read the depth file that corresponds to the color image file.
     // The file is a collection of bytes; read them into an array
@@ -256,7 +258,7 @@ public class RealSenseUtils {
     // the target pixel.
     //**TODO Need to take into account the offset of the camera from the robot's center -
     // and define the convention for the point-of-view and sign.
-    private static Pair<Double, Double> getAngleAndDistanceToPixel(D405Configuration pD405Configuration, RobotConstantsPowerPlay.D405Orientation pOrientation,
+    private static Pair<Double, Double> getAngleAndDistanceToPixel(D405Configuration pD405Configuration, RobotConstantsPowerPlay.D405Orientation pCameraId,
                                                                    VisionParameters.ImageParameters pImageParameters,
                                                                    int pTargetPixelX, int pTargetPixelY, double pScaledPixelDepth) {
         // The coordinates of the target pixel are relative to the ROI.
@@ -267,42 +269,25 @@ public class RealSenseUtils {
 
         // Calculate the angle from the camera to the target pixel.
         double angleFromCameraToPixel = ImageUtils.computeAngleToObjectCenter(pImageParameters.resolution_width, targetPixelX, pD405Configuration.fieldOfView);
-        RobotLogCommon.d(TAG, "Angle from camera to target pixel " + angleFromCameraToPixel);
+        RobotLogCommon.d(TAG, "Angle from camera to target pixel (degrees) " + angleFromCameraToPixel);
 
-        // We have the hypotenuse from the camera to the center of the object
-        // in meters and we have the angle from the camera to the center
-        // of the object. Solve for the other two sides in meters.
+        // Get the angle from the center of the robot to the target pixel.
+        D405Configuration.D405Camera cameraData = pD405Configuration.cameraMap.get(pCameraId);
+        double distanceFromCameraToPixel = pScaledPixelDepth * INCHES_PER_METER;
+        RobotLogCommon.d(TAG, "Distance from camera to target pixel (inches) " + distanceFromCameraToPixel);
 
-        // sin(angleFromCameraToObject) = opposite / scaledPixelDepth
-        double sinACC = Math.sin(Math.toRadians(angleFromCameraToPixel));
-        // The "opposite" side if the triangle is from the centroid of the
-        // object to the center of the image.
-        double opposite = sinACC * pScaledPixelDepth;
+        double correctedAngle =
+                CameraToCenterCorrections.getCorrectedAngle(Objects.requireNonNull(cameraData).distanceToCameraCanter,
+                        cameraData.offsetFromCameraCenter, distanceFromCameraToPixel, angleFromCameraToPixel);
 
-        // cos(angleFromCameraToObject) = adjacent / scaledPixelDepth
-        double cosACC = Math.cos(Math.toRadians(angleFromCameraToPixel));
-        // The "adjacent" side if the triangle is from the center of the
-        // camera to the center of the image.
-        double adjacentFromCameraCenter = cosACC * pScaledPixelDepth;
+        RobotLogCommon.d(TAG, "Angle from robot center to target pixel (degrees) " + correctedAngle);
 
-        // Since the center of the robot is behind the camera, add this
-        // distance to the adjacent value.
-        D405Configuration.D405Camera cameraData = pD405Configuration.cameraMap.get(pOrientation);
-        double adjacentFromRobotCenter = adjacentFromCameraCenter + cameraData.distanceToCameraCanter;
+        // Get the distance from the center of the robot to the target pixel.
+        double correctedDistance = CameraToCenterCorrections.getCorrectedDistance(cameraData.distanceToCameraCanter,
+                cameraData.offsetFromCameraCenter, distanceFromCameraToPixel, angleFromCameraToPixel);
+        RobotLogCommon.d(TAG, "Distance (inches) from robot center to pixel in full image at x " + targetPixelX + ", y " + targetPixelY + " = " + correctedDistance);
 
-        // We have a new triangle. We need to get the angle from the robot
-        // center to the center of the object.
-        double ratioARC = opposite / adjacentFromRobotCenter;
-        double tanARC = Math.tan(ratioARC);
-        double angleFromRobotCenter = Math.toDegrees(tanARC);
-        RobotLogCommon.d(TAG, "Angle from robot center to target pixel " + angleFromRobotCenter);
-
-        // Get the distance from the center of the robot to the center of
-        // the object. This is the hypotenuse of our new triangle.
-        double distanceFromRobotCenter = Math.sqrt(Math.pow(opposite, 2) + Math.pow(adjacentFromRobotCenter, 2));
-        RobotLogCommon.d(TAG, "Distance (meters) from robot center to pixel in full image at x " + targetPixelX + ", y " + targetPixelY + " = " + distanceFromRobotCenter);
-
-        return Pair.create(angleFromRobotCenter, distanceFromRobotCenter);
+        return Pair.create(correctedAngle, correctedDistance);
     }
 
     // The parameters pContours is the output of a call to findContours.

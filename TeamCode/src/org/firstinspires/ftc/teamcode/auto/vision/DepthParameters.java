@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.auto.vision;
 public class DepthParameters {
     // These depth values are given as percentages of the size of the
     // bounding rectangle which encloses the contour of an object.
-    public final int depthWindowOffsetX;
-    public final int depthWindowOffsetY;
-    public final int depthWindowWidth;
-    public final int depthWindowHeight;
+    public final double depthWindowOffsetX;
+    public final double depthWindowOffsetY;
+    public final double depthWindowWidth;
+    public final double depthWindowHeight;
 
     public final float minDepth;
     public final float maxDepth;
@@ -15,8 +15,8 @@ public class DepthParameters {
     // From the x-coordinate of the center of the bounding box subtract this
     // number, which is given as a percentage of the width of the bounding
     // box. Double the result to get the width of the depth window. -->
-    public DepthParameters(int pDepthWindowOffsetX, int pDepthWindowOffsetY,
-                           int pDepthWindowHeight,
+    public DepthParameters(double pDepthWindowOffsetX, double pDepthWindowOffsetY,
+                           double pDepthWindowHeight,
                            float pMinDepth, float pMaxDepth) {
         depthWindowOffsetX = pDepthWindowOffsetX;
         depthWindowOffsetY = pDepthWindowOffsetY;

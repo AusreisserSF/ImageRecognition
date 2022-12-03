@@ -259,7 +259,7 @@ public class RecognitionDispatcher extends Application {
                 String angleString = realSenseReturn.angleFromRobotCenter == RealSenseReturn.RECOGNITION_ANGLE_NPOS ? "unable to determine" : String.format("%.2f", realSenseReturn.angleFromRobotCenter);
                 String displayText = "Image: " + imageFilename +
                         '\n' + "Center of robot to pixel on cone:" +
-                        '\n' + "  Distance (meters) " + distanceString +
+                        '\n' + "  Distance (inches) " + distanceString +
                         '\n' + "  Angle " + angleString;
 
                 displayResults(imagePath + coneStackImageParameters.image_source,
@@ -306,7 +306,7 @@ public class RecognitionDispatcher extends Application {
                 String angleString = realSenseReturn.angleFromRobotCenter == RealSenseReturn.RECOGNITION_ANGLE_NPOS ? "unable to determine" : String.format("%.2f", realSenseReturn.angleFromRobotCenter);
                 String displayText = "Image: " + imageFilename +
                         '\n' + "Center of robot to pixel on junction:" +
-                        '\n' + "  Distance (meters) " + distanceString +
+                        '\n' + "  Distance (inches) " + distanceString +
                         '\n' + "  Angle " + angleString;
 
                 displayResults(imagePath + junctionImageParameters.image_source,

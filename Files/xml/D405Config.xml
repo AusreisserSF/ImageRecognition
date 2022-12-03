@@ -1,6 +1,6 @@
 <DEPTH_CAMERA_D405 configured="yes">
     <characteristics>
-      <field_of_view>87.0</field_of_view>
+      <field_of_view>84.0</field_of_view>
       <depth_scale>.0001</depth_scale>
     </characteristics>
     <!-- distances are in inches; convert to meters internally. -->

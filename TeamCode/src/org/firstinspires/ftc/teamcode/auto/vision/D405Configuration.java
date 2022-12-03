@@ -55,10 +55,11 @@ public class D405Configuration {
             orientation = pOrientation;
             serialNumber = pSerialNumber;
 
-            // In the xml file these values are given in inches but
-            // the RealSense cameras work in meters.
-            distanceToCameraCanter = pDistanceToCameraCenter / 39.37;
-            offsetFromCameraCenter = pOffsetFromCameraCenter / 39.37;
+            // Keep these values in inches as they are given in the XML file.
+            // pOffsetFromCameraCenter is positive if the camera is positioned
+            // for the left of the robot's center as seen from behind.
+            distanceToCameraCanter = pDistanceToCameraCenter;
+            offsetFromCameraCenter = pOffsetFromCameraCenter;
         }
     }
 }

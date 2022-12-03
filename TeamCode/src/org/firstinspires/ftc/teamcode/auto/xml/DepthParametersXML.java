@@ -20,9 +20,9 @@ public class DepthParametersXML {
             throw new AutonomousRobotException(TAG, "Element 'depth_window_offset_percent_x' not found or empty");
 
         String windowOffsetXText = window_offset_x_node.getTextContent();
-        int window_offset_x;
+        double window_offset_x;
         try {
-            window_offset_x = Integer.parseInt(windowOffsetXText);
+            window_offset_x = Double.parseDouble(windowOffsetXText);
         } catch (NumberFormatException nex) {
             throw new AutonomousRobotException(TAG, "Invalid number format in element 'depth_window_offset_percent_x'");
         }
@@ -34,9 +34,9 @@ public class DepthParametersXML {
             throw new AutonomousRobotException(TAG, "Element 'depth_window_offset_percent_y' not found or empty");
 
         String windowOffsetYText = window_offset_y_node.getTextContent();
-        int window_offset_y;
+        double window_offset_y;
         try {
-            window_offset_y = Integer.parseInt(windowOffsetYText);
+            window_offset_y = Double.parseDouble(windowOffsetYText);
         } catch (NumberFormatException nex) {
             throw new AutonomousRobotException(TAG, "Invalid number format in element 'depth_window_offset_percent_y'");
         }
@@ -48,9 +48,9 @@ public class DepthParametersXML {
             throw new AutonomousRobotException(TAG, "Element 'depth_window_percent_height' not found");
 
         String windowHeightText = depth_window_height_node.getTextContent();
-        int window_height;
+        double window_height;
         try {
-            window_height = Integer.parseInt(windowHeightText);
+            window_height = Double.parseDouble(windowHeightText);
         } catch (NumberFormatException nex) {
             throw new AutonomousRobotException(TAG, "Invalid number format in element 'depth_window_percent_height'");
         }

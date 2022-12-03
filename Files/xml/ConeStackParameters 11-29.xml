@@ -23,10 +23,10 @@
             <hue_name>blue</hue_name>
             <hue_low>70</hue_low>
             <hue_high>120</hue_high>
-            <saturation_median_target>50</saturation_median_target>
-            <saturation_threshold_low>100</saturation_threshold_low>
-            <value_median_target>75</value_median_target>
-            <value_threshold_low>125</value_threshold_low>          
+            <saturation_median_target>100</saturation_median_target>
+            <saturation_threshold_low>125</saturation_threshold_low>
+            <value_median_target>140</value_median_target>
+            <value_threshold_low>65</value_threshold_low>           
         </hsv_parameters>
         </BLUE>
         <depth_parameters>
