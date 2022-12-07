@@ -103,7 +103,7 @@ public class RealSenseUtils {
     // pThresholded is the thresholded output of pImageROI.
     public static RealSenseReturn getAngleAndDistance(Mat pImageROI, Mat pThresholded,
                                                       D405Configuration pD405Configuration,
-                                                      RobotConstantsPowerPlay.D405Orientation pOrientation,
+                                                      RobotConstantsPowerPlay.D405Orientation pCameraId,
                                                       short[] pDepthArray,
                                                       String pOutputFilenamePreamble,
                                                       VisionParameters.ImageParameters pImageParameters,
@@ -285,7 +285,7 @@ public class RealSenseUtils {
         RobotLogCommon.d(TAG, "Average ROI x, y, depth of the closest 50 (max) pixels " +
                 averageROIX + ", " + averageROIY + ", " + averageDepth);
 
-        Pair<Double, Double> angleAndDistanceToPixel = getAngleAndDistanceToPixel(pD405Configuration, pOrientation,
+        Pair<Double, Double> angleAndDistanceToPixel = getAngleAndDistanceToPixel(pD405Configuration, pCameraId,
                 pImageParameters,
                 averageROIX, averageROIY, averageDepth);
         return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_SUCCESSFUL, angleAndDistanceToPixel.first, angleAndDistanceToPixel.second);
