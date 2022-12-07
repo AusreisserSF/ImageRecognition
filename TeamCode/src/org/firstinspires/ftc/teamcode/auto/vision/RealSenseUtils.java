@@ -13,10 +13,8 @@ import org.opencv.imgproc.Imgproc;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class RealSenseUtils {
 
@@ -57,7 +55,7 @@ public class RealSenseUtils {
         // to an array of bytes as shown here ---
         // https://stackoverflow.com/questions/27065062/opencv-mat-object-serialization-in-java
         byte[] imageROIBytes = new byte[(int) (pImageROI.total() * pImageROI.elemSize())];
-        pImageROI.get(0,0,imageROIBytes);
+        pImageROI.get(0, 0, imageROIBytes);
         int imageROIBytesIndex = 0;
 
         int roiOriginX = pImageParameters.image_roi.x;
@@ -82,8 +80,7 @@ public class RealSenseUtils {
                     imageROIBytes[imageROIBytesIndex + 1] = (byte) 0x60; // g
                     imageROIBytes[imageROIBytesIndex + 2] = (byte) 0x60; // r
                     pixelsGrayedOut++;
-                }
-                else
+                } else
                     pixelsInRange++;
                 imageROIBytesIndex += 3;
             }
@@ -96,7 +93,7 @@ public class RealSenseUtils {
         // an OpenCV Mat.
         // Again from https://stackoverflow.com/questions/27065062/opencv-mat-object-serialization-in-java
         Mat depthAdjustedROI = new Mat(pImageParameters.image_roi.height, pImageParameters.image_roi.width, CvType.CV_8UC3);
-        depthAdjustedROI.put(0,0, imageROIBytes);
+        depthAdjustedROI.put(0, 0, imageROIBytes);
         return depthAdjustedROI;
     }
 
@@ -160,17 +157,17 @@ public class RealSenseUtils {
         int pixelSearchY = (int) (largestBoundingRect.height - percentageOfHeight);
         double pixelSearchHeight = largestBoundingRect.height * (pDepthParameters.depthWindowHeight / 100.0);
         RobotLogCommon.d(TAG, "Pixel search box x " + pixelSearchX +
-                ", y " + pixelSearchY + ", width " + pixelSearchWidth + ", height " + pixelSearchHeight);
+                ", y " + pixelSearchY + ", width " + pixelSearchWidth + ", height " + pixelSearchHeight + ", area " + (pixelSearchWidth * pixelSearchHeight));
 
         // Sanity check.
         if (pixelSearchWidth == 0 || pixelSearchHeight == 0)
-            throw new AutonomousRobotException(TAG, "Pixel search area width or height is 0");
+            throw new AutonomousRobotException(TAG, "Pixel search box width or height is 0");
 
         // Write out the pixel search area.
-        Rect pixelSearchRect = new Rect(pixelSearchX, pixelSearchY, (int) pixelSearchWidth,(int)  pixelSearchHeight);
+        Rect pixelSearchRect = new Rect(pixelSearchX, pixelSearchY, (int) pixelSearchWidth, (int) pixelSearchHeight);
         drawOneRectangle(pixelSearchRect, drawnRectangle, -1);
-                Imgcodecs.imwrite(pOutputFilenamePreamble + "_PRECT.png", drawnRectangle);
-                RobotLogCommon.d(TAG, "Writing " + pOutputFilenamePreamble + "_PRECT.png");
+        Imgcodecs.imwrite(pOutputFilenamePreamble + "_PRECT.png", drawnRectangle);
+        RobotLogCommon.d(TAG, "Writing " + pOutputFilenamePreamble + "_PRECT.png");
 
         // Make sure the pixel search box is within the boundaries of the
         // bounding box of the largest contour.
@@ -197,10 +194,29 @@ public class RealSenseUtils {
         // once.
         MatOfPoint2f largestContourPoint2f = new MatOfPoint2f(largestContour.get().toArray());
         float testReturn;
-        boolean foundPixel = false;
-        int foundPixelX = 0, foundPixelY = 0;
         int targetPixelX, targetPixelY, targetPixelRow;
-        float scaledPixelDepth = 0;
+        float scaledPixelDepth;
+
+        // Loop through all the pixels in the pixel search box and save the
+        // depth and location of in-range pixels for later sorting. To do
+        // this we'll need a method-local inner class.
+        class InRangePixel {
+            public final int roiX;
+            public final int roiY;
+            private final float scaledDepth;
+
+            public InRangePixel(int pROIX, int pROIY, float pScaledDepth) {
+                roiX = pROIX;
+                roiY = pROIY;
+                scaledDepth = pScaledDepth;
+            }
+
+            public float getScaledDepth() {
+                return scaledDepth;
+            }
+        }
+
+        List<InRangePixel> inRangePixels = new ArrayList<>();
         for (int i = pixelSearchY; i < pixelSearchY + pixelSearchHeight; i++) { // row
             for (int j = pixelSearchX; j < pixelSearchX + pixelSearchWidth; j++) { // column
                 testReturn = (float) Imgproc
@@ -222,42 +238,61 @@ public class RealSenseUtils {
                     int centroidPixelDepth = pDepthArray[targetPixelRow + targetPixelX] & 0xFFFF; // use as unsigned short
                     scaledPixelDepth = centroidPixelDepth * pD405Configuration.depthScale;
 
-                    // RobotLogCommon.d(TAG, "Distance from camera to pixel at x " + targetPixelX + ", y " + targetPixelY + " = " + scaledPixelDepth);
-
-                    // Now see if the depth of the pixel is in range.
+                    // if the depth of the pixel is in range store its coordinates in
+                    // the ROI and its depth.
                     if (scaledPixelDepth >= pDepthParameters.minDepth &&
-                            scaledPixelDepth <= pDepthParameters.maxDepth) {
-                        foundPixel = true;
-                        foundPixelX = j;
-                        foundPixelY = i;
-                        RobotLogCommon.d(TAG, "Found pixel in range at x " + foundPixelX + ", y " + foundPixelY + ", depth " + scaledPixelDepth);
-                        break;
-                    }
+                            scaledPixelDepth <= pDepthParameters.maxDepth)
+                        inRangePixels.add(new InRangePixel(j, i, scaledPixelDepth)); // yes, save it
                 }
             }
-
-            if (foundPixel)
-                break;
         }
 
-        if (foundPixel)
-            RobotLogCommon.d(TAG, "Found a pixel on or inside the cone contour at ROI x " +
-                    foundPixelX + ", y " + foundPixelY);
-        else {
+        // Make sure we've found at least one pixel.
+        if (inRangePixels.size() == 0) {
             RobotLogCommon.d(TAG, "Did not find a pixel on or inside the cone contour");
             return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL);
         }
 
-        Pair<Double, Double> angleAndDistanceToPixel = RealSenseUtils.getAngleAndDistanceToPixel(pD405Configuration, pOrientation,
+        // Sort the in-range pixels by their depth.
+        RobotLogCommon.d(TAG, "Found " + inRangePixels.size() + " in-range pixels");
+        List<InRangePixel> sortedInRangePixels = inRangePixels.stream()
+                .sorted(Comparator.comparing(InRangePixel::getScaledDepth)) // ascending
+                .collect(Collectors.toList());
+
+        InRangePixel closestPixel = sortedInRangePixels.get(0);
+        InRangePixel furthestPixel = sortedInRangePixels.get(sortedInRangePixels.size() - 1);
+        RobotLogCommon.d(TAG, "Closest in-range pixel at ROI x " + closestPixel.roiX +
+                ", y " + closestPixel.roiY + ", depth " + closestPixel.getScaledDepth());
+        RobotLogCommon.d(TAG, "Furthest in-range pixel at ROI x " + furthestPixel.roiX +
+                ", y " + furthestPixel.roiY + ", depth " + furthestPixel.getScaledDepth());
+
+        // Now we want to average the coordinates and depth of the closest 50 (max) pixels.
+        InRangePixel inRangePixel;
+        int accumulatedROIX = 0;
+        int accumulatedROIY = 0;
+        float accumulatedDepth = 0.0f;
+        int i;
+        for (i = 0; i < 50 && i < sortedInRangePixels.size(); i++) {
+            inRangePixel = sortedInRangePixels.get(i);
+            accumulatedROIX += inRangePixel.roiX;
+            accumulatedROIY += inRangePixel.roiY;
+            accumulatedDepth += inRangePixel.scaledDepth;
+        }
+
+        int averageROIX = accumulatedROIX / i;
+        int averageROIY = accumulatedROIY / i;
+        float averageDepth = accumulatedDepth / i;
+        RobotLogCommon.d(TAG, "Average ROI x, y, depth of the closest 50 (max) pixels " +
+                averageROIX + ", " + averageROIY + ", " + averageDepth);
+
+        Pair<Double, Double> angleAndDistanceToPixel = getAngleAndDistanceToPixel(pD405Configuration, pOrientation,
                 pImageParameters,
-                foundPixelX, foundPixelY, scaledPixelDepth);
+                averageROIX, averageROIY, averageDepth);
         return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_SUCCESSFUL, angleAndDistanceToPixel.first, angleAndDistanceToPixel.second);
     }
 
     // Returns the angle and distance from the center of the robot to
     // the target pixel.
-    //**TODO Need to take into account the offset of the camera from the robot's center -
-    // and define the convention for the point-of-view and sign.
     private static Pair<Double, Double> getAngleAndDistanceToPixel(D405Configuration pD405Configuration, RobotConstantsPowerPlay.D405Orientation pCameraId,
                                                                    VisionParameters.ImageParameters pImageParameters,
                                                                    int pTargetPixelX, int pTargetPixelY, double pScaledPixelDepth) {

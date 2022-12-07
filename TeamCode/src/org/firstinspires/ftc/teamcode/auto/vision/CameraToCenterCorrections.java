@@ -19,6 +19,9 @@ public class CameraToCenterCorrections {
     //Computes the distance from the center of the robot to the object using a formula derived from the law of cosines.
     public static double getCorrectedDistance(double distanceFromCenterToFront, double offset, double distanceFromCamera, double angleFromCamera){
 
+        //Converts the input angle from degrees to radians.
+        angleFromCamera = Math.toRadians(angleFromCamera);
+
         //Returns the direction of the camera offset from the center of the robot when looking from behind.
         CameraPosition cameraPosition;
         if (offset < 0){
@@ -46,27 +49,31 @@ public class CameraToCenterCorrections {
         double pythSum = Math.pow(distanceFromCenterToCamera, 2) + Math.pow(distanceFromCamera, 2);
 
         switch (cameraPosition) {
-            case LEFT: {
+            case LEFT -> {
                 //Returns the distance from the center of the robot to the object.
                 return Math.sqrt(pythSum - 2 * distanceFromCamera * distanceFromCenterToCamera * Math.cos(angleFromCameraToCenter + angleFromCamera));
             }
-            case CENTER: {
+            case CENTER -> {
                 //Returns the distance from the center of the robot to the object.
                 return Math.sqrt(pythSum - 2 * distanceFromCamera * distanceFromCenterToCamera * Math.cos(pi - angleFromCamera));
             }
-            case RIGHT: {
+            case RIGHT -> {
                 //Returns the distance from the center of the robot to the object.
                 return Math.sqrt(pythSum - 2 * distanceFromCamera * distanceFromCenterToCamera * Math.cos(angleFromCameraToCenter - angleFromCamera));
             }
         }
 
         return 0;
+
     }
 
     //Computes the angle from the heading of the robot to the object using a formula derived from the law of sines.
     //Returns a positive angle if the robot needs to turn counterclockwise.
     //Returns a negative angle if the robot needs to turn clockwise.
     public static double getCorrectedAngle(double distanceFromCenterToFront, double offset, double distanceFromCamera, double angleFromCamera){
+
+        //Converts the input angle from degrees to radians.
+        angleFromCamera = Math.toRadians(angleFromCamera);
 
         //Returns the direction of the camera offset from the center of the robot when looking from behind.
         CameraPosition cameraPosition;
@@ -91,9 +98,9 @@ public class CameraToCenterCorrections {
         double angleFromCenterToCamera = pi - angleFromCameraToCenter;
 
         switch (cameraPosition) {
-            case LEFT: {
+            case LEFT -> {
                 //Computes the distance from the center of the robot to the object using the distance function defined above.
-                double distanceFromCenter = getCorrectedDistance(distanceFromCenterToFront, offset, distanceFromCamera, angleFromCamera);
+                double distanceFromCenter = getCorrectedDistance(distanceFromCenterToFront, offset, distanceFromCamera, Math.toDegrees(angleFromCamera));
                 //Computes the sine of the angle between the line connecting the camera & the object and the line connecting the center of the robot to the camera.
                 double sinOppositeCenterLine = Math.sin(angleFromCameraToCenter + angleFromCamera);
                 //Computes the angle between the line connecting the center of the robot to the camera & the line connecting the center of the robot to the object.
@@ -102,9 +109,9 @@ public class CameraToCenterCorrections {
                 return Math.toDegrees(angleFromCenterToCamera - theta);
 
             }
-            case CENTER: {
+            case CENTER -> {
                 //Computes the distance from the center of the robot to the object using the distance function defined above.
-                double distanceFromCenter = getCorrectedDistance(distanceFromCenterToFront, offset, distanceFromCamera, angleFromCamera);
+                double distanceFromCenter = getCorrectedDistance(distanceFromCenterToFront, offset, distanceFromCamera, Math.toDegrees(angleFromCamera));
                 //Computes the sine of the angle between the line connecting the camera & the object and the line connecting the center of the robot to the camera.
                 double sinOppositeCenterLine = Math.sin(pi - angleFromCamera);
                 //Computes the angle between the line connecting the center of the robot to the camera & the line connecting the center of the robot to the object.
@@ -112,9 +119,9 @@ public class CameraToCenterCorrections {
                 //Returns the angle between the heading of the robot & the line connecting the center of the robot to the object.
                 return Math.toDegrees(theta);
             }
-            case RIGHT: {
+            case RIGHT -> {
                 //Computes the distance from the center of the robot to the object using the distance function defined above.
-                double distanceFromCenter = getCorrectedDistance(distanceFromCenterToFront, offset, distanceFromCamera, angleFromCamera);
+                double distanceFromCenter = getCorrectedDistance(distanceFromCenterToFront, offset, distanceFromCamera, Math.toDegrees(angleFromCamera));
                 //Computes the sine of the angle between the line connecting the camera & the object and the line connecting the center of the robot to the camera.
                 double sinOppositeCenterLine = Math.sin(angleFromCameraToCenter - angleFromCamera);
                 //Computes the angle between the line connecting the center of the robot to the camera & the line connecting the center of the robot to the object.

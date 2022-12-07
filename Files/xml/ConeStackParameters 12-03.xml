@@ -8,10 +8,10 @@
             <hue_name>red</hue_name>
             <hue_low>160</hue_low>
             <hue_high>25</hue_high>
-            <saturation_median_target>100</saturation_median_target>
-            <saturation_threshold_low>125</saturation_threshold_low>
-            <value_median_target>135</value_median_target>
-            <value_threshold_low>100</value_threshold_low>
+            <saturation_median_target>25</saturation_median_target>
+            <saturation_threshold_low>150</saturation_threshold_low>
+            <value_median_target>225</value_median_target>
+            <value_threshold_low>165</value_threshold_low>          
         </hsv_parameters>
     </RED>
     <BLUE>

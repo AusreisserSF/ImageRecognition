@@ -6,16 +6,16 @@
         <actions>
             <CONE_STACK_DEPTH>
                 <image_parameters>
-                    <image_source>SIGNAL_SLEEVE_12021727_32185_IMG_2.png</image_source>
+                    <image_source>SWIVEL_12051752_29912_IMG.png</image_source>
                     <resolution>
                         <width>640</width>
                         <height>480</height>
                     </resolution>
                     <image_roi>
-                        <x>35</x>
-                        <y>130</y>
-                        <width>565</width>
-                        <height>165</height> 
+                        <x>95</x>
+                        <y>185</y>
+                        <width>455</width>
+                        <height>255</height>  
                     </image_roi>
                 </image_parameters>
                 <cone_stack_recognition>
