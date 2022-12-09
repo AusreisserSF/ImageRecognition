@@ -15,6 +15,12 @@ public class RobotConstants {
         BLUE, RED, NONE
     }
 
+    //**TODO It's a good idea to put all recognition paths here.
+    // Generic recognition paths - independent of a particular game
+    public enum RecognitionPath {
+        GRAYSCALE, RED_CHANNEL_GRAYSCALE, COLOR
+    }
+
     //**TODO replace with RecognitionResults below
     public enum OpenCVResults {
         OCV_ERROR, RECOGNITION_SUCCESSFUL, RECOGNITION_UNSUCCESSFUL

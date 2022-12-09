@@ -1,22 +1,18 @@
 package org.firstinspires.ftc.teamcode.auto.vision;
 
-// Input parameters to barcode recognition.
+// Input parameters to gold cube recognition.
 public class GoldCubeParameters {
 
+    public final VisionParameters.GrayParameters grayscaleParameters;
     public final VisionParameters.HSVParameters hsvParameters;
-    public final float colorCameraFOV;
-    public final float depthCameraScale;
-    public final float depthCameraDistanceFilter;
-    public final float cameraToRobotCenterMeters;
+    public final DepthParameters depthParameters;
 
-    public GoldCubeParameters(VisionParameters.HSVParameters pHSVParameters,
-                              float pColorCameraFOV, float pDepthCameraScale, float pDepthCameraDistanceFilter,
-                              float pCameraToRobotCenterMeters) {
+    public GoldCubeParameters(VisionParameters.GrayParameters pGrayscaleParameters,
+                              VisionParameters.HSVParameters pHSVParameters,
+                              DepthParameters pDepthParameters) {
+        grayscaleParameters = pGrayscaleParameters;
         hsvParameters = pHSVParameters;
-        colorCameraFOV = pColorCameraFOV;
-        depthCameraScale = pDepthCameraScale;
-        depthCameraDistanceFilter = pDepthCameraDistanceFilter;
-        cameraToRobotCenterMeters = pCameraToRobotCenterMeters;
+        depthParameters = pDepthParameters;
     }
 
 }

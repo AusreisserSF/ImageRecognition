@@ -1,23 +1,26 @@
 <RobotAction>
-    <OpMode id="TEST">
+    <OpMode id="GOLD_CUBE">
            <parameters>
             <log_level>v</log_level>
         </parameters>
         <actions>
             <GOLD_CUBE_DEPTH>
                 <image_parameters>
-                    <ocv_image>RS_05131545_25836.png</ocv_image>
+                    <image_source>SWIVEL_12081334_22594_IMG.png</image_source>
                     <resolution>
                         <width>640</width>
                         <height>480</height>
                     </resolution>
                     <image_roi>
-                        <x>30</x>
-                        <y>185</y>
-                        <width>580</width>
-                        <height>100</height>
+                        <x>185</x>
+                        <y>200</y>
+                        <width>280</width>
+                        <height>250</height>
                     </image_roi>
-                </image_parameters>    
+                </image_parameters> 
+                <gold_cube_recognition>
+                    <recognition_path>color</recognition_path>
+                </gold_cube_recognition>      
             </GOLD_CUBE_DEPTH>
         </actions>
     </OpMode>

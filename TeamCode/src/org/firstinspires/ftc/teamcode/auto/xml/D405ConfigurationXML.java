@@ -15,7 +15,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.EnumMap;
 
 // Parse the XML elements that describe the configuration of the RealSense
 // D405 depth camera.
@@ -145,8 +144,8 @@ public class D405ConfigurationXML {
                 orientation_node.getTextContent().isEmpty())
             throw new AutonomousRobotException(TAG, "Element 'orientation' not found");
 
-        RobotConstantsPowerPlay.D405Orientation orientation =
-                RobotConstantsPowerPlay.D405Orientation.valueOf(orientation_node.getTextContent().toUpperCase());
+        RobotConstantsPowerPlay.D405CameraId orientation =
+                RobotConstantsPowerPlay.D405CameraId.valueOf(orientation_node.getTextContent().toUpperCase());
 
         // <serial_number>
         Node serial_number_node = orientation_node.getNextSibling();

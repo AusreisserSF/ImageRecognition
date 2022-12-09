@@ -21,8 +21,8 @@ public class RobotConstantsPowerPlay {
         VUFORIA, D405_FRONT, D405_BACK
     }
 
-    public enum D405Orientation {
-        FRONT, BACK
+    public enum D405CameraId {
+        SWIVEL, SIGNAL_SLEEVE
     }
 
     public enum SignalSleeveRecognitionPath {

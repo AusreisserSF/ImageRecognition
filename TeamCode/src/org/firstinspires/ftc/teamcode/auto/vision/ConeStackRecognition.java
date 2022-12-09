@@ -38,7 +38,7 @@ public class ConeStackRecognition {
     // A stack of 1 to 5 blue cones
     public RealSenseReturn recognizeConeStack(ImageProvider pImageProvider,
                                               D405Configuration pD405Configuration,
-                                              RobotConstantsPowerPlay.D405Orientation pOrientation,
+                                              RobotConstantsPowerPlay.D405CameraId pOrientation,
                                               VisionParameters.ImageParameters pImageParameters,
                                               ConeStackParameters pConeStackParameters,
                                               RobotConstantsPowerPlay.ConeStackRecognitionPath pConeStackRecognitionPath) throws InterruptedException, IOException {

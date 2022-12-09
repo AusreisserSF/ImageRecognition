@@ -34,7 +34,7 @@ public class JunctionRecognition {
     // Returns the result of image analysis.
     public RealSenseReturn recognizeJunction(ImageProvider pImageProvider,
                                              D405Configuration pD405Configuration,
-                                             RobotConstantsPowerPlay.D405Orientation pOrientation,
+                                             RobotConstantsPowerPlay.D405CameraId pOrientation,
                                              VisionParameters.ImageParameters pImageParameters,
                                              JunctionParameters pJunctionParameters,
                                              RobotConstantsPowerPlay.JunctionRecognitionPath pJunctionRecognitionPath) throws InterruptedException, IOException {

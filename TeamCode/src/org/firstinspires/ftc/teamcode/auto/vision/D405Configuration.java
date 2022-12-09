@@ -29,8 +29,8 @@ public class D405Configuration {
 
     public final double fieldOfView;
     public final float depthScale;
-    public final EnumMap<RobotConstantsPowerPlay.D405Orientation, D405Camera> cameraMap =
-            new EnumMap<>(RobotConstantsPowerPlay.D405Orientation.class);
+    public final EnumMap<RobotConstantsPowerPlay.D405CameraId, D405Camera> cameraMap =
+            new EnumMap<>(RobotConstantsPowerPlay.D405CameraId.class);
 
     public D405Configuration(double pFieldOfView,
                              float pDepthScale,
@@ -43,12 +43,12 @@ public class D405Configuration {
     }
 
     public static class D405Camera {
-        public final RobotConstantsPowerPlay.D405Orientation orientation;
+        public final RobotConstantsPowerPlay.D405CameraId orientation;
         public final String serialNumber;
         public final double distanceToCameraCanter;
         public final double offsetFromCameraCenter;
 
-        public D405Camera(RobotConstantsPowerPlay.D405Orientation pOrientation,
+        public D405Camera(RobotConstantsPowerPlay.D405CameraId pOrientation,
                           String pSerialNumber,
                           double pDistanceToCameraCenter,
                           double pOffsetFromCameraCenter) {

@@ -5,13 +5,13 @@
     </characteristics>
     <!-- distances are in inches; convert to meters internally. -->
     <camera_1>
-      <orientation>front</orientation>
+      <orientation>swivel</orientation>
       <serial_number>123622270958</serial_number>
       <distance_to_camera_center>8.0</distance_to_camera_center>
       <offset_from_camera_center>0.0</offset_from_camera_center>
     </camera_1>
     <!-- camera_2>
-      <orientation>back</orientation>
+      <orientation>signal_sleeve</orientation>
       <serial_number>123622270236</serial_number>
       <distance_to_camera_center></distance_to_camera_center>
       <offset_from_camera_center></offset_from_camera_center>

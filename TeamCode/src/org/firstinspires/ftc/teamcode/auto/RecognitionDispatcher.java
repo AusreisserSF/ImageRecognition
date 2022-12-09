@@ -44,7 +44,7 @@ public class RecognitionDispatcher extends Application {
     private Stage stage;
     private Pane field;
     private RobotActionXMLFreightFrenzy robotActionXMLFreightFrenzy;
-    private RobotActionXMLGoldCube robotActionXMLGoldCube;
+    private RobotActionXMLStandard robotActionXMLGoldCube;
     private RobotActionXMLStandard robotActionXMLSignalSleeve;
     private RobotActionXMLStandard robotActionXMLConeStack;
     private RobotActionXMLStandard robotActionXMLJunction;
@@ -100,18 +100,8 @@ public class RecognitionDispatcher extends Application {
         // that has a single action.
         List<RobotXMLElement> actions;
         switch (opmodeParameter) {
-
-            //**TODO this is wrong - reimplement under GOLD_CUBE
             case "TEST" -> {
-                robotActionXMLGoldCube = new RobotActionXMLGoldCube(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
-                RobotActionXMLGoldCube.RobotActionDataGoldCube actionData = robotActionXMLGoldCube.getOpModeData("TEST");
-                actions = actionData.actions;
-                if (actions.size() != 1)
-                    throw new AutonomousRobotException(TAG, "TEST OpMode must contain a single action");
-
-                String recognitionAction = actions.get(0).getRobotXMLElementName();
-                if (!recognitionAction.equals("GOLD_CUBE_DEPTH"))
-                    throw new AutonomousRobotException(TAG, "Missing required action GOLD_CUBE_DEPTH");
+                   throw new AutonomousRobotException(TAG, "TEST OpMode not implemented");
             }
 
             case "SIGNAL_SLEEVE" -> {
@@ -150,9 +140,16 @@ public class RecognitionDispatcher extends Application {
                     throw new AutonomousRobotException(TAG, "Missing required action JUNCTION_DEPTH");
             }
 
-            //**TODO gold cube should follow cone stack and junction.
             case "GOLD_CUBE" -> {
-                    throw new AutonomousRobotException(TAG, "GOLD_CUBE OpMode needs reimplementation");
+                robotActionXMLGoldCube = new RobotActionXMLStandard(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
+                RobotActionXMLStandard.RobotActionDataStandard actionData = robotActionXMLGoldCube.getOpModeData("GOLD_CUBE");
+                actions = actionData.actions;
+                if (actions.size() != 1)
+                    throw new AutonomousRobotException(TAG, "GOLD_CUBE OpMode must contain a single action");
+
+                String recognitionAction = actions.get(0).getRobotXMLElementName();
+                if (!recognitionAction.equals("GOLD_CUBE_DEPTH"))
+                    throw new AutonomousRobotException(TAG, "Missing required action GOLD_CUBE_DEPTH");
             }
 
             case "Freight Frenzy" -> {
@@ -253,7 +250,7 @@ public class RecognitionDispatcher extends Application {
                 // Perform image recognition and depth mapping.
                 ConeStackRecognition coneStackRecognition = new ConeStackRecognition(alliance);
                 RealSenseReturn realSenseReturn =
-                        coneStackRecognition.recognizeConeStack(fileImage, d405Configuration, RobotConstantsPowerPlay.D405Orientation.FRONT, coneStackImageParameters, coneStackParameters, coneStackRecognitionPath);
+                        coneStackRecognition.recognizeConeStack(fileImage, d405Configuration, RobotConstantsPowerPlay.D405CameraId.SWIVEL, coneStackImageParameters, coneStackParameters, coneStackRecognitionPath);
 
                 String distanceString = realSenseReturn.distanceFromRobotCenter == RealSenseReturn.RECOGNITION_DISTANCE_NPOS ? "unable to determine" : String.format("%.2f", realSenseReturn.distanceFromRobotCenter);
                 String angleString = realSenseReturn.angleFromRobotCenter == RealSenseReturn.RECOGNITION_ANGLE_NPOS ? "unable to determine" : String.format("%.2f", realSenseReturn.angleFromRobotCenter);
@@ -300,7 +297,7 @@ public class RecognitionDispatcher extends Application {
                 // Perform image recognition and depth mapping.
                 JunctionRecognition junctionRecognition = new JunctionRecognition(alliance);
                 RealSenseReturn realSenseReturn =
-                        junctionRecognition.recognizeJunction(fileImage, d405Configuration, RobotConstantsPowerPlay.D405Orientation.FRONT, junctionImageParameters, junctionParameters, junctionRecognitionPath);
+                        junctionRecognition.recognizeJunction(fileImage, d405Configuration, RobotConstantsPowerPlay.D405CameraId.SWIVEL, junctionImageParameters, junctionParameters, junctionRecognitionPath);
 
                 String distanceString = realSenseReturn.distanceFromRobotCenter == RealSenseReturn.RECOGNITION_DISTANCE_NPOS ? "unable to determine" : String.format("%.2f", realSenseReturn.distanceFromRobotCenter);
                 String angleString = realSenseReturn.angleFromRobotCenter == RealSenseReturn.RECOGNITION_ANGLE_NPOS ? "unable to determine" : String.format("%.2f", realSenseReturn.angleFromRobotCenter);
@@ -315,11 +312,15 @@ public class RecognitionDispatcher extends Application {
             }
 
             // Summer 2022: test Intel Realsense depth camera(s).
-            //**TODO Use general depth path, hsv branch only
             case "GOLD_CUBE_DEPTH" -> {
+                String xmlDir = WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir;
+
                 // Read the parameters for gold cube recognition from the xml file.
                 GoldCubeParametersXML goldCubeParametersXML = new GoldCubeParametersXML(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir);
                 GoldCubeParameters goldCubeParameters = goldCubeParametersXML.getGoldCubeParameters();
+
+                D405ConfigurationXML d405ConfigurationXML = new D405ConfigurationXML(xmlDir);
+                D405Configuration d405Configuration = d405ConfigurationXML.getD405Configuration();
 
                 // Get the <image_parameters> for the gold cube from the RobotAction (+suffix) XML file.
                 VisionParameters.ImageParameters goldCubeImageParameters =
@@ -330,18 +331,32 @@ public class RecognitionDispatcher extends Application {
                         goldCubeImageParameters.image_source.endsWith(".jpg")))
                     throw new AutonomousRobotException(TAG, "Invalid image file name");
 
+                imageFilename = goldCubeImageParameters.image_source;
                 ImageProvider fileImage = new FileImage(imagePath + goldCubeImageParameters.image_source);
 
                 // Perform image recognition and depth mapping.
-                GoldCubeRecognition recognition = new GoldCubeRecognition();
-                GoldCubeReturn goldCubeReturn = recognition.getAngleAndDistanceToGoldCube(fileImage, goldCubeImageParameters, goldCubeParameters);
-                String displayText = "Center of robot to center of gold cube" +
-                        '\n' + "Distance (meters) " + String.format("%.2f", goldCubeReturn.distanceFromRobotCenter) +
-                        ", angle " + String.format("%.2f", goldCubeReturn.angleFromRobotCenter);
+                // Get the recognition path from the XML file.
+                String recognitionPathString = actionXPath.getRequiredString("gold_cube_recognition/recognition_path");
+                RobotConstants.RecognitionPath goldCubeRecognitionPath =
+                        RobotConstants.RecognitionPath.valueOf(recognitionPathString.toUpperCase());
+
+                RobotLogCommon.d(TAG, "Recognition path " + goldCubeRecognitionPath);
+
+                // Perform image recognition and depth mapping.
+                GoldCubeRecognition goldCubeRecognition = new GoldCubeRecognition(alliance);
+                RealSenseReturn realSenseReturn =
+                        goldCubeRecognition.recognizeGoldCube(fileImage, d405Configuration, RobotConstantsPowerPlay.D405CameraId.SWIVEL, goldCubeImageParameters, goldCubeParameters, goldCubeRecognitionPath);
+
+                String distanceString = realSenseReturn.distanceFromRobotCenter == RealSenseReturn.RECOGNITION_DISTANCE_NPOS ? "unable to determine" : String.format("%.2f", realSenseReturn.distanceFromRobotCenter);
+                String angleString = realSenseReturn.angleFromRobotCenter == RealSenseReturn.RECOGNITION_ANGLE_NPOS ? "unable to determine" : String.format("%.2f", realSenseReturn.angleFromRobotCenter);
+                String displayText = "Image: " + imageFilename +
+                        '\n' + "Center of robot to pixel on gold cube:" +
+                        '\n' + "  Distance: " + distanceString + " inches" +
+                        '\n' + "  Angle " + angleString + " degrees";
 
                 displayResults(imagePath + goldCubeImageParameters.image_source,
                         displayText,
-                        "Test Realsense D455");
+                        "Test gold cube recognition");
             }
 
             // Freight Frenzy 2021-2022

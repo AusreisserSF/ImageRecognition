@@ -21,7 +21,7 @@ public class RealSenseRecognition {
     // Analyzes a grayscale image using only the red channel.
     public RealSenseReturn redChannelPath(Mat pImageROI,
                                           D405Configuration pD405Configuration,
-                                          RobotConstantsPowerPlay.D405Orientation pOrientation,
+                                          RobotConstantsPowerPlay.D405CameraId pOrientation,
                                           short[] pDepthArray,
                                           String pOutputFilenamePreamble,
                                           VisionParameters.ImageParameters pImageParameters,
@@ -51,7 +51,7 @@ public class RealSenseRecognition {
     // Analyzes a color image.
     public RealSenseReturn colorPath(Mat pImageROI,
                                      D405Configuration pD405Configuration,
-                                     RobotConstantsPowerPlay.D405Orientation pOrientation,
+                                     RobotConstantsPowerPlay.D405CameraId pOrientation,
                                      short[] pDepthArray,
                                      String pOutputFilenamePreamble,
                                      VisionParameters.ImageParameters pImageParameters,
