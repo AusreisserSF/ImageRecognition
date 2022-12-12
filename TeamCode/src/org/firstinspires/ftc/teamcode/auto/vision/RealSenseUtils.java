@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.auto.vision;
 
-import org.firstinspires.ftc.ftcdevcommon.AutonomousRobotException;
 import org.firstinspires.ftc.ftcdevcommon.Pair;
 import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
@@ -10,7 +9,10 @@ import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.*;
@@ -97,9 +99,7 @@ public class RealSenseUtils {
         return depthAdjustedROI;
     }
 
-    // pImageROI is a depth-sanitized version of the original ROI, that is,
-    // all pixels that are out of the identified depth range have been converted
-    // to gray.
+    // pImageROI is cropped version of the original ROI.
     // pThresholded is the thresholded output of pImageROI.
     public static RealSenseReturn getAngleAndDistance(Mat pImageROI, Mat pThresholded,
                                                       D405Configuration pD405Configuration,

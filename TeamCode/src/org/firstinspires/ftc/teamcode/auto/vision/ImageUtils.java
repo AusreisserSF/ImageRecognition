@@ -396,7 +396,7 @@ public class ImageUtils {
     // Compute the angle from the front-center of the robot to the center of the
     // object of interest. The parameter pImageWidth is the width of the entire
     // image, not just the ROI, and the parameter pObjectCentroidX is the x
-    // offset from the left-hand edge of the emtire image to the center of the
+    // offset from the left-hand edge of the entire image to the center of the
     // object of interest.
     public static double computeAngleToObjectCenter(int pImageWidth, int pObjectCentroidX, double pCameraFieldOfView) {
 
@@ -411,6 +411,7 @@ public class ImageUtils {
 	*/
 
         // tan(FOV / 2.0) = (pImageWidth / 2.0) [opposite] / adjacent [distance from the camera to the image in pseudo pixels]
+        RobotLogCommon.i(TAG, "Using horizontal field of view " + pCameraFieldOfView);
         double halfFOVRadians = Math.toRadians(pCameraFieldOfView / 2.0);
         double distanceToImageInPseudoPixels = (pImageWidth / 2.0) / Math.tan(halfFOVRadians);
         double angleRadians = Math.atan(((pImageWidth / 2.0) - pObjectCentroidX) / distanceToImageInPseudoPixels);

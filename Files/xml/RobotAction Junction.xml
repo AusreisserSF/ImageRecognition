@@ -6,16 +6,21 @@
         <actions>
             <JUNCTION_DEPTH>
                 <image_parameters>
-                    <image_source>D405_11171728_03413_IMG junction.png</image_source>
+                    <!-- 
+                      junction dead center SWIVEL_12081320_20234_IMG.png
+                      robot 2" to the left SWIVEL_12081320_37921_IMG.png
+                      robot 2" to the right SWIVEL_12081320_51774_IMG.png    
+                    -->
+                    <image_source>SWIVEL_12081320_51774_IMG.png</image_source>
                     <resolution>
                         <width>640</width>
                         <height>480</height>
                     </resolution>
                     <image_roi>
-                        <x>190</x>
-                        <y>185</y>
-                        <width>320</width>
-                        <height>205</height>
+                        <x>60</x>
+                        <y>50</y>
+                        <width>525</width>
+                        <height>190</height>
                     </image_roi>
                 </image_parameters>
                 <junction_recognition>

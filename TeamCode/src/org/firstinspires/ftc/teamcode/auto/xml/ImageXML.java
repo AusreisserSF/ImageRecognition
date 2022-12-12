@@ -37,8 +37,6 @@ public class ImageXML {
         int resolution_height;
         Rect image_roi;
 
-        RobotLogCommon.d(TAG, "Parsing XML image_parameters");
-
         Node image_node = pImageParametersNode.getFirstChild();
         Node image_source_node = getNextElement(image_node);
         if ((image_source_node == null) || !image_source_node.getNodeName().equals("image_source") || image_source_node.getTextContent().isEmpty())
@@ -155,7 +153,6 @@ public class ImageXML {
         int median_target;
         int threshold_low;
 
-        RobotLogCommon.d(TAG, "Parsing XML gray_parameters");
         Node gray_target_node = pGrayNode.getFirstChild();
         gray_target_node = getNextElement(gray_target_node);
         if ((gray_target_node == null) || !gray_target_node.getNodeName().equals("median_target") || gray_target_node.getTextContent().isEmpty())
@@ -203,7 +200,6 @@ public class ImageXML {
         int value_median_target;
         int value_threshold_low;
 
-        RobotLogCommon.d(TAG, "Parsing XML hsv_parameters");
         Node hue_name_node = pHSVNode.getFirstChild();
         hue_name_node = getNextElement(hue_name_node);
         if ((hue_name_node == null) || !hue_name_node.getNodeName().equals("hue_name") || hue_name_node.getTextContent().isEmpty())

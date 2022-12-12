@@ -8,9 +8,9 @@
         <hue_low>5</hue_low>
         <hue_high>30</hue_high>
         <saturation_median_target>12</saturation_median_target>
-        <saturation_threshold_low>10</saturation_threshold_low>
+        <saturation_threshold_low>70</saturation_threshold_low>
         <value_median_target>160</value_median_target>
-        <value_threshold_low>120</value_threshold_low>
+        <value_threshold_low>110</value_threshold_low>
     </hsv_parameters>
     <depth_parameters>
         <!-- define the pixel search area -->
@@ -18,12 +18,12 @@
              which we assume to be the cube. -->
         <!-- from the x-coordinate of the center of the bounding box subtract this
              number. Double the result to get the width of the pixel search area. -->
-             <depth_window_offset_percent_x>20</depth_window_offset_percent_x>
+             <depth_window_offset_percent_x>2.5</depth_window_offset_percent_x>
              <!-- subtract this number from the y-coordinate of the bottom of the bounding
                   box. -->  
-             <depth_window_offset_percent_y>100</depth_window_offset_percent_y>
+             <depth_window_offset_percent_y>90</depth_window_offset_percent_y>
              <!-- this number should be <= than the depth_window_offset_percent_y -->
-             <depth_window_percent_height>25</depth_window_percent_height>
+             <depth_window_percent_height>80</depth_window_percent_height>
              <depth_filter min="0.2" max="0.7"/>
     </depth_parameters>
 </gold_cube_parameters>
