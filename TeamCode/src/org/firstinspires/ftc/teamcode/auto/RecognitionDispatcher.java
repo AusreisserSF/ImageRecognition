@@ -34,8 +34,8 @@ public class RecognitionDispatcher extends Application {
 
     private static final String TAG = RecognitionDispatcher.class.getSimpleName();
 
-    public static final double FIELD_WIDTH = 410;
-    public static final double FIELD_HEIGHT = 300;
+    public static final double FIELD_WIDTH = 400;
+    public static final double FIELD_HEIGHT = 400;
 
     public static final double NOTIFICATION_TEXT_POSITION_Y = (FIELD_HEIGHT / 2) + 20;
     public static final double NOTIFICATION_TEXT_POSITION_X = 10;
@@ -101,7 +101,7 @@ public class RecognitionDispatcher extends Application {
         List<RobotXMLElement> actions;
         switch (opmodeParameter) {
             case "TEST" -> {
-                   throw new AutonomousRobotException(TAG, "TEST OpMode not implemented");
+                throw new AutonomousRobotException(TAG, "TEST OpMode not implemented");
             }
 
             case "SIGNAL_SLEEVE" -> {
@@ -249,18 +249,11 @@ public class RecognitionDispatcher extends Application {
 
                 // Perform image recognition and depth mapping.
                 ConeStackRecognition coneStackRecognition = new ConeStackRecognition(alliance);
-                RealSenseReturn realSenseReturn =
+                RealSenseReturn coneStackReturn =
                         coneStackRecognition.recognizeConeStack(fileImage, d405Configuration, RobotConstantsPowerPlay.D405CameraId.SWIVEL, coneStackImageParameters, coneStackParameters, coneStackRecognitionPath);
 
-                String distanceString = realSenseReturn.distanceFromRobotCenter == RealSenseReturn.RECOGNITION_DISTANCE_NPOS ? "unable to determine" : String.format("%.2f", realSenseReturn.distanceFromRobotCenter);
-                String angleString = realSenseReturn.angleFromRobotCenter == RealSenseReturn.RECOGNITION_ANGLE_NPOS ? "unable to determine" : String.format("%.2f", realSenseReturn.angleFromRobotCenter);
-                String displayText = "Image: " + imageFilename +
-                        '\n' + "Center of robot to pixel on cone:" +
-                        '\n' + "  Distance: " + distanceString + " inches" +
-                        '\n' + "  Angle " + angleString + " degrees";
-
                 displayResults(imagePath + coneStackImageParameters.image_source,
-                        displayText,
+                        buildAngleAndDepthDisplayText(imageFilename, coneStackReturn),
                         "Test cone stack recognition");
             }
 
@@ -296,18 +289,11 @@ public class RecognitionDispatcher extends Application {
 
                 // Perform image recognition and depth mapping.
                 JunctionRecognition junctionRecognition = new JunctionRecognition(alliance);
-                RealSenseReturn realSenseReturn =
+                RealSenseReturn junctionReturn =
                         junctionRecognition.recognizeJunction(fileImage, d405Configuration, RobotConstantsPowerPlay.D405CameraId.SWIVEL, junctionImageParameters, junctionParameters, junctionRecognitionPath);
 
-                String distanceString = realSenseReturn.distanceFromRobotCenter == RealSenseReturn.RECOGNITION_DISTANCE_NPOS ? "unable to determine" : String.format("%.2f", realSenseReturn.distanceFromRobotCenter);
-                String angleString = realSenseReturn.angleFromRobotCenter == RealSenseReturn.RECOGNITION_ANGLE_NPOS ? "unable to determine" : String.format("%.2f", realSenseReturn.angleFromRobotCenter);
-                String displayText = "Image: " + imageFilename +
-                        '\n' + "Center of robot to pixel on junction:" +
-                        '\n' + "  Distance: " + distanceString + " inches" +
-                        '\n' + "  Angle " + angleString + " degrees";
-
                 displayResults(imagePath + junctionImageParameters.image_source,
-                        displayText,
+                        buildAngleAndDepthDisplayText(imageFilename, junctionReturn),
                         "Test junction recognition");
             }
 
@@ -344,18 +330,11 @@ public class RecognitionDispatcher extends Application {
 
                 // Perform image recognition and depth mapping.
                 GoldCubeRecognition goldCubeRecognition = new GoldCubeRecognition(alliance);
-                RealSenseReturn realSenseReturn =
+                RealSenseReturn goldCubeReturn =
                         goldCubeRecognition.recognizeGoldCube(fileImage, d405Configuration, RobotConstantsPowerPlay.D405CameraId.SWIVEL, goldCubeImageParameters, goldCubeParameters, goldCubeRecognitionPath);
 
-                String distanceString = realSenseReturn.distanceFromRobotCenter == RealSenseReturn.RECOGNITION_DISTANCE_NPOS ? "unable to determine" : String.format("%.2f", realSenseReturn.distanceFromRobotCenter);
-                String angleString = realSenseReturn.angleFromRobotCenter == RealSenseReturn.RECOGNITION_ANGLE_NPOS ? "unable to determine" : String.format("%.2f", realSenseReturn.angleFromRobotCenter);
-                String displayText = "Image: " + imageFilename +
-                        '\n' + "Center of robot to pixel on gold cube:" +
-                        '\n' + "  Distance: " + distanceString + " inches" +
-                        '\n' + "  Angle " + angleString + " degrees";
-
                 displayResults(imagePath + goldCubeImageParameters.image_source,
-                        displayText,
+                        buildAngleAndDepthDisplayText(imageFilename, goldCubeReturn),
                         "Test gold cube recognition");
             }
 
@@ -521,7 +500,45 @@ public class RecognitionDispatcher extends Application {
         RobotLogCommon.closeLog();
     }
 
+    public String buildAngleAndDepthDisplayText(String pImageFilename, RealSenseReturn pRecognitionReturn) {
+        StringBuilder displayTextBuilder = new StringBuilder();
+
+        displayTextBuilder.append("Image: ");
+        displayTextBuilder.append(pImageFilename);
+        displayTextBuilder.append('\n');
+        if (pRecognitionReturn.recognitionResults != RobotConstants.RecognitionResults.RECOGNITION_SUCCESSFUL) {
+            displayTextBuilder.append("Unable to determine angle and distance");
+        } else {
+
+            displayTextBuilder.append("Front of camera to pixel on cone:");
+            displayTextBuilder.append('\n');
+            displayTextBuilder.append("  Angle ");
+            displayTextBuilder.append(String.format("%.2f", pRecognitionReturn.angleFromCamera));
+            displayTextBuilder.append(" degrees");
+            displayTextBuilder.append('\n');
+            displayTextBuilder.append("  Distance: ");
+            displayTextBuilder.append(String.format("%.2f", pRecognitionReturn.distanceFromCamera));
+            displayTextBuilder.append(" inches");
+            displayTextBuilder.append('\n');
+
+            displayTextBuilder.append("Center of robot to pixel on cone:");
+            displayTextBuilder.append('\n');
+            displayTextBuilder.append("  Angle ");
+            displayTextBuilder.append(String.format("%.2f", pRecognitionReturn.angleFromRobotCenter));
+            displayTextBuilder.append(" degrees");
+            displayTextBuilder.append('\n');
+            displayTextBuilder.append("  Distance: ");
+            displayTextBuilder.append(String.format("%.2f", pRecognitionReturn.distanceFromRobotCenter));
+            displayTextBuilder.append(" inches");
+            displayTextBuilder.append('\n');
+        }
+
+        return displayTextBuilder.toString();
+    }
+
     // Display the image in the Pane.
+    //**TODO make this larger so you can display both the angle and distance from
+    // the camera as well as those from the center of the robot.
     private void displayResults(String pImageFile, String pResultText, String pTitle) throws FileNotFoundException {
         InputStream stream = new FileInputStream(pImageFile);
         Image image = new Image(stream);
