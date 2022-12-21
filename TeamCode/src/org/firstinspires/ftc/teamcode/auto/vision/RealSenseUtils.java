@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.auto.vision;
 
-import org.firstinspires.ftc.ftcdevcommon.Pair;
 import org.firstinspires.ftc.ftcdevcommon.intellij.RobotLogCommon;
 import org.firstinspires.ftc.ftcdevcommon.intellij.WorkingDirectory;
 import org.firstinspires.ftc.teamcode.common.RobotConstants;
@@ -294,21 +293,58 @@ public class RealSenseUtils {
         RobotLogCommon.d(TAG, "Average x, y, depth of the closest 50 (max) pixels in the full image " +
                 averageFullImageX + ", " + averageFullImageY + ", " + averageDepth * INCHES_PER_METER);
 
-        return getAngleAndDistanceToPixel(pD405Configuration, pCameraId,
-                pImageParameters,
-                averageFullImageX, averageFullImageY, averageDepth);
+        //**TODO hardcoded the width of the **GOLD_CUBE**
+        double realSenseAngleToPixel = getAngleToPixelFromRealSenseDistance(pImageParameters.resolution_width, averageFullImageX, largestBoundingRect.width,
+                                            RobotConstantsPowerPlay.WIDTH_OF_GOLD_CUBE, averageDepth);
+        RobotLogCommon.d(TAG, "RealSense angle from camera to target pixel (degrees) " + realSenseAngleToPixel);
+
+        double fieldOfViewAngleToPixel = getAngleToPixelFromFieldOfView(pImageParameters.resolution_width, averageFullImageX, pD405Configuration.fieldOfView);
+        RobotLogCommon.d(TAG, "Field of view angle from camera to target pixel (degrees) " + fieldOfViewAngleToPixel);
+
+        //**TODO using the RealSense angle
+        RealSenseReturn finalValues = getAngleAndDistanceToPixel(pD405Configuration, pCameraId,
+                realSenseAngleToPixel, averageDepth);
+        RobotLogCommon.d(TAG, "Angle (degrees) from robot center to pixel in full image " + finalValues.angleFromRobotCenter);
+        RobotLogCommon.d(TAG, "Distance (inches) from robot center to pixel in full image " + finalValues.distanceFromRobotCenter);
+
+        return finalValues;
+    }
+
+    // pResolutionWidth is in inches.
+    // pTargetPixelX is the location of the pixel we're using for depth in relation to the full image.
+    // pBoundingBoxWidth is the width in pixels of a known object such as a cone stack.
+    // pKnownObjectWidth is the width of the known object in inches.
+    // pScaledPixelDepth is the value returned from the RealSense camera for the target pixel; in meters.
+    private static double getAngleToPixelFromRealSenseDistance(int pResolutionWidth, int pTargetPixelX, int pBoundingBoxWidth,
+                                                               double pKnownObjectWidth, double pScaledPixelDepth) {
+        // Using the size of the known object, compute the number of pixels
+        // per inch for the current image.
+        double pixelsPerInch = pBoundingBoxWidth / pKnownObjectWidth;
+        RobotLogCommon.d(TAG, "Pixels per inch " + pixelsPerInch);
+
+        // Now get the number of pixels from the target pixel to the center of the image.
+        // If the value is negative then the target pixel is to the right of the center
+        // of the image.
+        double pixelsFromTargetToCenter = (pResolutionWidth / 2.0) - pTargetPixelX;
+        double inchesFromTargetToCenter =  pixelsFromTargetToCenter / pixelsPerInch;
+        RobotLogCommon.d(TAG, "Distance from target pixel to image center (inches) " + inchesFromTargetToCenter);
+
+        // Using the distance from the target to the center of the image [opposite]
+        // and the distance from the camera to the target pixel [hypotenuse],
+        // calculate the angle.
+        double finalAngle = Math.toDegrees(Math.asin(inchesFromTargetToCenter / (pScaledPixelDepth * INCHES_PER_METER)));
+        return finalAngle;
+    }
+
+    private static double getAngleToPixelFromFieldOfView(int pResolutionWidth, int pTargetPixelX, double pFieldOfView) {
+        return ImageUtils.computeAngleToObjectCenter(pResolutionWidth, pTargetPixelX, pFieldOfView);
     }
 
     // Returns the angle and distance from the center of the robot to
     // the target pixel.
     //##!! The coordinates of the target pixel are relative to the full image.
     private static RealSenseReturn getAngleAndDistanceToPixel(D405Configuration pD405Configuration, RobotConstantsPowerPlay.D405CameraId pCameraId,
-                                                                   VisionParameters.ImageParameters pImageParameters,
-                                                                   int pTargetPixelX, int pTargetPixelY, double pScaledPixelDepth) {
-        // Calculate the angle from the camera to the target pixel.
-        double angleFromCameraToPixel = ImageUtils.computeAngleToObjectCenter(pImageParameters.resolution_width, pTargetPixelX, pD405Configuration.fieldOfView);
-        RobotLogCommon.d(TAG, "Angle from camera to target pixel (degrees) " + angleFromCameraToPixel);
-
+                                                                   double pAngleFromCameraToPixel, double pScaledPixelDepth) {
         // Get the angle from the center of the robot to the target pixel.
         D405Configuration.D405Camera cameraData = pD405Configuration.cameraMap.get(pCameraId);
         double distanceFromCameraToPixel = pScaledPixelDepth * INCHES_PER_METER;
@@ -316,16 +352,13 @@ public class RealSenseUtils {
 
         double angleFromRobotCenterToPixel =
                 CameraToCenterCorrections.getCorrectedAngle(Objects.requireNonNull(cameraData).distanceToCameraCanter,
-                        cameraData.offsetFromCameraCenter, distanceFromCameraToPixel, angleFromCameraToPixel);
-
-        RobotLogCommon.d(TAG, "Angle from robot center to target pixel (degrees) " + angleFromRobotCenterToPixel);
+                        cameraData.offsetFromCameraCenter, distanceFromCameraToPixel, pAngleFromCameraToPixel);
 
         // Get the distance from the center of the robot to the target pixel.
         double distanceFromRobotCenterToPixel = CameraToCenterCorrections.getCorrectedDistance(cameraData.distanceToCameraCanter,
-                cameraData.offsetFromCameraCenter, distanceFromCameraToPixel, angleFromCameraToPixel);
-        RobotLogCommon.d(TAG, "Distance (inches) from robot center to pixel in full image at x " + pTargetPixelX + ", y " + pTargetPixelY + " = " + distanceFromRobotCenterToPixel);
+                cameraData.offsetFromCameraCenter, distanceFromCameraToPixel, pAngleFromCameraToPixel);
 
-        return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_SUCCESSFUL, angleFromCameraToPixel, distanceFromCameraToPixel, angleFromRobotCenterToPixel, distanceFromRobotCenterToPixel);
+        return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_SUCCESSFUL, pAngleFromCameraToPixel, distanceFromCameraToPixel, angleFromRobotCenterToPixel, distanceFromRobotCenterToPixel);
     }
 
     // The parameters pContours is the output of a call to findContours.

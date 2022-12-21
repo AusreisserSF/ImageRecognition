@@ -50,8 +50,9 @@ public class JunctionParametersXML {
 
     public JunctionParameters getJunctionParameters() throws XPathExpressionException {
         XPathExpression expr;
-        VisionParameters.GrayParameters grayParameters;
-        VisionParameters.HSVParameters hsvParameters;
+        VisionParameters.GrayParameters junctionCapGrayParameters;
+        VisionParameters.GrayParameters junctionPoleGrayParameters;
+        VisionParameters.HSVParameters junctionPoleHsvParameters;
 
         // Point to the first node.
         RobotLogCommon.d(TAG, "Parsing XML junction_parameters");
@@ -61,13 +62,33 @@ public class JunctionParametersXML {
         if (junction_parameters_node == null)
             throw new AutonomousRobotException(TAG, "Element '//junction_parameters' not found");
 
+        // Point to <junction_cap>
+        Node junction_cap_node = junction_parameters_node.getFirstChild();
+        junction_cap_node = getNextElement(junction_cap_node);
+        if ((junction_cap_node == null) || !junction_cap_node.getNodeName().equals("junction_cap"))
+            throw new AutonomousRobotException(TAG, "Element 'junction_cap' not found");
+
         // Point to <gray_parameters>
-        Node gray_node = junction_parameters_node.getFirstChild();
+        Node cap_gray_node = junction_cap_node.getFirstChild();
+        cap_gray_node = getNextElement(cap_gray_node);
+        if ((cap_gray_node == null) || !cap_gray_node.getNodeName().equals("gray_parameters"))
+            throw new AutonomousRobotException(TAG, "Element 'gray_parameters' not found");
+
+        junctionCapGrayParameters = ImageXML.parseGrayParameters(cap_gray_node);
+
+        // Point to <junction_pole>
+        Node junction_pole_node = junction_cap_node.getNextSibling();
+        junction_pole_node = getNextElement(junction_pole_node);
+        if ((junction_pole_node == null) || !junction_pole_node.getNodeName().equals("junction_pole"))
+            throw new AutonomousRobotException(TAG, "Element 'junction_pole' not found");
+
+        // Point to <gray_parameters>
+        Node gray_node = junction_pole_node.getFirstChild();
         Node gray_parameters_node = getNextElement(gray_node);
         if ((gray_parameters_node == null) || !gray_parameters_node.getNodeName().equals("gray_parameters"))
             throw new AutonomousRobotException(TAG, "Element 'gray_parameters' not found");
 
-        grayParameters = ImageXML.parseGrayParameters(gray_parameters_node);
+        junctionPoleGrayParameters = ImageXML.parseGrayParameters(gray_parameters_node);
 
         // Point to <hsv_parameters>
         Node hsv_node = gray_parameters_node.getNextSibling();
@@ -75,17 +96,18 @@ public class JunctionParametersXML {
         if ((hsv_parameters_node == null) || !hsv_parameters_node.getNodeName().equals("hsv_parameters"))
             throw new AutonomousRobotException(TAG, "Element 'hsv_parameters' not found");
 
-        hsvParameters = ImageXML.parseHSVParameters(hsv_parameters_node);
+        junctionPoleHsvParameters = ImageXML.parseHSVParameters(hsv_parameters_node);
 
         // Parse <depth_parameters>
-        Node depth_parameters_node = hsv_parameters_node.getNextSibling();
+        Node depth_parameters_node = junction_pole_node.getNextSibling();
         depth_parameters_node = getNextElement(depth_parameters_node);
         if (depth_parameters_node == null)
             throw new AutonomousRobotException(TAG, "Element 'depth_parameters' not found");
 
         DepthParameters depthParameters = DepthParametersXML.parseDepthParameters(depth_parameters_node);
 
-        return new JunctionParameters(grayParameters, hsvParameters, depthParameters);
+        return new JunctionParameters(junctionCapGrayParameters, junctionPoleGrayParameters,
+                junctionPoleHsvParameters, depthParameters);
     }
 
     private Node getNextElement(Node pNode) {

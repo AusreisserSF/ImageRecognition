@@ -2,6 +2,10 @@ package org.firstinspires.ftc.teamcode.common;
 
 public class RobotConstantsPowerPlay {
 
+    public static final double WIDTH_OF_CONE_STACK = 4.0; // inches
+    public static final double WIDTH_OF_JUNCTION = 1.0; // inches
+    public static final double WIDTH_OF_GOLD_CUBE = 2.0; //**TODO TEMP for testing
+
     public enum OpMode {
         // Autonomous OpModes
         RED_F2, RED_F5, BLUE_A2, BLUE_A5,
