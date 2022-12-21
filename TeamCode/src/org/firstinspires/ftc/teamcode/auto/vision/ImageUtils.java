@@ -317,9 +317,9 @@ public class ImageUtils {
         // Threshold the image: set pixels over the threshold value to white.
         Mat thresholded = new Mat(); // output binary image
         Imgproc.threshold(blurred, thresholded,
-                pLowThreshold,    // threshold value
+                Math.abs(pLowThreshold),    // threshold value
                 255,   // white
-                Imgproc.THRESH_BINARY); // thresholding type
+                pLowThreshold >= 0  ? Imgproc.THRESH_BINARY : Imgproc.THRESH_BINARY_INV); // thresholding type
 
         Imgcodecs.imwrite(pOutputFilenamePreamble + "_ADJ_THR.png", thresholded);
         RobotLogCommon.d(TAG, "Writing " + pOutputFilenamePreamble + "_ADJ_THR.png");
@@ -345,12 +345,11 @@ public class ImageUtils {
         RobotLogCommon.d(TAG, "Threshold values: low " + pLowThreshold + ", high 255");
 
         // A negative threshold value indicates an inverse threshold.
-        int thresholdType = pLowThreshold >= 0  ? Imgproc.THRESH_BINARY : Imgproc.THRESH_BINARY_INV;
         Mat thresholded = new Mat(); // output binary image
         Imgproc.threshold(blurred, thresholded,
                 Math.abs(pLowThreshold),
                 255,   // white
-                thresholdType);
+                pLowThreshold >= 0  ? Imgproc.THRESH_BINARY : Imgproc.THRESH_BINARY_INV);
 
         Imgcodecs.imwrite(pOutputFilenamePreamble + "_ADJ_THR.png", thresholded);
         RobotLogCommon.d(TAG, "Writing " + pOutputFilenamePreamble + "_ADJ_THR.png");

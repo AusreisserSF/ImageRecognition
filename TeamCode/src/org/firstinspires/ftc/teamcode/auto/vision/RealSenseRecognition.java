@@ -18,10 +18,12 @@ public class RealSenseRecognition {
 
     public RealSenseRecognition() {}
 
+    //**TODO Another path for pure grayscale? - junction cap.
+
     // Analyzes a grayscale image using only the red channel.
     public RealSenseReturn redChannelPath(Mat pImageROI,
                                           D405Configuration pD405Configuration,
-                                          RobotConstantsPowerPlay.D405CameraId pOrientation,
+                                          RobotConstantsPowerPlay.D405CameraId pCameraId,
                                           short[] pDepthArray,
                                           String pOutputFilenamePreamble,
                                           VisionParameters.ImageParameters pImageParameters,
@@ -44,14 +46,14 @@ public class RealSenseRecognition {
         Mat thresholded = ImageUtils.performThresholdOnGray(channels.get(2), pOutputFilenamePreamble, pGrayParameters.median_target, pGrayParameters.threshold_low);
 
         return RealSenseUtils.getAngleAndDistance(pImageROI, thresholded,
-                pD405Configuration, pOrientation, pDepthArray,
+                pD405Configuration, pCameraId, pDepthArray,
                 pOutputFilenamePreamble, pImageParameters, pDepthParameters);
     }
 
     // Analyzes a color image.
     public RealSenseReturn colorPath(Mat pImageROI,
                                      D405Configuration pD405Configuration,
-                                     RobotConstantsPowerPlay.D405CameraId pOrientation,
+                                     RobotConstantsPowerPlay.D405CameraId pCameraId,
                                      short[] pDepthArray,
                                      String pOutputFilenamePreamble,
                                      VisionParameters.ImageParameters pImageParameters,
@@ -66,7 +68,7 @@ public class RealSenseRecognition {
         Imgproc.dilate(morphed, morphed, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5)));
 
         return RealSenseUtils.getAngleAndDistance(pImageROI, thresholded,
-                pD405Configuration, pOrientation, pDepthArray,
+                pD405Configuration, pCameraId, pDepthArray,
                 pOutputFilenamePreamble, pImageParameters, pDepthParameters);
     }
 }

@@ -55,6 +55,9 @@ public class JunctionRecognition {
 
         // Subject the ROI to depth filtering on all paths.
         short[] depthArray = RealSenseUtils.getDepthArrayFromFile(pImageParameters);
+
+        //**TODO VERY VERY TEMP - ROI_RANGE input ONLY
+        /*
         Mat depthImageROI = RealSenseUtils.removeBackground(imageROI, pImageParameters,
                 pD405Configuration, depthArray,
                 pJunctionParameters.depthParameters.minDepth,
@@ -63,11 +66,24 @@ public class JunctionRecognition {
         Imgcodecs.imwrite(outputFilenamePreamble + "_ROI_RANGE.png", depthImageROI);
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ROI_RANGE.png");
 
+         */
+
         //**TODO get more pictures and look at the ROI_RANGE file. Preliminary
         // indications are the it blocks out all extraneous black objects and
         // other junctions on the field. Consider using this file for
         // thresholding on black.
-        
+
+        //**TODO TEMP TEMP Try the ROI_RANGE path here.
+        Mat thresholded = ImageUtils.performThreshold(imageROI, outputFilenamePreamble,
+                pJunctionParameters.junctionCapGrayscaleParameters.median_target,
+                pJunctionParameters.junctionCapGrayscaleParameters.threshold_low);
+
+        return RealSenseUtils.getAngleAndDistance(imageROI, thresholded,
+                pD405Configuration, pCameraId, depthArray,
+                outputFilenamePreamble, pImageParameters, pJunctionParameters.depthParameters);
+
+        //**TODO or use the RotatedRectangle of the junction.
+
         //**TODO Recognition of a junction needs to be done in two parts because
         // the most reliable target is the black cap on the top of the junction.
         // Using the black cap eliminates the problem of having to account for
@@ -101,6 +117,8 @@ public class JunctionRecognition {
         // From the depth array returned from the camera we can get the
         // depth values for any pixel in the black object.
 
+        //**TODO TEMP TEMP while working on ROI_RANGE above
+        /*
         RobotLogCommon.d(TAG, "Recognition path " + pJunctionRecognitionPath);
         switch (pJunctionRecognitionPath) {
             case RED_CHANNEL_GRAYSCALE -> {
@@ -117,6 +135,7 @@ public class JunctionRecognition {
             }
             default -> throw new AutonomousRobotException(TAG, "Unrecognized recognition path");
         }
+         */
     }
 
 }
