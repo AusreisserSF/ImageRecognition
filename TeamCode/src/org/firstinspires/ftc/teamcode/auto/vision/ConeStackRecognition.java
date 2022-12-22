@@ -38,7 +38,7 @@ public class ConeStackRecognition {
     // A stack of 1 to 5 blue cones
     public RealSenseReturn recognizeConeStack(ImageProvider pImageProvider,
                                               D405Configuration pD405Configuration,
-                                              RobotConstantsPowerPlay.D405CameraId pOrientation,
+                                              RobotConstantsPowerPlay.D405CameraId pCameraId,
                                               VisionParameters.ImageParameters pImageParameters,
                                               ConeStackParameters pConeStackParameters,
                                               RobotConstantsPowerPlay.ConeStackRecognitionPath pConeStackRecognitionPath) throws InterruptedException, IOException {
@@ -80,8 +80,9 @@ public class ConeStackRecognition {
                     return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_INTERNAL_ERROR); // don't crash
 
                 return realSenseRecognition.redChannelPath(imageROI,
-                        pD405Configuration, pOrientation,
-                        depthArray, outputFilenamePreamble,
+                        pD405Configuration, pCameraId,
+                        depthArray, RobotConstantsPowerPlay.WIDTH_OF_CONE_STACK,
+                        outputFilenamePreamble,
                 pImageParameters, grayscaleParameters, pConeStackParameters.depthParameters);
             }
             case COLOR -> {
@@ -95,8 +96,9 @@ public class ConeStackRecognition {
                     return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_INTERNAL_ERROR); // don't crash
 
                 return realSenseRecognition.colorPath(imageROI,
-                        pD405Configuration, pOrientation,
-                        depthArray, outputFilenamePreamble,
+                        pD405Configuration, pCameraId,
+                        depthArray, RobotConstantsPowerPlay.WIDTH_OF_CONE_STACK,
+                        outputFilenamePreamble,
                 pImageParameters, hsvParameters, pConeStackParameters.depthParameters);
             }
             default -> throw new AutonomousRobotException(TAG, "Unrecognized recognition path");

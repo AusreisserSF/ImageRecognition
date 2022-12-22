@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.common;
 
 public class RobotConstantsPowerPlay {
 
-    public static final double WIDTH_OF_CONE_STACK = 4.0; // inches
-    public static final double WIDTH_OF_JUNCTION = 1.0; // inches
-    public static final double WIDTH_OF_GOLD_CUBE = 2.0; //**TODO TEMP for testing
+    public static final float WIDTH_OF_CONE_STACK = 4.0f; // inches
+    public static final float WIDTH_OF_JUNCTION = 1.0f; // inches
+    public static final float WIDTH_OF_GOLD_CUBE = 2.0f; //**TODO TEMP for testing
 
     public enum OpMode {
         // Autonomous OpModes
@@ -30,7 +30,7 @@ public class RobotConstantsPowerPlay {
     }
 
     public enum SignalSleeveRecognitionPath {
-        RED_CHANNEL_GRAYSCALE, COLOR, SPLIT_GREEN
+        RED_CHANNEL_GRAYSCALE, COLOR
     }
 
     public enum SignalSleeveLocation {
@@ -38,11 +38,11 @@ public class RobotConstantsPowerPlay {
     }
 
     public enum ConeStackRecognitionPath {
-        COLOR, GRAYSCALE
+        GRAYSCALE, COLOR
     }
 
     public enum JunctionRecognitionPath {
-        RED_CHANNEL_GRAYSCALE, COLOR
+        GRAYSCALE, RED_CHANNEL_GRAYSCALE, COLOR
     }
 
     // Vumark identifiers

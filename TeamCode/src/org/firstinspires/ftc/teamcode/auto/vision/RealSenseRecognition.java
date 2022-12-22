@@ -16,15 +16,28 @@ public class RealSenseRecognition {
 
     private static final String TAG = RealSenseRecognition.class.getSimpleName();
 
-    public RealSenseRecognition() {}
+    public RealSenseReturn grayscalePath(Mat pDepthImageROI,
+                                         D405Configuration pD405Configuration,
+                                         RobotConstantsPowerPlay.D405CameraId pCameraId,
+                                         short[] pDepthArray, float pObjectWidth,
+                                         String pOutputFilenamePreamble,
+                                         VisionParameters.ImageParameters pImageParameters,
+                                         VisionParameters.GrayParameters pGrayParameters,
+                                         DepthParameters pDepthParameters) {
+        Mat thresholded = ImageUtils.performThreshold(pDepthImageROI, pOutputFilenamePreamble,
+                pGrayParameters.median_target,
+                pGrayParameters.threshold_low);
 
-    //**TODO Another path for pure grayscale? - junction cap.
+        return RealSenseUtils.getAngleAndDistance(pDepthImageROI, thresholded,
+                pD405Configuration, pCameraId, pDepthArray, pObjectWidth,
+                pOutputFilenamePreamble, pImageParameters, pDepthParameters);
+    }
 
     // Analyzes a grayscale image using only the red channel.
     public RealSenseReturn redChannelPath(Mat pImageROI,
                                           D405Configuration pD405Configuration,
                                           RobotConstantsPowerPlay.D405CameraId pCameraId,
-                                          short[] pDepthArray,
+                                          short[] pDepthArray, float pObjectWidth,
                                           String pOutputFilenamePreamble,
                                           VisionParameters.ImageParameters pImageParameters,
                                           VisionParameters.GrayParameters pGrayParameters,
@@ -46,15 +59,15 @@ public class RealSenseRecognition {
         Mat thresholded = ImageUtils.performThresholdOnGray(channels.get(2), pOutputFilenamePreamble, pGrayParameters.median_target, pGrayParameters.threshold_low);
 
         return RealSenseUtils.getAngleAndDistance(pImageROI, thresholded,
-                pD405Configuration, pCameraId, pDepthArray,
+                pD405Configuration, pCameraId, pDepthArray, pObjectWidth,
                 pOutputFilenamePreamble, pImageParameters, pDepthParameters);
     }
 
-    // Analyzes a color image.
+    // Analyze a color image.
     public RealSenseReturn colorPath(Mat pImageROI,
                                      D405Configuration pD405Configuration,
                                      RobotConstantsPowerPlay.D405CameraId pCameraId,
-                                     short[] pDepthArray,
+                                     short[] pDepthArray, float pObjectWidth,
                                      String pOutputFilenamePreamble,
                                      VisionParameters.ImageParameters pImageParameters,
                                      VisionParameters.HSVParameters pHSVParameters,
@@ -68,7 +81,7 @@ public class RealSenseRecognition {
         Imgproc.dilate(morphed, morphed, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5)));
 
         return RealSenseUtils.getAngleAndDistance(pImageROI, thresholded,
-                pD405Configuration, pCameraId, pDepthArray,
+                pD405Configuration, pCameraId, pDepthArray, pObjectWidth,
                 pOutputFilenamePreamble, pImageParameters, pDepthParameters);
     }
 }

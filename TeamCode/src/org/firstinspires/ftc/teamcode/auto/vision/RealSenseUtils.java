@@ -103,7 +103,7 @@ public class RealSenseUtils {
     public static RealSenseReturn getAngleAndDistance(Mat pImageROI, Mat pThresholded,
                                                       D405Configuration pD405Configuration,
                                                       RobotConstantsPowerPlay.D405CameraId pCameraId,
-                                                      short[] pDepthArray,
+                                                      short[] pDepthArray, float pObjectWidth,
                                                       String pOutputFilenamePreamble,
                                                       VisionParameters.ImageParameters pImageParameters,
                                                       DepthParameters pDepthParameters) {
@@ -293,15 +293,14 @@ public class RealSenseUtils {
         RobotLogCommon.d(TAG, "Average x, y, depth of the closest 50 (max) pixels in the full image " +
                 averageFullImageX + ", " + averageFullImageY + ", " + averageDepth * INCHES_PER_METER);
 
-        //**TODO hardcoded the width of the **GOLD_CUBE**
         double realSenseAngleToPixel = getAngleToPixelFromRealSenseDistance(pImageParameters.resolution_width, averageFullImageX, largestBoundingRect.width,
-                                            RobotConstantsPowerPlay.WIDTH_OF_GOLD_CUBE, averageDepth);
+                pObjectWidth, averageDepth);
         RobotLogCommon.d(TAG, "RealSense angle from camera to target pixel (degrees) " + realSenseAngleToPixel);
 
         double fieldOfViewAngleToPixel = getAngleToPixelFromFieldOfView(pImageParameters.resolution_width, averageFullImageX, pD405Configuration.fieldOfView);
         RobotLogCommon.d(TAG, "Field of view angle from camera to target pixel (degrees) " + fieldOfViewAngleToPixel);
 
-        //**TODO using the RealSense angle
+        // Using the RealSense angle.
         RealSenseReturn finalValues = getAngleAndDistanceToPixel(pD405Configuration, pCameraId,
                 realSenseAngleToPixel, averageDepth);
         RobotLogCommon.d(TAG, "Angle (degrees) from robot center to pixel in full image " + finalValues.angleFromRobotCenter);

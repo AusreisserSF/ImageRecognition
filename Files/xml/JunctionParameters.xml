@@ -28,7 +28,7 @@
              which we assume to be the cube. -->
         <!-- from the x-coordinate of the center of the bounding box subtract this
              number. Double the result to get the width of the pixel search area. -->
-             <depth_window_offset_percent_x>2.5</depth_window_offset_percent_x>
+             <depth_window_offset_percent_x>25.0</depth_window_offset_percent_x>
              <!-- subtract this number from the y-coordinate of the bottom of the bounding
                   box. -->  
              <depth_window_offset_percent_y>90</depth_window_offset_percent_y>

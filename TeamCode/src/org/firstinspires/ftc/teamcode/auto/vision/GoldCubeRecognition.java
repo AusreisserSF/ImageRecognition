@@ -66,13 +66,15 @@ public class GoldCubeRecognition {
             case RED_CHANNEL_GRAYSCALE -> {
                 return realSenseRecognition.redChannelPath(imageROI,
                         pD405Configuration, pOrientation,
-                        depthArray, outputFilenamePreamble,
+                        depthArray, RobotConstantsPowerPlay.WIDTH_OF_GOLD_CUBE,
+                        outputFilenamePreamble,
                         pImageParameters, pGoldCubeParameters.grayscaleParameters, pGoldCubeParameters.depthParameters);
             }
             case COLOR -> {
                 return realSenseRecognition.colorPath(imageROI,
                         pD405Configuration, pOrientation,
-                        depthArray, outputFilenamePreamble,
+                        depthArray, RobotConstantsPowerPlay.WIDTH_OF_GOLD_CUBE,
+                        outputFilenamePreamble,
                         pImageParameters, pGoldCubeParameters.hsvParameters, pGoldCubeParameters.depthParameters);
             }
             default -> throw new AutonomousRobotException(TAG, "Unrecognized recognition path");
