@@ -3,7 +3,7 @@
         <gray_parameters>
             <median_target>150</median_target>
             <!-- negative threshold value requests THRESH_BINARY_INV -->
-            <threshold_low>-135</threshold_low>
+            <threshold_low>-50</threshold_low>
         </gray_parameters>
     </junction_cap>
     <junction_pole>
@@ -34,6 +34,6 @@
              <depth_window_offset_percent_y>90</depth_window_offset_percent_y>
              <!-- this number should be <= than the depth_window_offset_percent_y -->
              <depth_window_percent_height>80</depth_window_percent_height>
-             <depth_filter min="0.2" max="0.7"/>
+             <depth_filter min="0.1" max="0.7"/>
     </depth_parameters>
 </junction_parameters>

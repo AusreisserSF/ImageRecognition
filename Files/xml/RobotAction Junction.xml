@@ -6,12 +6,7 @@
         <actions>
             <JUNCTION_DEPTH>
                 <image_parameters>
-                    <!-- benchmark images from home
-                      junction dead center SWIVEL_12081320_20234_IMG.png
-                      robot 2" to the left SWIVEL_12081320_37921_IMG.png
-                      robot 2" to the right SWIVEL_12081320_51774_IMG.png    
-                    -->
-                    <image_source>SWIVEL_12191504_48367_IMG.png</image_source>
+                    <image_source>D405_JUNCTION_12291245_34737_IMG.png</image_source>
                     <resolution>
                         <width>640</width>
                         <height>480</height>
@@ -24,7 +19,7 @@
                     </image_roi>
                 </image_parameters>
                 <junction_recognition>
-                    <recognition_path>grayscale</recognition_path>
+                    <recognition_path>two_channel_grayscale</recognition_path>
                 </junction_recognition>    
             </JUNCTION_DEPTH>
         </actions>

@@ -29,11 +29,10 @@ public class SignalSleeveRecognition {
         workingDirectory = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
     }
 
-    // Returns the result of image analysis.
-    // The targets are:
-    // Location 1: all black
-    // Location 2: half-white, half black
-    // Location 3: all white
+     //**TODO need to change the XML: use tag
+    // <split_channel_grayscale>
+    // with sections for <RED> and <BLUE> alliance. OR use <red_channel_grayscale>
+    // for the RED alliance and <blue_channel_grayscale> for BLUE.
     public SignalSleeveReturn recognizeSignalSleeve(ImageProvider pImageProvider,
                                                     VisionParameters.ImageParameters pImageParameters,
                                                     SignalSleeveParameters pSignalSleeveParameters,
@@ -61,6 +60,7 @@ public class SignalSleeveRecognition {
         SignalSleeveReturn retVal;
         switch (pSignalSleeveRecognitionPath) {
             case RED_CHANNEL_GRAYSCALE -> retVal = redChannelGrayscale(pSignalSleeveParameters);
+            case BLUE_CHANNEL_GRAYSCALE -> retVal = blueChannelGrayscale(pSignalSleeveParameters);
             case COLOR -> retVal = colorSleeve(pSignalSleeveParameters.colorSleeveParameters);
             default -> throw new AutonomousRobotException(TAG, "Unsupported recognition path " + pSignalSleeveRecognitionPath);
         }
@@ -72,32 +72,32 @@ public class SignalSleeveRecognition {
         ArrayList<Mat> channels = new ArrayList<>(3);
         Core.split(imageROI, channels);
 
-        // For both the red cone and the blue cone use the red channel.
-        // Then we'll threshold them differently because the color red
-        // will be almost white in the grayscale image while the color
-        // blue will be almost black.
         // Write out the red channel as grayscale.
         Imgcodecs.imwrite(outputFilenamePreamble + "_RED_CHANNEL.png", channels.get(2));
         RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_RED_CHANNEL.png");
 
-        SignalSleeveParameters.GrayscaleParameters grayscaleParameters;
         Mat thresholded;
-
-        if (alliance == RobotConstants.Alliance.RED) {
-            grayscaleParameters = pSignalSleeveParameters.redGrayscaleParameters;
-      }
-        else if (alliance == RobotConstants.Alliance.BLUE) {
-            grayscaleParameters = pSignalSleeveParameters.blueGrayscaleParameters;
-       }
-        else
-            return new SignalSleeveReturn(RobotConstants.OpenCVResults.OCV_ERROR);
-
-        // Always use the red channel - better contrast!
-        thresholded = ImageUtils.performThresholdOnGray(channels.get(2), outputFilenamePreamble, grayscaleParameters.grayParameters.median_target, grayscaleParameters.grayParameters.threshold_low);
+        thresholded = ImageUtils.performThresholdOnGray(channels.get(2), outputFilenamePreamble, pSignalSleeveParameters.redGrayscaleParameters.grayParameters.median_target, pSignalSleeveParameters.redGrayscaleParameters.grayParameters.threshold_low);
 
         return getLocation(thresholded,
-                grayscaleParameters.minWhitePixelsLocation2,
-                grayscaleParameters.minWhitePixelsLocation3);
+                pSignalSleeveParameters.redGrayscaleParameters.minWhitePixelsLocation2,
+                pSignalSleeveParameters.redGrayscaleParameters.minWhitePixelsLocation3);
+    }
+
+    private SignalSleeveReturn blueChannelGrayscale(SignalSleeveParameters pSignalSleeveParameters) {
+        ArrayList<Mat> channels = new ArrayList<>(3);
+        Core.split(imageROI, channels);
+
+        // Write out the blue channel as grayscale.
+        Imgcodecs.imwrite(outputFilenamePreamble + "_BLUE_CHANNEL.png", channels.get(0));
+        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_BLUE_CHANNEL.png");
+
+        Mat thresholded;
+       thresholded = ImageUtils.performThresholdOnGray(channels.get(0), outputFilenamePreamble, pSignalSleeveParameters.blueGrayscaleParameters.grayParameters.median_target, pSignalSleeveParameters.blueGrayscaleParameters.grayParameters.threshold_low);
+
+        return getLocation(thresholded,
+                pSignalSleeveParameters.blueGrayscaleParameters.minWhitePixelsLocation2,
+                pSignalSleeveParameters.blueGrayscaleParameters.minWhitePixelsLocation3);
     }
 
     private SignalSleeveReturn colorSleeve(SignalSleeveParameters.ColorSleeveParameters pColorSleeveParameters) {

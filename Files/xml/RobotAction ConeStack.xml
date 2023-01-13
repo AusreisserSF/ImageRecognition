@@ -6,20 +6,21 @@
         <actions>
             <CONE_STACK_DEPTH>
                 <image_parameters>
-                    <image_source>SWIVEL_12051753_15927_IMG.png</image_source>
+                    <image_source>SWIVEL_01101637_51075_IMG.png</image_source>
                     <resolution>
                         <width>640</width>
                         <height>480</height>
                     </resolution>
                     <image_roi>
-                        <x>95</x>
-                        <y>185</y>
-                        <width>455</width>
-                        <height>255</height>  
+                        <x>150</x>
+                        <y>125</y>
+                        <width>340</width>
+                        <height>240</height> 
                     </image_roi>
                 </image_parameters>
                 <cone_stack_recognition>
-                    <recognition_path>color</recognition_path>
+                    <distance_target_id>c1_blue</distance_target_id>
+                    <recognition_path>blue_channel_grayscale</recognition_path>
                 </cone_stack_recognition>
             </CONE_STACK_DEPTH>
         </actions>

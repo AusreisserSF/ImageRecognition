@@ -41,7 +41,8 @@ public class ConeStackRecognition {
                                               RobotConstantsPowerPlay.D405CameraId pCameraId,
                                               VisionParameters.ImageParameters pImageParameters,
                                               ConeStackParameters pConeStackParameters,
-                                              RobotConstantsPowerPlay.ConeStackRecognitionPath pConeStackRecognitionPath) throws InterruptedException, IOException {
+                                              RobotConstantsPowerPlay.ConeStackRecognitionPath pConeStackRecognitionPath,
+                                              boolean pIncludeDepthProcessing) throws InterruptedException, IOException {
 
         RobotLogCommon.d(TAG, "In ConeStackRecognition.recognizeConeStack");
 
@@ -57,33 +58,43 @@ public class ConeStackRecognition {
         String outputFilenamePreamble = ImageUtils.createOutputFilePreamble(pImageParameters.image_source, workingDirectory, fileDate);
         Mat imageROI = ImageUtils.preProcessImage(pImageProvider, imgOriginal, outputFilenamePreamble, pImageParameters);
 
-        // Subject the ROI to depth filtering on all paths.
-        short[] depthArray = RealSenseUtils.getDepthArrayFromFile(pImageParameters);
-        Mat depthImageROI = RealSenseUtils.removeBackground(imageROI, pImageParameters,
-                pD405Configuration, depthArray,
-                pConeStackParameters.depthParameters.minDepth,
-                pConeStackParameters.depthParameters.maxDepth);
+        // Subject the ROI to depth filtering on all paths un less we're experimenting
+        // with image recognition only.
+        short[] depthArray;
+        Mat depthImageROI;
+        if (pIncludeDepthProcessing) {
+            depthArray = RealSenseUtils.getDepthArrayFromFile(pImageParameters);
+            depthImageROI = RealSenseUtils.removeBackground(imageROI, pImageParameters,
+                    pD405Configuration, depthArray,
+                    pConeStackParameters.depthParameters.minDepth,
+                    pConeStackParameters.depthParameters.maxDepth);
 
-        Imgcodecs.imwrite(outputFilenamePreamble + "_ROI_RANGE.png", depthImageROI);
-        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ROI_RANGE.png");
+            Imgcodecs.imwrite(outputFilenamePreamble + "_ROI_RANGE.png", depthImageROI);
+            RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_ROI_RANGE.png");
+        }
+        else {
+            depthArray = null;
+            depthImageROI = null;
+        }
 
         RobotLogCommon.d(TAG, "Recognition path " + pConeStackRecognitionPath);
         switch (pConeStackRecognitionPath) {
-            case GRAYSCALE -> {
-                VisionParameters.GrayParameters grayscaleParameters;
-                if (alliance == RobotConstants.Alliance.RED)
-                    grayscaleParameters = pConeStackParameters.redGrayscaleParameters;
-                else
-                if (alliance == RobotConstants.Alliance.BLUE)
-                    grayscaleParameters = pConeStackParameters.blueGrayscaleParameters;
-                else
-                    return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_INTERNAL_ERROR); // don't crash
-
-                return realSenseRecognition.redChannelPath(imageROI,
+            case RED_CHANNEL_GRAYSCALE -> {
+                //## Use the depth image ROI for grayscale recognition.
+                return realSenseRecognition.redChannelPath(depthImageROI,
                         pD405Configuration, pCameraId,
                         depthArray, RobotConstantsPowerPlay.WIDTH_OF_CONE_STACK,
                         outputFilenamePreamble,
-                pImageParameters, grayscaleParameters, pConeStackParameters.depthParameters);
+                pImageParameters, pConeStackParameters.redGrayscaleParameters, pConeStackParameters.depthParameters);
+            }
+            case BLUE_CHANNEL_GRAYSCALE -> {
+                //**TODO *experimental*.
+                return realSenseRecognition.blueChannelPath(imageROI, depthImageROI,
+                        pD405Configuration, pCameraId,
+                        depthArray, RobotConstantsPowerPlay.WIDTH_OF_CONE_STACK,
+                        outputFilenamePreamble,
+                        pImageParameters, pConeStackParameters.blueHSVParameters, pConeStackParameters.blueGrayscaleParameters,
+                        pConeStackParameters.depthParameters);
             }
             case COLOR -> {
                 VisionParameters.HSVParameters hsvParameters;

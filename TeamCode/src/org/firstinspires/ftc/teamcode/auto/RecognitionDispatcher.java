@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class RecognitionDispatcher extends Application {
 
@@ -48,6 +49,7 @@ public class RecognitionDispatcher extends Application {
     private RobotActionXMLStandard robotActionXMLSignalSleeve;
     private RobotActionXMLStandard robotActionXMLConeStack;
     private RobotActionXMLStandard robotActionXMLJunction;
+    private boolean includeDepthProcessing = true;
 
     // Load OpenCV.
     private static final boolean openCVInitialized;
@@ -76,6 +78,9 @@ public class RecognitionDispatcher extends Application {
         // Process the command line parameters common.
         Parameters parameters = getParameters();
         Map<String, String> namedParameters = parameters.getNamed();
+
+        // Also get the parameters that have no value.
+        List<String> unnamedParameters = parameters.getUnnamed();
 
         String opmodeParameter = namedParameters.get("opmode");
         if (opmodeParameter == null)
@@ -117,6 +122,8 @@ public class RecognitionDispatcher extends Application {
             }
 
             case "CONE_STACK" -> {
+                if (unnamedParameters.contains("--no_depth"))
+                 includeDepthProcessing = false;
                 robotActionXMLConeStack = new RobotActionXMLStandard(WorkingDirectory.getWorkingDirectory() + RobotConstants.xmlDir + actionXMLFilenameParameter);
                 RobotActionXMLStandard.RobotActionDataStandard actionData = robotActionXMLConeStack.getOpModeData("CONE_STACK");
                 actions = actionData.actions;
@@ -250,7 +257,9 @@ public class RecognitionDispatcher extends Application {
                 // Perform image recognition and depth mapping.
                 ConeStackRecognition coneStackRecognition = new ConeStackRecognition(alliance);
                 RealSenseReturn coneStackReturn =
-                        coneStackRecognition.recognizeConeStack(fileImage, d405Configuration, RobotConstantsPowerPlay.D405CameraId.SWIVEL, coneStackImageParameters, coneStackParameters, coneStackRecognitionPath);
+                        coneStackRecognition.recognizeConeStack(fileImage, d405Configuration, RobotConstantsPowerPlay.D405CameraId.SWIVEL,
+                                coneStackImageParameters, coneStackParameters, coneStackRecognitionPath,
+                                includeDepthProcessing);
 
                 displayResults(imagePath + coneStackImageParameters.image_source,
                         buildAngleAndDepthDisplayText(imageFilename, coneStackReturn),

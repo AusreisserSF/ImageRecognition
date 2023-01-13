@@ -74,12 +74,14 @@ public class JunctionRecognition {
                         outputFilenamePreamble, pImageParameters,
                         pJunctionParameters.junctionCapGrayscaleParameters, pJunctionParameters.depthParameters);
             }
-            case RED_CHANNEL_GRAYSCALE -> {
-                return realSenseRecognition.redChannelPath(imageROI,
+            // Uses a combination of the red channel and the blue channel
+            // to isolate the junction pole cap.
+            case TWO_CHANNEL_GRAYSCALE -> {
+                return realSenseRecognition.twoChannelPath(depthImageROI,
                         pD405Configuration, pCameraId,
                         depthArray, RobotConstantsPowerPlay.WIDTH_OF_JUNCTION,
                         outputFilenamePreamble,
-                        pImageParameters, pJunctionParameters.junctionPoleGrayscaleParameters, pJunctionParameters.depthParameters);
+                        pImageParameters, pJunctionParameters.junctionCapGrayscaleParameters, pJunctionParameters.depthParameters);
             }
             case COLOR -> {
                 return realSenseRecognition.colorPath(imageROI,

@@ -10,6 +10,7 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.opencv.imgcodecs.Imgcodecs.IMREAD_COLOR;
 
@@ -32,9 +33,7 @@ public class ImageUtils {
     }
 
     // Define a region of interest.
-    //**TODO Matybe what I want is a submat not an ROI. See --
-    // https://stackoverflow.com/questions/37849313/java-opencv-detecting-roi-creating-submat-and-copy-to-original-mat
-    public static Mat getImageROI(Mat pSrcImage, Rect pROIDefinition) {
+   public static Mat getImageROI(Mat pSrcImage, Rect pROIDefinition) {
 
         if ((pROIDefinition.height == 0) && (pROIDefinition.width == 0)) {
             RobotLogCommon.d(TAG, "At least one ROI dimension was 0");
@@ -67,8 +66,9 @@ public class ImageUtils {
             Imgproc.cvtColor(pOriginalImage, pOriginalImage, Imgproc.COLOR_RGB2BGR);
 
         String imageFilename = pPreamble + "_IMG.png";
-        RobotLogCommon.d(TAG, "Writing original image " + imageFilename);
-        Imgcodecs.imwrite(imageFilename, pOriginalImage);
+        //**TODO don't need this for IJ - we have the input file
+        //RobotLogCommon.d(TAG, "Writing original image " + imageFilename);
+        //Imgcodecs.imwrite(imageFilename, pOriginalImage);
 
         RobotLogCommon.d(TAG, "Image width " + pOriginalImage.cols() + ", height " + pOriginalImage.rows());
         if ((pOriginalImage.cols() != pImageParameters.resolution_width) ||
@@ -377,6 +377,20 @@ public class ImageUtils {
 
         Arrays.sort(intBuff);
         return (intBuff[buffLength / 2] + (intBuff[(buffLength / 2) - 1])) / 2;
+    }
+
+    //**TODO Sort Points in descending order
+    // points.sort(Comparator.comparing(point -> point.x))
+
+    // Sort contours by area in descending order.
+    public static List<MatOfPoint> sortContours(List<MatOfPoint> pContours) {
+       List<MatOfPoint> sortedContours = pContours.stream()
+               .sorted(Comparator.comparing(Imgproc::contourArea))
+               .collect(Collectors.toList());
+
+       // .sorted(Comparator.reverseOrder(Imgproc::contourArea)) is ambiguous
+        Collections.reverse(sortedContours);
+        return sortedContours;
     }
 
     // From https://stackoverflow.com/questions/40669684/opencv-sorting-contours-by-area-in-java
