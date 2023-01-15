@@ -15,6 +15,8 @@ import org.opencv.imgproc.Imgproc;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class SignalSleeveRecognition {
 
@@ -29,7 +31,7 @@ public class SignalSleeveRecognition {
         workingDirectory = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
     }
 
-     //**TODO need to change the XML: use tag
+    //**TODO need to change the XML: use tag
     // <split_channel_grayscale>
     // with sections for <RED> and <BLUE> alliance. OR use <red_channel_grayscale>
     // for the RED alliance and <blue_channel_grayscale> for BLUE.
@@ -59,45 +61,155 @@ public class SignalSleeveRecognition {
         RobotLogCommon.d(TAG, "Recognition path " + pSignalSleeveRecognitionPath);
         SignalSleeveReturn retVal;
         switch (pSignalSleeveRecognitionPath) {
-            case RED_CHANNEL_GRAYSCALE -> retVal = redChannelGrayscale(pSignalSleeveParameters);
-            case BLUE_CHANNEL_GRAYSCALE -> retVal = blueChannelGrayscale(pSignalSleeveParameters);
             case COLOR -> retVal = colorSleeve(pSignalSleeveParameters.colorSleeveParameters);
+            case GRAYSCALE_SLASH -> {
+                VisionParameters.GrayParameters grayParameters;
+                int colorChannel; // B = 0; G = 1; R = 2
+                if (alliance == RobotConstants.Alliance.RED) {
+                    grayParameters = pSignalSleeveParameters.redGrayscaleParameters.grayParameters;
+                    colorChannel = 2;
+                } else if (alliance == RobotConstants.Alliance.BLUE) {
+                    grayParameters = pSignalSleeveParameters.blueGrayscaleParameters.grayParameters;
+                    colorChannel = 0;
+                } else {
+                    RobotLogCommon.d(TAG, "GRAYSCALE_SLASH requires RED or BLUE alliance");
+                    return new SignalSleeveReturn(RobotConstants.OpenCVResults.RECOGNITION_UNSUCCESSFUL); // don't crash
+                }
+
+                retVal = grayscaleSlash(grayParameters, colorChannel);
+            }
             default -> throw new AutonomousRobotException(TAG, "Unsupported recognition path " + pSignalSleeveRecognitionPath);
         }
 
         return retVal;
     }
 
-    private SignalSleeveReturn redChannelGrayscale(SignalSleeveParameters pSignalSleeveParameters) {
-        ArrayList<Mat> channels = new ArrayList<>(3);
-        Core.split(imageROI, channels);
+    // Recognition of the signal sleeve by an angled rectangle.
+    private SignalSleeveReturn grayscaleSlash(VisionParameters.GrayParameters pGrayParameters, int pColorChannel) {
 
-        // Write out the red channel as grayscale.
-        Imgcodecs.imwrite(outputFilenamePreamble + "_RED_CHANNEL.png", channels.get(2));
-        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_RED_CHANNEL.png");
+        // Split the original image ROI into its BGR channels and use the
+        // the color channel (lighter here than in a pure grayscale image)
+        // to get better contrast with the black railing.
+        ArrayList<Mat> originalImageChannels = new ArrayList<>(3);
+        Core.split(imageROI, originalImageChannels); // red or blue channel. B = 0, G = 1, R = 2
 
-        Mat thresholded;
-        thresholded = ImageUtils.performThresholdOnGray(channels.get(2), outputFilenamePreamble, pSignalSleeveParameters.redGrayscaleParameters.grayParameters.median_target, pSignalSleeveParameters.redGrayscaleParameters.grayParameters.threshold_low);
+        // Write out the selected channel as grayscale.
+        //if (RobotLogCommon.isLoggable("v")) {
+        switch (pColorChannel) {
+            case 0: {
+                Imgcodecs.imwrite(outputFilenamePreamble + "_BLUE_CHANNEL.png", originalImageChannels.get(0));
+                RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_BLUE_CHANNEL.png");
+                break;
+            }
+            case 2: {
+                Imgcodecs.imwrite(outputFilenamePreamble + "_RED_CHANNEL.png", originalImageChannels.get(2));
+                RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_RED_CHANNEL.png");
+                break;
+            }
+            default: {
+                RobotLogCommon.d(TAG, "Invalid color channel " + pColorChannel);
+                return new SignalSleeveReturn(RobotConstants.OpenCVResults.RECOGNITION_UNSUCCESSFUL); // don't crash
+            }
+        }
+        // }
 
-        return getLocation(thresholded,
-                pSignalSleeveParameters.redGrayscaleParameters.minWhitePixelsLocation2,
-                pSignalSleeveParameters.redGrayscaleParameters.minWhitePixelsLocation3);
-    }
+        // Use an inverted threshold on the blue channel to create a white image of the black railing.
+        Mat thresholded = ImageUtils.performThresholdOnGray(originalImageChannels.get(pColorChannel), outputFilenamePreamble, pGrayParameters.median_target, pGrayParameters.threshold_low);
 
-    private SignalSleeveReturn blueChannelGrayscale(SignalSleeveParameters pSignalSleeveParameters) {
-        ArrayList<Mat> channels = new ArrayList<>(3);
-        Core.split(imageROI, channels);
+        // Identify the contours.
+        List<MatOfPoint> contours = new ArrayList<>();
+        Imgproc.findContours(thresholded, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+        if (contours.size() == 0) {
+            RobotLogCommon.d(TAG, "No contours found");
+            return new SignalSleeveReturn(RobotConstants.OpenCVResults.RECOGNITION_UNSUCCESSFUL); // don't crash
+        }
 
-        // Write out the blue channel as grayscale.
-        Imgcodecs.imwrite(outputFilenamePreamble + "_BLUE_CHANNEL.png", channels.get(0));
-        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_BLUE_CHANNEL.png");
+        // Within the ROI draw all of the contours.
+        Mat contoursDrawn = imageROI.clone();
+        drawShapeContours(contours, contoursDrawn);
+        Imgcodecs.imwrite(outputFilenamePreamble + "_CON.png", contoursDrawn);
+        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_CON.png");
 
-        Mat thresholded;
-       thresholded = ImageUtils.performThresholdOnGray(channels.get(0), outputFilenamePreamble, pSignalSleeveParameters.blueGrayscaleParameters.grayParameters.median_target, pSignalSleeveParameters.blueGrayscaleParameters.grayParameters.threshold_low);
+        //**TODO Find the contour whose center is closest to that of the ROI.
+        Point roiCentroid = new Point(imageROI.width() / 2, imageROI.height() / 2);
+        double closestDistance = imageROI.width(); // start with high value
+        int indexToClosest = -1;
+        for (int i = 0; i < contours.size(); i++) {
+            Point contourCentroid = ImageUtils.getContourCentroid(contours.get(i));
+            double dist = Math.pow(Math.pow((roiCentroid.x - contourCentroid.x), 2) + Math.pow((roiCentroid.y - contourCentroid.y), 2), 0.5);
+            if (dist < closestDistance) {
+                closestDistance = dist;
+                indexToClosest = i;
+            }
+        }
 
-        return getLocation(thresholded,
-                pSignalSleeveParameters.blueGrayscaleParameters.minWhitePixelsLocation2,
-                pSignalSleeveParameters.blueGrayscaleParameters.minWhitePixelsLocation3);
+        // Sanity check.
+        if (indexToClosest == -1) {
+            RobotLogCommon.d(TAG, "Failed sanity check on contour closest to center of ROI");
+            return new SignalSleeveReturn(RobotConstants.OpenCVResults.RECOGNITION_UNSUCCESSFUL); // don't crash
+        }
+
+        // Fit a rotated rectangle around the contour closest to the center.
+        // See https://stackoverflow.com/questions/25837934/matofpoint-to-matofpoint2f-size-opencv-java
+        MatOfPoint2f temp = new MatOfPoint2f();
+        temp.fromList(contours.get(indexToClosest).toList());
+        RotatedRect rotatedRect = Imgproc.minAreaRect(temp);
+        Point[] rect_points = new Point[4];
+        rotatedRect.points(rect_points);
+
+        // Draw the rotated rectangle.
+        Mat drawnRotatedRectangle = imageROI.clone();
+        List<MatOfPoint> rrContours = new ArrayList<>();
+        rrContours.add(new MatOfPoint(rect_points));
+        Imgproc.drawContours(drawnRotatedRectangle, rrContours, 0, new Scalar(0, 255, 0), -1);
+
+        Imgcodecs.imwrite(outputFilenamePreamble + "_RRECT.png", drawnRotatedRectangle);
+        RobotLogCommon.d(TAG, "Writing " + outputFilenamePreamble + "_RRECT.png");
+
+        // Log the 4 corners of the RotatedRect.
+        RobotLogCommon.d(TAG, "Rotated rectangle points: 0 " + rect_points[0] +
+                ", 1 " + rect_points[1] + ", 2 " + rect_points[2] + ", 3 " + rect_points[3]);
+
+        double rrAngle = rotatedRect.angle;
+        RobotLogCommon.d(TAG, "Rotated rectangle: width " + rotatedRect.size.width + ", height " + rotatedRect.size.height);
+        RobotLogCommon.d(TAG, "Rotated rectangle: angle " + rrAngle);
+
+        // See https://theailearner.com/tag/cv2-minarearect/
+        // "The angle always lies between [-90,0] because if the object is rotated more
+        // than 90 degrees, then the next edge is used to calculate the angle from the
+        // horizontal."
+        if (rect_points[0].x > rect_points[1].x && rotatedRect.size.height < rotatedRect.size.width) {
+            RobotLogCommon.d(TAG, "The slash is angled towards the top right");
+            if (rrAngle <= -85.0) {
+                RobotLogCommon.d(TAG, "The slash is within 5 degrees of upright");
+                return new SignalSleeveReturn(RobotConstants.OpenCVResults.RECOGNITION_SUCCESSFUL, RobotConstantsPowerPlay.SignalSleeveLocation.LOCATION_2);
+            } else {
+                if (rrAngle <= -45.0 && rrAngle >= -55.0)
+                    return new SignalSleeveReturn(RobotConstants.OpenCVResults.RECOGNITION_SUCCESSFUL, RobotConstantsPowerPlay.SignalSleeveLocation.LOCATION_3);
+
+                RobotLogCommon.d(TAG, "The angle of the slash is out of range on the right");
+                return new SignalSleeveReturn(RobotConstants.OpenCVResults.RECOGNITION_UNSUCCESSFUL);
+            }
+        } else if (rect_points[0].x > rect_points[1].x && rotatedRect.size.height > rotatedRect.size.width) {
+            RobotLogCommon.d(TAG, "The slash is angled towards the top left");
+            if (rrAngle >= -5.0) {
+                RobotLogCommon.d(TAG, "The slash is within 5 degrees of upright");
+                return new SignalSleeveReturn(RobotConstants.OpenCVResults.RECOGNITION_SUCCESSFUL, RobotConstantsPowerPlay.SignalSleeveLocation.LOCATION_2);
+            } else {
+                if (rrAngle <= -45.0 && rrAngle >= -55.0)
+                    return new SignalSleeveReturn(RobotConstants.OpenCVResults.RECOGNITION_SUCCESSFUL, RobotConstantsPowerPlay.SignalSleeveLocation.LOCATION_1);
+
+                RobotLogCommon.d(TAG, "The angle of the slash is out of range on the left");
+                return new SignalSleeveReturn(RobotConstants.OpenCVResults.RECOGNITION_UNSUCCESSFUL);
+            }
+        } else // exactly upright?
+            if (rect_points[0].x == rect_points[1].x && rotatedRect.size.height > rotatedRect.size.width) {
+                RobotLogCommon.d(TAG, "The slash is exactly upright");
+                return new SignalSleeveReturn(RobotConstants.OpenCVResults.RECOGNITION_SUCCESSFUL, RobotConstantsPowerPlay.SignalSleeveLocation.LOCATION_2);
+            }
+
+        RobotLogCommon.d(TAG, "I have no idea what's going on");
+        return new SignalSleeveReturn(RobotConstants.OpenCVResults.RECOGNITION_UNSUCCESSFUL);
     }
 
     private SignalSleeveReturn colorSleeve(SignalSleeveParameters.ColorSleeveParameters pColorSleeveParameters) {
@@ -201,6 +313,20 @@ public class SignalSleeveRecognition {
 
         // Default: must be location 1.
         return new SignalSleeveReturn(RobotConstants.OpenCVResults.RECOGNITION_SUCCESSFUL, RobotConstantsPowerPlay.SignalSleeveLocation.LOCATION_1);
+    }
 
+    // The parameters pContours is the output of a call to findContours.
+    private void drawShapeContours(List<MatOfPoint> pContours, Mat pImageOut) {
+        RobotLogCommon.d(TAG, "drawContours: number of contours " + pContours.size());
+        Scalar color = new Scalar(0, 255, 0); // BGR green - good against dark background
+
+        for (int i = 0; i < pContours.size(); i++) {
+            Imgproc.drawContours(pImageOut, pContours, i, color, 2);
+        }
+    }
+
+    // Thickness of < 0 means fill with color.
+    private void drawOneRectangle(Rect pRect, Mat pImageOut, int pThickness) {
+        Imgproc.rectangle(pImageOut, pRect, new Scalar(0, 255, 0), pThickness); // GREEN
     }
 }

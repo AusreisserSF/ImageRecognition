@@ -30,7 +30,7 @@ public class RobotConstantsPowerPlay {
     }
  
     public enum SignalSleeveRecognitionPath {
-        RED_CHANNEL_GRAYSCALE, BLUE_CHANNEL_GRAYSCALE, COLOR
+        COLOR, GRAYSCALE_SLASH
     }
 
     public enum AngleAlgorithm {

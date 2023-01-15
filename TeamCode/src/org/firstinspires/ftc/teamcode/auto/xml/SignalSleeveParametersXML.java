@@ -60,14 +60,14 @@ public class SignalSleeveParametersXML {
         if (signal_sleeve_parameters_node == null)
             throw new AutonomousRobotException(TAG, "Element '//signal_sleeve_parameters' not found");
 
-        // Point to <reflective_tape>
-        Node reflective_tape_node = signal_sleeve_parameters_node.getFirstChild();
-        reflective_tape_node = getNextElement(reflective_tape_node);
-        if ((reflective_tape_node == null) || !reflective_tape_node.getNodeName().equals("reflective_tape"))
-            throw new AutonomousRobotException(TAG, "Element 'reflective_tape' not found");
+        // Point to <red_channel_grayscale>
+        Node red_channel_node = signal_sleeve_parameters_node.getFirstChild();
+        red_channel_node = getNextElement(red_channel_node);
+        if ((red_channel_node == null) || !red_channel_node.getNodeName().equals("red_channel_grayscale"))
+            throw new AutonomousRobotException(TAG, "Element 'red_channel_grayscale' not found");
 
         // Point to <RED>
-        Node red_node = reflective_tape_node.getFirstChild();
+        Node red_node = red_channel_node.getFirstChild();
         red_node = getNextElement(red_node);
         if (red_node == null)
             throw new AutonomousRobotException(TAG, "Element 'RED' not found");
@@ -123,7 +123,7 @@ public class SignalSleeveParametersXML {
                         blueLocationCriteria.minWhitePixelsLocation3);
 
         // Now parse the <color_sleeve> parameters.
-        Node color_sleeve_node = reflective_tape_node.getNextSibling();
+        Node color_sleeve_node = red_channel_node.getNextSibling();
         color_sleeve_node = getNextElement(color_sleeve_node);
 
         // Point to <hsv_parameters>

@@ -106,12 +106,16 @@ public class RealSenseRecognition {
         // field to the left and right of the cone stack.
 
         List<MatOfPoint> sortedContours = ImageUtils.sortContours(contours);
-        RotatedRect rotatedRect1 = Imgproc.minAreaRect(new MatOfPoint2f(sortedContours.get(0)));
+        // See https://stackoverflow.com/questions/25837934/matofpoint-to-matofpoint2f-size-opencv-java
+        MatOfPoint2f temp = new MatOfPoint2f();
+        temp.fromList(sortedContours.get(0).toList());
+        RotatedRect rotatedRect1 = Imgproc.minAreaRect(temp);
         Point[] rect_points_1 = new Point[4];
         rotatedRect1.points(rect_points_1);
 
-        RotatedRect rotatedRect2 = Imgproc.minAreaRect(new MatOfPoint2f(sortedContours.get(1)));
-        ;
+        temp = new MatOfPoint2f();
+        temp.fromList(sortedContours.get(1).toList());
+        RotatedRect rotatedRect2 = Imgproc.minAreaRect(temp);
         Point[] rect_points_2 = new Point[4];
         rotatedRect2.points(rect_points_2);
 
@@ -125,15 +129,29 @@ public class RealSenseRecognition {
         rrContours.add(new MatOfPoint(rect_points_2));
         Imgproc.drawContours(rotatedRectangles, rrContours, 0, new Scalar(0, 255, 0), -1);
 
-        // The two rectangles must be within 5 degrees of horizontal.
-        // See https://namkeenman.wordpress.com/2015/12/18/open-cv-determine-angle-of-rotatedrect-minarearect/
-        RobotLogCommon.d(TAG, "rotatedRect1.angle " + rotatedRect1.angle);
-        RobotLogCommon.d(TAG, "rotatedRect2.angle " + rotatedRect2.angle);
+        Imgcodecs.imwrite(pOutputFilenamePreamble + "_RRECT.png", rotatedRectangles);
+        RobotLogCommon.d(TAG, "Writing " + pOutputFilenamePreamble + "_RRECT.png");
 
-        double angle1Abs = Math.abs(rotatedRect1.angle);
-        double angle2Abs = Math.abs(rotatedRect2.angle);
-        if (angle1Abs < 85.0 || angle1Abs > 95.0 ||
-                angle2Abs < 85.0 || angle2Abs > 95.0) {
+        double angle1 = rotatedRect1.angle;
+        double angle2 =  rotatedRect2.angle;
+        RobotLogCommon.d(TAG, "Raw rotatedRect1.angle " + angle1);
+        RobotLogCommon.d(TAG, "Raw rotatedRect2.angle " + angle2);
+
+        // The two rectangles must be within 5 degrees of horizontal.
+        // https://stackoverflow.com/questions/15956124/minarearect-angles-unsure-about-the-angle-returned/21427814#21427814
+        if (rotatedRect1.size.width <= rotatedRect1.size.height) {
+            RobotLogCommon.d(TAG, "Rotated rectangle 1 is not horizontal");
+            return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL); // don't crash
+        } else
+            angle1 += 90;
+
+        if (rotatedRect2.size.width <= rotatedRect2.size.height) {
+            RobotLogCommon.d(TAG, "Rotated rectangle 2 is not horizontal");
+            return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL); // don't crash
+        } else
+            angle2 += 90;
+
+        if (angle1 < 85.0 || angle1 > 95.0 || angle2 < 85.0 || angle2 > 95.0) {
             RobotLogCommon.d(TAG, "One of the two largest contours is at an angle of > +-5 degrees");
             return new RealSenseReturn(RobotConstants.RecognitionResults.RECOGNITION_UNSUCCESSFUL);
         }
@@ -141,42 +159,70 @@ public class RealSenseRecognition {
         // Figure out which of the two rectangles is on the left.
         // "The lowest point in a rectangle is 0th vertex, and 1st, 2nd, 3rd vertices follow clockwise."
         // The sorted array is in ascending order.
-        Point[] rect_points_1_sorted = rect_points_1.clone();
-        Arrays.sort(rect_points_1_sorted, Comparator.comparing(point -> point.x));
-        RobotLogCommon.d(TAG, "rotatedRect1 min x " + rect_points_1_sorted[0].x +
-                ", max " + rect_points_1_sorted[3].x);
+        Point[] rect_points_1_sorted_x = rect_points_1.clone();
+        Arrays.sort(rect_points_1_sorted_x, Comparator.comparing(point -> point.x));
+        RobotLogCommon.d(TAG, "rotatedRect1 min x " + rect_points_1_sorted_x[0].x +
+                ", max " + rect_points_1_sorted_x[3].x);
 
-        Point[] rect_points_2_sorted = rect_points_2.clone();
-        Arrays.sort(rect_points_2_sorted, Comparator.comparing(point -> point.x));
-        RobotLogCommon.d(TAG, "rotatedRect2 min x " + rect_points_2_sorted[0].x +
-                ", max " + rect_points_2_sorted[3].x);
+        Point[] rect_points_2_sorted_x = rect_points_2.clone();
+        Arrays.sort(rect_points_2_sorted_x, Comparator.comparing(point -> point.x)); // ascending
+        RobotLogCommon.d(TAG, "rotatedRect2 min x " + rect_points_2_sorted_x[0].x +
+                ", max " + rect_points_2_sorted_x[3].x);
 
-        double maxXOfLeftSide;
-        double minXOfRightSide;
+        Point maxXOfLeftSide;
+        Point minXOfRightSide;
         double widthOfConeStack;
-        if (rect_points_1_sorted[3].x < rect_points_2_sorted[0].x) {
+        if (rect_points_1_sorted_x[3].x < rect_points_2_sorted_x[0].x) {
             RobotLogCommon.d(TAG, "rotatedRect1 is to the left of rotatedRect2");
-            maxXOfLeftSide = rect_points_1_sorted[3].x;
-            minXOfRightSide = rect_points_2_sorted[0].x;
+            maxXOfLeftSide = rect_points_1_sorted_x[3];
+            minXOfRightSide = rect_points_2_sorted_x[0];
         } else {
             RobotLogCommon.d(TAG, "rotatedRect2 is to the left of rotatedRect1");
-            maxXOfLeftSide = rect_points_2_sorted[3].x;
-            minXOfRightSide = rect_points_1_sorted[3].x;
+            maxXOfLeftSide = rect_points_2_sorted_x[3];
+            minXOfRightSide = rect_points_1_sorted_x[0];
         }
 
         // The difference in pixels between the maximum x-coordinate of
         // the rotated rectangle on the left and the minimum x-coordinate
         // off the rotated rectangle on the right is the width of the cone
         // stack.
-        widthOfConeStack = minXOfRightSide - maxXOfLeftSide;
+        widthOfConeStack = minXOfRightSide.x - maxXOfLeftSide.x;
         RobotLogCommon.d(TAG, "Pixel width of cone stack " + widthOfConeStack);
 
         double pixelsPerInch = widthOfConeStack / 4.0f;
         RobotLogCommon.d(TAG, "Pixels per inch " + pixelsPerInch);
 
-        //**TODO Now you have the width of a bounding box for the cone stack
-        // even though no contour is present. Define a pixel search area and
-        // use this in conjunction with the depth array.
+        // Draw a pseudo bounding box on top of the cones (pseudo because
+        // there is no OpenCV contour for the cones - we have inferred it).
+        // The OpenCV rectangle function wants the upper left and lower
+        // right points of the rectangle. To get the highest possible y
+        // value (closest to the bottom of the railing) sort both
+        // rectangles' Points by their y-coordinates.
+        Point[] rect_points_1_sorted_y = rect_points_1.clone();
+        Arrays.sort(rect_points_1_sorted_y, Comparator.comparing(point -> point.y)); // ascending
+        RobotLogCommon.d(TAG, "rotatedRect1 max y " + rect_points_1_sorted_y[3].y);
+
+        Point[] rect_points_2_sorted_y = rect_points_2.clone();
+        Arrays.sort(rect_points_2_sorted_y, Comparator.comparing(point -> point.y)); // ascending
+        RobotLogCommon.d(TAG, "rotatedRect2 max y " + rect_points_2_sorted_y[3].x);
+
+        double maxY = rect_points_1_sorted_y[3].y > rect_points_2_sorted_y[3].y ?
+                rect_points_1_sorted_y[3].y : rect_points_2_sorted_y[3].y;
+
+        Mat drawBoundingBox = pImageROI.clone();
+        Point upperLeft = new Point(maxXOfLeftSide.x,  maxY - 100);
+        Point lowerRight = new Point(minXOfRightSide.x, maxY);
+        Rect boundingBox = new Rect(upperLeft, lowerRight);
+
+        //**TODO put into ShapeDrawing.
+        Imgproc.rectangle(drawBoundingBox, boundingBox, new Scalar(0,255,0) ,2);
+        Imgcodecs.imwrite(pOutputFilenamePreamble + "_BRECT.png", drawBoundingBox);
+        RobotLogCommon.d(TAG, "Writing " + pOutputFilenamePreamble + "_BRECT.png");
+
+
+
+        //**TODO Define a pixel search area and within the pseudo bounding
+        // box and use it in conjunction with the depth array.
 
         //**TODO The y-coordinates of the left and right side rectangles
         // must be within xx% of the bottom of the image and within yy%

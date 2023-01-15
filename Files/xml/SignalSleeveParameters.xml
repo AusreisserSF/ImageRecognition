@@ -13,8 +13,8 @@
     </RED>
     <BLUE>
         <gray_parameters>
-            <median_target>150</median_target>
-            <threshold_low>160</threshold_low>
+            <median_target>120</median_target>
+            <threshold_low>-90</threshold_low>
         </gray_parameters>
         <criteria>
             <min_white_pixels_location_2>2000</min_white_pixels_location_2>

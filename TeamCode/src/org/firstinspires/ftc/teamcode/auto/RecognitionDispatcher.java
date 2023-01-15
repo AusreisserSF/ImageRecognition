@@ -218,7 +218,8 @@ public class RecognitionDispatcher extends Application {
                 SignalSleeveRecognition recognition = new SignalSleeveRecognition();
                 SignalSleeveReturn signalSleeveReturn = recognition.recognizeSignalSleeve(fileImage, signalSleeveImageParameters, signalSleeveParameters, alliance, signalSleeveRecognitionPath);
                 String displayText = "Image: " + imageFilename +
-                        '\n' + "Signal sleeve location: " + signalSleeveReturn.signalSleeveLocation;
+                        '\n' + "Signal sleeve location: " +
+                        '\n' + signalSleeveReturn.signalSleeveLocation;
 
                 displayResults(imagePath + signalSleeveImageParameters.image_source,
                         displayText,

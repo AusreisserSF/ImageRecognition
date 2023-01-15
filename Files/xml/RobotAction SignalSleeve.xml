@@ -6,32 +6,20 @@
         <actions>
             <ANALYZE_SIGNAL_SLEEVE>
                 <image_parameters>
-                    <image_source>D405_10311723_30778_IMG.png</image_source>
+                    <image_source>Blue cone single slash right.png</image_source>
                     <resolution>
                         <width>640</width>
                         <height>480</height>
                     </resolution>
                     <image_roi>
-                        <!-- Brio 325 -->
-                        <!-- D405 260 -->
-                        <!-- D405 field 275 -->
                         <x>275</x>
-                        <!-- Brio 170 -->
-                        <!-- D405 215 -->
-                        <!-- D405 field 135 -->
                         <y>135</y>
-                        <!-- Brio 180 -->
-                        <!-- D405 155 -->
-                        <!-- D405 field 125 -->
                         <width>125</width>
-                        <!-- Brio 200 -->
-                        <!-- D405 145 -->
-                        <!-- D405 field 140 -->
                         <height>140</height>
                     </image_roi>
                 </image_parameters>
                 <signal_sleeve_recognition>
-                    <recognition_path>color_sleeve</recognition_path>
+                    <recognition_path>grayscale_slash</recognition_path>
                 </signal_sleeve_recognition>
             </ANALYZE_SIGNAL_SLEEVE>
         </actions>

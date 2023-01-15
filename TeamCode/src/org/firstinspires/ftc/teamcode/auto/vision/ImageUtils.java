@@ -379,10 +379,7 @@ public class ImageUtils {
         return (intBuff[buffLength / 2] + (intBuff[(buffLength / 2) - 1])) / 2;
     }
 
-    //**TODO Sort Points in descending order
-    // points.sort(Comparator.comparing(point -> point.x))
-
-    // Sort contours by area in descending order.
+     // Sort contours by area in descending order.
     public static List<MatOfPoint> sortContours(List<MatOfPoint> pContours) {
        List<MatOfPoint> sortedContours = pContours.stream()
                .sorted(Comparator.comparing(Imgproc::contourArea))
