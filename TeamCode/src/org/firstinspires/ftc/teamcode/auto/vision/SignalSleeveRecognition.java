@@ -31,10 +31,6 @@ public class SignalSleeveRecognition {
         workingDirectory = WorkingDirectory.getWorkingDirectory() + RobotConstants.imageDir;
     }
 
-    //**TODO need to change the XML: use tag
-    // <split_channel_grayscale>
-    // with sections for <RED> and <BLUE> alliance. OR use <red_channel_grayscale>
-    // for the RED alliance and <blue_channel_grayscale> for BLUE.
     public SignalSleeveReturn recognizeSignalSleeve(ImageProvider pImageProvider,
                                                     VisionParameters.ImageParameters pImageParameters,
                                                     SignalSleeveParameters pSignalSleeveParameters,
@@ -50,8 +46,7 @@ public class SignalSleeveRecognition {
         if (signalSleeveImage == null)
             return new SignalSleeveReturn(RobotConstants.OpenCVResults.OCV_ERROR); // don't crash
 
-        // The image may be RGB (from a camera) or BGR (OpenCV imread from a file).
-        // OpenCV wants BGR; the possible conversion is taken care of in imageUtils.preProcessImage.
+        // The image is always BGR (OpenCV imread from a file).
         Mat imgOriginal = signalSleeveImage.first.clone();
 
         String fileDate = TimeStamp.getLocalDateTimeStamp(signalSleeveImage.second);

@@ -1,5 +1,5 @@
 ﻿<signal_sleeve_parameters>
-    <red_channel_grayscale>
+    <grayscale_slash>
         <RED>
         <gray_parameters>
             <median_target>150</median_target>
@@ -22,7 +22,7 @@
             <!-- Loc 2 Number of non-zero pixels 3639  -->
         </criteria>
     </BLUE>
-    </red_channel_grayscale>
+    </grayscale_slash>
     <color_sleeve>
         <hsv_parameters>
             <hue_name>chroma green</hue_name>
