@@ -1,3 +1,5 @@
+7/29/2023 Archiving this project. It was an attempt at a season-independent, general-purpose image recognition project. But each new season introduced backwards compatibility problems so now there is one IJxxxVision project (e.g. IJPowerPlayVision) for each season. 
+
 Stand-alone IntelliJ IDEA project that
 recognizes the ring stacks in the FTC
 2020 - 2021 game Ultimate Goal.
